@@ -18,4 +18,5 @@ namespace REDZONE
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
+
 }
