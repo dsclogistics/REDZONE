@@ -7,6 +7,6 @@ namespace REDZONE.Models
 {
     public class DSC_LC
     {
-        public int dsc_lc_id { set; get; }
+        public int dsc_lc_id { set; get; }//test
     }
 }
