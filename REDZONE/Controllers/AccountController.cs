@@ -22,47 +22,14 @@ namespace REDZONE.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        //private ApplicationSignInManager _signInManager;
+        //private ApplicationUserManager _userManager;
 
-        //------ NOT USED YET -------------
-        public AccountController()
-        {
-        }
-        //------ NOT USED YET -------------
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-        //------ NOT USED YET -------------
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-        //------ NOT USED YET -------------
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
 
         //
         // GET: /Account/Login
-        [AllowAnonymous] [HttpGet]
+        [AllowAnonymous]
+        [HttpGet]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -121,6 +88,54 @@ namespace REDZONE.Controllers
         //        ViewBag.ReturnUrl = ReturnUrl;
         //        ModelState.AddModelError("", "Cannot Logon");
         //        return View(loginModel);
+        //    }
+        //}
+
+
+        //--------------------------------------------------------------------------------------------------------------\\
+        // POST: /Account/LogOff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Login", "Account");
+        }
+        //--------------------------------------------------------------------------------------------------------------//
+
+
+        ////------ NOT USED YET -------------
+        //public AccountController()
+        //{
+        //}
+        ////------ NOT USED YET -------------
+        //public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        //{
+        //    UserManager = userManager;
+        //    SignInManager = signInManager;
+        //}
+        ////------ NOT USED YET -------------
+        //public ApplicationSignInManager SignInManager
+        //{
+        //    get
+        //    {
+        //        return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+        //    }
+        //    private set 
+        //    { 
+        //        _signInManager = value; 
+        //    }
+        //}
+        ////------ NOT USED YET -------------
+        //public ApplicationUserManager UserManager
+        //{
+        //    get
+        //    {
+        //        return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        //    }
+        //    private set
+        //    {
+        //        _userManager = value;
         //    }
         //}
 
@@ -418,15 +433,6 @@ namespace REDZONE.Controllers
         //    return View(model);
         //}
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Login", "Account");
-        }
 
         //
         //// GET: /Account/ExternalLoginFailure
@@ -436,25 +442,25 @@ namespace REDZONE.Controllers
         //    return View();
         //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        if (_userManager != null)
+        //        {
+        //            _userManager.Dispose();
+        //            _userManager = null;
+        //        }
 
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
+        //        if (_signInManager != null)
+        //        {
+        //            _signInManager.Dispose();
+        //            _signInManager = null;
+        //        }
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
 
         #region Helpers
         // Used for XSRF protection when adding external logins

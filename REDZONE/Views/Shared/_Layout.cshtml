@@ -1,44 +1,75 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - DSC RED-ZONE</title>
+    @* ---------------------- Load CSS Styles -----------------------*@
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-
+    @* ---------------------- Load Jquery Libraries (Must be Before Bootstraps is Loaded) -----------------*@
     @Scripts.Render("~/bundles/jquery")
+    <style>
+        #foot {
+            position: fixed !important;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+            padding: 5px 0;
+            background: #f0f0f0;
+            border-top: 1px solid #666;
+        }
+        .container-fluid {
+            max-width: 1500px;
+            padding: 25px; /*Whitespace or outside gutter*/
+        }
+        .nopadding {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    @*/---------------------------------- TO DO -----------------------------------------\
+     ||      Validate Login Token, if token does not exist or if it's Expired            ||
+     ||                 Kick User back to the Login Page                                 || 
+     \\----------------------------------------------------------------------------------//*@
+
+
+    @* ------- Render the partial View that contains the Navigation Bar (MENU) ---------- *@
+    <div style="text-align:center">
+        @Html.Partial("_NavMenu")
+    </div>
+    @*-----------------------------------------------------------------------------------*@
+    
+
+    @* ------- Render the partial View that contains the Application BODY  ------------- *@
+    <div class="container-fluid body-content">
+        @RenderBody()
+    </div>
+    @*-----------------------------------------------------------------------------------*@
+
+
+    @* ---------------- Render the Application STATUS FOOTER BAR ----------------------- *@
+    <div id="foot" style="z-index: 999">
+        <table style="width:100%;">
+            <tr>
+                <td style="text-align:center"></td>
+                <td style="text-align:center">
+                    Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
+                </td>
+                <td style="text-align:right">
+                    <b>v.Beta 0.1 &nbsp;&nbsp;&nbsp;&nbsp;</b>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryUI")
     @RenderSection("scripts", required: false)
 </body>
 </html>
