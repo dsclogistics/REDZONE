@@ -28,3 +28,14 @@
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+<script>
+    // Page Startup Script
+    $(document).ready(function () {
+        if (isUsrTokenValid()) {
+            alert("A Valid token already exist:\nUSER:    " + getUsrName() + "   [" + getUsrRole() + "]\nTOKEN: " + getUsrToken() + "  [ "+ getUsrTokenAge() + " minutes old]");
+        } else {
+            setUsrIdentity("FD", "Admin", "5xh!ju75i!eh$5");
+            alert("No User LogedIn... Logging In");
+        }        
+    });
+</script>
