@@ -3,7 +3,7 @@
 //\==================================================================================//
 
 //================ USER AUTHENTICATION RELATED FUNCTIONS =============================
-var SESSION_EXP = 1;   // Define The Maximum Session Inactivity Timeout (In Minutes)
+var SESSION_EXP = 60;   // Define The Maximum Session Inactivity Timeout (In Minutes)
 function getUsrAutToken() {
     $.ajax({
         //url: '@Url.Action("getNewCAMid", "cognosUtils")',
@@ -42,13 +42,13 @@ function setUsrIdentity(usrName, usrRole, usrToken) {
 function isUsrTokenValid() {
     var tokenId = localStorage.getItem("usrToken");
     var tokenDt = new Date(localStorage.getItem("tokenDate"));
-    var tokenAge = Math.floor(((new Date() - tokenDt) / 1000) / 60);     // In Minutes
-
+    var tokenAge = Math.ceil(((new Date() - tokenDt) / 1000) / 60);     // In Minutes    
     if (!tokenId || tokenId == 'undefined') {
+        alert("User Not Defined");
         return false;  //CAMid does not exist
     }
     //If the Token Date does not exist, is blank, undefined or it is greater than 60 minutes, then it is considered invalid
-    if (!tokenAge || tokenAge == 'undefined' || tokenAge > SESSION_EXP) { return false; }       //Set the Timeout valid time of the Token to be 60 minutes (After 60 minutes it is considered Invalid)
+    if (!tokenAge || tokenAge == 'undefined' || tokenAge > SESSION_EXP) { alert("Token Expired!" + tokenAge); return false; }       //Set the Timeout valid time of the Token to be 60 minutes (After 60 minutes it is considered Invalid)
     alert("User Session Token was " + tokenAge + " minutes Old before being reset.");
     window.localStorage.setItem("tokenDate", new Date());   //Reset the access date every time we verify that the token is valid
     return true;
@@ -85,7 +85,7 @@ function getUsrTokenAge() {
     //}else
 
     var tokenDt = new Date(localStorage.getItem("tokenDate"));
-    var tokenAge = Math.floor(((new Date() - tokenDt) / 1000) / 60);     // In Minutes
+    var tokenAge = Math.ceil(((new Date() - tokenDt) / 1000) / 60);     // In Minutes
     return tokenAge;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

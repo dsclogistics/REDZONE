@@ -6,10 +6,11 @@
     }
 </style>
 
-@if (Request.IsAuthenticated)
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+<ul class="nav navbar-nav navbar-right" style="margin-top:20px">
+    <li class="dropdown">
+
+        @if (Request.IsAuthenticated)
+        {
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;@User.Identity.GetUserName()</span>
             </a>
@@ -17,17 +18,15 @@
                 <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
                 <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
             </ul>
-        </li>
-    </ul>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>
+        }
+        else
+        {
             @*@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })*@
             <a href="/Account/Login">
                 <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
             </a>
-        </li>
-    </ul>
-}
+        }
+
+    </li>
+</ul>
+
