@@ -93,8 +93,7 @@ namespace REDZONE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
-            if (!ModelState.IsValid) { return View(loginModel); }
-
+            if (!ModelState.IsValid) { return View(loginModel); }            
             //Model State is Valid. Check Password
             if (isLogonValid(loginModel))
             {  // Is password is Valid, set the Authorization cookie and redirect
@@ -107,6 +106,9 @@ namespace REDZONE.Controllers
                 //}
                 setUserRoles(loginModel.Username, new string[] { Session["role"].ToString() });
                 FormsAuthentication.SetAuthCookie(loginModel.Username, true);
+                
+                //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
+
                 if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
                     && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
                 { return Redirect(ReturnUrl); }
@@ -122,13 +124,14 @@ namespace REDZONE.Controllers
 
         }
         //--------------------------------------------------------------------------------------------------------------\\
-        // POST: /Account/LogOff
-        [HttpPost]
+        // GET: /Account/LogOff
+        [HttpGet]
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
+            ViewBag.ReturnUrl = "\\Home\\Index";
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home");
         }
         //--------------------------------------------------------------------------------------------------------------\\
 
