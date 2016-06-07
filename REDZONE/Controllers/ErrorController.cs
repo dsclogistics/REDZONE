@@ -9,12 +9,12 @@ namespace REDZONE.Controllers
     [AllowAnonymous]
     public class ErrorController : Controller
     {
-        // GET: Error
-        public ActionResult Index()
-        {
-            Exception ex = new HttpUnhandledException();
-            return View("Error", ex);
-        }
+        //// GET: Error
+        //public ActionResult Index()
+        //{
+        //    Exception ex = new HttpUnhandledException();
+        //    return View("Error", ex);
+        //}
 
         // GET: Error
         public ActionResult Index(string ErrorMsg)
