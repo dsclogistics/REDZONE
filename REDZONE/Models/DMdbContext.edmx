@@ -53,7 +53,7 @@
           <Property Name="dsc_lc_eff_end_date" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="DSC_OBS_DEV_Server" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="DSC_CUSTOMER" EntityType="Self.DSC_CUSTOMER" />
+          <EntitySet Name="DSC_CUSTOMER" EntityType="Models.DSC_CUSTOMER" />
           <EntitySet Name="DSC_LC" EntityType="Self.DSC_LC" />
         </EntityContainer>
       </Schema>
