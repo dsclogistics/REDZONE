@@ -78,7 +78,7 @@ namespace REDZONE
             //Response.Clear();
 
             //// Finally redirect, transfer, or render a error view
-            //Response.Redirect("~/Error/Index?ErroMsg=" + errorMessage);
+            Response.Redirect("~/Error/Index?ErroMsg=" + errorMessage);
         }
 
         protected void Session_End(object sender, EventArgs e)

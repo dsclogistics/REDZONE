@@ -12,12 +12,11 @@ namespace REDZONE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DSC_LC
+    public partial class DSC_CUSTOMER
     {
-        public int dsc_lc_id { get; set; }
-        public string dsc_lc_name { get; set; }
-        public string dsc_lc_code { get; set; }
-        public string dsc_lc_timezone { get; set; }
-        public Nullable<System.DateTime> dsc_lc_eff_end_date { get; set; }
+        public int dsc_cust_id { get; set; }
+        public string dsc_cust_name { get; set; }
+        public string dsc_cust_parent_name { get; set; }
+        public Nullable<System.DateTime> dsc_cust_eff_end_date { get; set; }
     }
 }

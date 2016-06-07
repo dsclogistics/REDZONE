@@ -52,6 +52,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -170,8 +172,28 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\DMdbContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DMdbContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DMdbContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DMdbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DMdbContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DMdbContext.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\DSCCustAccount.cs" />
-    <Compile Include="Models\DSC_LC.cs" />
+    <Compile Include="Models\DSC_CUSTOMER.cs">
+      <DependentUpon>DMdbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSC_LC.cs">
+      <DependentUpon>DMdbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DSC_LC_Building.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -229,8 +251,25 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <EntityDeploy Include="Models\DMdbContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DMdbContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DMdbContext.edmx.diagram">
+      <DependentUpon>DMdbContext.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\REDZONE.pubxml" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Models\DMdbContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DMdbContext.edmx</DependentUpon>
+      <LastGenOutput>DMdbContext.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\DMdbContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DMdbContext.edmx</DependentUpon>
+      <LastGenOutput>DMdbContext.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.js" />
@@ -287,6 +326,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
