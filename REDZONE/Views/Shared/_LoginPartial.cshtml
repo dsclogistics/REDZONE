@@ -11,13 +11,21 @@
 
         @if (Request.IsAuthenticated)
         {
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;@User.Identity.GetUserName()</span>
-            </a>
-            <ul class="dropdown-menu user-menu">
-                <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
-                <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
-            </ul>
+            var userName = "";
+            try {
+                userName = Session["first_name"].ToString() + " " + Session["last_name"].ToString();
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;@userName</span>
+                </a>
+                <ul class="dropdown-menu user-menu">
+                    <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
+                    <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
+                </ul>
+            }
+            catch(Exception ex){
+                <span>@ex.Message;</span>
+                Html.Action("LogOff", "Account");
+            }
         }
         else
         {
@@ -26,7 +34,6 @@
                 <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
             </a>
         }
-
     </li>
 </ul>
 

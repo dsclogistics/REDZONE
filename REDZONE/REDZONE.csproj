@@ -165,7 +165,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
-    <Compile Include="Controllers\DSC_CUSTOMERController.cs" />
+    <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -176,32 +176,65 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
-    <Compile Include="Models\DMdbContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DMdbContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DMdbContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DMdbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DMdbContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DMdbContext.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\DSCCustAccount.cs" />
-    <Compile Include="Models\DSC_CUSTOMER.cs">
-      <DependentUpon>DMdbContext.tt</DependentUpon>
+    <Compile Include="Models\DSCREDZONE_ENTITY.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSCREDZONE_ENTITY.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSCREDZONE_ENTITY.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSCREDZONE_ENTITY.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSC_CUST_ACCT.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DSC_LC.cs">
-      <DependentUpon>DMdbContext.tt</DependentUpon>
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSC_LC_BLDG.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DSC_LC_Building.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\MTRC_BLDG_DATA_SRC.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_DATA_SRC.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_DATA_TYPE.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_METRIC.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_METRIC_HIERARCHY.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_METRIC_PERIOD.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_METRIC_PRODUCTS.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_METRIC_VALUE.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_PRODUCT.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MTRC_TIME_PERIOD_TYPE.cs">
+      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -255,10 +288,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <EntityDeploy Include="Models\DMdbContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DMdbContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Images\Button-Add-icon.png" />
     <Content Include="Images\confused-emoticon.jpg" />
     <Content Include="Images\DSCHOME_Logo.png" />
@@ -267,20 +296,24 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\LoadingData.gif" />
     <Content Include="Images\ui-anim_basic_16x16.gif" />
-    <Content Include="Models\DMdbContext.edmx.diagram">
-      <DependentUpon>DMdbContext.edmx</DependentUpon>
+    <EntityDeploy Include="Models\DSCREDZONE_ENTITY.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DSCREDZONE_ENTITY.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DSCREDZONE_ENTITY.edmx.diagram">
+      <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\REDZONE.pubxml" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
-    <Content Include="Models\DMdbContext.Context.tt">
+    <Content Include="Models\DSCREDZONE_ENTITY.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DMdbContext.edmx</DependentUpon>
-      <LastGenOutput>DMdbContext.Context.cs</LastGenOutput>
+      <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
+      <LastGenOutput>DSCREDZONE_ENTITY.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\DMdbContext.tt">
+    <Content Include="Models\DSCREDZONE_ENTITY.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DMdbContext.edmx</DependentUpon>
-      <LastGenOutput>DMdbContext.cs</LastGenOutput>
+      <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
+      <LastGenOutput>DSCREDZONE_ENTITY.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -330,16 +363,16 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
-    <Content Include="Views\DSC_CUSTOMER\Create.cshtml" />
-    <Content Include="Views\DSC_CUSTOMER\Delete.cshtml" />
-    <Content Include="Views\DSC_CUSTOMER\Details.cshtml" />
-    <Content Include="Views\DSC_CUSTOMER\Edit.cshtml" />
-    <Content Include="Views\DSC_CUSTOMER\Index.cshtml" />
     <Content Include="Views\DSC_LC\Create.cshtml" />
     <Content Include="Views\DSC_LC\Delete.cshtml" />
     <Content Include="Views\DSC_LC\Details.cshtml" />
     <Content Include="Views\DSC_LC\Edit.cshtml" />
     <Content Include="Views\DSC_LC\Index.cshtml" />
+    <Content Include="Views\DSC_CUST_ACCT\Create.cshtml" />
+    <Content Include="Views\DSC_CUST_ACCT\Delete.cshtml" />
+    <Content Include="Views\DSC_CUST_ACCT\Details.cshtml" />
+    <Content Include="Views\DSC_CUST_ACCT\Edit.cshtml" />
+    <Content Include="Views\DSC_CUST_ACCT\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

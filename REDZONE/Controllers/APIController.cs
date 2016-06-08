@@ -15,8 +15,8 @@ namespace REDZONE.Controllers
         // GET: API/getCustInfo
         public JsonResult getCustInfo(int id)
         {
-            DSC_OBS_DEV_Server db = new DSC_OBS_DEV_Server();
-            DSC_CUSTOMER dscCustomer = db.DSC_CUSTOMER.Find(id);
+            DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
+            DSC_CUST_ACCT dscCustomer = db.DSC_CUST_ACCT.Find(id);
 
             //var serializer = new JavaScriptSerializer();
             //string json = serializer.Serialize(dscCustomer);
@@ -27,8 +27,8 @@ namespace REDZONE.Controllers
         // GET: API/getCustomers
         public JsonResult getCustomers()
         {
-            DSC_OBS_DEV_Server db = new DSC_OBS_DEV_Server();
-            List<DSC_CUSTOMER>  dscCustomers = db.DSC_CUSTOMER.ToList();
+            DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
+            List<DSC_CUST_ACCT> dscCustomers = db.DSC_CUST_ACCT.ToList();
 
             return Json(dscCustomers, JsonRequestBehavior.AllowGet);
         }

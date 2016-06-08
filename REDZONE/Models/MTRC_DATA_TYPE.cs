@@ -12,21 +12,20 @@ namespace REDZONE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DSC_LC
+    public partial class MTRC_DATA_TYPE
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DSC_LC()
+        public MTRC_DATA_TYPE()
         {
-            this.DSC_LC_BLDG = new HashSet<DSC_LC_BLDG>();
+            this.MTRC_METRIC = new HashSet<MTRC_METRIC>();
         }
     
-        public int dsc_lc_id { get; set; }
-        public string dsc_lc_name { get; set; }
-        public string dsc_lc_code { get; set; }
-        public string dsc_lc_timezone { get; set; }
-        public Nullable<System.DateTime> dsc_lc_eff_end_date { get; set; }
+        public short data_type_id { get; set; }
+        public string data_type_name { get; set; }
+        public string data_type_token { get; set; }
+        public string data_type_num_yn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DSC_LC_BLDG> DSC_LC_BLDG { get; set; }
+        public virtual ICollection<MTRC_METRIC> MTRC_METRIC { get; set; }
     }
 }

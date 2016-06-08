@@ -13,12 +13,12 @@ namespace REDZONE.Controllers
 [AllowAnonymous]
     public class DSC_LCController : Controller
     {
-        private DSC_OBS_DEV_Server db = new DSC_OBS_DEV_Server();
+        private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
 
         // GET: DSC_LC
         public ActionResult Index()
         {
-            return View(db.DSC_LC.ToList());
+            return View(db.DSC_LC.Where(x => x.dsc_lc_id > 0).OrderBy(y => y.dsc_lc_name).ToList());
         }
 
         // GET: DSC_LC/Details/5

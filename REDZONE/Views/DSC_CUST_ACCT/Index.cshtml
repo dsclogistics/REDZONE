@@ -1,4 +1,4 @@
-﻿@model IEnumerable<REDZONE.Models.DSC_CUSTOMER>
+﻿@model IEnumerable<REDZONE.Models.DSC_CUST_ACCT>
 
 @{
     ViewBag.Title = "Index";
@@ -12,7 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.dsc_cust_id)
+            @Html.DisplayNameFor(model => model.dsc_cust_acct1)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.dsc_cust_name)
@@ -29,7 +29,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.dsc_cust_id)
+            @Html.DisplayFor(modelItem => item.dsc_cust_acct1)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.dsc_cust_name)

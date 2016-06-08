@@ -34,43 +34,54 @@
 </head>
 
 <body>
-    @*/---------------------------------- TO DO -----------------------------------------\
-     ||      Validate Login Token, if token does not exist or if it's Expired            ||
-     ||                 Kick User back to the Login Page                                 || 
-     \\----------------------------------------------------------------------------------//*@
-
-
-    @* ------- Render the partial View that contains the Navigation Bar (MENU) ---------- *@
-    <div style="text-align:center">
-        @Html.Partial("_NavMenu")
-    </div>
-    @*-----------------------------------------------------------------------------------*@
-    
-
-    @* ------- Render the partial View that contains the Application BODY  ------------- *@
-    <div class="container-fluid body-content">
+    //if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }
+    @if (!Request.IsAuthenticated)
+    {
         @RenderBody()
-    </div>
-    @*-----------------------------------------------------------------------------------*@
+        Html.Action("LogOff", "Account");
+    }
+    else
+    {
+
+        @*/---------------------------------- TO DO -----------------------------------------\
+            ||      Validate Login Token, if token does not exist or if it's Expired            ||
+            ||                 Kick User back to the Login Page                                 ||
+            \\----------------------------------------------------------------------------------//*@
 
 
-    @* ---------------- Render the Application STATUS FOOTER BAR ----------------------- *@
-    <div id="foot" style="z-index: 999">
-        <table style="width:100%;">
-            <tr>
-                <td style="text-align:center"></td>
-                <td style="text-align:center">
-                    Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
-                </td>
-                <td style="text-align:right">
-                    <b>v.Beta 0.1 &nbsp;&nbsp;&nbsp;&nbsp;</b>
-                </td>
-            </tr>
-        </table>
-    </div>
+        @* ------- Render the partial View that contains the Navigation Bar (MENU) ---------- *@
+        <div style="text-align:center">
+            @Html.Partial("_NavMenu")
+        </div>
+        @*-----------------------------------------------------------------------------------*@
 
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryUI")
-    @RenderSection("scripts", required: false)
+
+        @* ------- Render the partial View that contains the Application BODY  ------------- *@
+        <div class="container-fluid body-content">
+            @RenderBody()
+        </div>
+        @*-----------------------------------------------------------------------------------*@
+
+
+        @* ---------------- Render the Application STATUS FOOTER BAR ----------------------- *@
+        <div id="foot" style="z-index: 999">
+            <table style="width:100%;">
+                <tr>
+                    <td style="text-align:center"></td>
+                    <td style="text-align:center">
+                        Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
+                    </td>
+                    <td style="text-align:right">
+                        <b>v.Beta 0.1 &nbsp;&nbsp;&nbsp;&nbsp;</b>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryUI")
+        @RenderSection("scripts", required: false)
+    }
+
 </body>
 </html>

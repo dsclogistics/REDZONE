@@ -94,6 +94,7 @@ namespace REDZONE.Controllers
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
             if (!ModelState.IsValid) { return View(loginModel); }            
+            
             //Model State is Valid. Check Password
             if (isLogonValid(loginModel))
             {  // Is password is Valid, set the Authorization cookie and redirect
@@ -130,6 +131,8 @@ namespace REDZONE.Controllers
         {
             FormsAuthentication.SignOut();
             ViewBag.ReturnUrl = "\\Home\\Index";
+            Session["emp_id"] = "";
+            Session["role"] = "";
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
@@ -373,6 +376,7 @@ namespace REDZONE.Controllers
                     Session.Add("email", "rasul.abduguev@dsc-logistics.com");
                 }
                 Session.Add("role", "Admin");
+                Session["emp_id"] = "12345";   //Temporarily to avoid auto-signoff
 
                 return true;
             }
