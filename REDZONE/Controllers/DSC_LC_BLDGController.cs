@@ -10,107 +10,112 @@ using REDZONE.Models;
 
 namespace REDZONE.Controllers
 {
-    public class DSC_LCController : Controller
+    public class DSC_LC_BLDGController : Controller
     {
         private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
 
-        // GET: DSC_LC
+        // GET: DSC_LC_BLDG
         public ActionResult Index()
         {
-            return View(db.DSC_LC.Where(x => x.dsc_lc_id > 0).OrderBy(y => y.dsc_lc_name).ToList());
+            var dSC_LC_BLDG = db.DSC_LC_BLDG.Include(d => d.DSC_LC);
+            return View(dSC_LC_BLDG.ToList());
         }
 
-        // GET: DSC_LC/Details/5
-        public ActionResult Details(int? id)
+        // GET: DSC_LC_BLDG/Details/5
+        public ActionResult Details(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            DSC_LC_BLDG dSC_LC_BLDG = db.DSC_LC_BLDG.Find(id);
+            if (dSC_LC_BLDG == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            return View(dSC_LC_BLDG);
         }
 
-        // GET: DSC_LC/Create
+        // GET: DSC_LC_BLDG/Create
         public ActionResult Create()
         {
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
             return View();
         }
 
-        // POST: DSC_LC/Create
+        // POST: DSC_LC_BLDG/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "dsc_lc_id,dsc_lc_name,dsc_lc_code,dsc_lc_timezone,dsc_lc_eff_end_date")] DSC_LC dSC_LC)
+        public ActionResult Create([Bind(Include = "dsc_mtrc_lc_bldg_id,dsc_lc_id,dsc_mtrc_lc_bldg_name,dsc_mtrc_lc_bldg_code,dsc_mtrc_lc_bldg_eff_start_dt,dsc_mtrc_lc_bldg_eff_end_dt")] DSC_LC_BLDG dSC_LC_BLDG)
         {
             if (ModelState.IsValid)
             {
-                db.DSC_LC.Add(dSC_LC);
+                db.DSC_LC_BLDG.Add(dSC_LC_BLDG);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(dSC_LC);
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", dSC_LC_BLDG.dsc_lc_id);
+            return View(dSC_LC_BLDG);
         }
 
-        // GET: DSC_LC/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: DSC_LC_BLDG/Edit/5
+        public ActionResult Edit(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            DSC_LC_BLDG dSC_LC_BLDG = db.DSC_LC_BLDG.Find(id);
+            if (dSC_LC_BLDG == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", dSC_LC_BLDG.dsc_lc_id);
+            return View(dSC_LC_BLDG);
         }
 
-        // POST: DSC_LC/Edit/5
+        // POST: DSC_LC_BLDG/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "dsc_lc_id,dsc_lc_name,dsc_lc_code,dsc_lc_timezone,dsc_lc_eff_end_date")] DSC_LC dSC_LC)
+        public ActionResult Edit([Bind(Include = "dsc_mtrc_lc_bldg_id,dsc_lc_id,dsc_mtrc_lc_bldg_name,dsc_mtrc_lc_bldg_code,dsc_mtrc_lc_bldg_eff_start_dt,dsc_mtrc_lc_bldg_eff_end_dt")] DSC_LC_BLDG dSC_LC_BLDG)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(dSC_LC).State = EntityState.Modified;
+                db.Entry(dSC_LC_BLDG).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(dSC_LC);
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", dSC_LC_BLDG.dsc_lc_id);
+            return View(dSC_LC_BLDG);
         }
 
-        // GET: DSC_LC/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: DSC_LC_BLDG/Delete/5
+        public ActionResult Delete(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            DSC_LC_BLDG dSC_LC_BLDG = db.DSC_LC_BLDG.Find(id);
+            if (dSC_LC_BLDG == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            return View(dSC_LC_BLDG);
         }
 
-        // POST: DSC_LC/Delete/5
+        // POST: DSC_LC_BLDG/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(short id)
         {
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            db.DSC_LC.Remove(dSC_LC);
+            DSC_LC_BLDG dSC_LC_BLDG = db.DSC_LC_BLDG.Find(id);
+            db.DSC_LC_BLDG.Remove(dSC_LC_BLDG);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

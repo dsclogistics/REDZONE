@@ -167,9 +167,11 @@
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
+    <Compile Include="Controllers\DSC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
     <Compile Include="Controllers\sayHiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -346,7 +348,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -363,16 +364,27 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
-    <Content Include="Views\DSC_LC\Create.cshtml" />
-    <Content Include="Views\DSC_LC\Delete.cshtml" />
-    <Content Include="Views\DSC_LC\Details.cshtml" />
-    <Content Include="Views\DSC_LC\Edit.cshtml" />
-    <Content Include="Views\DSC_LC\Index.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Create.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Delete.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Details.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Edit.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Index.cshtml" />
+    <Content Include="Views\DSC_LC\Create.cshtml" />
+    <Content Include="Views\DSC_LC\Delete.cshtml" />
+    <Content Include="Views\DSC_LC\Details.cshtml" />
+    <Content Include="Views\DSC_LC\Edit.cshtml" />
+    <Content Include="Views\DSC_LC\Index.cshtml" />
+    <Content Include="Views\DSC_LC_BLDG\Create.cshtml" />
+    <Content Include="Views\DSC_LC_BLDG\Delete.cshtml" />
+    <Content Include="Views\DSC_LC_BLDG\Details.cshtml" />
+    <Content Include="Views\DSC_LC_BLDG\Edit.cshtml" />
+    <Content Include="Views\DSC_LC_BLDG\Index.cshtml" />
+    <Content Include="Views\MTRC_PRODUCT\Create.cshtml" />
+    <Content Include="Views\MTRC_PRODUCT\Delete.cshtml" />
+    <Content Include="Views\MTRC_PRODUCT\Details.cshtml" />
+    <Content Include="Views\MTRC_PRODUCT\Edit.cshtml" />
+    <Content Include="Views\MTRC_PRODUCT\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

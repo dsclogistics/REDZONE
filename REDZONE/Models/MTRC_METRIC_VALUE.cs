@@ -22,7 +22,7 @@ namespace REDZONE.Models
         public System.DateTime mtrc_val_dtm_end { get; set; }
         public string mtrc_value_period_desc { get; set; }
     
-        public virtual DSC_LC_BLDG DSC_LC_BLDG { get; set; }
         public virtual MTRC_METRIC_PERIOD MTRC_METRIC_PERIOD { get; set; }
+        public virtual DSC_LC_BLDG DSC_LC_BLDG { get; set; }
     }
 }

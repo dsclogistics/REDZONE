@@ -6,7 +6,6 @@ using System.Web.Mvc;
 
 namespace REDZONE.Controllers
 {
-    [AllowAnonymous]
     public class ErrorController : Controller
     {
         //// GET: Error

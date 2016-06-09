@@ -7,8 +7,7 @@
       <Diagram DiagramId="ed57e9cc680a4d6cae9386884724eb99" Name="Diagram1">
         <EntityTypeShape EntityType="Models.DSC_CUST_ACCT" Width="1.5" PointX="7.875" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.DSC_LC" Width="1.5" PointX="0.5" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.DSC_LC_BLDG" Width="1.5" PointX="2.375" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.MTRC_BLDG_DATA_SRC" Width="1.5" PointX="7.625" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.MTRC_BLDG_DATA_SRC" Width="2" PointX="7.625" PointY="3" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MTRC_DATA_SRC" Width="1.5" PointX="8" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MTRC_DATA_TYPE" Width="1.5" PointX="0.5" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MTRC_METRIC" Width="1.5" PointX="3.25" PointY="2.875" IsExpanded="true" />
@@ -18,9 +17,6 @@
         <EntityTypeShape EntityType="Models.MTRC_METRIC_VALUE" Width="1.5" PointX="10" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MTRC_PRODUCT" Width="1.625" PointX="3" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MTRC_TIME_PERIOD_TYPE" Width="1.875" PointX="0.5" PointY="0.5" IsExpanded="true" />
-        <AssociationConnector Association="Models.relationship8" ManuallyRouted="false" />
-        <AssociationConnector Association="Models.relationship14" ManuallyRouted="false" />
-        <AssociationConnector Association="Models.relationship16" ManuallyRouted="false" />
         <AssociationConnector Association="Models.relationship15" ManuallyRouted="false" />
         <AssociationConnector Association="Models.relationship17" ManuallyRouted="false" />
         <AssociationConnector Association="Models.relationship13" ManuallyRouted="false" />
@@ -31,6 +27,10 @@
         <AssociationConnector Association="Models.relationship18" ManuallyRouted="false" />
         <AssociationConnector Association="Models.relationship6" ManuallyRouted="false" />
         <AssociationConnector Association="Models.relationship3" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Models.DSC_LC_BLDG" Width="1.5" PointX="2.75" PointY="8" />
+        <AssociationConnector Association="Models.relationship8" />
+        <AssociationConnector Association="Models.relationship14" />
+        <AssociationConnector Association="Models.relationship16" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

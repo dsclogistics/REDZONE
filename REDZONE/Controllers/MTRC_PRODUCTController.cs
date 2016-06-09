@@ -10,107 +10,107 @@ using REDZONE.Models;
 
 namespace REDZONE.Controllers
 {
-    public class DSC_LCController : Controller
+    public class MTRC_PRODUCTController : Controller
     {
         private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
 
-        // GET: DSC_LC
+        // GET: MTRC_PRODUCT
         public ActionResult Index()
         {
-            return View(db.DSC_LC.Where(x => x.dsc_lc_id > 0).OrderBy(y => y.dsc_lc_name).ToList());
+            return View(db.MTRC_PRODUCT.ToList());
         }
 
-        // GET: DSC_LC/Details/5
-        public ActionResult Details(int? id)
+        // GET: MTRC_PRODUCT/Details/5
+        public ActionResult Details(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            MTRC_PRODUCT mTRC_PRODUCT = db.MTRC_PRODUCT.Find(id);
+            if (mTRC_PRODUCT == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            return View(mTRC_PRODUCT);
         }
 
-        // GET: DSC_LC/Create
+        // GET: MTRC_PRODUCT/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: DSC_LC/Create
+        // POST: MTRC_PRODUCT/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "dsc_lc_id,dsc_lc_name,dsc_lc_code,dsc_lc_timezone,dsc_lc_eff_end_date")] DSC_LC dSC_LC)
+        public ActionResult Create([Bind(Include = "prod_id,prod_name")] MTRC_PRODUCT mTRC_PRODUCT)
         {
             if (ModelState.IsValid)
             {
-                db.DSC_LC.Add(dSC_LC);
+                db.MTRC_PRODUCT.Add(mTRC_PRODUCT);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(dSC_LC);
+            return View(mTRC_PRODUCT);
         }
 
-        // GET: DSC_LC/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: MTRC_PRODUCT/Edit/5
+        public ActionResult Edit(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            MTRC_PRODUCT mTRC_PRODUCT = db.MTRC_PRODUCT.Find(id);
+            if (mTRC_PRODUCT == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            return View(mTRC_PRODUCT);
         }
 
-        // POST: DSC_LC/Edit/5
+        // POST: MTRC_PRODUCT/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "dsc_lc_id,dsc_lc_name,dsc_lc_code,dsc_lc_timezone,dsc_lc_eff_end_date")] DSC_LC dSC_LC)
+        public ActionResult Edit([Bind(Include = "prod_id,prod_name")] MTRC_PRODUCT mTRC_PRODUCT)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(dSC_LC).State = EntityState.Modified;
+                db.Entry(mTRC_PRODUCT).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(dSC_LC);
+            return View(mTRC_PRODUCT);
         }
 
-        // GET: DSC_LC/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: MTRC_PRODUCT/Delete/5
+        public ActionResult Delete(short? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            if (dSC_LC == null)
+            MTRC_PRODUCT mTRC_PRODUCT = db.MTRC_PRODUCT.Find(id);
+            if (mTRC_PRODUCT == null)
             {
                 return HttpNotFound();
             }
-            return View(dSC_LC);
+            return View(mTRC_PRODUCT);
         }
 
-        // POST: DSC_LC/Delete/5
+        // POST: MTRC_PRODUCT/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(short id)
         {
-            DSC_LC dSC_LC = db.DSC_LC.Find(id);
-            db.DSC_LC.Remove(dSC_LC);
+            MTRC_PRODUCT mTRC_PRODUCT = db.MTRC_PRODUCT.Find(id);
+            db.MTRC_PRODUCT.Remove(mTRC_PRODUCT);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

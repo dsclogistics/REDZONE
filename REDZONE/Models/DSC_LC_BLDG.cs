@@ -21,12 +21,12 @@ namespace REDZONE.Models
             this.MTRC_BLDG_DATA_SRC = new HashSet<MTRC_BLDG_DATA_SRC>();
         }
     
-        public short dsc_lc_bldg_id { get; set; }
+        public short dsc_mtrc_lc_bldg_id { get; set; }
         public int dsc_lc_id { get; set; }
-        public string dsc_lc_bldg_name { get; set; }
-        public string dsc_lc_bldg_code { get; set; }
-        public System.DateTime dsc_lc_bldg_eff_start_dt { get; set; }
-        public System.DateTime dsc_lc_bldg_eff_end_dt { get; set; }
+        public string dsc_mtrc_lc_bldg_name { get; set; }
+        public string dsc_mtrc_lc_bldg_code { get; set; }
+        public System.DateTime dsc_mtrc_lc_bldg_eff_start_dt { get; set; }
+        public System.DateTime dsc_mtrc_lc_bldg_eff_end_dt { get; set; }
     
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

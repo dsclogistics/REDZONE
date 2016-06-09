@@ -69,7 +69,9 @@ namespace REDZONE
             var raisedException = Server.GetLastError();
             string errorMessage = raisedException.Message;
             // Process exception...
-
+            if (!Request.IsAuthenticated) {
+                Response.Redirect("~/Account/Login");
+            }
             //// We've handled the error, so clear it from the Server. 
             ////Leaving the server in an error state can cause unintended side effects as the server continues its attempts to handle the error.
             Server.ClearError();
@@ -78,7 +80,7 @@ namespace REDZONE
             //Response.Clear();
 
             //// Finally redirect, transfer, or render a error view
-            Response.Redirect("~/Error/Index?ErroMsg=" + errorMessage);
+            Response.Redirect("~/Error/Index?ErrorMsg=" + errorMessage);
         }
 
         protected void Session_End(object sender, EventArgs e)

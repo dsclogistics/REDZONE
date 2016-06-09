@@ -19,8 +19,8 @@ namespace REDZONE.Models
         public Nullable<short> dsc_lc_bldg_id { get; set; }
         public int mtrc_period_id { get; set; }
     
-        public virtual DSC_LC_BLDG DSC_LC_BLDG { get; set; }
         public virtual MTRC_DATA_SRC MTRC_DATA_SRC { get; set; }
         public virtual MTRC_METRIC_PERIOD MTRC_METRIC_PERIOD { get; set; }
+        public virtual DSC_LC_BLDG DSC_LC_BLDG { get; set; }
     }
 }

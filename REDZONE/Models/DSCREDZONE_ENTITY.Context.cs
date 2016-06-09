@@ -27,7 +27,6 @@ namespace REDZONE.Models
     
         public virtual DbSet<DSC_CUST_ACCT> DSC_CUST_ACCT { get; set; }
         public virtual DbSet<DSC_LC> DSC_LC { get; set; }
-        public virtual DbSet<DSC_LC_BLDG> DSC_LC_BLDG { get; set; }
         public virtual DbSet<MTRC_BLDG_DATA_SRC> MTRC_BLDG_DATA_SRC { get; set; }
         public virtual DbSet<MTRC_DATA_SRC> MTRC_DATA_SRC { get; set; }
         public virtual DbSet<MTRC_DATA_TYPE> MTRC_DATA_TYPE { get; set; }
@@ -38,5 +37,6 @@ namespace REDZONE.Models
         public virtual DbSet<MTRC_METRIC_VALUE> MTRC_METRIC_VALUE { get; set; }
         public virtual DbSet<MTRC_PRODUCT> MTRC_PRODUCT { get; set; }
         public virtual DbSet<MTRC_TIME_PERIOD_TYPE> MTRC_TIME_PERIOD_TYPE { get; set; }
+        public virtual DbSet<DSC_LC_BLDG> DSC_LC_BLDG { get; set; }
     }
 }
