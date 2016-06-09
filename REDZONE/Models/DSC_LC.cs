@@ -17,7 +17,7 @@ namespace REDZONE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DSC_LC()
         {
-            this.DSC_LC_BLDG = new HashSet<DSC_LC_BLDG>();
+            this.DSC_MTRC_LC_BLDG = new HashSet<DSC_MTRC_LC_BLDG>();
         }
     
         public int dsc_lc_id { get; set; }
@@ -27,6 +27,6 @@ namespace REDZONE.Models
         public Nullable<System.DateTime> dsc_lc_eff_end_date { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DSC_LC_BLDG> DSC_LC_BLDG { get; set; }
+        public virtual ICollection<DSC_MTRC_LC_BLDG> DSC_MTRC_LC_BLDG { get; set; }
     }
 }

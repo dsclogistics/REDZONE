@@ -167,12 +167,12 @@
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
-    <Compile Include="Controllers\DSC_LC_BLDGController.cs" />
+    <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MTRC_BLDG_DATA_SRCController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
-    <Compile Include="Controllers\sayHiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,10 +200,10 @@
     <Compile Include="Models\DSC_LC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DSC_LC_BLDG.cs">
+    <Compile Include="Models\DSC_LC_Building.cs" />
+    <Compile Include="Models\DSC_MTRC_LC_BLDG.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DSC_LC_Building.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
@@ -238,6 +238,8 @@
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerAPIs\OBSAPI.cs" />
+    <Compile Include="Servers\HostServer.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -374,22 +376,26 @@
     <Content Include="Views\DSC_LC\Details.cshtml" />
     <Content Include="Views\DSC_LC\Edit.cshtml" />
     <Content Include="Views\DSC_LC\Index.cshtml" />
-    <Content Include="Views\DSC_LC_BLDG\Create.cshtml" />
-    <Content Include="Views\DSC_LC_BLDG\Delete.cshtml" />
-    <Content Include="Views\DSC_LC_BLDG\Details.cshtml" />
-    <Content Include="Views\DSC_LC_BLDG\Edit.cshtml" />
-    <Content Include="Views\DSC_LC_BLDG\Index.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Create.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Delete.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Details.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Edit.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\MTRC_BLDG_DATA_SRC\Create.cshtml" />
+    <Content Include="Views\MTRC_BLDG_DATA_SRC\Delete.cshtml" />
+    <Content Include="Views\MTRC_BLDG_DATA_SRC\Details.cshtml" />
+    <Content Include="Views\MTRC_BLDG_DATA_SRC\Edit.cshtml" />
+    <Content Include="Views\MTRC_BLDG_DATA_SRC\Index.cshtml" />
+    <Content Include="Views\DSC_MTRC_LC_BLDG\Create.cshtml" />
+    <Content Include="Views\DSC_MTRC_LC_BLDG\Delete.cshtml" />
+    <Content Include="Views\DSC_MTRC_LC_BLDG\Details.cshtml" />
+    <Content Include="Views\DSC_MTRC_LC_BLDG\Edit.cshtml" />
+    <Content Include="Views\DSC_MTRC_LC_BLDG\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\API\" />
-    <Folder Include="Views\sayHi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -12,10 +12,10 @@ namespace REDZONE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DSC_LC_BLDG
+    public partial class DSC_MTRC_LC_BLDG
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DSC_LC_BLDG()
+        public DSC_MTRC_LC_BLDG()
         {
             this.MTRC_METRIC_VALUE = new HashSet<MTRC_METRIC_VALUE>();
             this.MTRC_BLDG_DATA_SRC = new HashSet<MTRC_BLDG_DATA_SRC>();

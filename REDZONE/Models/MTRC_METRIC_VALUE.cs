@@ -23,6 +23,6 @@ namespace REDZONE.Models
         public string mtrc_value_period_desc { get; set; }
     
         public virtual MTRC_METRIC_PERIOD MTRC_METRIC_PERIOD { get; set; }
-        public virtual DSC_LC_BLDG DSC_LC_BLDG { get; set; }
+        public virtual DSC_MTRC_LC_BLDG DSC_MTRC_LC_BLDG { get; set; }
     }
 }
