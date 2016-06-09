@@ -1,0 +1,45 @@
+﻿@model IEnumerable<REDZONE.Models.MTRC_BLDG_DATA_SRC>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DSC_MTRC_LC_BLDG.dsc_mtrc_lc_bldg_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MTRC_DATA_SRC.data_src_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MTRC_METRIC_PERIOD.mtrc_period_name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DSC_MTRC_LC_BLDG.dsc_mtrc_lc_bldg_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MTRC_DATA_SRC.data_src_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MTRC_METRIC_PERIOD.mtrc_period_name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.bldg_data_src_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.bldg_data_src_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.bldg_data_src_id })
+        </td>
+    </tr>
+}
+
+</table>
