@@ -21,16 +21,15 @@ namespace REDZONE.Models
             this.MTRC_METRIC_HIERARCHY1 = new HashSet<MTRC_METRIC_HIERARCHY>();
             this.MTRC_METRIC_VALUE = new HashSet<MTRC_METRIC_VALUE>();
             this.MTRC_METRIC_PRODUCTS = new HashSet<MTRC_METRIC_PRODUCTS>();
-            this.MTRC_BLDG_DATA_SRC = new HashSet<MTRC_BLDG_DATA_SRC>();
         }
     
         public int mtrc_period_id { get; set; }
         public int mtrc_id { get; set; }
         public short tpt_id { get; set; }
         public string mtrc_period_name { get; set; }
+        public string mtrc_period_token { get; set; }
         public string mtrc_period_desc { get; set; }
         public string mtrc_period_calc_yn { get; set; }
-        public string mtrc_period_manual_yn { get; set; }
         public Nullable<decimal> mtrc_period_min_val { get; set; }
         public Nullable<decimal> mtrc_period_max_val { get; set; }
         public Nullable<short> mtrc_period_max_dec_places { get; set; }
@@ -47,7 +46,5 @@ namespace REDZONE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MTRC_METRIC_PRODUCTS> MTRC_METRIC_PRODUCTS { get; set; }
         public virtual MTRC_TIME_PERIOD_TYPE MTRC_TIME_PERIOD_TYPE { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MTRC_BLDG_DATA_SRC> MTRC_BLDG_DATA_SRC { get; set; }
     }
 }

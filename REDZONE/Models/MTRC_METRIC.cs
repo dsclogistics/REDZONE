@@ -31,6 +31,7 @@ namespace REDZONE.Models
         public Nullable<short> mtrc_max_dec_places { get; set; }
         public Nullable<short> mtrc_max_str_size { get; set; }
         public string mtrc_na_allow_yn { get; set; }
+        public string mtrc_token { get; set; }
     
         public virtual MTRC_DATA_TYPE MTRC_DATA_TYPE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -18,7 +18,7 @@ namespace REDZONE.Models
         public short prod_id { get; set; }
         public int mtrc_period_id { get; set; }
     
-        public virtual MTRC_METRIC_PERIOD MTRC_METRIC_PERIOD { get; set; }
         public virtual MTRC_PRODUCT MTRC_PRODUCT { get; set; }
+        public virtual MTRC_METRIC_PERIOD MTRC_METRIC_PERIOD { get; set; }
     }
 }

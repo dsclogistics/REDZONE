@@ -18,7 +18,6 @@ namespace REDZONE.Models
         public DSC_MTRC_LC_BLDG()
         {
             this.MTRC_METRIC_VALUE = new HashSet<MTRC_METRIC_VALUE>();
-            this.MTRC_BLDG_DATA_SRC = new HashSet<MTRC_BLDG_DATA_SRC>();
         }
     
         public short dsc_mtrc_lc_bldg_id { get; set; }
@@ -31,7 +30,5 @@ namespace REDZONE.Models
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MTRC_METRIC_VALUE> MTRC_METRIC_VALUE { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MTRC_BLDG_DATA_SRC> MTRC_BLDG_DATA_SRC { get; set; }
     }
 }

@@ -171,7 +171,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\MTRC_BLDG_DATA_SRCController.cs" />
+    <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -207,9 +207,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
-    <Compile Include="Models\MTRC_BLDG_DATA_SRC.cs">
-      <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
@@ -382,16 +379,16 @@
     <Content Include="Views\MTRC_PRODUCT\Edit.cshtml" />
     <Content Include="Views\MTRC_PRODUCT\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\MTRC_BLDG_DATA_SRC\Create.cshtml" />
-    <Content Include="Views\MTRC_BLDG_DATA_SRC\Delete.cshtml" />
-    <Content Include="Views\MTRC_BLDG_DATA_SRC\Details.cshtml" />
-    <Content Include="Views\MTRC_BLDG_DATA_SRC\Edit.cshtml" />
-    <Content Include="Views\MTRC_BLDG_DATA_SRC\Index.cshtml" />
     <Content Include="Views\DSC_MTRC_LC_BLDG\Create.cshtml" />
     <Content Include="Views\DSC_MTRC_LC_BLDG\Delete.cshtml" />
     <Content Include="Views\DSC_MTRC_LC_BLDG\Details.cshtml" />
     <Content Include="Views\DSC_MTRC_LC_BLDG\Edit.cshtml" />
     <Content Include="Views\DSC_MTRC_LC_BLDG\Index.cshtml" />
+    <Content Include="Views\MTRC_METRIC\Create.cshtml" />
+    <Content Include="Views\MTRC_METRIC\Delete.cshtml" />
+    <Content Include="Views\MTRC_METRIC\Details.cshtml" />
+    <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
+    <Content Include="Views\MTRC_METRIC\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
