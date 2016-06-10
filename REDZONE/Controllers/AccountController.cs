@@ -30,7 +30,7 @@ namespace REDZONE.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
+        #region UnusedCode        
         //--------------------------------------------------------------------------------------------------------------\\
         //
         // POST: /Account/Login              (Original Template Method)
@@ -85,7 +85,7 @@ namespace REDZONE.Controllers
         //        return View(loginModel);
         //    }
         //}
-
+        #endregion
         //--------------------------------------------------------------------------------------------------------------\\
         // This is a new Login Page Using Modal View (POST)
         [HttpPost]
@@ -130,15 +130,15 @@ namespace REDZONE.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
-            ViewBag.ReturnUrl = "\\Home\\Index";
-            Session["emp_id"] = "";
-            Session["role"] = "";
+            ViewBag.ReturnUrl = "\\Home\\Index";                        
+            Session.Remove("emp_id");    //Session["emp_id"] = null;
+            Session.Remove("role");      //Session["role"] = null;
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
         //--------------------------------------------------------------------------------------------------------------\\
 
-        #region OroginalTemplateMethods
+        #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)
         //[HttpPost]
         //[ValidateAntiForgeryToken]

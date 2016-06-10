@@ -6,9 +6,10 @@ using System.Web.Mvc;
 
 namespace REDZONE.Controllers
 {
-    [AllowAnonymous]
+    
     public class HomeController : Controller
-    {        
+    {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             //ServerAPIs.API_obs_getLC apiObject = new ServerAPIs.API_obs_getLC("DEV");

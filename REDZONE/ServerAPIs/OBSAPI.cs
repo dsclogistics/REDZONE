@@ -135,16 +135,16 @@ namespace REDZONE.ServerAPIs
     {
         const string APINAME = "obs_getObserver";       // <--- Important (This is the URL API Endpoint)
         // ------- CONSTRUCTOR-----------
-        public API_obs_getObserver(string apiEnvironment, string pEmpFN, string pEmpLN, string pEmpEmail)
+        public API_obs_getObserver(string apiEnvironment, string pObserverFirstName, string pObserverLastName, string pObserverEmail)
         {
             requestMethod = "POST";                          // <---Important; It will determine if there is an http "getRequest"            
             apiServer = new APIServer(apiEnvironment);
             APIURL = apiServer.APIbaseURL + APINAME;
 
             //{"dsc_observer_emp_first_name":"Obs","dsc_observer_emp_last_name":"User","dsc_observer_emp_email_addr":"obs.user@dsc-logistics.com"}
-            addParameter("dsc_observer_emp_first_name", "Observer First Name", "STRING", pEmpFN);
-            addParameter("dsc_observer_emp_last_name", "Observer Last Name", "STRING", pEmpLN);
-            addParameter("dsc_observer_emp_email_addr", "Observer Email Address", "STRING", pEmpEmail);
+            addParameter("dsc_observer_emp_first_name", "Observer First Name", "STRING", pObserverFirstName);
+            addParameter("dsc_observer_emp_last_name", "Observer Last Name", "STRING", pObserverLastName);
+            addParameter("dsc_observer_emp_email_addr", "Observer Email Address", "STRING", pObserverEmail);
         }// ------- END OF CONSTRUCTOR-----------
     }
     //=======================================================================================================================
