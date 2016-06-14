@@ -165,12 +165,14 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\BasicEntryController.cs" />
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MetricDisplayController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
     <Compile Include="Global.asax.cs">
@@ -389,10 +391,13 @@
     <Content Include="Views\MTRC_METRIC\Details.cshtml" />
     <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
+    <Content Include="Views\BasicEntry\Index.cshtml" />
+    <Content Include="Views\Home\helloworld.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

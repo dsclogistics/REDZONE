@@ -20,9 +20,12 @@ namespace REDZONE.Servers
 
     public class APIServer : HostServer
     {
-        const string PROD_APIURL = "http://dscapi.dsccorp.net/dscrest/api/v1/getobsemp/";
-        const string DEV_APIURL = "http://dscapidev.dsccorp.net/dscrest/api/v1/getobsemp/";
-        const string QA_APIURL = "http://192.168.43.191.dsccorp.net/dscrest/api/v1/getobsemp/";
+        //const string PROD_APIURL = "http://dscapi.dsccorp.net/dscrest/api/v1/getobsemp/";
+        //const string DEV_APIURL = "http://dscapidev.dsccorp.net/dscrest/api/v1/getobsemp/";
+        //const string QA_APIURL = "http://192.168.43.191.dsccorp.net/dscrest/api/v1/getobsemp/";
+        const string PROD_APIURL = "http://dscapi/dscmtrc/api/v1/metric/";
+        const string DEV_APIURL = "http://dscapidev/dscmtrc/api/v1/metric/";
+        const string QA_APIURL = "http://dscapiqa/dscmtrc/api/v1/metric/";
         const string API_PROD_IP = "192.168.1.114";
         const string API_DEV_IP = "192.168.43.119";
         const string API_QA_IP = "192.168.43.191";
