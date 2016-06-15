@@ -21,7 +21,7 @@ namespace REDZONE.Controllers
             {
                 RZMetricMenu menuItem = new RZMetricMenu();
                 menuItem.menuText = (string)res["mtrc_name"];
-                menuItem.menuValue = "/BasicMetric/Volume/"+(string)res["mtrc_id"];
+                menuItem.menuValue = "/Metric/EditView/"+(string)res["mtrc_id"];
                 RZMenu.Add(menuItem);
             }
             return PartialView(RZMenu);

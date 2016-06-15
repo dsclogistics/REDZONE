@@ -17,7 +17,7 @@ namespace REDZONE.Controllers
         // GET: DSC_MTRC_LC_BLDG
         public ActionResult Index()
         {
-            var dSC_MTRC_LC_BLDG = db.DSC_MTRC_LC_BLDG.Include(d => d.DSC_LC);
+            var dSC_MTRC_LC_BLDG = db.DSC_MTRC_LC_BLDG.Include(d => d.DSC_LC).Where(x => x.dsc_mtrc_lc_bldg_eff_start_dt < DateTime.Now &&  x.dsc_mtrc_lc_bldg_eff_end_dt > DateTime.Now);
             return View(dSC_MTRC_LC_BLDG.ToList());
         }
 

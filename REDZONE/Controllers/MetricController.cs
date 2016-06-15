@@ -1,13 +1,9 @@
-﻿using System; 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 using System.Web.Mvc;
 using REDZONE.Models;
 
 namespace REDZONE.Controllers
 {
-    [AllowAnonymous]
     public class MetricController : Controller
     {
         // GET: Metric
