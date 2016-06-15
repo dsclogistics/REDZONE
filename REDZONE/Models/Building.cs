@@ -13,7 +13,7 @@ namespace REDZONE.Models
         public string buildingValue { get; set; }
         public string buildingLC { get; set; }
         public bool isEditable { get; set; }
-
+        public bool isManual { get; set; }
         //-------- Empty Constructor -----------
         public Building() { }
         //-------- END Constructor -----------
@@ -24,6 +24,7 @@ namespace REDZONE.Models
             buildingCode = building_Code;
             buildingValue = building_MetricValue;
             isEditable = Is_editable;
+            //isManual = Is_Manual;
         } //-------- END of Initializer Constructor -----------
     }
 

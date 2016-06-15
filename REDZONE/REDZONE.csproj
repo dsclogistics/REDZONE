@@ -157,6 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\DataRetrieval.cs" />
     <Compile Include="App_Code\Util.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
@@ -396,6 +398,7 @@
     <Content Include="Views\Home\helloworld.cshtml" />
     <Content Include="Views\BasicMetric\Volume.cshtml" />
     <Content Include="Views\Metric\EditView.cshtml" />
+    <Content Include="Views\Menu\_RedZoneDM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
