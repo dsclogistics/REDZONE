@@ -13,6 +13,7 @@ namespace REDZONE.Models
         public string buildingValue { get; set; }
         public string buildingLC { get; set; }
         public bool isEditable { get; set; }
+
         //-------- Empty Constructor -----------
         public Building() { }
         //-------- END Constructor -----------

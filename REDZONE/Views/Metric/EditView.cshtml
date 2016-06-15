@@ -1,0 +1,54 @@
+﻿@using REDZONE.Models
+@model REDZONE.Models.RZ_Metric
+@{
+    ViewBag.Title = "EditView";
+}
+
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading" style="text-align:center">
+       <h2>@Model.metricName</h2>
+    </div>
+    <div class="panel-body">
+        <table class="table table-bordered">
+            @foreach (Building bldng in Model.buildingList)
+            {
+                <tr>
+                    <td>@bldng.buildingName</td>
+                    @if (bldng.isEditable)
+                    {
+                        <td>
+                            <input type="text" value="@bldng.buildingValue" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@bldng.buildingValue</td>
+                    }
+
+                </tr>
+            }
+
+
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
