@@ -165,7 +165,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
-    <Compile Include="Controllers\BasicMetricController.cs" />
+    <Compile Include="Controllers\BasicMetricController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
