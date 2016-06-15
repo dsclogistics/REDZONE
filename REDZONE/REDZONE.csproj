@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\Building.cs" />
     <Compile Include="Models\DSCCustAccount.cs" />
     <Compile Include="Models\DSCREDZONE_ENTITY.Context.cs">
       <AutoGen>True</AutoGen>
@@ -206,7 +207,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\RZ_Metric.cs" />
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
@@ -385,6 +386,7 @@
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
     <Content Include="Views\BasicMetric\Index.cshtml" />
     <Content Include="Views\Home\helloworld.cshtml" />
+    <Content Include="Views\BasicMetric\Volume.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

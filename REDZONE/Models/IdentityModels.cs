@@ -29,5 +29,7 @@ namespace REDZONE.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<REDZONE.Models.RZ_Metric> RZ_Metric { get; set; }
     }
 }
