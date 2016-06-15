@@ -19,7 +19,7 @@ namespace REDZONE.App_Code
             request.Method = "POST";
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptName\":\"" + tptName + "\"}";
+            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;
             try

@@ -12,6 +12,7 @@ namespace REDZONE.Controllers
     {
         DataRetrieval api = new DataRetrieval();
         // GET: Menu
+        [ChildActionOnly]
         public ActionResult _RedZoneDM()
         {
             List<RZMetricMenu> RZMenu = new List<RZMetricMenu>();
@@ -23,7 +24,7 @@ namespace REDZONE.Controllers
                 menuItem.menuValue = "/BasicMetric/Volume/"+(string)res["mtrc_id"];
                 RZMenu.Add(menuItem);
             }
-            return View(RZMenu);
+            return PartialView(RZMenu);
         }
     }
 

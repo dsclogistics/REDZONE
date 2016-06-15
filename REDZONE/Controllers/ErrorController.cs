@@ -21,6 +21,13 @@ namespace REDZONE.Controllers
             Exception ex = new Exception(ErrorMsg);
             return View("Error", ex);
         }
+        // POST: Error
+        [HttpPost]
+        public ActionResult IndexPost(string ErrorMsg)
+        {
+            Exception ex = new Exception(ErrorMsg);
+            return View("Error", ex);
+        }
 
         // GET: Error
         public ActionResult Index(Exception catchedException)

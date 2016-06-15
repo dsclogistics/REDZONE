@@ -395,7 +395,6 @@
     <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
     <Content Include="Views\BasicMetric\Index.cshtml" />
-    <Content Include="Views\Home\helloworld.cshtml" />
     <Content Include="Views\BasicMetric\Volume.cshtml" />
     <Content Include="Views\Metric\EditView.cshtml" />
     <Content Include="Views\Menu\_RedZoneDM.cshtml" />

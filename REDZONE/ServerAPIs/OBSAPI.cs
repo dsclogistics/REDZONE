@@ -144,6 +144,21 @@ namespace REDZONE.ServerAPIs
             addParameter("test", "Dummy Description", "STRING", "test");
         }// ------- END OF CONSTRUCTOR-----------
     }
+    //===============================  "Retrieve a list of Metric NAmes" API  =========================================//
+    public class API_RZ_metricname : OBSAPI
+    {
+        const string APINAME = "metricname";       // <--- Important (This is the URL API Endpoint)
+        // ------- CONSTRUCTOR-----------
+        public API_RZ_metricname(string apiEnvironment, string productname, string tptname)
+        {
+            requestMethod = "POST";                          // <---Important; It will determine if there is an http "getRequest"            
+            apiServer = new APIServer(apiEnvironment);
+            APIURL = apiServer.APIbaseURL + APINAME;
+
+            addParameter("productname", "Product Name", "STRING", productname);
+            addParameter("tptname", "Product Time", "STRING", tptname);
+        }// ------- END OF CONSTRUCTOR-----------
+    }
     //=======================================================================================================================
     public class API_obs_getObserver : OBSAPI
     {
