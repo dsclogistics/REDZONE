@@ -1,0 +1,27 @@
+﻿@model REDZONE.Controllers.HomeController.dscBuildingViewModel
+@{
+    ViewBag.Title = "helloworld";
+}
+
+<h2>
+    The Building Name is @Model.name
+</h2>
+
+@if(Model.isList)
+{ 
+<table class="table table-condensed table-hover table-striped">
+
+        @foreach (string user in Model.employees)
+        {
+<tr style="color:blue">
+    <td>Name:</td>
+    <td>@user</td>
+</tr>
+
+        }
+
+</table>
+}
+else{
+<div style="color:red">This is notg a list</div>
+}

@@ -109,11 +109,11 @@ namespace REDZONE.ServerAPIs
     //=======================================================================================================================
 
 
-    //======================================================================================================================\\
     //======================================================================================================================||
     //============================          OBSERVATIONS DEFINED SERVER APIs       =========================================||
     //======================================================================================================================||
-    //                                                                                                                      ||
+
+
     //===============================  "DSCAuthenticationSrv" API (Authentication) =========================================//
     public class API_DSCAuthenticationSrv : OBSAPI
     {
@@ -128,6 +128,20 @@ namespace REDZONE.ServerAPIs
             addParameter("username", "User Name", "STRING", pUserName);
             addParameter("password", "User Password", "STRING", pUserPwd);
             addParameter("appid", "Aplication Id", "STRING", "DM");
+        }// ------- END OF CONSTRUCTOR-----------
+    }
+    //===============================  "DSCAuthenticationSrv" API (Authentication) =========================================//
+    public class API_RZ_MetricProducs : OBSAPI
+    {
+        const string APINAME = "metricperiod";       // <--- Important (This is the URL API Endpoint)
+        // ------- CONSTRUCTOR-----------
+        public API_RZ_MetricProducs(string apiEnvironment, string test)
+        {
+            requestMethod = "POST";                          // <---Important; It will determine if there is an http "getRequest"            
+            apiServer = new APIServer(apiEnvironment);
+            APIURL = apiServer.APIbaseURL + APINAME;
+
+            addParameter("test", "Dummy Description", "STRING", "test");
         }// ------- END OF CONSTRUCTOR-----------
     }
     //=======================================================================================================================

@@ -165,12 +165,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\BasicMetricController.cs" />
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
     <Compile Include="Global.asax.cs">
@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\Building.cs" />
     <Compile Include="Models\DSCCustAccount.cs" />
     <Compile Include="Models\DSCREDZONE_ENTITY.Context.cs">
       <AutoGen>True</AutoGen>
@@ -206,7 +207,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\RZ_Metric.cs" />
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
@@ -353,12 +354,6 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
@@ -389,10 +384,14 @@
     <Content Include="Views\MTRC_METRIC\Details.cshtml" />
     <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
+    <Content Include="Views\BasicMetric\Index.cshtml" />
+    <Content Include="Views\Home\helloworld.cshtml" />
+    <Content Include="Views\BasicMetric\Volume.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
