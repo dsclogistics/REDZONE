@@ -1,36 +1,12 @@
-﻿@model REDZONE.Controllers.BasicMetricController.RZ_Metric
-
+﻿
 @{
     ViewBag.Title = "Index";
 }
 
 <div class="row" style="text-align:center">
-    <h2>@Model.metricTitle</h2>
+    TEST PAGE
 </div>
-    
-
-    <div class="row">
-        <div class="col-sm-1 col-sm-offset-2" style="border:1px solid darkgray; padding:0">
-            <input type="button" value="<<" style="float:left; width:100%" />
-        </div>
-        <div class="col-sm-6" style="border:1px solid darkgray; height:30px; text-align:center">
-            @Model.period_Name
-    </div>
-    <div class="col-sm-1" style="border:1px solid darkgray; padding:0">
-        <input type="button" value=">>" style="float:right; width:100%" />
-    </div>
-</div>
-
-<div class="row" @*style="text-align:center"*@>
-    <table class="table table-bordered table-condensed table-hover table-responsive ">
-        @foreach (REDZONE.Controllers.BasicMetricController.Building dscBldng in Model.buildingList)
-        { 
-          <tr><td>dscBldng.buildingName</td></tr>
-        }
-    </table>
-
-</div>
-    
+        
 
  @*@ViewBag.APIresponse
     <div>Another Result:</div>@Model

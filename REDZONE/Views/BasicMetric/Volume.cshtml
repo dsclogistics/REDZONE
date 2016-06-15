@@ -22,65 +22,6 @@
 <div>
 
 
-    <hr />
-    @*<dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.period_Type)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.period_Type)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.period_Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.period_Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.metricType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.metricType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.metricDesc)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.metricDesc)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.metric_eff_start_date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.metric_eff_start_date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.metric_eff_end_date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.metric_eff_end_date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.na_allowed)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.na_allowed)
-        </dd>
-
-    </dl>*@
 </div>
 
 
@@ -97,7 +38,15 @@
         {
             <tr>
                 <td>@dscBldng.buildingName</td>
-                <td>@dscBldng.buildingValue</td>
+                <td>
+                    @if (dscBldng.isEditable) { 
+                    <input type="text" value="@dscBldng.buildingValue" />
+                    }
+                    else
+                    {
+                        <span>@dscBldng.buildingValue</span>
+                    }
+                </td>
                 <td>@dscBldng.buildingCode</td>
             </tr>
         }
