@@ -7,7 +7,7 @@ using System.Web;
 namespace REDZONE.Models
 {
     public class Metric
-    {
+    {   
         [Display(Name = "Metric ID")]
         public int metricID { set; get; }
         [Display(Name = "Name")]
@@ -19,7 +19,6 @@ namespace REDZONE.Models
         [Display(Name = "End Date")]
         public DateTime metric_eff_end_date { set; get; }
         public string na_allowed { set; get; }
-
 
     }
 }
