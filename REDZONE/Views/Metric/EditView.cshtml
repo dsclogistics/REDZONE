@@ -1,5 +1,8 @@
 ﻿@model REDZONE.Models.RZ_Metric
-@{ ViewBag.Title = "Model Metric"; }
+@{ ViewBag.Title = "Model Metric";
+   string titleClass = "";
+   if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
+   }
 
 <style>
     th {
@@ -12,8 +15,11 @@
 
 </style>
 
-<div class="row" style="text-align:center">
-    <h2>@Model.metricName Metric Information</h2>
+<div class="row " style="text-align:center" >
+    <div class="col-sm-1"></div>
+    <div class="col-md-10 @titleClass" style="margin-left:15px;">
+        <h2>@Model.metricName</h2>
+    </div>    
 </div>
 
 <div class="row">
@@ -76,9 +82,8 @@
     <div class="col-sm-2 col-sm-offset-1"><input id="btnImport" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
     <div class="col-sm-2 "><input id="btnImport" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
 </div>
-@Model.headerJson
 
 
 <div class="alert-info">
-    
+    @Model.headerJson
 </div>
