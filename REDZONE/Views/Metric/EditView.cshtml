@@ -20,14 +20,14 @@
             <div class="panel-heading" style="text-align:center">
                 <div class="input-group col-sm-10 col-sm-offset-1">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" style="float:right;">
+                        <button id ="btn-lastmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.lastMonthUrl'">
                             <span class="glyphicon glyphicon-chevron-left"></span>
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
                     </span>
                     <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" style="float:right;">
+                        <button id ="btn-nextmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.nextMonthUrl'">
                             <span class="glyphicon glyphicon-chevron-right"></span>
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
@@ -74,4 +74,5 @@
     <div class="col-sm-2 col-sm-offset-1"><input id="btnImport" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
     <div class="col-sm-2 "><input id="btnImport" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
 </div>
+@Model.headerJson
 
