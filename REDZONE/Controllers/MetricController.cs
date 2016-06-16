@@ -9,18 +9,23 @@ namespace REDZONE.Controllers
     {
         DataRetrieval api = new DataRetrieval();
         APIDataParcer parcer = new APIDataParcer();
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         // GET: Metric
-        public ActionResult EditView(int id, string month, string year)
+        public ActionResult EditView(int? id, string month, string year)
         {
-          
-   
-            return View(parcer.getRZ_Metric(id,month,year));
+            int metricId = id ?? 0;
+            if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
+            return View(parcer.getRZ_Metric(metricId, month, year));
         }
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
         public string saveRZMetric(string raw_json)
         {
             return(api.saveRZMetric(raw_json));
         }
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
     }
     
 

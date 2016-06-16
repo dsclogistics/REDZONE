@@ -53,19 +53,24 @@
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
-                            <tr>
+                            <tr class="buildingRow">                                
                                 <td>@dscBldng.buildingName</td>
                                 <td class="center">
                                     @if (dscBldng.isEditable)
                                     {
-                                        <input type="text" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
                                     }
                                     else
                                     {
                                         <span>@dscBldng.metricPeriodValue</span>
                                     }
+                                    <input type="hidden" id="wasEdited" value="N" />
+                                    <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                    <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                    <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                    <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                    <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
                                 </td>
-                                <td class="center">@dscBldng.buildingCode</td>
                             </tr>
                         }
                     </table>
@@ -84,7 +89,7 @@
 
 
 <div class="alert-info">
-    @Model.headerJson
+    @*@Model.headerJson*@
 </div>
 <div id="output"></div>
 
@@ -94,24 +99,60 @@
             alert("Cancelled");
         });
 
+        $(".updateField").on('change', function(){
+            $(this).parents(".buildingRow").find("#wasEdited").first().val("Y"); 
+            //alert("Building Metric Valuer has been changed!");
+        });
+
         $("#btnSave").click(function () {
-            alert("Saving Data...");
+            //alert("Saving Data...");
+            //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
+            var payload = buildJSON();
+
+            //$("#output").html("OUTPUT1 = " + payload1 + "<br/>OUTPUT2 = " + payload2);
+
             @*@Model.headerJson.Replace("&quot;", "'")*@
+            //alert("Posting Data: \n" + payload);
+
             $.ajax({
-                //url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                url: '/Metric/saveRZMetric',
-                //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                //url: '/Metric/saveRZMetric',
+                url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
                 method: "POST",
                 cache: false,
-                data: { raw_json: "TEST" },
+                type: "POST",
+                data: payload,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
-                //alert("Retrieved Data is: " + d);
-                $("#output").html(d);
+                alert("Data Saved Successfully!\n");
+                $("#output").html(JSON.stringify(d));
             });
         });
     });
 
+    function buildJSON() {
+        var periodId = @Model.metricPeriodID
+        var jsonPayloadHeader = '{"metricdetail":{"mtrc_period_id":"@Model.metricPeriodID","mtrc_name":"@Model.metricName","mtrc_id":"@Model.id","mtrc_period_name":"@Model.periodName.Replace("Metric Information", "")","tpt_name":"@Model.period_Type","tm_per_start_dtm":"@Model.metric_period_start_date.ToString("yyyy-MM-dd HH:mm:ss")","tm_per_end_dtm":"@Model.metric_period_end_date.ToString("yyyy-MM-dd HH:mm:ss")","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},';
+        var jsonPayloadDetail = '"locationdetails":[';
+        //Loop thorugh all building and build a location Detail JSON payload for each bnuilding that was edited
+        var recordsChanged = 0;
+        $(".buildingRow").each(function(){
+            // Loop thoruh all building rows
+            if ($(this).find("#wasEdited").first().val() == "Y")
+            {//If this Building Value was Edited add it to the payload
+                if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}     
+                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "' + $(this).find("#isEditable").first().val() + '","bmp_is_manual_yn": "' + $(this).find("#isManual").first().val() + '","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
+
+                recordsChanged = recordsChanged + 1;
+            }
+        });
+
+        //alert( recordsChanged + " building were Updated.");
+        jsonPayloadDetail = jsonPayloadDetail + ']}';
+        
+        return jsonPayloadHeader + jsonPayloadDetail
+    }
 </script>
