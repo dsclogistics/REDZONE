@@ -7,7 +7,7 @@ using System.Web;
 
 namespace REDZONE.App_Code
 {
-    
+
     public class APIDataParcer
     {
         DataRetrieval api = new DataRetrieval();
@@ -17,6 +17,9 @@ namespace REDZONE.App_Code
             RZ_Metric rz_metric = new RZ_Metric();
             //List<Building> buildings = new List<Building>();
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
+           
+            rz_metric.detail_deleteme = @"{ ""dsc_mtrc_lc_bldg_name"": ""Allentown 2"",""dsc_mtrc_lc_bldg_id"": ""2"",""bmp_is_editable_yn"": ""Y"",""bmp_is_manual_yn"": ""Y"",""mtrc_period_val_id"": ""122"",""mtrc_period_val_value"": """"}";
+            rz_metric.headerJson = raw_data.Substring(0, (raw_data.IndexOf('[') + 1)) + rz_metric.detail_deleteme+ "]}";
             JObject parsed_result = JObject.Parse(raw_data);
 
             try { }

@@ -23,8 +23,7 @@ namespace REDZONE.Models
         [Display(Name = "Period Type")] 
         public METRICPERIODS period_Type { get; set; }      //second, minute, day, month..., example: "tpt_name": "Month"
         [Display(Name = "Period Name")]
-        public string displayPeriodName { get{ return metric_period_start_date.ToString("MMM, yyyy");
-            } }             // i.e. "June, 2016"
+        public string displayPeriodName { get{ return metric_period_start_date.ToString("MMMM, yyyy");          } }             // i.e. "June, 2016"
      
         public string periodName { set; get; }       // Monthly Net FTE (mtrc_period_name)
         [Display(Name = "Product Name")]
@@ -39,6 +38,13 @@ namespace REDZONE.Models
 
         [Display(Name = "N/A Allowed?")]
         public bool isNumeric { set; get; }
+
+        public string lastMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); } }
+        public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
+
+        public string headerJson { get; set; }
+        public string detail_deleteme { get; set; }
+         
         public List<Building> buildingList = new List<Building>();
         //public List<SelectListItem> periodTypesSL = new List<SelectListItem>() { 
         //        new SelectListItem() {Text="- Select -", Value=""},
