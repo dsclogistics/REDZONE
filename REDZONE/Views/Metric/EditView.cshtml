@@ -77,12 +77,40 @@
 <hr />
 <div class="row">
     <div class="col-sm-2 col-sm-offset-2"><input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" /></div>
-    <div class="col-sm-2 "><input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" /></div>
-    <div class="col-sm-2 col-sm-offset-1"><input id="btnImport" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
-    <div class="col-sm-2 "><input id="btnImport" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
+    <div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" /></div>
+    <div class="col-sm-2 col-sm-offset-1"><input id="btnSave" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
+    <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px"  /></div>
 </div>
 
 
 <div class="alert-info">
     @Model.headerJson
 </div>
+<div id="output"></div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnCancel").click(function () {
+            alert("Cancelled");
+        });
+
+        $("#btnSave").click(function () {
+            alert("Saving Data...");
+            $.ajax({
+                //url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                //url: '/ColFormTemplate/GetSelectableAnswers',
+                url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                method: "POST",
+                cache: false,
+                data: @Model.headerJson.Replace("&quot;", "\""),
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //alert("Retrieved Data is: " + d);
+                $("#output").html(d);
+            });
+        });
+    });
+
+</script>

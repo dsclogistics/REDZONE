@@ -19,7 +19,7 @@ namespace REDZONE.App_Code
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             if (raw_data.Length > 3) { 
             // If the raw data retrieved has actual details and noy just empty "{}" 
-                rz_metric.detail_deleteme = @"{ ""dsc_mtrc_lc_bldg_name"": ""Allentown 2"",""dsc_mtrc_lc_bldg_id"": ""2"",""bmp_is_editable_yn"": ""Y"",""bmp_is_manual_yn"": ""Y"",""mtrc_period_val_id"": ""122"",""mtrc_period_val_value"": """"}";
+                rz_metric.detail_deleteme = @"{ ""dsc_mtrc_lc_bldg_name"": ""Allentown 2"",""dsc_mtrc_lc_bldg_id"": ""2"",""bmp_is_editable_yn"": ""Y"",""bmp_is_manual_yn"": ""Y"",""mtrc_period_val_id"": ""122"",""mtrc_period_val_value"": ""TEST""}";
                 rz_metric.headerJson = raw_data.Substring(0, (raw_data.IndexOf('[') + 1)) + rz_metric.detail_deleteme + "]}";
             }
             JObject parsed_result = JObject.Parse(raw_data);
