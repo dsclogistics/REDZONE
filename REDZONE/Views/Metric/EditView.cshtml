@@ -96,13 +96,17 @@
 
         $("#btnSave").click(function () {
             alert("Saving Data...");
+            //var postData = @Model.headerJson;
             $.ajax({
-                //url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                url: '/Metric/saveRZMetric',
-                //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
-                method: "POST",
+                //{ raw_json: @Model.headerJson }
+                //url: '/Metric/saveRZMetric',
+                url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                type: "POST",
                 cache: false,
-                data: { raw_json: @Model.headerJson }, 
+                dataType: 'json',
+                crossDomain: true,
+               
+                data: '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "Second Second"}]}',
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
