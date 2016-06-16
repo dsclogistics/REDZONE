@@ -12,7 +12,8 @@
         @if (Request.IsAuthenticated)
         {
             var userName = "";
-            try {
+            try
+            {
                 userName = Session["first_name"].ToString() + " " + Session["last_name"].ToString();
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;@userName</span>
@@ -22,7 +23,13 @@
                     <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
                 </ul>
             }
-            catch(Exception ex){
+            catch (System.Web.HttpException exH)
+            {
+                <span>@exH.Message;</span>
+                Html.Action("LogOff", "Account");
+            }
+            catch (Exception ex)
+            {
                 <span>@ex.Message;</span>
                 Html.Action("LogOff", "Account");
             }

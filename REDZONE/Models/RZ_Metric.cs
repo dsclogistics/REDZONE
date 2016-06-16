@@ -52,7 +52,6 @@ namespace REDZONE.Models
         //        new SelectListItem() { Text="Year", Value="7"}
         //};  //Select List used to populate a drop down list with period types in the MVC view
 
-
         //-------- Constructor -----------
         public RZ_Metric()
         {

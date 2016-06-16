@@ -19,6 +19,9 @@ namespace REDZONE.App_Code
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             JObject parsed_result = JObject.Parse(raw_data);
 
+            try { }
+            catch { }
+
             rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
             rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
             rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_name"];
