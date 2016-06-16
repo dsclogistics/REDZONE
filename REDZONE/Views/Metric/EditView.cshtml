@@ -96,13 +96,14 @@
 
         $("#btnSave").click(function () {
             alert("Saving Data...");
+            @*@Model.headerJson.Replace("&quot;", "'")*@
             $.ajax({
                 //url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
                 url: '/Metric/saveRZMetric',
                 //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
                 method: "POST",
                 cache: false,
-                data: { raw_json: @Model.headerJson }, 
+                data: { raw_json: "TEST" },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
