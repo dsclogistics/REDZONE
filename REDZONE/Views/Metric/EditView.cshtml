@@ -1,6 +1,6 @@
 ﻿@model REDZONE.Models.RZ_Metric
 @{ ViewBag.Title = "Model Metric";
-   string titleClass = "";
+   string titleClass = "alert-standard";
    if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
    }
 
@@ -12,34 +12,35 @@
     td.center {
         text-align: center;
     }
-
+    .alert-standard {
+        background-color: #f1f0f0;
+    }
 </style>
 
-<div class="row " style="text-align:center" >
+<div class="row" >
     <div class="col-sm-1"></div>
-    <div class="col-md-10 @titleClass" style="margin-left:15px;">
-        <h2>@Model.metricName</h2>
-    </div>    
-</div>
-
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-default">
+    <div class="col-md-10 " style="margin-left:15px; padding:0">
+        <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center">
-                <div class="input-group col-sm-10 col-sm-offset-1">
-                    <span class="input-group-btn">
-                        <button id ="btn-lastmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.lastMonthUrl'">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                        </button>
-                    </span>
-                    <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
-                    <span class="input-group-btn">
-                        <button id ="btn-nextmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.nextMonthUrl'">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
-                    </span>
+                <div class="row @titleClass">
+                    <span style="font-family:Arial; font-size:x-large; font-weight:bold">@Model.metricName</span>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-10 col-sm-offset-1">
+                        <span class="input-group-btn">
+                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.lastMonthUrl'">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
+                        <span class="input-group-btn">
+                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.nextMonthUrl'">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -52,29 +53,27 @@
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
-                        <tr>
-                            <td>@dscBldng.buildingName</td>
-                            <td class="center">
-                                @if (dscBldng.isEditable)
+                            <tr>
+                                <td>@dscBldng.buildingName</td>
+                                <td class="center">
+                                    @if (dscBldng.isEditable)
                                     {
-                                    <input type="text" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                        <input type="text" value="@dscBldng.metricPeriodValue" style="text-align:center" />
                                     }
                                     else
                                     {
-                                    <span>@dscBldng.metricPeriodValue</span>
+                                        <span>@dscBldng.metricPeriodValue</span>
                                     }
-                            </td>
-                            <td class="center">@dscBldng.buildingCode</td>
-                        </tr>
+                                </td>
+                                <td class="center">@dscBldng.buildingCode</td>
+                            </tr>
                         }
                     </table>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <hr />
 <div class="row">
     <div class="col-sm-2 col-sm-offset-2"><input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" /></div>
