@@ -4,24 +4,21 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using REDZONE.Models;
+using REDZONE.App_Code;
 
 namespace REDZONE.Controllers
 {
     [AllowAnonymous]
     public class MetricController : Controller
     {
+        DataRetrieval api = new DataRetrieval();
         // GET: Metric
-        public ActionResult EditView()
+        public ActionResult EditView(int id, string month, string year)
         {
-            Building myBuilding;
-            DateTime metricMonthDate = new DateTime(2016, 01, 01);
-            RZ_Metric volumeMetric = new RZ_Metric(metricMonthDate, "Volume");
-
-            myBuilding = new Building("Allentown 1", "20", "AP1", true);
-            volumeMetric.buildingList.Add(myBuilding);
-            myBuilding = new Building("Perris 3", "10000", "PC3", false);
-            volumeMetric.buildingList.Add(myBuilding);
-            return View(volumeMetric);
+            String json = api.getMetricperiod("Red Zone", "Month", id.ToString(), month, year);
+            RZ_Metric metric = new RZ_Metric();
+            metric.metricName = json;
+            return View();
         }
     }
 }

@@ -15,14 +15,8 @@ namespace REDZONE.Controllers
         public ActionResult Index()
         {
             Building dscBldng;
-            RZ_Metric mainMetric = new RZ_Metric(DateTime.Today, "Volume");
-            dscBldng = new Building("Desplaines", "100", "PP", true);
-            mainMetric.buildingList.Add(dscBldng);
-            dscBldng = new Building("Perris", "150", "PC", true);
-            mainMetric.buildingList.Add(dscBldng);
-            dscBldng = new Building("Elwood", "125", "EL", true);
-            mainMetric.buildingList.Add(dscBldng);
-
+            RZ_Metric mainMetric = new RZ_Metric();
+       
             //API_RZ_MetricProducs apiObject = new API_RZ_MetricProducs("DEV", "test");
             //ViewBag.APIresponse = apiObject.getJasonData();
 
@@ -31,14 +25,10 @@ namespace REDZONE.Controllers
         public ActionResult Volume()
         {
             Building dscBldng;
-            RZ_Metric volumeMetric = new RZ_Metric(DateTime.Today, "Volume");
-            dscBldng = new Building("Desplaines", "100", "PP", true);
+            RZ_Metric volumeMetric = new RZ_Metric();
+            dscBldng = new Building();
             volumeMetric.buildingList.Add(dscBldng);
-            dscBldng = new Building("Perris", "150", "PC", false);
-            volumeMetric.buildingList.Add(dscBldng);
-            dscBldng = new Building("Elwood", "125", "EL", true);
-            volumeMetric.buildingList.Add(dscBldng);
-
+          
             //API_RZ_MetricProducs apiObject = new API_RZ_MetricProducs("DEV", "test");
             //ViewBag.APIresponse = apiObject.getJasonData();
 
