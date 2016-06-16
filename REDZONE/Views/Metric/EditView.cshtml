@@ -5,19 +5,14 @@
     th {
         background-color: aliceblue;
     }
-
     td.center {
         text-align: center;
     }
 </style>
 
-
-<br />
 <div class="row" style="text-align:center">
-    <h2>@Model.metricName</h2>
+    <h2>@Model.metricName Metric Information</h2>
 </div>
-<br /><br />
-
 
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
@@ -40,7 +35,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0">
+                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
                     <table class="table table-bordered table-condensed table-hover table-responsive ">
                         <tr>
                             <th>Building Name</th>
