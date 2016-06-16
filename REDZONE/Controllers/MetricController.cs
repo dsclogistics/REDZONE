@@ -16,6 +16,7 @@ namespace REDZONE.Controllers
    
             return View(parcer.getRZ_Metric(id,month,year));
         }
+        [HttpPost]
         public string saveRZMetric(string raw_json)
         {
             return(api.saveRZMetric(raw_json));
