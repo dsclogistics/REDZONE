@@ -1,54 +1,82 @@
-﻿@using REDZONE.Models
-@model REDZONE.Models.RZ_Metric
-@{
-    ViewBag.Title = "EditView";
-}
+﻿@model REDZONE.Models.RZ_Metric
+@{ ViewBag.Title = "Volume Metric"; }
+
+<style>
+    th {
+        background-color: aliceblue;
+    }
+
+    td.center {
+        text-align: center;
+    }
+</style>
 
 
-
-<div class="panel panel-primary">
-    <div class="panel-heading" style="text-align:center">
-       <h2>@Model.metricName</h2>
-    </div>
-    <div class="panel-body">
-        <table class="table table-bordered">
-            @foreach (Building bldng in Model.buildingList)
-            {
-                <tr>
-                    <td>@bldng.buildingName</td>
-                    @if (bldng.isEditable)
-                    {
-                        <td>
-                            <input type="text" value="@bldng.buildingValue" />
-                        </td>
-                    }
-                    else
-                    {
-                        <td>@bldng.buildingValue</td>
-                    }
-
-                </tr>
-            }
+<br />
+<div class="row" style="text-align:center">
+    <h2>@Model.metricDesc</h2>
+</div>
+<br /><br />
 
 
-        </table>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center">
+                <div class="input-group col-sm-10 col-sm-offset-1">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" style="float:right;">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </button>
+                    </span>
+                    <input type="text" class="form-control" value="@Model.period_Name" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" style="float:right;">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0">
+                    <table class="table table-bordered table-condensed table-hover table-responsive ">
+                        <tr>
+                            <th>Building Name</th>
+                            <th style="text-align:center">Value</th>
+                            <th style="text-align:center">Code</th>
+                        </tr>
+                        @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                        {
+                            <tr>
+                                <td>@dscBldng.buildingName</td>
+                                <td class="center">
+                                    @if (dscBldng.isEditable)
+                                    {
+                                        <input type="text" value="@dscBldng.buildingValue" style="text-align:center" />
+                                    }
+                                    else
+                                    {
+                                        <span>@dscBldng.buildingValue</span>
+                                    }
+                                </td>
+                                <td class="center">@dscBldng.buildingCode</td>
+                            </tr>
+                        }
+                    </table>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<hr />
+<div class="row">
+    <div class="col-sm-2 col-sm-offset-2"><input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" /></div>
+    <div class="col-sm-2 "><input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" /></div>
+    <div class="col-sm-2 col-sm-offset-1"><input id="btnImport" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
+    <div class="col-sm-2 "><input id="btnImport" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
+</div>
 

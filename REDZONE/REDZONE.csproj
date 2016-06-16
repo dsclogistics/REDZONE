@@ -166,9 +166,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
-    <Compile Include="Controllers\BasicMetricController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
@@ -360,9 +357,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -394,9 +388,7 @@
     <Content Include="Views\MTRC_METRIC\Details.cshtml" />
     <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
-    <Content Include="Views\BasicMetric\Index.cshtml" />
-    <Content Include="Views\Home\helloworld.cshtml" />
-    <Content Include="Views\BasicMetric\Volume.cshtml" />
+    <Content Include="Views\BasicMetric_Delete\Volume.cshtml" />
     <Content Include="Views\Metric\EditView.cshtml" />
     <Content Include="Views\Menu\_RedZoneDM.cshtml" />
   </ItemGroup>
