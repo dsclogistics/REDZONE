@@ -12,32 +12,42 @@ namespace REDZONE.Models
 
     public class RZ_Metric
     {
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Metric ID")]                       // numeric, pk for mtrc_metric table
         public int id { set; get; }
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Metric Name")]                     //i.e. Net FTE (mtrc_metric.mtrc_name)
         public string metricName { set; get; }
-
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Metric Data Type")]
-        public string metricDataType { get; set; }              //Decimal=dec, Currency...
-
+        public string metricDataType { get; set; }          //Decimal=dec, Currency...
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Period Type")] 
         public METRICPERIODS period_Type { get; set; }      //second, minute, day, month..., example: "tpt_name": "Month"
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        [Display(Name = "Metric Period Name")]
+        public string period_Name { get; set; }             // mtrc_period_name       i.e. "Monthly Net FTE"
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Period Name")]
-        public string period_Name { get{ return metric_period_start_date.ToString("MMM, yyyy");
-            } }             // i.e. "June, 2016"
-     
+        public string period_Name2 { get { return metric_period_start_date.ToString("MMM, yyyy"); } }       // i.e. "June, 2016"
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Product Name")]
-        public string prodName { set; get; }
+        public string prodName { set; get; }                // i.e. Red Zone
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Period Start Date")]
         public DateTime metric_period_start_date { set; get; }
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "Period End Date")]
         public DateTime metric_period_end_date { set; get; }
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "N/A Allowed?")]
         public string na_allowed { set; get; }
-
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         [Display(Name = "N/A Allowed?")]
         public bool isNumeric { set; get; }
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -        
         public List<Building> buildingList = new List<Building>();
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         //public List<SelectListItem> periodTypesSL = new List<SelectListItem>() { 
         //        new SelectListItem() {Text="- Select -", Value=""},
         //        new SelectListItem() {Text="Second", Value="0"},
@@ -49,8 +59,7 @@ namespace REDZONE.Models
         //        new SelectListItem() { Text="Quarter", Value="6"},
         //        new SelectListItem() { Text="Year", Value="7"}
         //};  //Select List used to populate a drop down list with period types in the MVC view
-
-
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         //-------- Constructor -----------
         public RZ_Metric()
         {

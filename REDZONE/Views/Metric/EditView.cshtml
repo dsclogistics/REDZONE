@@ -14,7 +14,7 @@
 
 <br />
 <div class="row" style="text-align:center">
-    <h2>@Model.metricDesc</h2>
+    <h2>@Model.period_Name</h2>
 </div>
 <br /><br />
 
@@ -30,7 +30,7 @@
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
                     </span>
-                    <input type="text" class="form-control" value="@Model.period_Name" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
+                    <input type="text" class="form-control" value="@Model.period_Name2" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-primary" style="float:right;">
                             <span class="glyphicon glyphicon-chevron-right"></span>
@@ -54,11 +54,11 @@
                                 <td class="center">
                                     @if (dscBldng.isEditable)
                                     {
-                                        <input type="text" value="@dscBldng.buildingValue" style="text-align:center" />
+                                        <input type="text" value="@dscBldng.metricPeriodValue" style="text-align:center" />
                                     }
                                     else
                                     {
-                                        <span>@dscBldng.buildingValue</span>
+                                        <span>@dscBldng.metricPeriodValue</span>
                                     }
                                 </td>
                                 <td class="center">@dscBldng.buildingCode</td>
