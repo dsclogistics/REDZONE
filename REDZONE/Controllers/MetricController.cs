@@ -11,6 +11,8 @@ namespace REDZONE.Controllers
         // GET: Metric
         public ActionResult EditView(int id, string month, string year)
         {
+
+
             String json = api.getMetricperiod("Red Zone", "Month", id.ToString(), month, year);
             RZ_Metric metric = new RZ_Metric();
             metric.metricName = json;
