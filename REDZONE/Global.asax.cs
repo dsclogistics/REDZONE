@@ -67,7 +67,7 @@ namespace REDZONE
         protected void Application_Error(Object sender, EventArgs e)
         {
             var raisedException = Server.GetLastError();
-            string errorMessage = raisedException.Message;
+            string errorMessage = raisedException.Message.TrimEnd(System.Environment.NewLine.ToCharArray());  //Remove the Carriage returms from the String
             // Process exception...
             if (!Request.IsAuthenticated) {
                 Response.Redirect("~/Account/Login");
