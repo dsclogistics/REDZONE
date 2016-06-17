@@ -88,7 +88,7 @@
 </div>
 
 
-<div class="alert-info">
+<div id="posData" class="alert-info">
     @*@Model.headerJson*@
 </div>
 <div id="output"></div>
@@ -113,7 +113,7 @@
 
             @*@Model.headerJson.Replace("&quot;", "'")*@
             //alert("Posting Data: \n" + payload);
-
+            $("#posData").html(payload);
             $.ajax({
                 //url: '/Metric/saveRZMetric',
                 url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
@@ -134,7 +134,7 @@
     });
 
     function buildJSON() {
-        var periodId = @Model.metricPeriodID
+        //var periodId = @Model.metricPeriodID
         var jsonPayloadHeader = '{"metricdetail":{"mtrc_period_id":"@Model.metricPeriodID","mtrc_name":"@Model.metricName","mtrc_id":"@Model.id","mtrc_period_name":"@Model.periodName.Replace("Metric Information", "")","tpt_name":"@Model.period_Type","tm_per_start_dtm":"@Model.metric_period_start_date.ToString("yyyy-MM-dd HH:mm:ss")","tm_per_end_dtm":"@Model.metric_period_end_date.ToString("yyyy-MM-dd HH:mm:ss")","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},';
         var jsonPayloadDetail = '"locationdetails":[';
         //Loop thorugh all building and build a location Detail JSON payload for each bnuilding that was edited
@@ -144,7 +144,7 @@
             if ($(this).find("#wasEdited").first().val() == "Y")
             {//If this Building Value was Edited add it to the payload
                 if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}     
-                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "' + $(this).find("#isEditable").first().val() + '","bmp_is_manual_yn": "' + $(this).find("#isManual").first().val() + '","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
+                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
 
                 recordsChanged = recordsChanged + 1;
             }
