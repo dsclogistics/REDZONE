@@ -22,7 +22,13 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string saveRZMetric(string raw_json)
         {
-            return(api.saveRZMetric(raw_json));
+            string status = api.saveRZMetric(raw_json);
+            if (status.ToLower().Contains("success"))
+            {
+                return "Success";
+            }
+            else { return status; }
+            
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
