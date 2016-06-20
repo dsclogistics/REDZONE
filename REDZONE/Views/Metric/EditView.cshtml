@@ -109,26 +109,29 @@
             //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
             var payload = buildJSON();
 
-            //$("#output").html("OUTPUT1 = " + payload1 + "<br/>OUTPUT2 = " + payload2);
-
-            @*@Model.headerJson.Replace("&quot;", "'")*@
             //alert("Posting Data: \n" + payload);
-            $("#posData").html(payload);
+            //$("#posData").html(payload);
             $.ajax({
-                //url: '/Metric/saveRZMetric',
-                url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                url: '/Metric/saveRZMetric',
+                //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
                 method: "POST",
                 cache: false,
-                type: "POST",
-                data: payload,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                //type: "POST",
+                //data: payload,
+                data: {raw_json:payload},
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
-                alert("Data Saved Successfully!\n");
-                $("#output").html(JSON.stringify(d));
+                if (d == "Success") {
+                    alert("Data Saved Successfully!\n");
+                    location.reload();
+                } else {
+                    alert("Error Saving the data!\n" + JSON.stringify(d));
+                }
+                //$("#output").html(JSON.stringify(d));
             });
         });
     });
