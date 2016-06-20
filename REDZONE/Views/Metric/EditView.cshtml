@@ -17,26 +17,24 @@
     }
 </style>
 
-<div class="row" >
-    <div class="col-sm-1"></div>
+<div class="row" style="font-family:Arial;">
+    <div class=" col-sm-1"></div>
     <div class="col-md-10 " style="margin-left:15px; padding:0">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center">
                 <div class="row @titleClass">
-                    <span style="font-family:Arial; font-size:x-large; font-weight:bold">@Model.metricName</span>
+                    <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
                 </div>
                 <div class="row">
-                    <div class="input-group col-sm-10 col-sm-offset-1">
+                    <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                         <span class="input-group-btn">
-                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.lastMonthUrl'">
-                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month">
                                 <span class="glyphicon glyphicon-chevron-left"></span>
                             </button>
                         </span>
-                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large">
+                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px" >
                         <span class="input-group-btn">
-                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right;" onclick="location.href='@Model.nextMonthUrl'">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
                         </span>
@@ -49,7 +47,6 @@
                         <tr>
                             <th>Building Name</th>
                             <th style="text-align:center">Value</th>
-                            <th style="text-align:center">Code</th>
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
@@ -93,6 +90,29 @@
 </div>
 <div id="output"></div>
 
+
+
+<section id="UploadSection">
+
+    @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <table>
+            <tr>
+                <td>File:</td>
+                <td>
+                    <input type="file" name="UploadedFile" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="Submit" value="Submit" />
+                </td>
+            </tr>
+        </table>
+    }
+
+</section>
 <script>
     $(document).ready(function () {
         $("#btnCancel").click(function () {

@@ -23,7 +23,7 @@ namespace REDZONE.Models
         [Display(Name = "Period Type")] 
         public METRICPERIODS period_Type { get; set; }      //second, minute, day, month..., example: "tpt_name": "Month"
         [Display(Name = "Period Name")]
-        public string displayPeriodName { get{ return metric_period_start_date.ToString("MMMM, yyyy");          } }             // i.e. "June, 2016"
+        public string displayPeriodName { get{ return metric_period_start_date.ToString("MMMM yyyy");          } }             // i.e. "June, 2016"
      
         public string periodName { set; get; }       // Monthly Net FTE (mtrc_period_name)
         [Display(Name = "Product Name")]
