@@ -15,14 +15,9 @@ namespace REDZONE.Models
         public string buildingLC { get; set; }
         public bool isEditable { get; set; }
         public bool isManual { get; set; }
-        public string validationMsg(string type) {
-            string valMsg = String.Empty;
-            if (metricPeriodValue.GetType().ToString().Equals("Int16")) {
+        public string validationMsg { get; set; }
 
-                valMsg = "There is an error";
-            }
-            return valMsg;
-        }
+    
 
         //-------- Empty Constructor -----------
         public Building() { }
