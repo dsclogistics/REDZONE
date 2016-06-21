@@ -1,11 +1,29 @@
 ﻿
 @{
     ViewBag.Title = "Index";
+    string temp = ViewBag.listofnames;
+    //string[] split_by = { "~" };
+    string[] results = temp.Split(new string[] {"~"}, StringSplitOptions.RemoveEmptyEntries);
 }
 
-<h2>Index</h2>
+<h2>Building Values</h2>
+<table class="table table-condensed table-hover table-striped table-bordered">
+    <tr>
+        <th>Building</th>
+        <th>Metric Value</th>
+    </tr>
+    @foreach (string building in results)
+    {
+        string[] items = building.Split(new string[] { "*" }, StringSplitOptions.None);
+        <tr>
+            <td>@items[0]</td>
+            <td>@items[1]</td>
+        </tr>
+    }
+</table>
 
-@ViewBag.listofnames
+
+
 
 <br />
 <br /><br />

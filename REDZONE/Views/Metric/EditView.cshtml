@@ -96,7 +96,7 @@
 
     @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-
+        <input id="metricName" name="metricname" type="hidden" value="@Model.metricName" />
         <table>
             <tr>
                 <td>File:</td>

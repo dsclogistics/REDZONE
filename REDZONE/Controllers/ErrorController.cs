@@ -11,8 +11,10 @@ namespace REDZONE.Controllers
         //// GET: Error
         //public ActionResult Index()
         //{
-        //    Exception ex = new HttpUnhandledException();
-        //    return View("Error", ex);
+        //    Exception exception = Server.GetLastError();  //Not working Last Error is cleared at this point
+        //    System.Diagnostics.Debug.WriteLine(exception);
+        //    Session["ErrorMessage"] = exception.Message;
+        //    return View("ErrorMsg");
         //}
 
         // GET: Error
@@ -33,6 +35,21 @@ namespace REDZONE.Controllers
         public ActionResult Index(Exception catchedException)
         {
             return View("Error", catchedException);
+        }
+
+        // GET: Error
+        public ActionResult ErrorMsg()
+        {
+            string errorMessage = String.Empty;
+            try {
+                errorMessage = Session["ErrorMessage"].ToString();
+            }
+            catch {
+                errorMessage = "No Information Available about the error condition. Please try again your reques or contact the Service Desk.";
+            }
+
+            Exception ex = new Exception(errorMessage);
+            return View("Error", ex);
         }
 
         // GET: Error

@@ -130,11 +130,11 @@ namespace REDZONE.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
-            ViewBag.ReturnUrl = "\\Home\\Index";                        
+            ViewBag.ReturnUrl = "\\Home\\Index";
             Session.Remove("emp_id");    //Session["emp_id"] = null;
             Session.Remove("role");      //Session["role"] = null;
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Home");
         }
         //--------------------------------------------------------------------------------------------------------------\\
 

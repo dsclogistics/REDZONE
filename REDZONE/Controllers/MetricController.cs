@@ -39,6 +39,7 @@ namespace REDZONE.Controllers
 
         public ActionResult Upload(FormCollection formCollection)
         {
+            string metricName = formCollection["metricName"];
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["UploadedFile"];
@@ -48,14 +49,14 @@ namespace REDZONE.Controllers
                     string fileContentType = file.ContentType;
                     byte[] fileBytes = new byte[file.ContentLength];
                     var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                    var usersList = new List<Users>();
+                    var metricItems = new List<MetricItem>();
                     using(var package = new ExcelPackage(file.InputStream))
                     {
                         //var currentSheet = package.Workbook.Worksheets;
                         //var workSheet = currentSheet.First();
                         var workSheet = package.Workbook.Worksheets[1];
                         var noOfCol = workSheet.Dimension.End.Column;
-                        var noOfRow = workSheet.Dimension.End.Row;
+                        var noOfRow = workSheet.Dimension.End.Row - 5;
 
 
                         if (workSheet.Cells[1, 2].Value.ToString().Equals("Net FTE"))
@@ -63,12 +64,12 @@ namespace REDZONE.Controllers
                         else { ViewBag.action = "You did not upload the correct Metric! Booh"; }
 
                         ViewBag.message = "Current Spreadsheet has " + noOfRow + " Rows and " + noOfCol + " columns.";
-                        for (int rowIterator = 1; rowIterator <= noOfRow; rowIterator++)
+                        for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
                         {
-                            var user = new Users();
-                            user.FirstName = workSheet.Cells[rowIterator, 1].Value.ToString();
-                            user.LastName = workSheet.Cells[rowIterator, 2].Value.ToString();
-                            usersList.Add(user);
+                            var user = new MetricItem();
+                            user.BuildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
+                            user.BldngMetricValue = workSheet.Cells[rowIterator, 2].Value.ToString();
+                            metricItems.Add(user);
                             ViewBag.listofnames = ViewBag.listofnames + user.ToString();
                         }
                     }
@@ -77,12 +78,12 @@ namespace REDZONE.Controllers
             return View("Index");
         }
 
-        public class Users
+        public class MetricItem
         {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
+            public string BuildingName { get; set; }
+            public string BldngMetricValue { get; set; }
             public override string ToString(){
-                return FirstName + " " + LastName + "<br/>";
+                return BuildingName + "*" + BldngMetricValue + "~";
             }
         }
 
