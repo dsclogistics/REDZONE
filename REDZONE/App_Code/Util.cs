@@ -39,5 +39,26 @@ namespace REDZONE.App_Code
 
         }
 
+        public static bool isValidDataType(string dataType, string value)
+        {
+
+            switch (dataType)
+            {
+                case "dec":                   
+                case "cur":
+                case "pct":
+                    float res;
+                    return float.TryParse(value, out res);
+                case "int":
+                    int number;
+                    return int.TryParse(value, out number);
+                case "char":
+                    return value.Length==1?true:false;
+                case "str":
+                    return true;
+                default: return false;
+            } 
+        }
+
     }
 }

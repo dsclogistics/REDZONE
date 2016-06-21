@@ -35,16 +35,14 @@ namespace REDZONE.Models
         [Display(Name = "N/A Allowed?")]
         public string na_allowed { set; get; }
         public int metricPeriodID { set; get; }
-
-        [Display(Name = "N/A Allowed?")]
         public bool isNumeric { set; get; }
 
         public string lastMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); } }
         public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
 
-        public string headerJson { get; set; }
-        public string detail_deleteme { get; set; }        
+        public string headerJson { get; set; }      
         public List<Building> buildingList = new List<Building>();
+        public string allBuildings { get; set; }
         //public List<SelectListItem> periodTypesSL = new List<SelectListItem>() { 
         //        new SelectListItem() {Text="- Select -", Value=""},
         //        new SelectListItem() {Text="Second", Value="0"},

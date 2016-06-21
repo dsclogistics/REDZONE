@@ -16,6 +16,7 @@ namespace REDZONE.App_Code
         public RZ_Metric getRZ_Metric(int metric_id, string month, string year)
         {
             RZ_Metric rz_metric = new RZ_Metric();
+            rz_metric.allBuildings = String.Empty;
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             JObject parsed_result = JObject.Parse(raw_data);
 
@@ -40,6 +41,7 @@ namespace REDZONE.App_Code
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
+                    rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }
             }
@@ -64,7 +66,7 @@ namespace REDZONE.App_Code
             RZ_Metric rz_metric = new RZ_Metric();
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             JObject parsed_result = JObject.Parse(raw_data);
-            ExcelMetric eMetric = excelReader.readExcelFile(file);
+            //ExcelMetric eMetric = excelReader.readExcelFile(file);
             try
             {
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
@@ -84,11 +86,11 @@ namespace REDZONE.App_Code
                     bldg.buildingName = (string)res["dsc_mtrc_lc_bldg_name"];
                     bldg.buildingCode = (string)res["dsc_mtrc_lc_bldg_id"];
                     bldg.metricPeriodValue = (string)res["mtrc_period_val_value"];
-                    try
-                    {
-                        bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
-                    }
-                    catch { }
+                    //try
+                    //{
+                    //    bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                    //}
+                    //catch { }
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
