@@ -40,9 +40,11 @@ namespace REDZONE.Controllers
         public ActionResult Upload(FormCollection formCollection)
         {
             string metricName = formCollection["metricName"];
+            RZ_Metric rz_metric = new RZ_Metric();
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["UploadedFile"];
+                
                 if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
                     string fileName = file.FileName;
@@ -75,7 +77,7 @@ namespace REDZONE.Controllers
                     }
                 }
             }
-            return View("Index");
+            return View("Index", rz_metric);
         }
 
         public class MetricItem

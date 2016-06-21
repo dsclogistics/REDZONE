@@ -11,17 +11,12 @@ namespace REDZONE.App_Code
     public class APIDataParcer
     {
         DataRetrieval api = new DataRetrieval();
+        ExcelReader excelReader = new ExcelReader();
 
         public RZ_Metric getRZ_Metric(int metric_id, string month, string year)
         {
             RZ_Metric rz_metric = new RZ_Metric();
-            //List<Building> buildings = new List<Building>();
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
-            //if (raw_data.Length > 3) {
-            //    // If the raw data retrieved has actual details and not just empty "{}" 
-            //    rz_metric.detail_deleteme = @"{ ""dsc_mtrc_lc_bldg_name"": ""Allentown 2"",""dsc_mtrc_lc_bldg_id"": ""2"",""bmp_is_editable_yn"": ""Y"",""bmp_is_manual_yn"": ""Y"",""mtrc_period_val_id"": ""122"",""mtrc_period_val_value"": ""TEST""}";
-            //    rz_metric.headerJson = raw_data.Substring(0, (raw_data.IndexOf('[') + 1)) + rz_metric.detail_deleteme + "]}";                
-            //}
             JObject parsed_result = JObject.Parse(raw_data);
 
             try {
@@ -61,6 +56,54 @@ namespace REDZONE.App_Code
                 rz_metric.metricPeriodID = 0;
             }
 
+            return rz_metric;
+        }
+
+        public RZ_Metric getRZ_Metric(int metric_id, string month, string year, HttpPostedFileBase file)
+        {
+            RZ_Metric rz_metric = new RZ_Metric();
+            string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
+            JObject parsed_result = JObject.Parse(raw_data);
+            ExcelMetric eMetric = excelReader.readExcelFile(file);
+            try
+            {
+                rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
+                rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
+                rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_name"];
+                rz_metric.metricDataType = (string)parsed_result["metricdetail"]["data_type_token"];
+                rz_metric.isNumeric = (string)parsed_result["metricdetail"]["data_type_num_yn"] == "Y" ? true : false;
+                rz_metric.period_Type = METRICPERIODS.Month;
+                rz_metric.metric_period_start_date = (DateTime)parsed_result["metricdetail"]["tm_per_start_dtm"];
+                rz_metric.metric_period_end_date = (DateTime)parsed_result["metricdetail"]["tm_per_end_dtm"];
+                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"] + " Metric Information";
+                rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
+                JArray jbldg = (JArray)parsed_result["locationdetails"];
+                foreach (var res in jbldg)
+                {
+                    Building bldg = new Building();
+                    bldg.buildingName = (string)res["dsc_mtrc_lc_bldg_name"];
+                    bldg.buildingCode = (string)res["dsc_mtrc_lc_bldg_id"];
+                    //bldg.metricPeriodValue = (string)res["mtrc_period_val_value"];
+                    bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName == bldg.buildingName).metricPeriodValue;
+                    bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
+                    bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
+                    bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
+                    rz_metric.buildingList.Add(bldg);
+                }
+            }
+            catch
+            {
+                // Default Some Dummy Values since valid data could not be retrieved
+                DateTime currentMonth = new DateTime(Convert.ToInt16(year), monthToInt(month), 1);
+                rz_metric.prodName = "Red Zone";
+                rz_metric.id = metric_id;
+                rz_metric.metricName = "Requested Metric Period does not Exist";
+                rz_metric.period_Type = METRICPERIODS.Month;
+                rz_metric.metric_period_start_date = currentMonth;
+                rz_metric.metric_period_end_date = currentMonth;
+                rz_metric.periodName = "Requested Metric Period does not Exist";
+                rz_metric.metricPeriodID = 0;
+            }
             return rz_metric;
         }
 
