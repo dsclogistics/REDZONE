@@ -83,8 +83,12 @@ namespace REDZONE.App_Code
                     Building bldg = new Building();
                     bldg.buildingName = (string)res["dsc_mtrc_lc_bldg_name"];
                     bldg.buildingCode = (string)res["dsc_mtrc_lc_bldg_id"];
-                    //bldg.metricPeriodValue = (string)res["mtrc_period_val_value"];
-                    bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName == bldg.buildingName).metricPeriodValue;
+                    bldg.metricPeriodValue = (string)res["mtrc_period_val_value"];
+                    try
+                    {
+                        bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                    }
+                    catch { }
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
