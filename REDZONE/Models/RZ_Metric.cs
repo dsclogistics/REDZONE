@@ -43,8 +43,7 @@ namespace REDZONE.Models
         public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
 
         public string headerJson { get; set; }
-        public string detail_deleteme { get; set; }
-         
+        public string detail_deleteme { get; set; }        
         public List<Building> buildingList = new List<Building>();
         //public List<SelectListItem> periodTypesSL = new List<SelectListItem>() { 
         //        new SelectListItem() {Text="- Select -", Value=""},

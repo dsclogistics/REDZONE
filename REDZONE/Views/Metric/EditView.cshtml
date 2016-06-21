@@ -92,31 +92,22 @@
 
 
 
-<section id="UploadSection">
+<section id="UploadSection" style="display:none">
+  
+  @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
+  {
+   <input type="hidden" name="metricId" value="@Model.id" />
+   <input type="hidden" name="metricName" value="@Model.metricName" />
+   <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
+   <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
 
-    @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <input type="hidden" name="metricId" value="@Model.id" />
-        <input type="hidden" name="metricName" value="@Model.metricName" />
-        <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
-        <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
+   <label class="btn btn-default btn-file">
+       Upload File: <input type="file" name="UploadedFile">
+   </label>
 
-        <table>
-            <tr>
-                <td>File:</td>
-                <td>
-                    <input type="file" name="UploadedFile" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" name="Submit" value="Submit" />
-                </td>
-            </tr>
-        </table>
-    }
-
+  }
 </section>
+
 <script>
     $(document).ready(function () {
         $("#btnCancel").click(function () {
