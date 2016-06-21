@@ -89,7 +89,7 @@ namespace REDZONE
 
 
                 //Redirect HTTP errors to HttpError page
-                Server.Transfer("HttpErrorPage.aspx");     //For Standard ASPX Error Handling Page
+                //Server.Transfer("HttpErrorPage.aspx");     //For Standard ASPX Error Handling Page
                 //Or do a Response Redirect to a controller View (MVC)
             }
 

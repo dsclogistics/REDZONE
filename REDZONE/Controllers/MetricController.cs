@@ -39,7 +39,11 @@ namespace REDZONE.Controllers
 
         public ActionResult Upload(FormCollection formCollection)
         {
+            int metricId = Convert.ToInt32(formCollection["metricId"]);
             string metricName = formCollection["metricName"];
+            string metricMonth = formCollection["metricMonth"];
+            string metricYear = formCollection["metricYear"];
+
             RZ_Metric rz_metric = new RZ_Metric();
             if (Request != null)
             {
@@ -61,9 +65,9 @@ namespace REDZONE.Controllers
                     //    var noOfRow = workSheet.Dimension.End.Row - 5;
 
 
-                    //    if (workSheet.Cells[1, 2].Value.ToString().Equals("Net FTE"))
-                    //    { ViewBag.action = "You Have uploaded the correct Metric. Yay"; }
-                    //    else { ViewBag.action = "You did not upload the correct Metric! Booh"; }
+                    //if (workSheet.Cells[1, 2].Value.ToString().Equals("Net FTE"))
+                    //{ ViewBag.action = "You Have uploaded the correct Metric. Yay"; }
+                    //else { ViewBag.action = "You did not upload the correct Metric! Booh"; }
 
                     //    ViewBag.message = "Current Spreadsheet has " + noOfRow + " Rows and " + noOfCol + " columns.";
                     //    for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
@@ -75,7 +79,7 @@ namespace REDZONE.Controllers
                     //        ViewBag.listofnames = ViewBag.listofnames + user.ToString();
                     //    }
                     //}
-                    rz_metric =parcer.getRZ_Metric(6, "May", "2016",file);
+                    rz_metric = parcer.getRZ_Metric(metricId, metricMonth, metricYear, file);
                 }
             }
             return View("Index", rz_metric);
