@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool sessionEnded = false;
+    try { var temp = Session["first_name"].ToString();
+    }
+    catch {
+        sessionEnded = true;
+    }    
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -34,8 +42,8 @@
 </head>
 
 <body>
-    //if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }
-    @if (!Request.IsAuthenticated)
+    @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
+    @if (!Request.IsAuthenticated || sessionEnded)
     {
         @RenderBody()
         Html.Action("LogOff", "Account");

@@ -15,7 +15,18 @@
     .alert-standard {
         background-color: #f1f0f0;
     }
+
+    .modal-content {
+        width: 600px !important;
+        margin: 30px auto !important;
+    }
+
 </style>
+
+<!-- jasny-bootstrap Latest compiled and minified CSS          Used for File Uploader Widget  -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+<!-- jasny-bootstrap Latest compiled and minified JavaScript   Used for File Uploader Widget  -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
 
 <div class="row" style="font-family:Arial;">
     <div class=" col-sm-1"></div>
@@ -90,9 +101,23 @@
 </div>
 <div id="output"></div>
 
+@* //=============================================== MODAL CONTAINER FOR POP UP WINDOWS ==================================\\*@
+
+<div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-content">
 
 
-<section id="UploadSection" style="display:none">
+
+
+
+
+    </div>
+</div>
+
+
+@* \\============================================== END OF CONTAINER FOR POP UP WINDOWS ==================================// *@
+
+<section id="UploadSection" @*style="display:none"*@>
   
   @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
   {
@@ -100,10 +125,35 @@
    <input type="hidden" name="metricName" value="@Model.metricName" />
    <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
    <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
+   <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
 
-   <label class="btn btn-default btn-file">
-       Upload File: <input type="file" name="UploadedFile">
-   </label>
+    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+        <div class="form-control" data-trigger="fileinput">
+           <i class="glyphicon glyphicon-file fileinput-exists"></i>
+           <span class="fileinput-filename"></span>
+        </div>
+        <span class="input-group-addon btn btn-default btn-file">
+           <span class="fileinput-new">Select file to Upload</span>
+           <span class="fileinput-exists">Change</span>
+           <input type="file" name="UploadedFile">
+        </span>
+        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+    </div>
+    <input type="submit" name="Submit" value="Submit" />
+
+    @*<table>
+        <tr>
+            <td>File:</td>
+            <td>
+                <input type="file" name="UploadedFile" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="Submit" value="Submit" />
+            </td>
+        </tr>
+    </table>*@
 
   }
 </section>

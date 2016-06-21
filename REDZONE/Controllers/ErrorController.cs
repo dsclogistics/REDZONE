@@ -38,6 +38,7 @@ namespace REDZONE.Controllers
         }
 
         // GET: Error
+
         public ActionResult ErrorMsg()
         {
             string errorMessage = String.Empty;

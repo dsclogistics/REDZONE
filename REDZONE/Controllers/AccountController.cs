@@ -126,7 +126,7 @@ namespace REDZONE.Controllers
         }
         //--------------------------------------------------------------------------------------------------------------\\
         // GET: /Account/LogOff
-        [HttpGet]
+        [HttpGet][AllowAnonymous]
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
@@ -134,7 +134,8 @@ namespace REDZONE.Controllers
             Session.Remove("emp_id");    //Session["emp_id"] = null;
             Session.Remove("role");      //Session["role"] = null;
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Login", "Home");
+            //Session["ReturnURL"] = "";
+            return RedirectToAction("Login");
         }
         //--------------------------------------------------------------------------------------------------------------\\
 

@@ -69,6 +69,10 @@ namespace REDZONE
             // Code that runs when an unhandled error occurs
             // Get the exception object.
             Exception exc = Server.GetLastError();
+
+            if (exc == null) {
+                exc = new Exception("An Unknown Error occurred.");
+            }
             //System.Diagnostics.Debug.WriteLine(exc);
             string errorMessage = exc.Message.TrimEnd(System.Environment.NewLine.ToCharArray());  //Remove the Carriage returns from the String
 
@@ -112,7 +116,10 @@ namespace REDZONE
 
             //// Finally redirect, transfer, or render a error view if Unhandled
             Session["ErrorMessage"] = errorMessage;
-            Response.Redirect("/Error/ErrorMsg");
+            
+            Server.Transfer("~/Error/ErrorMsg");
+            //Server.Transfer("~/Account/Login");
+            //Response.Redirect("~/Error/ErrorMsg");
         }
 
         protected void Session_End(object sender, EventArgs e)

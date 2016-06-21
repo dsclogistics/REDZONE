@@ -177,7 +177,6 @@
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
@@ -394,10 +393,9 @@
     <Content Include="Views\MTRC_METRIC\Details.cshtml" />
     <Content Include="Views\MTRC_METRIC\Edit.cshtml" />
     <Content Include="Views\MTRC_METRIC\Index.cshtml" />
-    <Content Include="Views\BasicMetric_Delete\Volume.cshtml" />
     <Content Include="Views\Metric\EditView.cshtml" />
-    <Content Include="Views\Menu\_RedZoneDM.cshtml" />
     <Content Include="Views\Metric\Index.cshtml" />
+    <Content Include="Views\Home\_RZDM_MenuItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

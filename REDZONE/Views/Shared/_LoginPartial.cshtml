@@ -8,10 +8,10 @@
 
 <ul class="nav navbar-nav navbar-right" style="margin-top:20px">
     <li class="dropdown">
-
         @if (Request.IsAuthenticated)
         {
-            var userName = "";
+            var userName = String.Empty;
+
             try
             {
                 userName = Session["first_name"].ToString() + " " + Session["last_name"].ToString();
@@ -23,24 +23,20 @@
                     <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
                 </ul>
             }
-            catch (System.Web.HttpException exH)
+            catch
             {
-                <span>@exH.Message;</span>
-                Html.Action("LogOff", "Account");
-            }
-            catch (Exception ex)
-            {
-                <span>@ex.Message;</span>
-                Html.Action("LogOff", "Account");
+                @*<span>@ex.Message</span>
+                    Server.Transfer("~\\Account\\Logoff");*@
+                <a href="/Account/Login">
+                    <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
+                </a>
             }
         }
         else
         {
-            @*@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })*@
             <a href="/Account/Login">
                 <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
             </a>
         }
     </li>
 </ul>
-
