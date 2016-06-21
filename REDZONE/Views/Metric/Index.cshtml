@@ -1,16 +1,79 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@model REDZONE.Models.RZ_Metric
+@{ ViewBag.Title = "Model Metric";
+    string titleClass = "alert-standard";
+    if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
 }
 
-<h2>Index</h2>
+<style>
+    th {
+        background-color: aliceblue;
+    }
 
-@ViewBag.listofnames
+    td.center {
+        text-align: center;
+    }
 
-<br />
-<br /><br />
+    .alert-standard {
+        background-color: #f1f0f0;
+    }
+</style>
 
-@ViewBag.action
-<br />
-<br />
-@ViewBag.message
+<div class="row" style="font-family:Arial;">
+    <div class=" col-sm-1"></div>
+    <div class="col-md-10 " style="margin-left:15px; padding:0">
+        <div class="panel panel-default" style="margin-bottom:0px; ">
+            <div class="panel-heading" style="text-align:center">
+                <div class="row @titleClass">
+                    <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
+                </div>
+                <div class="row">
+                    <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
+                        <span class="input-group-btn">
+                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                        <span class="input-group-btn">
+                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
+                    <table class="table table-bordered table-condensed table-hover table-responsive ">
+                        <tr>
+                            <th>Building Name</th>
+                            <th style="text-align:center">Value</th>
+                        </tr>
+                        @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                        {
+                            <tr class="buildingRow">
+                                <td>@dscBldng.buildingName</td>
+                                <td class="center">
+                                    @if (dscBldng.isEditable)
+                                    {
+                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                    }
+                                    else
+                                    {
+                                        <span>@dscBldng.metricPeriodValue</span>
+                                    }
+                                    <input type="hidden" id="wasEdited" value="N" />
+                                    <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                    <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                    <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                    <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                    <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
