@@ -63,35 +63,35 @@ namespace REDZONE.Controllers
                         string excelYear = "";
                         try
                         {
-                            excelMetricName = workSheet.Cells[1, 2].Value.ToString().ToUpper();
-                            excelYear = workSheet.Cells[2, 2].Value.ToString();
-                            excelMonth = workSheet.Cells[3, 2].Value.ToString().ToUpper();
+                            excelMetricName = workSheet.Cells[1, 2].Value.ToString().Trim().ToUpper();
+                            excelYear = workSheet.Cells[2, 2].Value.ToString().Trim();
+                            excelMonth = workSheet.Cells[3, 2].Value.ToString().Trim().ToUpper();
                         }
                         catch
                         {
                             Session["ErrorMessage"] = "Metric Name or Year or Month cannot be found in the SpreadSheet";
-                            return View("ErrorMsg", "Error");
+                            return RedirectToAction("ErrorMsg", "Error");
                         }
-                        if (!excelMetricName.Equals(metricName.ToUpper()))
+                        if (!excelMetricName.Equals(metricName.Trim().ToUpper()))
                         {
                             Session["ErrorMessage"] = "Metric Name doesn't match Metric name in the SpreadSheet";
-                            return View("ErrorMsg", "Error");
+                            return RedirectToAction("ErrorMsg", "Error");
                         }
-                        else if (!excelMonth.Equals(metricMonth.ToUpper()))
+                        else if (!excelMonth.Equals(metricMonth.Trim().ToUpper()))
                         {
                             Session["ErrorMessage"] = "Month doesn't match Month in the SpreadSheet";
-                            return View("ErrorMsg", "Error");
+                            return RedirectToAction("ErrorMsg", "Error");
                         }
-                        else if (!excelYear.Equals(metricYear))
+                        else if (!excelYear.Equals(metricYear.Trim()))
                         {
                             Session["ErrorMessage"] = "Year doesn't match Year in the SpreadSheet";
-                            return View("ErrorMsg", "Error");
+                            return RedirectToAction("ErrorMsg", "Error");
                         }
-                        rz_metric = parcer.getRZ_Metric(metricId, metricMonth, metricName, file);
+                        rz_metric = parcer.getRZ_Metric(metricId, metricMonth, metricYear, file);
                     }
                 }
             }
-            return View("Index", rz_metric);
+            return View("EditView", rz_metric);
         }
 
         public class MetricItem
