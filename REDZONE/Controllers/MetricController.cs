@@ -47,34 +47,35 @@ namespace REDZONE.Controllers
                 
                 if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
-                    string fileName = file.FileName;
-                    string fileContentType = file.ContentType;
-                    byte[] fileBytes = new byte[file.ContentLength];
-                    var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                    var metricItems = new List<MetricItem>();
-                    using(var package = new ExcelPackage(file.InputStream))
-                    {
-                        //var currentSheet = package.Workbook.Worksheets;
-                        //var workSheet = currentSheet.First();
-                        var workSheet = package.Workbook.Worksheets[1];
-                        var noOfCol = workSheet.Dimension.End.Column;
-                        var noOfRow = workSheet.Dimension.End.Row - 5;
+                    //string fileName = file.FileName;
+                    //string fileContentType = file.ContentType;
+                    //byte[] fileBytes = new byte[file.ContentLength];
+                    //var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                    //var metricItems = new List<MetricItem>();
+                    //using(var package = new ExcelPackage(file.InputStream))
+                    //{
+                    //    //var currentSheet = package.Workbook.Worksheets;
+                    //    //var workSheet = currentSheet.First();
+                    //    var workSheet = package.Workbook.Worksheets[1];
+                    //    var noOfCol = workSheet.Dimension.End.Column;
+                    //    var noOfRow = workSheet.Dimension.End.Row - 5;
 
 
-                        if (workSheet.Cells[1, 2].Value.ToString().Equals("Net FTE"))
-                        { ViewBag.action = "You Have uploaded the correct Metric. Yay"; }
-                        else { ViewBag.action = "You did not upload the correct Metric! Booh"; }
+                    //    if (workSheet.Cells[1, 2].Value.ToString().Equals("Net FTE"))
+                    //    { ViewBag.action = "You Have uploaded the correct Metric. Yay"; }
+                    //    else { ViewBag.action = "You did not upload the correct Metric! Booh"; }
 
-                        ViewBag.message = "Current Spreadsheet has " + noOfRow + " Rows and " + noOfCol + " columns.";
-                        for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
-                        {
-                            var user = new MetricItem();
-                            user.BuildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
-                            user.BldngMetricValue = workSheet.Cells[rowIterator, 2].Value.ToString();
-                            metricItems.Add(user);
-                            ViewBag.listofnames = ViewBag.listofnames + user.ToString();
-                        }
-                    }
+                    //    ViewBag.message = "Current Spreadsheet has " + noOfRow + " Rows and " + noOfCol + " columns.";
+                    //    for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
+                    //    {
+                    //        var user = new MetricItem();
+                    //        user.BuildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
+                    //        user.BldngMetricValue = workSheet.Cells[rowIterator, 2].Value.ToString();
+                    //        metricItems.Add(user);
+                    //        ViewBag.listofnames = ViewBag.listofnames + user.ToString();
+                    //    }
+                    //}
+                    rz_metric =parcer.getRZ_Metric(6, "May", "2016",file);
                 }
             }
             return View("Index", rz_metric);
