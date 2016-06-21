@@ -96,7 +96,11 @@
 
     @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <input id="metricName" name="metricname" type="hidden" value="@Model.metricName" />
+        <input type="hidden" name="metricId" value="@Model.id" />
+        <input type="hidden" name="metricName" value="@Model.metricName" />
+        <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
+        <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
+
         <table>
             <tr>
                 <td>File:</td>
