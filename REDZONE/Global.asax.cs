@@ -58,6 +58,7 @@ namespace REDZONE
 
             // retrieve roles from UserData
             string[] roles = authTicket.UserData.Split(';');
+            if (roles.Length == 0 || roles[0] == ""){ roles = new string[] {"User"};}
 
             if (Context.User != null)
                 Context.User = new GenericPrincipal(Context.User.Identity, roles);
