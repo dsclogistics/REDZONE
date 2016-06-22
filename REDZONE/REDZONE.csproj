@@ -161,10 +161,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\APIDataParcer.cs" />
-    <Compile Include="App_Code\DataRetrieval.cs" />
-    <Compile Include="App_Code\ExcelReader.cs" />
-    <Compile Include="App_Code\Util.cs" />
+    <Compile Include="AppCode\APIDataParcer.cs" />
+    <Compile Include="AppCode\DataRetrieval.cs" />
+    <Compile Include="AppCode\ExcelReader.cs" />
+    <Compile Include="AppCode\Util.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
