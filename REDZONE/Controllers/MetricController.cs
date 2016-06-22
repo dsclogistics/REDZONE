@@ -50,8 +50,8 @@ namespace REDZONE.Controllers
             string metricYear = formCollection["metricYear"];
             string allBuildings = formCollection["allBuildings"]; 
             string metricDataType = formCollection["metricDataType"];
-            bool na_allowed= true;
-            //bool na_allowed = formCollection["na_allowed"];
+            bool na_allowed = Convert.ToBoolean(formCollection["na_allowed"]);
+          
             ExcelReader excelReader = new ExcelReader();
             ExcelMetric eMetric = new ExcelMetric();
             if (Request != null)

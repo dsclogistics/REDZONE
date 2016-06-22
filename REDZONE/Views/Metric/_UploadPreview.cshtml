@@ -23,7 +23,7 @@
         <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
         <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
         <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
-        <input type="hidden" name="na_allowed" value="@Model.na_allowed" />
+        <input type="hidden" name="na_allowed" value="@Model.na_allowed.ToString()" />
 
         <div class="row">
             <div class="col-sm-8">
