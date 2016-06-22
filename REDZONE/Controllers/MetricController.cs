@@ -38,6 +38,7 @@ namespace REDZONE.Controllers
         //GET: Metric/UploadPreview
         public ActionResult UploadPreview(RZ_Metric myData)
         {
+
             return PartialView("_UploadPreview", myData);
         }
       
@@ -60,7 +61,7 @@ namespace REDZONE.Controllers
                     eMetric = excelReader.readExcelFile(file, metricName, metricYear, metricMonth, allBuildings, metricDataType);
                 }
             }
-            return View("EditView", eMetric);
+            return View("_Upload", eMetric);
         }
 
         public ActionResult UploadValidated(FormCollection formCollection)
