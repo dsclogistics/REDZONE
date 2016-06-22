@@ -16,6 +16,8 @@
         <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
         <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
         <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
+        <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
+        <input type="hidden" name="na_allowed" value="@Model.na_allowed" />
 
         <div class="fileinput fileinput-new input-group" data-provides="fileinput">
             <div class="form-control" data-trigger="fileinput">

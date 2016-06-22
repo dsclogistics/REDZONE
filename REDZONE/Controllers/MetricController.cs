@@ -50,6 +50,8 @@ namespace REDZONE.Controllers
             string metricYear = formCollection["metricYear"];
             string allBuildings = formCollection["allBuildings"]; 
             string metricDataType = formCollection["metricDataType"];
+            bool na_allowed= true;
+            //bool na_allowed = formCollection["na_allowed"];
             ExcelReader excelReader = new ExcelReader();
             ExcelMetric eMetric = new ExcelMetric();
             if (Request != null)
@@ -58,7 +60,7 @@ namespace REDZONE.Controllers
                 
                 if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
-                    eMetric = excelReader.readExcelFile(file, metricName, metricYear, metricMonth, allBuildings, metricDataType);
+                    eMetric = excelReader.readExcelFile(file, metricName, metricYear, metricMonth, allBuildings, metricDataType, na_allowed);
                 }
             }
             return View("_Upload", eMetric);
