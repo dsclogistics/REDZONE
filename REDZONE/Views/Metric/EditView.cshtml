@@ -86,15 +86,15 @@
 <hr />
 <div class="row">
     <div class="col-sm-2 col-sm-offset-2">
-        @Html.ActionLink("Import Excel", "FilePreview", "Metric", null, new { @class = "modal-link btn btn-primary", id = "btnImport" })
-        @*<input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" />*@
+       @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+       @*<input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" />*@
     </div>
-    <div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" /></div>
+    <div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" disabled="disabled" /></div>
     <div class="col-sm-2 col-sm-offset-1"><input id="btnSave" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
     <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px"  /></div>
 </div>
 <br />
-@Html.ActionLink("Click to display Pop up ", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+
 
 <div id="posData" class="alert-info">
     @*@Model.headerJson*@
