@@ -15,9 +15,10 @@ namespace REDZONE.Models
         public string buildingLC { get; set; }
         public bool isEditable { get; set; }
         public bool isManual { get; set; }
-        public string validationMsg { get; set; }
+        public string buildingErrorMsg { get; set; }
+        public string valueErrorMsg { get; set; }
 
-    
+
 
         //-------- Empty Constructor -----------
         public Building() { }

@@ -33,7 +33,8 @@ namespace REDZONE.Models
         [Display(Name = "Period End Date")]
         public DateTime metric_period_end_date { set; get; }
         [Display(Name = "N/A Allowed?")]
-        public string na_allowed { set; get; }
+        public bool na_allowed { set; get; }
+        public bool isImportable { set; get; }
         public int metricPeriodID { set; get; }
         public bool isNumeric { set; get; }
 

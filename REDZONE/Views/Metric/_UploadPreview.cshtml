@@ -17,22 +17,23 @@
         <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
         <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
         <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
-        <input type="hidden" name="allBuildings" value="@Model.allBuildings" />
+        <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
+        <input type="hidden" name="na_allowed" value="@Model.na_allowed" />
 
         <div class="row">
             <div class="col-sm-8">
                 <div class="fileinput fileinput-new input-group " data-provides="fileinput">
-                    <div class="form-control" data-trigger="fileinput">
-                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                        <span class="fileinput-filename"></span>
-                    </div>
-                    <span class="input-group-addon btn btn-default btn-file">
-                        <span class="fileinput-new">Select file to Upload</span>
-                        <span class="fileinput-exists">Change</span>
-                        <input type="file" name="UploadedFile">
-                    </span>
-                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-                </div>
+            <div class="form-control" data-trigger="fileinput">
+                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                <span class="fileinput-filename"></span>
+            </div>
+            <span class="input-group-addon btn btn-default btn-file">
+                <span class="fileinput-new">Select file to Upload</span>
+                <span class="fileinput-exists">Change</span>
+                <input type="file" name="UploadedFile">
+            </span>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+        </div>
             </div>
             <div class="col-sm-4">
                 <input class="btn btn-primary" type="submit" name="Submit" value="Validate File" />

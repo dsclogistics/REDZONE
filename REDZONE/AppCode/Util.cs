@@ -39,8 +39,16 @@ namespace REDZONE.AppCode
 
         }
 
-        public static bool isValidDataType(string dataType, string value)
+        public static bool isValidDataType(string dataType, string value,bool na_allowed)
         {
+            if (String.IsNullOrEmpty(value))
+            {
+                return true;
+            }
+            if (value.ToUpper().Equals("N/A") && na_allowed)
+            {
+                return true;
+            }
             switch (dataType)
             {
                 case "dec":                   
