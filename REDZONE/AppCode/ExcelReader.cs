@@ -100,6 +100,7 @@ namespace REDZONE.AppCode
         }
 
     }
+
     public class ExcelMetric
     {
         public string MetricName { get; set; }
