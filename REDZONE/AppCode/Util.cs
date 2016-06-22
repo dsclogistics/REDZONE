@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace REDZONE.App_Code
+namespace REDZONE.AppCode
 {
     public class Util
     {

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using REDZONE.ServerAPIs;
 using Newtonsoft.Json.Linq;
-using REDZONE.App_Code;
+using REDZONE.AppCode;
 
 namespace REDZONE.Controllers
 {

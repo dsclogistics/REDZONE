@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-namespace REDZONE.App_Code
+namespace REDZONE.AppCode
 {
     public class DataRetrieval
     {
