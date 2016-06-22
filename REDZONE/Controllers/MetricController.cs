@@ -36,6 +36,13 @@ namespace REDZONE.Controllers
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
+        //GET: Metric/FilePreview
+        public ActionResult FilePreview()
+        {
+            string modelName = "This is a test only!";
+
+            return PartialView("_FilePreview", modelName);
+        }
 
         public ActionResult Upload(FormCollection formCollection)
         {
