@@ -41,6 +41,7 @@ namespace REDZONE.Controllers
             return PartialView("_UploadPreview", myData);
         }
       
+
         public ActionResult Upload(FormCollection formCollection)
         {
             int metricId = Convert.ToInt32(formCollection["metricId"]);
