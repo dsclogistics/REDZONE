@@ -41,7 +41,6 @@ namespace REDZONE.App_Code
 
         public static bool isValidDataType(string dataType, string value)
         {
-
             switch (dataType)
             {
                 case "dec":                   
