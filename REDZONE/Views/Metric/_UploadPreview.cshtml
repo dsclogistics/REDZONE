@@ -6,9 +6,10 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
 
 <div class="modal-body">
-    <div id="UploadSection" @*style="display:none"*@>
-        Preview test!
-    </div>
+    @*<div id="UploadSection" >
+
+        </div>*@
+
     @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <input type="hidden" name="metricId" value="@Model.id" />
@@ -19,7 +20,9 @@
         <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
         <input type="hidden" name="na_allowed" value="@Model.na_allowed" />
 
-        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="fileinput fileinput-new input-group " data-provides="fileinput">
             <div class="form-control" data-trigger="fileinput">
                 <i class="glyphicon glyphicon-file fileinput-exists"></i>
                 <span class="fileinput-filename"></span>
@@ -31,7 +34,12 @@
             </span>
             <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
         </div>
-        <input type="submit" name="Submit" value="Submit" />
+            </div>
+            <div class="col-sm-4">
+                <input class="btn btn-primary" type="submit" name="Submit" value="Validate File" />
+            </div>
+        </div>
+
 
         @*<table>
                 <tr>

@@ -1,9 +1,17 @@
 ﻿@{
     bool sessionEnded = false;
-    try { var temp = Session["first_name"].ToString();
+    if (Request.IsAuthenticated)
+    {
+        string tempName = Request.LogonUserIdentity.Name;
+        tempName = tempName.Substring(tempName.IndexOf("\\") + 1);
+        string userName = tempName.Substring(0, tempName.IndexOf("_"));
+        Session["last_name"] = userName;
+        userName = tempName.Substring(tempName.IndexOf("_") + 1);
+        Session["first_name"] = userName;
     }
-    catch {
-        sessionEnded = true;
+    else {
+        sessionEnded = true; 
+        @Html.Action("Login", "Account", new { returnUrl = "\\Home\\Index"})
     }    
 }
 <!DOCTYPE html>
