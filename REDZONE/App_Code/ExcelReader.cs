@@ -84,12 +84,12 @@ namespace REDZONE.App_Code
                         bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString();
                         if (!Util.isValidDataType(metricDataType, bldg.metricPeriodValue))
                         {
-                            bldg.validationMsg = "Can't find " + bldg.buildingName + " in the existing list of buildings";
+                            bldg.validationMsg = bldg.validationMsg + "; Value: " + bldg.metricPeriodValue + " is invalid for this metric";
                         }
                     }
                     catch (NullReferenceException)
                     {
-                        bldg.validationMsg = bldg.validationMsg +"; Value: "+ bldg.metricPeriodValue+" is invalid for this metric";
+                        
                     }                    
                     eMetric.buildingList.Add(bldg);
 
