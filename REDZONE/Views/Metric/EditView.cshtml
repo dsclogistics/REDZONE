@@ -93,7 +93,8 @@
     <div class="col-sm-2 col-sm-offset-1"><input id="btnSave" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
     <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px"  /></div>
 </div>
-
+<br />
+@Html.ActionLink("Click to display Pop up ", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
 
 <div id="posData" class="alert-info">
     @*@Model.headerJson*@
@@ -102,8 +103,11 @@
 
 @* //=============================================== MODAL CONTAINER FOR POP UP WINDOWS ==================================\\
     This Modal pop up could also be added to the Layout Page so it can be utilized across all pages of the application
-    The Popup is triggered by inserting a link action command (Button); for Example:
-    @Html.ActionLink("Click for Popup ", "ActionName", "HomeController", null, new { @class = "modal-link btn btn-success" })*@
+    The Popup is triggered by inserting a link action command (Button); for Example, In Razr Format:
+    @Html.ActionLink("Click for Popup ", "ActionName", "HomeController", null, new { @class = "modal-link btn btn-success" })
+    or regulat HTML sintax:
+    <a class="modal-link btn btn-primary" href="/HomeController/ActionName">Click to display Pop up </a>
+*@
 
 <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-content">
@@ -114,46 +118,6 @@
 
 @* \\============================================== END OF CONTAINER FOR POP UP WINDOWS ==================================// *@
 
-<section id="UploadSection" @*style="display:none"*@>
-  
-  @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
-  {
-   <input type="hidden" name="metricId" value="@Model.id" />
-   <input type="hidden" name="metricName" value="@Model.metricName" />
-   <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
-   <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
-   <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
-
-    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-        <div class="form-control" data-trigger="fileinput">
-           <i class="glyphicon glyphicon-file fileinput-exists"></i>
-           <span class="fileinput-filename"></span>
-        </div>
-        <span class="input-group-addon btn btn-default btn-file">
-           <span class="fileinput-new">Select file to Upload</span>
-           <span class="fileinput-exists">Change</span>
-           <input type="file" name="UploadedFile">
-        </span>
-        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-    </div>
-    <input type="submit" name="Submit" value="Submit" />
-
-    @*<table>
-        <tr>
-            <td>File:</td>
-            <td>
-                <input type="file" name="UploadedFile" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" name="Submit" value="Submit" />
-            </td>
-        </tr>
-    </table>*@
-
-  }
-</section>
 
 <script>
     $(document).ready(function () {

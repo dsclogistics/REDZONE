@@ -35,15 +35,12 @@ namespace REDZONE.Controllers
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-
-        //GET: Metric/FilePreview
-        public ActionResult FilePreview()
+        //GET: Metric/UploadPreview
+        public ActionResult UploadPreview(RZ_Metric myData)
         {
-            string modelName = "This is a test only!";
-
-            return PartialView("_FilePreview", modelName);
+            return PartialView("_UploadPreview", myData);
         }
-
+      
         public ActionResult Upload(FormCollection formCollection)
         {
             int metricId = Convert.ToInt32(formCollection["metricId"]);
