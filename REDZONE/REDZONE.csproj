@@ -400,6 +400,7 @@
     <Content Include="Views\Metric\EditView.cshtml" />
     <Content Include="Views\Metric\Index.cshtml" />
     <Content Include="Views\Home\_RZDM_MenuItems.cshtml" />
+    <Content Include="Views\Metric\_Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
