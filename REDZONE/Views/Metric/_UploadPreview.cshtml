@@ -94,35 +94,37 @@
             var myFile = document.getElementById('UploadedFile').files[0];
             formData.append('UploadedFile', myFile, myFile.name);
 
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/Metric/Upload/",
-            //    data: formData,
-            //    success: function () {
-            //        alert("Ajax call successful");
-            //    },
-            //    error: function () {
-            //        alert("Ajax call Failed");
-            //    }
-            //});   
-
-            // Set up the request.
-            var xhr = new XMLHttpRequest();
-            // Open the connection.
-            xhr.open('POST', '/Metric/Upload', true);
-            // Set up a handler for when the request finishes.
-            xhr.onload = function (d) {
-                if (xhr.status === 200) {
-                    //// File(s) uploaded.
-                    $('#approve-btn').html("Wait");
-                    // uploadButton.innerHTML = 'Upload';
-                    alert("Process Completed.\n" );
-                } else {
-                    alert('An error occurred!');
+            $.ajax({
+                type: "POST",
+                url: "/Metric/Upload/",
+                data: formData,
+                cache: false,
+                //contentType: 'multipart/form-data',
+                success: function () {
+                    alert("Ajax call successful");
+                },
+                error: function () {
+                    alert("Ajax call Failed");
                 }
-            };
-            // Send the Data.
-            xhr.send(formData);
+            });   
+
+            //// Set up the request.
+            //var xhr = new XMLHttpRequest();
+            //// Open the connection.
+            //xhr.open('POST', '/Metric/Upload', true);
+            //// Set up a handler for when the request finishes.
+            //xhr.onload = function (d) {
+            //    if (xhr.status === 200) {
+            //        //// File(s) uploaded.
+            //        $('#approve-btn').html("Wait");
+            //        // uploadButton.innerHTML = 'Upload';
+            //        alert("Process Completed.\n" );
+            //    } else {
+            //        alert('An error occurred!');
+            //    }
+            //};
+            //// Send the Data.
+            //xhr.send(formData);
             
 
             @*$.ajax({

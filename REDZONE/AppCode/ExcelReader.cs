@@ -18,6 +18,7 @@ namespace REDZONE.AppCode
             eMetric.Month = String.Empty;
             eMetric.Year = String.Empty;
             string fileName = file.FileName;
+            eMetric.isValidated = "True";
             string fileContentType = file.ContentType;
             byte[] fileBytes = new byte[file.ContentLength];
             var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
@@ -34,6 +35,7 @@ namespace REDZONE.AppCode
                     {
                         eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type. [ Metric Name '" + metricName + "' ] is Expected.";
                         eMetric.MetricNameClass = ERRORCLASS;
+                        eMetric.isValidated = "False";
                         return eMetric;
                     }
                 }
@@ -41,6 +43,7 @@ namespace REDZONE.AppCode
                 {
                     eMetric.MetricNameErrorMsg = "ERROR: Metric Name cannot be found in the spreadsheet. Invalid or incorrect Uploaded File Format ";
                     eMetric.MetricNameClass = ERRORCLASS;
+                    eMetric.isValidated = "False";
                     return eMetric;
                 }
                 try
@@ -51,12 +54,14 @@ namespace REDZONE.AppCode
                     {
                         eMetric.MetricYearErrorMsg = "ERROR: Year doesn't match Year in the SpreadSheet. Year '" + metricYear + "' was Expected.";
                         eMetric.MetricYearClass = ERRORCLASS;
+                        eMetric.isValidated = "False";
                     }
                 }
                 catch( NullReferenceException )
                 {
                     eMetric.MetricYearErrorMsg = "ERROR: Metric Year Value cannot be found in the spreadsheet";
                     eMetric.MetricYearClass = ERRORCLASS;
+                    eMetric.isValidated = "False";
                 }
                 try
                 {
@@ -66,12 +71,14 @@ namespace REDZONE.AppCode
                     {
                         eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet.Year '" + metricMonth + "' was Expected.";
                         eMetric.MetricMonthClass = ERRORCLASS;
+                        eMetric.isValidated = "False";
                     }
                 }
                 catch(NullReferenceException )
                 {
                     eMetric.MetricMonthErrorMsg = "ERROR: Metric Month Value cannot be found in the spreadsheet";
                     eMetric.MetricMonthClass = ERRORCLASS;
+                    eMetric.isValidated = "False";
                 }                               
                
                 for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
@@ -89,12 +96,14 @@ namespace REDZONE.AppCode
                         {
                             bldg.buildingErrorMsg = "Can't find " + bldg.buildingName + " in the existing list of buildings";
                             bldg.buildingViewClass = ERRORCLASS;
+                            eMetric.isValidated = "False";
                         }
                     }
                     catch(NullReferenceException )
                     {
                         bldg.buildingErrorMsg = "Can't find building name";
                         bldg.buildingViewClass = ERRORCLASS;
+                        eMetric.isValidated = "False";
                     }
                     try
                     {
@@ -103,11 +112,11 @@ namespace REDZONE.AppCode
                         {
                             bldg.valueErrorMsg = "Value: " + bldg.metricPeriodValue + " is invalid for this metric";
                             bldg.buildingViewClass = ERRORCLASS;
+                            eMetric.isValidated = "False";
                         }
                     }
                     catch (NullReferenceException)
-                    {
-                        
+                    {                       
                     }                    
                     eMetric.buildingList.Add(bldg);
 
@@ -116,6 +125,51 @@ namespace REDZONE.AppCode
             }
 
         }
+        public ExcelMetric readValidatedExcelFile(HttpPostedFileBase file)
+        {
+
+            ExcelMetric eMetric = new ExcelMetric();
+            
+            string fileName = file.FileName;
+            string fileContentType = file.ContentType;
+            byte[] fileBytes = new byte[file.ContentLength];
+            var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+            using (var package = new ExcelPackage(file.InputStream))
+            {
+                var workSheet = package.Workbook.Worksheets[1];
+                var noOfCol = workSheet.Dimension.End.Column;
+                var noOfRow = workSheet.Dimension.End.Row;
+                
+                eMetric.MetricName = workSheet.Cells[1, 2].Value.ToString().Trim();
+                eMetric.Year = workSheet.Cells[2, 2].Value.ToString().Trim();
+                eMetric.Month = workSheet.Cells[3, 2].Value.ToString().Trim();
+
+
+                for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
+                {
+                    Building bldg = new Building();
+                    bldg.buildingName = String.Empty;
+                    bldg.metricPeriodValue = String.Empty;
+                    bldg.buildingErrorMsg = String.Empty;
+                    bldg.valueErrorMsg = String.Empty;
+                    bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
+                    try
+                    {
+
+                        bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
+                    }
+                    catch (NullReferenceException)
+                    {
+                        bldg.metricPeriodValue = String.Empty;
+                    }
+                                       
+                    eMetric.buildingList.Add(bldg);
+
+                }
+                return eMetric;
+            }
+        }
+
 
     }
 
@@ -130,7 +184,7 @@ namespace REDZONE.AppCode
         public string Month { get; set; }
         public string MetricMonthClass { get; set; }
         public string MetricMonthErrorMsg { get; set; }
-        public bool isValidated { get; set; }//this flag is true if excel file has no errors
+        public string isValidated { get; set; }//this flag is "True" if excel file has no errors
         
         public List<Building> buildingList = new List<Building>();
 

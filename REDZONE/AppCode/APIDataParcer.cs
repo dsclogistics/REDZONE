@@ -68,7 +68,7 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             JObject parsed_result = JObject.Parse(raw_data);
-            //ExcelMetric eMetric = excelReader.readExcelFile(file);
+            ExcelMetric eMetric = excelReader.readValidatedExcelFile(file);
             try
             {
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
