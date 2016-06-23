@@ -15,8 +15,8 @@
 
         </div>*@
     @*@using (Ajax.BeginForm("Upload", "Metric", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "validation-partial", OnSuccess = "postSuccess", OnFailure = "postFailed" }))*@
-@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExcelUpload" }))
-{
+    @using (Html.BeginForm("UploadValidated", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExcelUpload" }))
+    {
         <input type="hidden" name="metricId" value="@Model.id" />
         <input type="hidden" name="metricName" value="@Model.metricName" />
         <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
@@ -49,8 +49,8 @@
     }
 
     @*@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id="frmExcelUpload" }))
-    {
-    }*@
+        {
+        }*@
 
     <br /><br />
     <div id="validation-partial">
@@ -60,8 +60,8 @@
 
 <div class="modal-footer" style="text-align:center">
 
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" id="approve-btn" class="btn btn-danger">Upload</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <button type="button" id="approve-btn" class="btn btn-danger">Upload</button>
 
 </div>
 
@@ -89,44 +89,44 @@
         });
 
         $("#approve-btn").click(function () {
-            
+
             var formData = new FormData($('#frmExcelUpload')[0]);
             var myFile = document.getElementById('UploadedFile').files[0];
             formData.append('UploadedFile', myFile, myFile.name);
-
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/Metric/Upload/",
-            //    data: formData,
-            //    success: function () {
-            //        alert("Ajax call successful");
-            //    },
-            //    error: function () {
-            //        alert("Ajax call Failed");
-            //    }
-            //});   
+            // var postURL = '/Metric/Upload';
 
             // Set up the request.
             var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+
+                    if (isValidated()) {
+                        $("#frmExcelUpload").submit();
+                    }
+                    $("#validation-partial").html(xhr.responseText);
+                    //alert(xhr.responseText);
+                }
+            }
             // Open the connection.
             xhr.open('POST', '/Metric/Upload', true);
             // Set up a handler for when the request finishes.
             xhr.onload = function (d) {
                 if (xhr.status === 200) {
                     //// File(s) uploaded.
-                    $('#approve-btn').html("Wait");
-                    // uploadButton.innerHTML = 'Upload';
-                    alert("Process Completed.\n" );
+                    //$('#approve-btn').html("Wait");
+                    //// uploadButton.innerHTML = 'Upload';
+                    //alert("Process Completed.\n");
                 } else {
                     alert('An error occurred!');
                 }
             };
             // Send the Data.
             xhr.send(formData);
-            
+
 
             @*$.ajax({
                 url: '@Url.Action("Upload", "Metric")',
+                type: "POST",
                 method: "POST",
                 cache: false,
                 data: formData,
@@ -147,5 +147,42 @@
     function postFailed() {
         alert("Post Failed.");
     }
+    function validateData(formData, postURL, action) {
+        // Set up the request.
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
 
+                if (action == "True") {
+                    var urlValidated = '/Metric/UploadValidated';
+                    validateData(formData, urlValidated);
+                }
+                else {
+                    $("#validation-partial").html(xhr.responseText);
+                }
+
+                //alert(xhr.responseText);
+            }
+        }
+        // Open the connection.
+        xhr.open('POST', postURL, true);
+        // Set up a handler for when the request finishes.
+        xhr.onload = function (d) {
+            if (xhr.status === 200) {
+                //// File(s) uploaded.
+                //$('#approve-btn').html("Wait");
+                //// uploadButton.innerHTML = 'Upload';
+                //alert("Process Completed.\n");
+            } else {
+                alert('An Error Occurred Validating the File !');
+            }
+        };
+        // Send the Data.
+        xhr.send(formData);
+
+    }
+
+    function isValidated() {
+        return true;
+    }
 </script>
