@@ -93,6 +93,7 @@ namespace REDZONE.AppCode
                     try
                     {
                         bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                        bldg.saveFlag = "Y";
                     }
                     catch { }
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];

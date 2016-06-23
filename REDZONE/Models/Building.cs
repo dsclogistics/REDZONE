@@ -18,9 +18,13 @@ namespace REDZONE.Models
         public string buildingViewClass { get; set; }
         public string buildingErrorMsg { get; set; }
         public string valueErrorMsg { get; set; }
+        public string saveFlag { get; set; }
 
         //-------- Empty Constructor -----------
-        public Building() { }
+        public Building()
+        {
+            saveFlag  = "N";
+        }
 
 
     }
