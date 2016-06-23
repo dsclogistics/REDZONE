@@ -99,6 +99,7 @@ namespace REDZONE.AppCode
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
+                    rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }
             }
