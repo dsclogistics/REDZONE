@@ -68,7 +68,7 @@
                                     {
                                         <span>@dscBldng.metricPeriodValue</span>
                                     }
-                                    <input type="hidden" id="saveFlag" value="@dscBldng.buildingName" />
+                                    <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
                                     <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
                                     <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
                                     <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
@@ -192,7 +192,7 @@
         var recordsChanged = 0;
         $(".buildingRow").each(function(){
             // Loop thoruh all building rows
-            if ($(this).find("#wasEdited").first().val() == "Y" || $(this).find("#saveFlag").first().val() == "Y")
+            if ($(this).find("#saveFlag").first().val() == "Y")
             {//If this Building Value was Edited add it to the payload
                 if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}
                 jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
