@@ -11,21 +11,18 @@
 </div>
 
 <div class="modal-body">
-    @*<div id="UploadSection" >
+  <div class="row">
+        @using (Html.BeginForm("UploadValidated", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExcelUpload" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="metricId" value="@Model.id" />
+            <input type="hidden" name="metricName" value="@Model.metricName" />
+            <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
+            <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
+            <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
+            <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
+            <input type="hidden" name="na_allowed" value="@Model.na_allowed.ToString()" />
 
-        </div>*@
-    @*@using (Ajax.BeginForm("Upload", "Metric", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "validation-partial", OnSuccess = "postSuccess", OnFailure = "postFailed" }))*@
-    @using (Html.BeginForm("UploadValidated", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExcelUpload" }))
-    {
-        <input type="hidden" name="metricId" value="@Model.id" />
-        <input type="hidden" name="metricName" value="@Model.metricName" />
-        <input type="hidden" name="metricMonth" value="@Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(' '))" />
-        <input type="hidden" name="metricYear" value="@Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(' ') + 1)" />
-        <input type="hidden" name="metricDataType" value="@Model.metricDataType" />
-        <input type="hidden" id="allBuildings" value="@Model.allBuildings" name="allBuildings" />
-        <input type="hidden" name="na_allowed" value="@Model.na_allowed.ToString()" />
-
-        <div class="row">
             <div class="col-sm-6">
                 <div class="fileinput fileinput-new input-group " data-provides="fileinput">
                     <div class="form-control" data-trigger="fileinput">
@@ -40,56 +37,54 @@
                     <a href="#" class="input-group-addon btn btn-primary fileinput-exists" data-dismiss="fileinput">Remove</a>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <input class="btn btn-primary" type="submit" name="Submit" id="btnSubmit" value="Validate File" disabled="disabled" />
-            </div>
-            <div class="col-sm-2">
-            </div>
+        }
+        <div class="col-sm-4">
+            <input class="btn btn-primary" type="button" @*name="Submit"*@ id="btnValidate" value="Validate File" disabled="disabled" />
         </div>
-    }
-
-    @*@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id="frmExcelUpload" }))
-        {
-        }*@
-
-    <br /><br />
-    <div id="validation-partial">
-
+        <div class="col-sm-2">
+        </div>
     </div>
+
+
+  @*@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id="frmExcelUpload" }))
+        {
+  }*@
+
+  <br /><br />
+  <div id="validation-partial">
+
+  </div>
 </div>
 
 <div class="modal-footer" style="text-align:center">
-
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    <button type="button" id="approve-btn" class="btn btn-danger">Upload</button>
-
+  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+  <button type="button" id="approve-btn" class="btn btn-danger">Upload</button>
 </div>
 
 <script>
     $(document).ready(function () {
         $("#UploadedFile").on('change', function () {
             if ($(this).val() == "") {
-                $("#btnSubmit").prop("disabled", true);
+                $("#btnValidate").prop("disabled", true);
             }
             else {
                 var file = this.files[0];
-                var name = file.name;
-                var size = file.size;
-                var type = file.type;
+                //var name = file.name;
+                //var size = file.size;
+                //var type = file.type;
                 if (file.name.match(/xlsx/) == null) {
-                    $("#btnSubmit").prop("disabled", true);
+                    $("#btnValidate").prop("disabled", true);
                     alert("Invalid File Selected. File must be an Excel '*.xlsx' File");
                     $(this).val("");
                 }
                 else {
                     //alert("Selection done:\nFile Name: " + name + "\nFile Size: " + size + "\nFile Type: " + type);
-                    $("#btnSubmit").prop("disabled", false);
+                    $("#btnValidate").prop("disabled", false);
                 }
             }
         });
 
-        $("#approve-btn").click(function () {
-
+        $("#btnValidate").click(function () {
             var formData = new FormData($('#frmExcelUpload')[0]);
             var myFile = document.getElementById('UploadedFile').files[0];
             formData.append('UploadedFile', myFile, myFile.name);
@@ -99,11 +94,17 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
-
-                    if (isValidated()) {
+                    var isValidated = $($.parseHTML(xhr.responseText)).filter("#isValidated").val();
+                    //alert("IsValidate Flag = " + flagValue.val());
+                    
+                    if (isValidated == "True") {
+                        alert("Input File Data Validation Passed!");
                         $("#frmExcelUpload").submit();
                     }
-                    $("#validation-partial").html(xhr.responseText);
+                    else {
+                        alert("Errors were found when validating Input Excel File.");
+                        $("#validation-partial").html($.parseHTML(xhr.responseText));
+                    }                    
                     //alert(xhr.responseText);
                 }
             }
@@ -123,66 +124,14 @@
             // Send the Data.
             xhr.send(formData);
 
-
-            @*$.ajax({
-                url: '@Url.Action("Upload", "Metric")',
-                type: "POST",
-                method: "POST",
-                cache: false,
-                data: formData,
-                error: function () {
-                    obsAlert("Failed to run Ajax");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                alert("Done");
-            });*@
-
-
         });
 
     }); //----- End Ready ------
-    function postSuccess() {
-        alert("Post was successful.");
-    }
-    function postFailed() {
-        alert("Post Failed.");
-    }
-    function validateData(formData, postURL, action) {
-        // Set up the request.
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == XMLHttpRequest.DONE) {
+    //function postSuccess() {
+    //    alert("Post was successful.");
+    //}
+    //function postFailed() {
+    //    alert("Post Failed.");
+    //}
 
-                if (action == "True") {
-                    var urlValidated = '/Metric/UploadValidated';
-                    validateData(formData, urlValidated);
-                }
-                else {
-                    $("#validation-partial").html(xhr.responseText);
-                }
-
-                //alert(xhr.responseText);
-            }
-        }
-        // Open the connection.
-        xhr.open('POST', postURL, true);
-        // Set up a handler for when the request finishes.
-        xhr.onload = function (d) {
-            if (xhr.status === 200) {
-                //// File(s) uploaded.
-                //$('#approve-btn').html("Wait");
-                //// uploadButton.innerHTML = 'Upload';
-                //alert("Process Completed.\n");
-            } else {
-                alert('An Error Occurred Validating the File !');
-            }
-        };
-        // Send the Data.
-        xhr.send(formData);
-
-    }
-
-    function isValidated() {
-        return true;
-    }
 </script>

@@ -66,6 +66,8 @@ namespace REDZONE.Controllers
             //return View("_Upload", eMetric);
         }
 
+    
+        [ValidateAntiForgeryToken]
         public ActionResult UploadValidated(FormCollection formCollection)
         {
             int metricId = Convert.ToInt32(formCollection["metricId"]);

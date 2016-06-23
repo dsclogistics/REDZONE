@@ -2,6 +2,9 @@
 @{ ViewBag.Title = "Model Metric";
  string titleClass = "alert-standard";
  if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
+ 
+ var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
+ var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1); 
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <style>
@@ -152,9 +155,12 @@
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
-                if (d == "Success") {
-                    alert("Data Saved Successfully!\n");
-                    location.reload();
+                if (d == "Success") {                    
+                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                    alert("Data Saved Successfully!");
+                    //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                    location.href = "/Metric/EditView/" + urlSufixx;
+                    //location.reload();
                 } else {
                     alert("Error Saving the data!\n" + JSON.stringify(d));
                 }
