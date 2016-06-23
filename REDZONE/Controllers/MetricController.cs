@@ -38,7 +38,6 @@ namespace REDZONE.Controllers
         //GET: Metric/UploadPreview
         public ActionResult UploadPreview(RZ_Metric myData)
         {
-
             return PartialView("_UploadPreview", myData);
         }
       

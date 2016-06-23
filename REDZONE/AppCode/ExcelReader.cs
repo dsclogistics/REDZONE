@@ -98,7 +98,7 @@ namespace REDZONE.AppCode
                     }
                     try
                     {
-                        bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString();
+                        bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
                         if (!Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed))
                         {
                             bldg.valueErrorMsg = "Value: " + bldg.metricPeriodValue + " is invalid for this metric";
@@ -130,6 +130,7 @@ namespace REDZONE.AppCode
         public string Month { get; set; }
         public string MetricMonthClass { get; set; }
         public string MetricMonthErrorMsg { get; set; }
+        public bool isValidated { get; set; }//this flag is true if excel file has no errors
         
         public List<Building> buildingList = new List<Building>();
 
