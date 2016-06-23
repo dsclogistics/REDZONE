@@ -14,8 +14,7 @@
     @*<div id="UploadSection" >
 
         </div>*@
-
-    @using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Ajax.BeginForm("Upload", "Metric", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "validation-partial", OnSuccess = "postSuccess", OnFailure = "postFailed" }))
     {
         <input type="hidden" name="metricId" value="@Model.id" />
         <input type="hidden" name="metricName" value="@Model.metricName" />
@@ -44,27 +43,18 @@
                 <input class="btn btn-primary" type="submit" name="Submit" id="btnSubmit" value="Validate File" disabled="disabled" />
             </div>
             <div class="col-sm-2">
-
             </div>
         </div>
-
-
-        @*<table>
-                <tr>
-                    <td>File:</td>
-                    <td>
-                        <input type="file" name="UploadedFile" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" name="Submit" value="Submit" />
-                    </td>
-                </tr>
-            </table>*@
     }
 
+    @*@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id="frmExcelUpload" }))
+    {
+    }*@
+
     <br /><br />
+    <div id="validation-partial">
+
+    </div>
 </div>
 
 <div class="modal-footer" style="text-align:center">
@@ -89,10 +79,25 @@
             alert("Calling Ajax");
 
 
-
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetSomePartialView/",
+                data: someArguments,
+                success: function (jsReturnArgs) {
+                },
+                error: function (errorData) {
+                }
+            });
 
 
         });
 
     }); //----- End Ready ------
+    function postSuccess() {
+        alert("Post was successful.");
+    }
+    function postFailed() {
+        alert("Post Failed.");
+    }
+
 </script>
