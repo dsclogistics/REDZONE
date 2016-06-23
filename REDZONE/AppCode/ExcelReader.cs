@@ -34,12 +34,14 @@ namespace REDZONE.AppCode
                     {
                         eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type. [ Metric Name '" + metricName + "' ] is Expected.";
                         eMetric.MetricNameClass = ERRORCLASS;
+                        return eMetric;
                     }
                 }
                 catch(NullReferenceException )
                 {
                     eMetric.MetricNameErrorMsg = "ERROR: Metric Name cannot be found in the spreadsheet. Invalid or incorrect Uploaded File Format ";
                     eMetric.MetricNameClass = ERRORCLASS;
+                    return eMetric;
                 }
                 try
                 {

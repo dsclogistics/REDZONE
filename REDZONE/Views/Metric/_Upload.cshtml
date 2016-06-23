@@ -17,6 +17,12 @@
     .erroMsg {
         font-style: italic; 
     }
+    .ErrorFormat {
+        /*background-color: #f8fecd;
+        color: #720303;*/
+        font-weight:bold;
+        font-size:x-large;
+    }
 </style>
 
 <div class="row" style="font-family:Arial;">
@@ -29,8 +35,8 @@
                 </div>
                 <div class="row @Model.MetricNameClass">
                     <div class="col-sm-2" style="background-color:lightgray; text-align:right">Metric Name</div>
-                    <div class="col-sm-3" style="text-decoration:underline; font-weight:bold; text-align:left">@Model.MetricName</div>
-                    <div class="col-sm-6 erroMsg">@Model.MetricNameErrorMsg</div>
+                    <div class="col-sm-2" style="text-decoration:underline; font-weight:bold; text-align:left">@Model.MetricName</div>
+                    <div class="col-sm-8 erroMsg">@Model.MetricNameErrorMsg</div>
                 </div>
                 <div class="row @Model.MetricYearClass">
                     <div class="col-sm-2" style="background-color:lightgray; text-align:right">Metric Year</div>
@@ -49,40 +55,63 @@
 
 
             <div class="panel-body">
-                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
-                    <table class="table table-bordered table-condensed table-hover table-responsive ">
-                        <tr>
-                            <th>Building Name</th>
-                            <th>Building Name Error</th>
-                            <th style="text-align:center">Value</th>
-                            <th style="text-align:center">Value Error</th>
-                        </tr>
-                        @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
-                        {
-                            <tr class="buildingRow">
-                                <td>@dscBldng.buildingName</td>
-                                <td>@dscBldng.buildingErrorMsg</td>
-                                <td class="center">
-                                    @if (dscBldng.isEditable)
-                                    {
-                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
-                                    }
+                @if (String.IsNullOrEmpty(@Model.MetricNameErrorMsg))
+                {
+                    <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
+                        <table class="table table-bordered table-condensed table-hover table-responsive ">
+                            <tr>
+                                <th>Building Name</th>
+                                <th style="text-align:center">Value</th>
+                                <th style="text-align:center">Validation Message</th>
+                            </tr>
+                            @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                            {
+                                <tr class="buildingRow">
+                                    <td>@dscBldng.buildingName</td>
+                                    <td class="center">
+                                        @if (dscBldng.isEditable)
+                                        {
+                                            <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                        }
+                                        else
+                                        {
+                                            <span>@dscBldng.metricPeriodValue</span>
+                                        }
+                                        <input type="hidden" id="wasEdited" value="N" />
+                                        <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                        <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                        <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                        <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                        <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                    </td>
+                                    @if (String.IsNullOrEmpty(@dscBldng.buildingErrorMsg + @dscBldng.valueErrorMsg))
+                                    {<td><span class="glyphicon glyphicon-ok" ></span></td> }
                                     else
                                     {
-                                        <span>@dscBldng.metricPeriodValue</span>
-                                    }
-                                    <input type="hidden" id="wasEdited" value="N" />
-                                    <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
-                                    <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
-                                    <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
-                                    <input type="hidden" id="isManual" value="@dscBldng.isManual" />
-                                    <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
-                                </td>
-                                <td>@dscBldng.valueErrorMsg</td>
-                            </tr>
-                        }
-                    </table>
-                </div>
+                                        <td class="alert-danger">
+                                            @if (!String.IsNullOrEmpty(dscBldng.buildingErrorMsg))
+                                            {
+                                                @dscBldng.buildingErrorMsg<br />
+                                            }
+                                            @dscBldng.valueErrorMsg
+                                        </td>}
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+                }
+                else
+                {
+                    <br /><br />
+                    <div class="row" style="margin:0px 1px; padding:0; text-align:center">
+                        <div class="ErrorFormat alert-danger" >
+                            Incorrect File was uploaded or the Data Format is incorrect<br />
+                            Please correct File and try uploading it again<br /><br />
+                            @Model.MetricNameErrorMsg
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>

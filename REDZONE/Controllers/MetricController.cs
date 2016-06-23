@@ -63,8 +63,8 @@ namespace REDZONE.Controllers
                     eMetric = excelReader.readExcelFile(file, metricName, metricYear, metricMonth, allBuildings, metricDataType, na_allowed);
                 }
             }
-            //return PartialView("_Upload", eMetric);
-            return View("_Upload", eMetric);
+            return PartialView("_Upload", eMetric);
+            //return View("_Upload", eMetric);
         }
 
         public ActionResult UploadValidated(FormCollection formCollection)
