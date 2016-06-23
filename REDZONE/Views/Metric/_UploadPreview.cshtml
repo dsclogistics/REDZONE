@@ -58,7 +58,7 @@
 
 <div class="modal-footer" style="text-align:center">
   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-  <button type="button" id="approve-btn" class="btn btn-danger">Upload</button>
+  @*<button type="button" id="approve-btn" class="btn btn-danger">Upload</button>*@
 </div>
 
 <script>
@@ -98,11 +98,11 @@
                     //alert("IsValidate Flag = " + flagValue.val());
                     
                     if (isValidated == "True") {
-                        alert("Input File Data Validation Passed!");
+                       // alert("Input File Data Validation Passed!");
                         $("#frmExcelUpload").submit();
                     }
                     else {
-                        alert("Errors were found when validating Input Excel File.");
+                        //alert("Errors were found when validating Input Excel File.");
                         $("#validation-partial").html($.parseHTML(xhr.responseText));
                     }                    
                     //alert(xhr.responseText);
