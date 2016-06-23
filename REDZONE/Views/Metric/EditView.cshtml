@@ -1,9 +1,9 @@
 ﻿@model REDZONE.Models.RZ_Metric
 @{ ViewBag.Title = "Model Metric";
-   string titleClass = "alert-standard";
-   if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
-   }
-
+ string titleClass = "alert-standard";
+ if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
+}
+<link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <style>
     th {
         background-color: aliceblue;
@@ -12,15 +12,15 @@
     td.center {
         text-align: center;
     }
+
     .alert-standard {
         background-color: #f1f0f0;
     }
 
-    .modal-content {
-        width: 600px !important;
+    /*.modal-content {
+        width: 80% !important;
         margin: 30px auto !important;
-    }
-
+    }*/
 </style>
 
 
@@ -29,7 +29,7 @@
     <div class="col-md-10 " style="margin-left:15px; padding:0">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center">
-                <div class="row @titleClass">                 
+                <div class="row @titleClass">
                     <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
                 </div>
                 <div class="row">
@@ -39,7 +39,7 @@
                                 <span class="glyphicon glyphicon-chevron-left"></span>
                             </button>
                         </span>
-                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px" >
+                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                         <span class="input-group-btn">
                             <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -57,7 +57,7 @@
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
-                            <tr class="buildingRow">                                
+                            <tr class="buildingRow">
                                 <td>@dscBldng.buildingName</td>
                                 <td class="center">
                                     @if (dscBldng.isEditable)
@@ -86,12 +86,12 @@
 <hr />
 <div class="row">
     <div class="col-sm-2 col-sm-offset-2">
-       @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
-       @*<input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" />*@
+        @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+        @*<input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" />*@
     </div>
     <div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" disabled="disabled" /></div>
     <div class="col-sm-2 col-sm-offset-1"><input id="btnSave" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
-    <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px"  /></div>
+    <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
 </div>
 <br />
 
@@ -110,11 +110,12 @@
 *@
 
 <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-content">
+    <div class="modal-dialog modal-custom">
+        <div class="modal-content">
 
-    </div>
-</div>
-
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 @* \\============================================== END OF CONTAINER FOR POP UP WINDOWS ==================================// *@
 
@@ -126,7 +127,7 @@
         });
 
         $(".updateField").on('change', function(){
-            $(this).parents(".buildingRow").find("#wasEdited").first().val("Y"); 
+            $(this).parents(".buildingRow").find("#wasEdited").first().val("Y");
             //alert("Building Metric Valuer has been changed!");
         });
 
@@ -193,7 +194,7 @@
             // Loop thoruh all building rows
             if ($(this).find("#wasEdited").first().val() == "Y")
             {//If this Building Value was Edited add it to the payload
-                if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}     
+                if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}
                 jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
 
                 recordsChanged = recordsChanged + 1;
@@ -202,7 +203,7 @@
 
         //alert( recordsChanged + " building were Updated.");
         jsonPayloadDetail = jsonPayloadDetail + ']}';
-        
+
         return jsonPayloadHeader + jsonPayloadDetail
     }
 </script>

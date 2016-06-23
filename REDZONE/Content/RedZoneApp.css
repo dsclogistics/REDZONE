@@ -1,0 +1,8 @@
+﻿/*@import url('http://getbootstrap.com/dist/css/bootstrap.css');*/
+
+@media screen and (min-width: 768px) {
+    .modal-custom {
+        width: 60%;
+        /* either % (e.g. 60%) or px (400px) */
+    }
+}
