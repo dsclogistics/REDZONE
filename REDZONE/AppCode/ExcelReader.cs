@@ -9,7 +9,7 @@ namespace REDZONE.AppCode
 {
     public class ExcelReader
     {
-        public ExcelMetric readExcelFile(HttpPostedFileBase file, string metricName, string metricYear, string metricMonth, string allBuildings, string metricDataType, bool na_allowed)
+        public ExcelMetric readExcelFile(HttpPostedFileBase file, string metricName, string metricYear, string metricMonth, string allBuildings, string metricDataType, bool na_allowed, string mtrcMinVal, string mtrcMaxVal, string maxDecPlaces, string maxStrSize)
         {
             const string ERRORCLASS = "alert-danger";
             const string VALIDCLASS = "valid";
