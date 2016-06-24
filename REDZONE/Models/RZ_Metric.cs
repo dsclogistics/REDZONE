@@ -38,10 +38,11 @@ namespace REDZONE.Models
         public int metricPeriodID { set; get; }
         public bool isNumeric { set; get; }
 
+        public bool isAuto { set; get; }
         public string lastMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); } }
         public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
+  
 
-        public string headerJson { get; set; }      
         public List<Building> buildingList = new List<Building>();
         public string allBuildings { get; set; }
         //public List<SelectListItem> periodTypesSL = new List<SelectListItem>() { 

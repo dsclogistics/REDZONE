@@ -33,6 +33,7 @@ namespace REDZONE.AppCode
                 rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
                 rz_metric.na_allowed = (string)parsed_result["metricdetail"]["mtrc_period_na_allow_yn"] == "Y" ? true : false;
                 rz_metric.isImportable = (string)parsed_result["metricdetail"]["mtrc_period_can_import_yn"] == "Y" ? true : false;
+                rz_metric.isAuto = (string)parsed_result["metricdetail"]["mtrc_period_is_auto_yn"] == "Y" ? true : false;
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
                 {
@@ -83,6 +84,7 @@ namespace REDZONE.AppCode
                 rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
                 rz_metric.na_allowed = (string)parsed_result["metricdetail"]["mtrc_period_na_allow_yn"] == "Y" ? true : false;
                 rz_metric.isImportable = (string)parsed_result["metricdetail"]["mtrc_period_can_import_yn"] == "Y" ? true : false;
+                rz_metric.isAuto = (string)parsed_result["metricdetail"]["mtrc_period_is_auto_yn"] == "Y" ? true : false;
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
                 {
