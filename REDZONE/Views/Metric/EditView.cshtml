@@ -137,6 +137,7 @@
 
         $(".updateField").on('change', function () {
             //Validate the Entered Value
+            var valMessage = "";
             var newValue = $(this).val();
             var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             //alert("New value is: " + valControl.prop("id") );
@@ -147,19 +148,27 @@
                 failedValidation = false;
             }
             else {
+                //Perform either the Numeric or the String Validations
                 if ("@Model.isNumeric" == "True") {
-                    // Perform the Numeric Validations
-
+                    //Validate the input as a number
+                    valMessage = validateNumEntry("Value", "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal");
                 }
                 else {
-                    //Perform the String Validations
-
+                    //Perform the String Validation
+                    valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
+                    if (valMessage == "PASS") {
+                        failedValidation = false;        //Validation did not Fail.
+                    }
+                }
+                //Check the result of the validation 
+                if (valMessage == "PASS") {
+                    failedValidation = false;        //Validation did not Fail.
                 }
             }
 
-            alert("Failed Validation? " + failedValidation);
+            //alert("Failed Validation? " + failedValidation);
             if (failedValidation) {
-                valControl.html("Validation Failed.");
+                valControl.html(valMessage);
                 valControl.show();
             }
             else {
@@ -248,21 +257,37 @@
         return jsonPayloadHeader + jsonPayloadDetail
     }
 
-    function validateNumEntry(txtValue, dataType, test) {
+    function validateNumEntry(txtValue, dataType, minVal, maxVal ) {
         var validationMessage = "PASS";
-        validationMessage = txtValue + " " + message;
 
+        if (dataType == "int")
+        {// Decimal cannot have decimal values
+            //Check Min and Max
+            alert("Integer Validation not implemented yet");
+            validationMessage = false;
+        }
+        if (dataType == "dec") {
+            alert("Decimal Validation not implemented yet");
+        }
+        if (dataType == "cur") {
+            alert("Currency Validation not implemented yet");
+        }
+        if (dataType == "pct") {
+            alert("Percent  Validation not implemented yet");
+        }
         return validationMessage;
     }
 
     function validateStrEntry(txtValue, strLength) {
-        if (isNaN(Number(strLength))) {
+        var stringLength = Number(strLength);
+        if ( stringLength == 0 || isNaN(stringLength)) {
+            //alert("Length is not a number");
             //The Length is undefined. We will assume that any lenght is valid
             return "PASS"
         }
-        if (txtValue.length > Number(strLength)) {
-            return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
+        if (txtValue.length < Number(strLength)) {
+            return "PASS";
         }
-        return "PASS";
+        return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
     }
 </script>
