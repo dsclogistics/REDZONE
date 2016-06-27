@@ -110,9 +110,10 @@ namespace REDZONE.AppCode
                     try
                     {
                         bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
-                        if (!Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed))
+                        string valueValidateStatus = Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed,  mtrcMinVal,  mtrcMaxVal,  maxDecPlaces,  maxStrSize);
+                        if (!valueValidateStatus.Equals("True"))
                         {
-                            bldg.valueErrorMsg = "Value: " + bldg.metricPeriodValue + " is invalid for this metric";
+                            bldg.valueErrorMsg = valueValidateStatus;
                             bldg.buildingViewClass = ERRORCLASS;
                             eMetric.isValidated = "False";
                         }
