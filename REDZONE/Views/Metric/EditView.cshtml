@@ -137,14 +137,37 @@
 
         $(".updateField").on('change', function () {
             //Validate the Entered Value
-            var newValue = $(this).val();            
+            var newValue = $(this).val();
             var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             //alert("New value is: " + valControl.prop("id") );
-            valControl.html("Value was changed");
-            valControl.show();
-            $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
-            alert(validateStrEntry($(this).val(), 5));
-            //alert("Building Metric Valuer has been changed!");
+            var failedValidation = true;
+
+            //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
+            if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
+                failedValidation = false;
+            }
+            else {
+                if ("@Model.isNumeric" == "True") {
+                    // Perform the Numeric Validations
+
+                }
+                else {
+                    //Perform the String Validations
+
+                }
+            }
+
+            alert("Failed Validation? " + failedValidation);
+            if (failedValidation) {
+                valControl.html("Validation Failed.");
+                valControl.show();
+            }
+            else {
+                //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
+                valControl.hide();
+                $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
+            }
+
         });
 
         $("#btnSave").click(function () {
@@ -168,7 +191,7 @@
                     alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
-                if (d == "Success") {                    
+                if (d == "Success") {
                     var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
                     alert("Data Saved Successfully!");
                     //alert("Navigating to: /Metric/EditView/" + urlSufixx);
@@ -209,11 +232,10 @@
         var jsonPayloadDetail = '"locationdetails":[';
         //Loop thorugh all building and build a location Detail JSON payload for each bnuilding that was edited
         var recordsChanged = 0;
-        $(".buildingRow").each(function(){
+        $(".buildingRow").each(function () {
             // Loop thoruh all building rows
-            if ($(this).find("#saveFlag").first().val() == "Y")
-            {//If this Building Value was Edited add it to the payload
-                if (recordsChanged > 0) {jsonPayloadDetail = jsonPayloadDetail + ",";}
+            if ($(this).find("#saveFlag").first().val() == "Y") {//If this Building Value was Edited add it to the payload
+                if (recordsChanged > 0) { jsonPayloadDetail = jsonPayloadDetail + ","; }
                 jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
 
                 recordsChanged = recordsChanged + 1;
