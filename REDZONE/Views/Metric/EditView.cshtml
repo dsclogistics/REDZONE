@@ -52,6 +52,8 @@
                 </div>
                 <div class="row">
                     Validation Rules: [ Data Type: @Model.metricDataType ], [ Importable?: @Model.isImportable ], [ Data Automatic?: @Model.isAuto ], [Data Numeric?: @Model.isNumeric ], [ N/A Allowed?: @Model.na_allowed ]
+                    <br />
+                     [Metric Min Value: @Model.mtrcMinVal ], [Metric Max Value: @Model.mtrcMaxVal ], [Val Dec Places: @Model.maxDecPlaces ], [Val String Length: @Model.maxStrSize]
                 </div>
             </div>
             <div class="panel-body">
@@ -141,6 +143,7 @@
             valControl.html("Value was changed");
             valControl.show();
             $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
+            alert(validateStrEntry($(this).val(), 5));
             //alert("Building Metric Valuer has been changed!");
         });
 
@@ -221,5 +224,23 @@
         jsonPayloadDetail = jsonPayloadDetail + ']}';
 
         return jsonPayloadHeader + jsonPayloadDetail
+    }
+
+    function validateNumEntry(txtValue, dataType, test) {
+        var validationMessage = "PASS";
+        validationMessage = txtValue + " " + message;
+
+        return validationMessage;
+    }
+
+    function validateStrEntry(txtValue, strLength) {
+        if (isNaN(Number(strLength))) {
+            //The Length is undefined. We will assume that any lenght is valid
+            return "PASS"
+        }
+        if (txtValue.length > Number(strLength)) {
+            return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
+        }
+        return "PASS";
     }
 </script>
