@@ -33,7 +33,7 @@ namespace REDZONE.AppCode
                     eMetric.MetricNameClass = VALIDCLASS;
                     if (!eMetric.MetricName.ToUpper().Equals(metricName.Trim().ToUpper()))
                     {
-                        eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type. [ Metric Name '" + metricName + "' ] is Expected.";
+                        eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type.  Metric Name '" + metricName + "' is Expected on Cell '1B'.";
                         eMetric.MetricNameClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                         
@@ -68,7 +68,7 @@ namespace REDZONE.AppCode
                     eMetric.MetricMonthClass = VALIDCLASS;
                     if ((!eMetric.Month.Equals(metricMonth.Trim())))
                     {
-                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet.Year '" + metricMonth + "' was Expected.";
+                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet. Year '" + metricMonth + "' was Expected.";
                         eMetric.MetricMonthClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                     }
@@ -96,14 +96,14 @@ namespace REDZONE.AppCode
                         bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
                         if (!Util.matchesSearchCriteria(bldg.buildingName.Trim().ToUpper(), allBuildings.ToUpper(), "Exact"))
                         {
-                            bldg.buildingErrorMsg = "Can't find " + bldg.buildingName + " in the existing list of buildings";
+                            bldg.buildingErrorMsg = "Building '" + bldg.buildingName + "' is not valid or it has not been set up.";
                             bldg.buildingViewClass = ERRORCLASS;
                             eMetric.isValidated = "False";
                         }
                     }
                     catch(NullReferenceException )
                     {
-                        bldg.buildingErrorMsg = "Can't find building name";
+                        bldg.buildingErrorMsg = "Building name is not valid.";
                         bldg.buildingViewClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                     }
