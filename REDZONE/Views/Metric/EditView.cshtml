@@ -27,11 +27,11 @@
 </style>
 
 
-<div class="row" style="font-family:Arial;">
+<div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-sm-1"></div>
-    <div class="col-md-10 " style="margin-left:15px; padding:0">
+    <div class="col-md-10 " style="margin-left:15px; padding:0;">
         <div class="panel panel-default" style="margin-bottom:0px; ">
-            <div class="panel-heading" style="text-align:center">
+            <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row @titleClass">
                     <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
                 </div>
@@ -50,22 +50,26 @@
                         </span>
                     </div>
                 </div>
+                <div class="row">
+                    Validation Rules: [ Data Type: @Model.metricDataType ], [ Importable?: @Model.isImportable ], [ Data Automatic?: @Model.isAuto ], [Data Numeric?: @Model.isNumeric ], [ N/A Allowed?: @Model.na_allowed ]
+                </div>
             </div>
             <div class="panel-body">
                 <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
                     <table class="table table-bordered table-condensed table-hover table-responsive ">
                         <tr>
                             <th>Building Name</th>
-                            <th style="text-align:center">Value</th>
+                            <th style="text-align:center"><span>Value</span></th>
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
                             <tr class="buildingRow">
                                 <td>@dscBldng.buildingName</td>
-                                <td class="center">
-                                    @if (dscBldng.isEditable)
-                                    {
-                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                <td class="left" style="text-align:center">
+                                    @if (!Model.isAuto || dscBldng.isEditable)
+                                    {//Value can be editable only if the Metric is Not Automatic and if the building level Value is Editable
+                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
+                                        <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
                                     }
                                     else
                                     {
@@ -129,7 +133,13 @@
             location.href('/Home');
         });
 
-        $(".updateField").on('change', function(){
+        $(".updateField").on('change', function () {
+            //Validate the Entered Value
+            var newValue = $(this).val();            
+            var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
+            //alert("New value is: " + valControl.prop("id") );
+            valControl.html("Value was changed");
+            valControl.show();
             $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
             //alert("Building Metric Valuer has been changed!");
         });
