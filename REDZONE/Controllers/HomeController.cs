@@ -45,7 +45,6 @@ namespace REDZONE.Controllers
             }
             return PartialView(RZMenu);
         }
-   
     }
 
     public class RZMetricMenu
