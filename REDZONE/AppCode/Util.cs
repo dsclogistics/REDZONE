@@ -51,15 +51,29 @@ namespace REDZONE.AppCode
             }
             switch (dataType)
             {
+
+                case "pct":
                 case "dec":                   
                 case "cur":
-                case "pct":
                     float res;
-                    if(float.TryParse(value, out res))
+                    int decDigits = 0;
+                    double min = Convert.ToDouble(mtrcMinVal);
+                    double max = Convert.ToDouble(mtrcMaxVal);
+                    if (dataType.Equals("pct"))
                     {
-                        if (res < Convert.ToDouble(mtrcMinVal) || res > Convert.ToDouble(mtrcMaxVal) || value.Substring(value.IndexOf(".")).Length > Convert.ToInt16(maxDecPlaces))
+                        min = min * 100;
+                        max = max * 100;
+                    }
+                    try
+                    {
+                        decDigits = value.Substring(value.IndexOf(".")).Length;
+                    }
+                    catch { }
+                    if (float.TryParse(value, out res))
+                    {
+                        if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<=decDigits)
                         {
-                            return "Value must be between [" + mtrcMinVal + "] and " + mtrcMaxVal + " ] and have no more than [" + maxDecPlaces + " ] digits after decimal point";
+                            return "Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
                         }
                         else
                         {
@@ -90,7 +104,7 @@ namespace REDZONE.AppCode
                 case "char":
                     return value.Length==1? "True" : "Value: " + value + " is invalid for this metric"; 
                 case "str":
-                    return value.Length>maxStrSize.Length? "Value for this metric cannot be more than ["+ maxStrSize.Length+"] characters long " : "True";
+                    return value.Length>=maxStrSize.Length? "Value for this metric cannot be more than ["+ maxStrSize.Length+"] characters long " : "True";
                 default: return "True";
             } 
         }
