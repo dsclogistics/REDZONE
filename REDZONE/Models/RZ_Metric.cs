@@ -37,7 +37,6 @@ namespace REDZONE.Models
         public bool isImportable { set; get; }
         public int metricPeriodID { set; get; }
         public bool isNumeric { set; get; }
-
         public bool isAuto { set; get; }
 
         public string mtrcMinVal { set; get; }
