@@ -51,19 +51,13 @@ namespace REDZONE.AppCode
             }
             switch (dataType)
             {
-
                 case "pct":
                 case "dec":                   
                 case "cur":
                     float res;
                     int decDigits = 0;
                     double min = Convert.ToDouble(mtrcMinVal);
-                    double max = Convert.ToDouble(mtrcMaxVal);
-                    if (dataType.Equals("pct"))
-                    {
-                        min = min * 100;
-                        max = max * 100;
-                    }
+                    double max = Convert.ToDouble(mtrcMaxVal);                   
                     try
                     {
                         decDigits = value.Substring(value.IndexOf(".")+1).Length;

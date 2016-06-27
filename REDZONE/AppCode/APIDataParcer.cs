@@ -38,6 +38,9 @@ namespace REDZONE.AppCode
                 rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_val"];
                 rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
+                rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"])|| String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive")?"disabled":"";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
                 {

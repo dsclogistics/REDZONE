@@ -43,6 +43,9 @@ namespace REDZONE.Models
         public string mtrcMaxVal { set; get; }
         public string maxDecPlaces { set; get; }
         public string maxStrSize { set; get; }
+        public string metricPeriodStatus { set; get; }
+        public string metricNextPeriodStatus { set; get; }
+        public string metricPrevPeriodStatus { set; get; }
 
         public string lastMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); } }
         public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
