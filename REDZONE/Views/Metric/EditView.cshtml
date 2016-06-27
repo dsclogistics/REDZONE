@@ -38,13 +38,13 @@
                 <div class="row">
                     <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                         <span class="input-group-btn">
-                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month">
+                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month" @Model.metricPrevPeriodStatus>
                                 <span class="glyphicon glyphicon-chevron-left"></span>
                             </button>
                         </span>
                         <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                         <span class="input-group-btn">
-                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month">
+                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month" @Model.metricNextPeriodStatus>
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
                         </span>
