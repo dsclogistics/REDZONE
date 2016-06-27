@@ -66,12 +66,12 @@ namespace REDZONE.AppCode
                     }
                     try
                     {
-                        decDigits = value.Substring(value.IndexOf(".")).Length;
+                        decDigits = value.Substring(value.IndexOf(".")+1).Length;
                     }
                     catch { }
                     if (float.TryParse(value, out res))
                     {
-                        if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<=decDigits)
+                        if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<decDigits)
                         {
                             return "Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
                         }
