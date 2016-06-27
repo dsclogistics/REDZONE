@@ -96,14 +96,14 @@ namespace REDZONE.AppCode
                         bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
                         if (!Util.matchesSearchCriteria(bldg.buildingName.Trim().ToUpper(), allBuildings.ToUpper(), "Exact"))
                         {
-                            bldg.buildingErrorMsg = "Can't find " + bldg.buildingName + " in the existing list of buildings";
+                            bldg.buildingErrorMsg = "Building '" + bldg.buildingName + "' is not valid or it has not been set up.";
                             bldg.buildingViewClass = ERRORCLASS;
                             eMetric.isValidated = "False";
                         }
                     }
                     catch(NullReferenceException )
                     {
-                        bldg.buildingErrorMsg = "Can't find building name";
+                        bldg.buildingErrorMsg = "Building name is not valid.";
                         bldg.buildingViewClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                     }
@@ -112,7 +112,7 @@ namespace REDZONE.AppCode
                         bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
                         if (!Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed))
                         {
-                            bldg.valueErrorMsg = "Value: " + bldg.metricPeriodValue + " is invalid for this metric";
+                            bldg.valueErrorMsg = "Value must be Numeric. '" + bldg.metricPeriodValue + "' Is not valid.";
                             bldg.buildingViewClass = ERRORCLASS;
                             eMetric.isValidated = "False";
                         }
