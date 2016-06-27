@@ -36,19 +36,18 @@ namespace REDZONE.AppCode
                         eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type. [ Metric Name '" + metricName + "' ] is Expected.";
                         eMetric.MetricNameClass = ERRORCLASS;
                         eMetric.isValidated = "False";
-                        return eMetric;
+                        
                     }
                 }
-                catch(NullReferenceException )
+                catch (NullReferenceException)
                 {
                     eMetric.MetricNameErrorMsg = "ERROR: Metric Name cannot be found in the spreadsheet. Invalid or incorrect Uploaded File Format ";
                     eMetric.MetricNameClass = ERRORCLASS;
-                    eMetric.isValidated = "False";
-                    return eMetric;
+                    eMetric.isValidated = "False";                    
                 }
                 try
                 {
-                    eMetric.Year= workSheet.Cells[2, 2].Value.ToString().Trim();
+                    eMetric.Year = workSheet.Cells[2, 2].Value.ToString().Trim();
                     eMetric.MetricYearClass = VALIDCLASS;
                     if (!eMetric.Year.Equals(metricYear.Trim()))
                     {
@@ -57,7 +56,7 @@ namespace REDZONE.AppCode
                         eMetric.isValidated = "False";
                     }
                 }
-                catch( NullReferenceException )
+                catch (NullReferenceException)
                 {
                     eMetric.MetricYearErrorMsg = "ERROR: Metric Year Value cannot be found in the spreadsheet";
                     eMetric.MetricYearClass = ERRORCLASS;
@@ -74,13 +73,16 @@ namespace REDZONE.AppCode
                         eMetric.isValidated = "False";
                     }
                 }
-                catch(NullReferenceException )
+                catch (NullReferenceException)
                 {
                     eMetric.MetricMonthErrorMsg = "ERROR: Metric Month Value cannot be found in the spreadsheet";
                     eMetric.MetricMonthClass = ERRORCLASS;
                     eMetric.isValidated = "False";
-                }                               
-               
+                }
+                if (eMetric.isValidated.Equals("False"))
+                {
+                    return eMetric;
+                }
                 for (int rowIterator = 6; rowIterator <= noOfRow; rowIterator++)
                 {
                     Building bldg = new Building();
