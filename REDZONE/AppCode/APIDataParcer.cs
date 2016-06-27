@@ -36,7 +36,7 @@ namespace REDZONE.AppCode
                 rz_metric.isAuto = (string)parsed_result["metricdetail"]["mtrc_period_is_auto_yn"] == "Y" ? true : false;
                 rz_metric.mtrcMinVal = (string)parsed_result["metricdetail"]["mtrc_min_val"];
                 rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_val"];
-                rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
+                rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
@@ -91,7 +91,7 @@ namespace REDZONE.AppCode
                 rz_metric.isAuto = (string)parsed_result["metricdetail"]["mtrc_period_is_auto_yn"] == "Y" ? true : false;
                 rz_metric.mtrcMinVal = (string)parsed_result["metricdetail"]["mtrc_min_val"];
                 rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_val"];
-                rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
+                rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)

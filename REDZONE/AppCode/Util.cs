@@ -39,31 +39,73 @@ namespace REDZONE.AppCode
 
         }
 
-        public static bool isValidDataType(string dataType, string value,bool na_allowed)
+        public static string isValidDataType(string dataType, string value, bool na_allowed, string mtrcMinVal, string mtrcMaxVal, string maxDecPlaces, string maxStrSize)
         {
             if (String.IsNullOrEmpty(value))
             {
-                return true;
+                return "True";
             }
             if (value.ToUpper().Equals("N/A") && na_allowed)
             {
-                return true;
+                return  "True";
             }
             switch (dataType)
             {
+
+                case "pct":
                 case "dec":                   
                 case "cur":
-                case "pct":
                     float res;
-                    return float.TryParse(value, out res);
+                    int decDigits = 0;
+                    double min = Convert.ToDouble(mtrcMinVal);
+                    double max = Convert.ToDouble(mtrcMaxVal);
+                    if (dataType.Equals("pct"))
+                    {
+                        min = min * 100;
+                        max = max * 100;
+                    }
+                    try
+                    {
+                        decDigits = value.Substring(value.IndexOf(".")).Length;
+                    }
+                    catch { }
+                    if (float.TryParse(value, out res))
+                    {
+                        if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<=decDigits)
+                        {
+                            return "Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
+                        }
+                        else
+                        {
+                            return "True";
+                        }
+                    }
+                    else
+                    {
+                        return  "Value: " + value + " is invalid for this metric";
+                    }                  
                 case "int":
                     int number;
-                    return int.TryParse(value, out number);
+                    if (int.TryParse(value, out number))
+                    {
+                        if (number < Convert.ToInt16(mtrcMinVal) || number > Convert.ToInt16(mtrcMaxVal))
+                        {
+                            return "Value must be between [" + mtrcMinVal + "] and " + mtrcMaxVal + " ]";
+                        }
+                        else
+                        {
+                            return "True";
+                        }
+                    }
+                    else
+                    {
+                        return "Value: " + value + " is invalid for this metric";
+                    } 
                 case "char":
-                    return value.Length==1?true:false;
+                    return value.Length==1? "True" : "Value: " + value + " is invalid for this metric"; 
                 case "str":
-                    return true;
-                default: return false;
+                    return value.Length>=maxStrSize.Length? "Value for this metric cannot be more than ["+ maxStrSize.Length+"] characters long " : "True";
+                default: return "True";
             } 
         }
 
