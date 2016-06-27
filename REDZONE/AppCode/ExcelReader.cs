@@ -33,7 +33,7 @@ namespace REDZONE.AppCode
                     eMetric.MetricNameClass = VALIDCLASS;
                     if (!eMetric.MetricName.ToUpper().Equals(metricName.Trim().ToUpper()))
                     {
-                        eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type. [ Metric Name '" + metricName + "' ] is Expected.";
+                        eMetric.MetricNameErrorMsg = "ERROR: Metric Uploaded is the incorrect Type.  Metric Name '" + metricName + "' is Expected on Cell '1B'.";
                         eMetric.MetricNameClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                         
@@ -68,7 +68,7 @@ namespace REDZONE.AppCode
                     eMetric.MetricMonthClass = VALIDCLASS;
                     if ((!eMetric.Month.Equals(metricMonth.Trim())))
                     {
-                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet.Year '" + metricMonth + "' was Expected.";
+                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet. Year '" + metricMonth + "' was Expected.";
                         eMetric.MetricMonthClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                     }
@@ -112,7 +112,7 @@ namespace REDZONE.AppCode
                         bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
                         if (!Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed))
                         {
-                            bldg.valueErrorMsg = "Value must be Numeric. '" + bldg.metricPeriodValue + "' Is not valid.";
+                            bldg.valueErrorMsg = "Value must be Numeric. '" + bldg.metricPeriodValue + "' is not a valid entry.";
                             bldg.buildingViewClass = ERRORCLASS;
                             eMetric.isValidated = "False";
                         }
