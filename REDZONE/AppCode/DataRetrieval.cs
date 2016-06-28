@@ -98,14 +98,14 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
-        public string authorizeUser(string user_name)
+        public string authorizeUser(string userName)
         {
             string endPoint = "metricauthorization";
             WebRequest request = WebRequest.Create(api_url + endPoint);
             request.Method = "POST";
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"username\":\"" + user_name + "\"}";
+            string parsedContent = "{\"username\":\"" + userName + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;
             try
