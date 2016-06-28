@@ -6,3 +6,35 @@
         /* either % (e.g. 60%) or px (400px) */
     }
 }
+
+.modal-content {
+        width: 80% !important;
+        margin: 30px auto !important;
+    }
+
+th {
+    background-color: aliceblue;
+}
+
+td.center {
+    text-align: center;
+}
+
+.alert-standard {
+    background-color: #f1f0f0;
+}
+
+
+.error {
+    border: 1px solid red;
+    background: #FFCECE;
+}
+
+.no-error {
+    border: 1px solid black;
+    background-color: white;
+}
+
+.ROField {
+    border: none;
+}

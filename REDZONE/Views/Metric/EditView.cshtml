@@ -1,13 +1,13 @@
 ﻿@model REDZONE.Models.RZ_Metric
 @{ ViewBag.Title = "Model Metric";
  string titleClass = "alert-standard";
- if (Model.metricName.Equals("Requested Metric Period does not Exist")) { titleClass = "alert-danger"; };
+ if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
  
  var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
  var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1); 
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
-<style>
+@*<style>
     th {
         background-color: aliceblue;
     }
@@ -32,65 +32,102 @@
         border: 1px solid black;
         background-color : white;
     }
-</style>
+    .ROField {
+        border:none;
+    }
+</style>*@
 
-
+<div class="row">
+    <input type="hidden" id="frmModified" value="N" />
+</div>
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-sm-1"></div>
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
-                <div class="row @titleClass">
-                    <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
-                </div>
                 <div class="row">
-                    <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
-                        <span class="input-group-btn">
-                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month" @Model.metricPrevPeriodStatus>
-                                <span class="glyphicon glyphicon-chevron-left"></span>
-                            </button>
-                        </span>
-                        <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
-                        <span class="input-group-btn">
-                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month" @Model.metricNextPeriodStatus>
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </button>
-                        </span>
+                    <div class="col-sm-11">
+                        <div class="row @titleClass">
+                            <span style="font-size:x-large; font-weight:bold; color:darkblue">@Model.metricName</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
+                                <span class="input-group-btn">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.lastMonthUrl'" title="Navigate to Previous Month" @Model.metricPrevPeriodStatus>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control" value="@Model.displayPeriodName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                <span class="input-group-btn">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.nextMonthUrl'" title="Navigate to Next Month" @Model.metricNextPeriodStatus>
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="border:1px double lightgray">
+                        <div class="row" style="text-align:center">
+                            @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
+                            {
+                                <img src="~/Images/locked.gif" width="35" /> <br />
+                                <span style="font-size:xx-small; color:blue; ">Period is Closed</span>
+                            }
+                            else
+                            {
+                                <span style="font-size:xx-small; color:blue; ">STATUS:</span>
+                                <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px">@Model.metricPeriodStatus.ToUpper()</span>
+                                <a href="\home\index"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
+                            }
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+
+                @*<div class="row">
                     Validation Rules: [ Data Type: @Model.metricDataType ], [ Importable?: @Model.isImportable ], [ Data Automatic?: @Model.isAuto ], [Data Numeric?: @Model.isNumeric ], [ N/A Allowed?: @Model.na_allowed ]
                     <br />
                      [Metric Min Value: @Model.mtrcMinVal ], [Metric Max Value: @Model.mtrcMaxVal ], [Val Dec Places: @Model.maxDecPlaces ], [Val String Length: @Model.maxStrSize]
-                </div>
+                </div>*@
             </div>
             <div class="panel-body">
-                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto">
-                    <table class="table table-bordered table-condensed table-hover table-responsive ">
+                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center">
+                    <table class="table table-bordered table-condensed table-hover table-responsive " style="width:98%">
                         <tr>
-                            <th>Building Name</th>
-                            <th style="text-align:center"><span>Value</span></th>
+                            <th>
+                                <div class="col-sm-2 col-sm-offset-1" style="text-align:center">
+                                    Building Name
+                                </div>
+                                <div class="col-sm-2 left" style="text-align:center">
+                                    @Model.metricName
+                                </div>
+                            </th>
                         </tr>
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
                             <tr class="buildingRow">
-                                <td>@dscBldng.buildingName</td>
-                                <td class="left" style="text-align:center">
-                                    @if (!Model.isAuto || dscBldng.isEditable)
-                                    {//Value can be editable only if the Metric is Not Automatic and if the building level Value is Editable
-                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
-                                        <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@dscBldng.metricPeriodValue</span>
-                                    }
-                                    <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
-                                    <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
-                                    <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
-                                    <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
-                                    <input type="hidden" id="isManual" value="@dscBldng.isManual" />
-                                    <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                <td style="width:100%">
+                                    <div class="row">
+                                        <div class="col-sm-2 col-sm-offset-1">
+                                            @dscBldng.buildingName
+                                        </div>
+                                        <div class="col-sm-2 left" style="text-align:center">
+                                            @if (!Model.isAuto || dscBldng.isEditable)
+                                            {//Value can be editable only if the Metric is Not Automatic and if the building level Value is Editable
+                                                <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
+                                                <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
+                                            }
+                                            <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
+                                            <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                            <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                            <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                            <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                            <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -103,12 +140,14 @@
 <hr />
 <div class="row">
     <div class="col-sm-2 col-sm-offset-2">
-        @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
-        @*<input id="btnImport" class="btn-primary" type="button" value="IMPORT" style="width:80px" />*@
+        @if (Model.isImportable)
+        {
+                @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+        }
     </div>
-    <div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" disabled="disabled" /></div>
-    <div class="col-sm-2 col-sm-offset-1"><input id="btnSave" class="btn-primary" type="button" value="SAVE" style="width:80px" /></div>
-    <div class="col-sm-2 ">               <input id="btnCancel" class="btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
+    @*<div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" disabled="disabled" /></div>*@
+    <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" disabled="disabled" style="width:80px" /></div>
+    <div class="col-sm-2 ">               <input id="btnCancel" class="btn btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
 </div>
 <br />
 
@@ -153,6 +192,7 @@
 
             //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
             if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
+                $(this).val("N/A");
                 valMessage = "PASS";
             }
             else {
@@ -174,6 +214,8 @@
                 $(this).addClass("no-error");
                 valControl.hide();
                 $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
+                $("#frmModified").val("Y");
+                $("#btnSave").prop('disabled', false);
             }
             else{
                 $(this).focus();

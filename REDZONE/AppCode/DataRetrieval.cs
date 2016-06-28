@@ -67,7 +67,7 @@ namespace REDZONE.AppCode
             }
             catch (Exception e)
             {
-                return e.Message;
+                return "ERROR: " +  e.Message;
             }
         }
         public string saveRZMetric(string raw_json)

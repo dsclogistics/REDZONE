@@ -2,12 +2,19 @@
     bool sessionEnded = false;
     if (Request.IsAuthenticated)
     {
-        string tempName = Request.LogonUserIdentity.Name;
-        tempName = tempName.Substring(tempName.IndexOf("\\") + 1);
-        string userName = tempName.Substring(0, tempName.IndexOf("_"));
-        Session["last_name"] = userName;
-        userName = tempName.Substring(tempName.IndexOf("_") + 1);
-        Session["first_name"] = userName;
+        if (Session["last_name"] == null)
+        {
+            string tempName = Request.LogonUserIdentity.Name;
+            tempName = tempName.Substring(tempName.IndexOf("\\") + 1);
+            string userName = tempName.Substring(0, tempName.IndexOf("_"));
+            Session["last_name"] = userName;
+            userName = tempName.Substring(tempName.IndexOf("_") + 1);
+            Session["first_name"] = userName;
+        }
+        else {
+            // For debug purposes only
+            string tempName = Session["last_name"].ToString();
+        }
     }
     else {
         sessionEnded = true; 

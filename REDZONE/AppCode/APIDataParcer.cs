@@ -18,9 +18,14 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             rz_metric.allBuildings = String.Empty;
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
-            JObject parsed_result = JObject.Parse(raw_data);
+            //if (raw_data.Substring(0, 5).Equals("ERROR")) {
+            //    HttpContext.Current.Server.Transfer("/Error/Index?ErrorMsg=" + raw_data.Substring(7));
+            //}
+            
 
             try {
+                JObject parsed_result = JObject.Parse(raw_data);
+
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
                 rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_name"];
@@ -60,11 +65,11 @@ namespace REDZONE.AppCode
                 DateTime currentMonth = new DateTime( Convert.ToInt16(year), monthToInt(month), 1);
                 rz_metric.prodName = "Red Zone";
                 rz_metric.id = metric_id;
-                rz_metric.metricName = "Requested Metric Period does not Exist";
+                rz_metric.metricName = "Requested Metric Period invalid or does not Exist";
                 rz_metric.period_Type = METRICPERIODS.Month;
                 rz_metric.metric_period_start_date = currentMonth;
                 rz_metric.metric_period_end_date = currentMonth;
-                rz_metric.periodName = "Requested Metric Period does not Exist";
+                rz_metric.periodName = "Requested Metric Period invalid or does not Exist";
                 rz_metric.metricPeriodID = 0;
             }
 

@@ -311,6 +311,7 @@
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\LoadingData.gif" />
+    <Content Include="Images\locked.gif" />
     <Content Include="Images\ui-anim_basic_16x16.gif" />
     <EntityDeploy Include="Models\DSCREDZONE_ENTITY.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
