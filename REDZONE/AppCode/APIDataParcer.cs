@@ -169,5 +169,20 @@ namespace REDZONE.AppCode
             }
             return monthNo;
         }
+
+        public List<int> getEditableMetrics(string userName)
+        {
+            List<int> accessibleMetrics = new List<int>();
+            JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
+            try {
+                foreach (var res in parsed_result["authorizationdetails"])
+                {
+                    int mtrc_period_id = (int)res["mtrc_period_id"];
+                    accessibleMetrics.Add(mtrc_period_id);
+                }
+            }
+            catch(Exception e) {}            
+            return accessibleMetrics;
+        }
     }
 }

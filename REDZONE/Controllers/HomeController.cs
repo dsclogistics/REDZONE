@@ -14,7 +14,8 @@ namespace REDZONE.Controllers
     {
       //================== GLOBAL CONTROLLER PROPERTIES =================
         DataRetrieval api = new DataRetrieval();
-      //=================================================================
+        APIDataParcer parcer = new APIDataParcer();
+        //=================================================================
 
         public ActionResult Index()
         {
@@ -35,13 +36,19 @@ namespace REDZONE.Controllers
             List<RZMetricMenu> RZMenu = new List<RZMetricMenu>();
             JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
             DateTime defDate = DateTime.Today.AddMonths(-1);
+            string userName = User.Identity.Name;
+            //userName = "KURANCHIE_PETER";
 
+            List<int> allowedMetrics = parcer.getEditableMetrics(userName);
             foreach (var res in parsed_result["metriclist"])
             {
-                RZMetricMenu menuItem = new RZMetricMenu();
-                menuItem.menuText = (string)res["mtrc_name"];
-                menuItem.menuValue = "/Metric/EditView/" + (string)res["mtrc_id"] + "?month=" + defDate.ToString("MMMM") + "&year=" + defDate.ToString("yyyy");
-                RZMenu.Add(menuItem);
+                if (allowedMetrics.IndexOf((int)res["mtrc_period_id"]) != -1)
+                {
+                    RZMetricMenu menuItem = new RZMetricMenu();
+                    menuItem.menuText = (string)res["mtrc_name"];
+                    menuItem.menuValue = "/Metric/EditView/" + (string)res["mtrc_id"] + "?month=" + defDate.ToString("MMMM") + "&year=" + defDate.ToString("yyyy");
+                    RZMenu.Add(menuItem);
+                }               
             }
             return PartialView(RZMenu);
         }
