@@ -24,6 +24,14 @@
         width: 80% !important;
         margin: 30px auto !important;
     }*/
+    .error {        
+        border: 1px solid red;
+        background: #FFCECE;
+    }
+    .no-error {
+        border: 1px solid black;
+        background-color : white;
+    }
 </style>
 
 
@@ -137,46 +145,43 @@
 
         $(".updateField").on('change', function () {
             //Validate the Entered Value
+            $(this).val($(this).val().trim());   //Trim the spaces from the input
             var valMessage = "";
             var newValue = $(this).val();
             var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             //alert("New value is: " + valControl.prop("id") );
-            var failedValidation = true;
 
             //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
             if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
-                failedValidation = false;
+                valMessage = "PASS";
             }
             else {
                 //Perform either the Numeric or the String Validations
                 if ("@Model.isNumeric" == "True") {
                     //Validate the input as a number
-                    valMessage = validateNumEntry("Value", "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal");
+                    valMessage = validateNumEntry($(this), "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
+                    //alert("result: " + valMessage);
                 }
                 else {
                     //Perform the String Validation
                     valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
-                    if (valMessage == "PASS") {
-                        failedValidation = false;        //Validation did not Fail.
-                    }
                 }
                 //Check the result of the validation 
-                if (valMessage == "PASS") {
-                    failedValidation = false;        //Validation did not Fail.
-                }
             }
-
-            //alert("Failed Validation? " + failedValidation);
-            if (failedValidation) {
-                valControl.html(valMessage);
-                valControl.show();
-            }
-            else {
+            if (valMessage == "PASS") {
                 //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
+                $(this).removeClass("error");
+                $(this).addClass("no-error");
                 valControl.hide();
                 $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
             }
-
+            else{
+                $(this).focus();
+                $(this).removeClass("no-error");
+                $(this).addClass("error");
+                valControl.html(valMessage);
+                valControl.show();            
+            }
         });
 
         $("#btnSave").click(function () {
@@ -257,24 +262,44 @@
         return jsonPayloadHeader + jsonPayloadDetail
     }
 
-    function validateNumEntry(txtValue, dataType, minVal, maxVal ) {
+    function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces ) {
+        // First Validation. If input values is null or empty. It passes
+        if (txtControl.val() == "") return "PASS";
+
+        var txtValue = txtControl.val();
         var validationMessage = "PASS";
+        var inputIntValue = Number(txtValue);
+        var minRange = Number(minVal);
+        var maxRange = Number(maxVal);
+        
+        //Second Validation, make sure that the input value is a number.
+        if (isNaN(inputIntValue)) {  // Value is not a number
+            return "Value must be numeric";
+        }
 
         if (dataType == "int")
-        {// Decimal cannot have decimal values
-            //Check Min and Max
-            alert("Integer Validation not implemented yet");
-            validationMessage = false;
-        }
-        if (dataType == "dec") {
-            alert("Decimal Validation not implemented yet");
-        }
+        {// Integer Value cannot have decimal values        
+            if (txtValue.includes(".")) {
+                validationMessage =  "Value must not contain decimals";
+            }            
+        }else
+            if (dataType == "dec") {
+                //round up or down the decimal places
+                //parseFloat(txtValue).toFixed(2);
+                txtControl.val(inputIntValue.toFixed(Number(decPlaces)) );                
+        }else
         if (dataType == "cur") {
-            alert("Currency Validation not implemented yet");
-        }
+            //There is no custom validation for now
+        }else
         if (dataType == "pct") {
-            alert("Percent  Validation not implemented yet");
+            //There is no custom validation for now
         }
+
+        //Check Min and Max for all data types
+        if ( inputIntValue < minRange || inputIntValue > maxRange) {
+            validationMessage =  "Value must be between " + minVal + " and " + maxRange;
+        }
+
         return validationMessage;
     }
 
