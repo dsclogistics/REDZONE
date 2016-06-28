@@ -68,7 +68,7 @@ namespace REDZONE.AppCode
                     eMetric.MetricMonthClass = VALIDCLASS;
                     if ((!eMetric.Month.Equals(metricMonth.Trim())))
                     {
-                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet. Year '" + metricMonth + "' was Expected.";
+                        eMetric.MetricMonthErrorMsg = "ERROR: Month doesn't match Month in the SpreadSheet. Month '" + metricMonth + "' was Expected.";
                         eMetric.MetricMonthClass = ERRORCLASS;
                         eMetric.isValidated = "False";
                     }

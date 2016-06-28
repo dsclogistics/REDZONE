@@ -60,7 +60,7 @@ namespace REDZONE.AppCode
                     double max = Convert.ToDouble(mtrcMaxVal);                   
                     try
                     {
-                        decDigits = value.Substring(value.IndexOf(".")+1).Length;
+                        decDigits = value.IndexOf(".")==-1? decDigits:value.Substring(value.IndexOf(".")+1).Length;
                     }
                     catch { }
                     if (float.TryParse(value, out res))
@@ -76,7 +76,7 @@ namespace REDZONE.AppCode
                     }
                     else
                     {
-                        return  "Value: " + value + " is invalid for this metric";
+                        return  "Value:[ " + value + " ] is invalid for this metric";
                     }                  
                 case "int":
                     int number;
@@ -84,7 +84,7 @@ namespace REDZONE.AppCode
                     {
                         if (number < Convert.ToInt16(mtrcMinVal) || number > Convert.ToInt16(mtrcMaxVal))
                         {
-                            return "Value must be between [" + mtrcMinVal + "] and " + mtrcMaxVal + " ]";
+                            return "Value must be between [ " + mtrcMinVal + "] and " + mtrcMaxVal + " ]";
                         }
                         else
                         {
@@ -93,10 +93,10 @@ namespace REDZONE.AppCode
                     }
                     else
                     {
-                        return "Value: " + value + " is invalid for this metric";
+                        return "Value: [ " + value + " ] is invalid for this metric";
                     } 
                 case "char":
-                    return value.Length==1? "True" : "Value: " + value + " is invalid for this metric"; 
+                    return value.Length==1? "True" : "Value: [ " + value + " ] is invalid for this metric"; 
                 case "str":
                     return value.Length>=maxStrSize.Length? "Value for this metric cannot be more than ["+ maxStrSize.Length+"] characters long " : "True";
                 default: return "True";
