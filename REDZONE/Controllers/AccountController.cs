@@ -368,10 +368,8 @@ namespace REDZONE.Controllers
                 if (loginModel.Username.Equals("delgado_feliciano"))
                 {
                     Session.Add("first_name", "Feliciano");
-                    Session["first_name"] = "Feliciano";
                     Session.Add("last_name", "Delgado");
-                    Session.Add("username", loginModel.Username);
-                    
+                    Session.Add("username", loginModel.Username);                    
                     Session.Add("email", "feliciano.delgado@dsc-logistics.com");
                     //string test = Session["first_name"].ToString() + Session["last_name"].ToString() + Session["email"].ToString();
                 }

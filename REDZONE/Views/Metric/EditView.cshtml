@@ -4,8 +4,12 @@
  if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
  
  var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
- var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1); 
+ var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1);
+ string tblCaption = "";
+ if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
+ if (Model.isAuto) tblCaption = "Warning, the values for this metric and generated automatically. They cannot be modified.";
 }
+
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 @*<style>
     th {
@@ -43,7 +47,7 @@
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-sm-1"></div>
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
-        <div class="panel panel-default" style="margin-bottom:0px; ">
+        <div class="panel panel-default" style="margin-bottom:0px; " title="@tblCaption">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
                     <div class="col-sm-11">
@@ -111,14 +115,14 @@
                                             @dscBldng.buildingName
                                         </div>
                                         <div class="col-sm-2 left" style="text-align:center">
-                                            @if (!Model.isAuto || dscBldng.isEditable)
-                                            {//Value can be editable only if the Metric is Not Automatic and if the building level Value is Editable
-                                                <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
-                                                <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
+                                            @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
+                                            {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
+                                                <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
                                             }
                                             else
                                             {
-                                                <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
+                                                <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
+                                                <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
                                             }
                                             <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
                                             <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
