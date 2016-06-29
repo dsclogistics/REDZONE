@@ -120,6 +120,10 @@ namespace REDZONE.AppCode
                         try
                         {
                             bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                            if(bldg.metricPeriodValue.Equals("na")|| bldg.metricPeriodValue.Equals("n/a")|| bldg.metricPeriodValue.Equals("NA"))
+                            {
+                                bldg.metricPeriodValue = "N/A";
+                            }
                             bldg.saveFlag = "Y";
                         }
                         catch { }
