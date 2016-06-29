@@ -20,6 +20,8 @@ namespace REDZONE.Models
         public string valueErrorMsg { get; set; }
         public string saveFlag { get; set; }
 
+        public bool naAllowed { get; set; }
+
         //-------- Empty Constructor -----------
         public Building()
         {

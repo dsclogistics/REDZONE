@@ -39,13 +39,13 @@ namespace REDZONE.AppCode
 
         }
 
-        public static string isValidDataType(string dataType, string value, bool na_allowed, string mtrcMinVal, string mtrcMaxVal, string maxDecPlaces, string maxStrSize)
+        public static string isValidDataType(string dataType, string value,  string mtrcMinVal, string mtrcMaxVal, string maxDecPlaces, string maxStrSize)
         {
             if (String.IsNullOrEmpty(value))
             {
                 return "True";
             }
-            if (value.ToUpper().Equals("N/A") && na_allowed)
+            if (value.ToUpper().Equals("N/A") || value.ToUpper().Equals("NA"))
             {
                 return  "True";
             }

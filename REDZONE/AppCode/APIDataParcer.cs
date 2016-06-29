@@ -56,6 +56,7 @@ namespace REDZONE.AppCode
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
+                    bldg.naAllowed = (string)res["bmp_na_allow_yn"] == "Y" ? true : false;
                     rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }
@@ -101,6 +102,9 @@ namespace REDZONE.AppCode
                 rz_metric.mtrcMaxVal = (string)parsed_result["metricdetail"]["mtrc_max_val"];
                 rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
+                rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive") ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
                 {
@@ -108,15 +112,20 @@ namespace REDZONE.AppCode
                     bldg.buildingName = (string)res["dsc_mtrc_lc_bldg_name"];
                     bldg.buildingCode = (string)res["dsc_mtrc_lc_bldg_id"];
                     bldg.metricPeriodValue = (string)res["mtrc_period_val_value"];
-                    try
-                    {
-                        bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
-                        bldg.saveFlag = "Y";
-                    }
-                    catch { }
-                    bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
                     bldg.isEditable = (string)res["bmp_is_editable_yn"] == "Y" ? true : false;
                     bldg.isManual = (string)res["bmp_is_manual_yn"] == "Y" ? true : false;
+                    bldg.naAllowed = (string)res["bmp_na_allow_yn"] == "Y" ? true : false;
+                    if (bldg.isEditable)
+                    {
+                        try
+                        {
+                            bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                            bldg.saveFlag = "Y";
+                        }
+                        catch { }
+                    }                  
+                    bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
+                    
                     rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }

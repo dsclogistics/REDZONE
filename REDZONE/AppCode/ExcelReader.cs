@@ -110,7 +110,7 @@ namespace REDZONE.AppCode
                     try
                     {
                         bldg.metricPeriodValue = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
-                        string valueValidateStatus = Util.isValidDataType(metricDataType, bldg.metricPeriodValue, na_allowed,  mtrcMinVal,  mtrcMaxVal,  maxDecPlaces,  maxStrSize);
+                        string valueValidateStatus = Util.isValidDataType(metricDataType, bldg.metricPeriodValue, mtrcMinVal,  mtrcMaxVal,  maxDecPlaces,  maxStrSize);
                         if (!valueValidateStatus.Equals("True"))
                         {
                             bldg.valueErrorMsg = valueValidateStatus;
@@ -124,6 +124,7 @@ namespace REDZONE.AppCode
                     eMetric.buildingList.Add(bldg);
 
                 }
+                eMetric.buildingList = eMetric.buildingList.OrderBy(y=>y.buildingName).ToList();
                 return eMetric;
             }
 
