@@ -102,7 +102,7 @@
                                     Building Name
                                 </div>
                                 <div class="col-sm-2 left" style="text-align:center">
-                                    @Model.metricName
+                                    @Model.periodName
                                 </div>
                             </th>
                         </tr>
@@ -150,7 +150,7 @@
         }
     </div>
     @*<div class="col-sm-2 ">               <input id="btnEdit" class="btn-primary" type="button" value="EDIT" style="width:80px" disabled="disabled" /></div>*@
-    <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" disabled="disabled" style="width:80px" /></div>
+    <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text> } style="width:80px" /></div>
     <div class="col-sm-2 ">               <input id="btnCancel" class="btn btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
 </div>
 <br />

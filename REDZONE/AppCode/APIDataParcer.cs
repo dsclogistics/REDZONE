@@ -34,7 +34,7 @@ namespace REDZONE.AppCode
                 rz_metric.period_Type = METRICPERIODS.Month;
                 rz_metric.metric_period_start_date = (DateTime)parsed_result["metricdetail"]["tm_per_start_dtm"];
                 rz_metric.metric_period_end_date = (DateTime)parsed_result["metricdetail"]["tm_per_end_dtm"];
-                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"] + " Metric Information";
+                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"] ;
                 rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
                 rz_metric.na_allowed = (string)parsed_result["metricdetail"]["mtrc_period_na_allow_yn"] == "Y" ? true : false;
                 rz_metric.isImportable = (string)parsed_result["metricdetail"]["mtrc_period_can_import_yn"] == "Y" ? true : false;
@@ -93,7 +93,7 @@ namespace REDZONE.AppCode
                 rz_metric.period_Type = METRICPERIODS.Month;
                 rz_metric.metric_period_start_date = (DateTime)parsed_result["metricdetail"]["tm_per_start_dtm"];
                 rz_metric.metric_period_end_date = (DateTime)parsed_result["metricdetail"]["tm_per_end_dtm"];
-                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"] + " Metric Information";
+                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"];
                 rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
                 rz_metric.na_allowed = (string)parsed_result["metricdetail"]["mtrc_period_na_allow_yn"] == "Y" ? true : false;
                 rz_metric.isImportable = (string)parsed_result["metricdetail"]["mtrc_period_can_import_yn"] == "Y" ? true : false;

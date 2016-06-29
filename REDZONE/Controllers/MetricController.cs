@@ -88,6 +88,7 @@ namespace REDZONE.Controllers
                         rz_metric = parcer.getRZ_Metric(metricId, metricMonth, metricYear, file);                    
                 }
             }
+            ViewBag.fileUploaded = "Y";
             return View("EditView", rz_metric);
         }
 
