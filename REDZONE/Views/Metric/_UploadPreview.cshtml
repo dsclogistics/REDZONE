@@ -42,9 +42,12 @@
             </div>
         }
         <div class="col-sm-4">
-            <input class="btn btn-primary" type="button" @*name="Submit"*@ id="btnValidate" value="Validate File" disabled="disabled" />
+            <input class="btn btn-primary" type="button" @*name="Submit"*@ id="btnValidate" value="Upload File" disabled="disabled" />
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" >
+            <div class="row rowViewHide" style="font-weight:normal">
+                <label><input type="checkbox" id="chkShowAll" value=""> Show Errors Only</label>
+            </div>            
         </div>
     </div>
 
@@ -52,8 +55,6 @@
   @*@using (Html.BeginForm("Upload", "Metric", FormMethod.Post, new { enctype = "multipart/form-data", id="frmExcelUpload" }))
         {
   }*@
-
-  <br /><br />
   <div id="validation-partial">
 
   </div>
@@ -107,6 +108,7 @@
                     else {
                         //alert("Errors were found when validating Input Excel File.");
                         $("#validation-partial").html($.parseHTML(xhr.responseText));
+                        $("#rowViewHide").show();
                     }                    
                     //alert(xhr.responseText);
                 }
@@ -126,8 +128,17 @@
             };
             // Send the Data.
             xhr.send(formData);
-
         });
+
+        $("#chkShowAll").click(function () {
+            if ($(this).prop('checked')) {
+                $('.withNoError').hide();
+            }
+            else {
+                $('.withNoError').show();
+            }
+        });
+
 
     }); //----- End Ready ------
     //function postSuccess() {

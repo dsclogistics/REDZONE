@@ -28,7 +28,7 @@
 <input type="hidden" id="isValidated" value="@Model.isValidated" />
 <div class="row" style="font-family:Arial;">
     <div class="col-sm-1"></div>
-    <div class="col-md-10 " style="margin-left:15px; padding:0">
+    <div class="col-sm-10 " style="margin-left:15px; padding:0">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center">
                 <div class="row ">
@@ -47,7 +47,10 @@
                 <div class="row ">
                     <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Month</div>
                     <div class="col-sm-3" style="text-decoration:underline; text-align:left">@Model.Month</div>
-                    <div class="col-sm-6 erroMsg @Model.MetricMonthClass">@Model.MetricMonthErrorMsg</div>
+                    <div class="col-sm-5 erroMsg @Model.MetricMonthClass">@Model.MetricMonthErrorMsg</div>
+
+                    <div class="col-sm-2 checkbox">
+                    </div>
                 </div>
             </div>
 
@@ -57,46 +60,55 @@
                     <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:500px; overflow-y:auto">
                         <table class="table table-bordered table-condensed table-hover table-responsive ">
                             <tr>
-                                <th>Building Name</th>
+                                <th>Building Name </th>
                                 <th style="text-align:center">Value</th>
                                 <th style="text-align:center">Validation Message</th>
                             </tr>
-                            @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
-                            {
-                                <tr class="buildingRow">
-                                    <td>@dscBldng.buildingName</td>
-                                    <td class="center">
-                                        @if (dscBldng.isEditable)
-                                        {
-                                            <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
-                                        }
-                                        else
-                                        {
-                                            <span>@dscBldng.metricPeriodValue</span>
-                                        }
-                                        <input type="hidden" id="wasEdited" value="N" />
-                                        <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
-                                        <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
-                                        <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
-                                        <input type="hidden" id="isManual" value="@dscBldng.isManual" />
-                                        <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
-                                    </td>
-                                    @if (String.IsNullOrEmpty(@dscBldng.buildingErrorMsg + @dscBldng.valueErrorMsg))
-                                    {<td><span class="glyphicon glyphicon-ok" ></span></td> }
+                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                         {
+                            string errorClass = "withNoError";
+                            bool hasError = !String.IsNullOrEmpty(@dscBldng.buildingErrorMsg + @dscBldng.valueErrorMsg);
+                                //bool hasWarning = !String.IsNullOrEmpty(@dscBldng.valueWarningMsg);
+                            if (hasError) { errorClass = "withError"; }
+                                //if (hasWarning) { errorClass = "withWarning"; }
+                            <tr class="buildingRow @errorClass">
+                                <td>@dscBldng.buildingName</td>
+                                <td class="center">
+                                    @if (dscBldng.isEditable)
+                                    {
+                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center" />
+                                    }
                                     else
                                     {
-                                        <td class="alert-danger">
-                                            @if (!String.IsNullOrEmpty(dscBldng.buildingErrorMsg))
-                                            {
-                                                @dscBldng.buildingErrorMsg<br />
-                                            }
-                                            @dscBldng.valueErrorMsg
-                                        </td>}
-                                </tr>
-                            }
+                                        <span>@dscBldng.metricPeriodValue</span>
+                                    }
+                                    <input type="hidden" id="wasEdited" value="N" />
+                                    <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                    <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                    <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                    <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                    <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                </td>
+                             @if (String.IsNullOrEmpty(@dscBldng.buildingErrorMsg + @dscBldng.valueErrorMsg))
+                             {
+                                <td>
+                                    <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                                </td>
+                             }
+                             else
+                             {
+                                <td class="alert-danger">
+                                    @if (!String.IsNullOrEmpty(dscBldng.buildingErrorMsg))
+                                    {
+                                        @dscBldng.buildingErrorMsg<br />
+                                    }
+                                    @dscBldng.valueErrorMsg
+                                </td>
+                             }
+                            </tr>
+                         }
                         </table>
                     </div>
-
                 }
                 else
                 {
