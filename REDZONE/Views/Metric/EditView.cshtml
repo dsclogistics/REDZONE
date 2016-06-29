@@ -11,6 +11,26 @@
 }
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+<style>
+    .buildingRow:hover {
+        background-color: #f1f1f1;
+    }
+    .headerRow {
+       padding: 4px; 
+       font-weight:bold;
+       border-bottom: 1px solid lightgrey;
+       width:98%;
+    }
+    .buildingRow {
+        padding: 3px;
+        border-bottom: 1px solid #f1f1f1;
+        width:98%;
+    }
+    .buildingCol {
+        border-right: 1px dashed #f1f1f1;   /*#f1f1f1*/
+        text-align:center;
+    }
+</style>
 @*<style>
     th {
         background-color: aliceblue;
@@ -94,14 +114,55 @@
                 </div>*@
             </div>
             <div class="panel-body">
-                <div class="row" @*style="text-align:center"*@ style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center">
+                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">  <!-- Table -->
+                    <div class="row" style="margin:0px 1px; padding:0; text-align:center; background-color:aliceblue">
+                        <div class="row headerRow" >
+                            <div class="col-sm-2 col-sm-offset-1 buildingCol">
+                                Building Name
+                            </div>
+                            <div class="col-sm-2 buildingCol">
+                                @Model.periodName
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center; ">
+                    @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                    {
+                        <div class="row buildingRow" >
+                            <div class="col-sm-2 col-sm-offset-1 buildingCol">
+                                @dscBldng.buildingName
+                            </div>
+                            <div class="col-sm-2 buildingCol">
+                                @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
+                                {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
+                                    <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
+                                }
+                                else
+                                {
+                                    <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
+                                    <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
+                                }
+                                <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
+                                <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
+                                <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
+                                <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
+                                <input type="hidden" id="isManual" value="@dscBldng.isManual" />
+                                <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                            </div>
+                        </div> <!-- End of "buildingRow" DIV-->
+                    }
+                    </div>
+                </div> <!-- End of DIV Table Table -->
+
+
+                @*<div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center">
                     <table class="table table-bordered table-condensed table-hover table-responsive " style="width:98%">
                         <tr>
                             <th>
                                 <div class="col-sm-2 col-sm-offset-1" style="text-align:center">
                                     Building Name
                                 </div>
-                                <div class="col-sm-2 left" style="text-align:center">
+                                <div class="col-sm-2 " style="text-align:center">
                                     @Model.periodName
                                 </div>
                             </th>
@@ -114,7 +175,7 @@
                                         <div class="col-sm-2 col-sm-offset-1">
                                             @dscBldng.buildingName
                                         </div>
-                                        <div class="col-sm-2 left" style="text-align:center">
+                                        <div class="col-sm-2 " style="text-align:center">
                                             @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
                                             {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
                                                 <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
@@ -136,7 +197,10 @@
                             </tr>
                         }
                     </table>
-                </div>
+                </div>*@ <!----------- END of HTML Table DIV----------> 
+
+
+
             </div>
         </div>
     </div>
