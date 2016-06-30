@@ -32,21 +32,21 @@
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center">
                 <div class="row ">
-                    <span style="font-size:x-large">Red Zone Metric Data Validation Summary</span>                    
+                    <span style="font-size:x-large">@Model.MetricName Import Validation Summary</span>                    
                 </div>
                 <div class="row ">
-                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Name</div>
-                    <div class="col-sm-2" style="text-decoration:underline;  text-align:left">@Model.MetricName</div>
+                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Name:</div>
+                    <div class="col-sm-2" style="text-align:left">@Model.MetricName</div>
                     <div class="col-sm-8 erroMsg @Model.MetricNameClass">@Model.MetricNameErrorMsg</div>
                 </div>
                 <div class="row ">
-                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Year</div>
-                    <div class="col-sm-3" style="text-decoration:underline; text-align:left">@Model.Year</div>
+                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Year:</div>
+                    <div class="col-sm-3" style="text-align:left">@Model.Year</div>
                     <div class="col-sm-6 erroMsg @Model.MetricYearClass">@Model.MetricYearErrorMsg</div>
                 </div>
                 <div class="row ">
-                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Month</div>
-                    <div class="col-sm-3" style="text-decoration:underline; text-align:left">@Model.Month</div>
+                    <div class="col-sm-2" style="text-align:right; font-weight:bold">Metric Month:</div>
+                    <div class="col-sm-3" style="text-align:left">@Model.Month</div>
                     <div class="col-sm-5 erroMsg @Model.MetricMonthClass">@Model.MetricMonthErrorMsg</div>
 
                     <div class="col-sm-2 checkbox">

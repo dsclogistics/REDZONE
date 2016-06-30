@@ -76,7 +76,7 @@ namespace REDZONE.AppCode
                     }
                     else
                     {
-                        return  "Value:[ " + value + " ] is invalid for this metric";
+                        return "Value:[ " + value + " ] is invalid for this metric. Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
                     }                  
                 case "int":
                     int number;
@@ -93,7 +93,7 @@ namespace REDZONE.AppCode
                     }
                     else
                     {
-                        return "Value: [ " + value + " ] is invalid for this metric";
+                        return "Value: [ " + value + " ] is invalid for this metric Value must be between [ " + mtrcMinVal + "] and " + mtrcMaxVal + " ]";
                     } 
                 case "char":
                     return value.Length==1? "True" : "Value: [ " + value + " ] is invalid for this metric"; 
