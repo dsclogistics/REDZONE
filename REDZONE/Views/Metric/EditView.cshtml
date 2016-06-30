@@ -11,6 +11,7 @@
 }
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+
 <style>
     .buildingRow:hover {
         background-color: #f1f1f1;
@@ -60,12 +61,17 @@
     }
 </style>*@
 <link href="~/Content/bootstrap-dialog.css" rel="stylesheet" />
-@*<script src="~/Scripts/bootstrap-dialog.js"></script>
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
+    or 
+  <script src="~/Scripts/bootstrap-dialog.js"></script>
 
     <script src="~/Scripts/RZglobal.js"></script>*@
 
 <div class="row">
     <input type="hidden" id="frmModified" value="N" />
+    <input type="hidden" id="frmErrors" value="0" />
 </div>
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-sm-1"></div>
@@ -103,7 +109,7 @@
                             else
                             {
                                 <span style="font-size:xx-small; color:blue; ">STATUS:</span>
-                                <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px">@Model.metricPeriodStatus.ToUpper()</span><br />
+                                <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
                                 <a href="javascript: alert('Functionaly not enabled yet')"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
                             }
                         </div>
@@ -254,82 +260,57 @@
         });
 
         $(".updateField").on('change', function () {
-            //Validate the Entered Value
-            $(this).val($(this).val().trim());   //Trim the spaces from the input
-            var valMessage = "";
-            var newValue = $(this).val();
-            var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
-            //alert("New value is: " + valControl.prop("id") );
-
-            //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
-            if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
-                $(this).val("N/A");
-                valMessage = "PASS";
-            }
-            else {
-                //Perform either the Numeric or the String Validations
-                if ("@Model.isNumeric" == "True") {
-                    //Validate the input as a number
-                    valMessage = validateNumEntry($(this), "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
-                    //alert("result: " + valMessage);
-                }
-                else {
-                    //Perform the String Validation
-                    valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
-                }
-                //Check the result of the validation 
-            }
-            if (valMessage == "PASS") {
-                //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
-                $(this).removeClass("error");
-                $(this).addClass("no-error");
-                valControl.hide();
-                $(this).parents(".buildingRow").find("#saveFlag").first().val("Y");
-                $("#frmModified").val("Y");
-                $("#btnSave").prop('disabled', false);
-            }
-            else{
-                $(this).focus();
-                $(this).removeClass("no-error");
-                $(this).addClass("error");
-                valControl.html(valMessage);
-                valControl.show();            
-            }
+            validateTxtField($(this));
         });
 
         $("#btnSave").click(function () {
-            //alert("Saving Data...");
-            //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
-            var payload = buildJSON();
-
-            //alert("Posting Data: \n" + payload);
-            $("#posData").html(payload);
-            $.ajax({
-                url: '/Metric/saveRZMetric',
-                //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
-                method: "POST",
-                cache: false,
-                //type: "POST",
-                //data: payload,
-                data: {raw_json:payload},
-                //contentType: "application/json; charset=utf-8",
-                //dataType: "json",
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                if (d == "Success") {
-                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                    alert("Data Saved Successfully!");
-                    //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                    location.href = "/Metric/EditView/" + urlSufixx;
-                    //location.reload();
-                } else {
-                    alert("Error Saving the data!\n" + JSON.stringify(d));
-                }
-                //$("#output").html(JSON.stringify(d));
+            //Validate all input fields
+            var errorsFound = 0;
+            $("#frmErrors").val("0"); // Reset the errors counter before form validation
+            $(".updateField").each(function(){
+                validateTxtField($(this));
             });
+
+            if(Number($("#frmErrors").val()) > 0){
+                // Errors were found
+                alert($("#frmErrors").val() + " Errors were found. Please correct errors before saving.");
+            }
+            else{
+                //Proceed saving the data
+                //alert("Saving Data...");
+                //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
+                var payload = buildJSON();
+                //alert("Posting Data: \n" + payload);
+                $("#posData").html(payload);
+                $.ajax({
+                    url: '/Metric/saveRZMetric',
+                    //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                    method: "POST",
+                    cache: false,
+                    //type: "POST",
+                    //data: payload,
+                    data: {raw_json:payload},
+                    //contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                        alert("Data Saved Successfully!");
+                        //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                        location.href = "/Metric/EditView/" + urlSufixx;
+                        //location.reload();
+                    } else {
+                        alert("Error Saving the data!\n" + JSON.stringify(d));
+                    }
+                    //$("#output").html(JSON.stringify(d));
+                });
+            }
+
         });
+
         //-------------------------- MODAL EVENTS --------------------------------
         // Initalize modal dialog
         // attach modal-container bootstrap attributes to links with .modal-link class.
@@ -354,7 +335,14 @@
     });
 
     function buildJSON() {
-        //var periodId = @Model.metricPeriodID
+        @*var periodId = @Model.metricPeriodID*@
+        var userName = "";
+        try { userName = "@Session["username"].ToString()"; }   //Verify that session did not expire.
+        catch(err) {
+            alert("Session Expired!\nPlease logon again.");
+            location.href ="/Account/Logoff";
+        }
+
         var jsonPayloadHeader = '{"metricdetail":{"mtrc_period_id":"@Model.metricPeriodID","mtrc_name":"@Model.metricName","mtrc_id":"@Model.id","mtrc_period_name":"@Model.periodName.Replace("Metric Information", "")","tpt_name":"@Model.period_Type","tm_per_start_dtm":"@Model.metric_period_start_date.ToString("yyyy-MM-dd HH:mm:ss")","tm_per_end_dtm":"@Model.metric_period_end_date.ToString("yyyy-MM-dd HH:mm:ss")","prod_name":"Red Zone","data_type_token":"@Model.metricDataType","data_type_num_yn":"Y"},';
         var jsonPayloadDetail = '"locationdetails":[';
         //Loop thorugh all building and build a location Detail JSON payload for each bnuilding that was edited
@@ -384,28 +372,32 @@
         var inputIntValue = Number(txtValue);
         var minRange = Number(minVal);
         var maxRange = Number(maxVal);
-        
+
         //Second Validation, make sure that the input value is a number.
         if (isNaN(inputIntValue)) {  // Value is not a number
             return "Value must be numeric";
         }
 
         if (dataType == "int")
-        {// Integer Value cannot have decimal values        
+        {// Integer Value cannot have decimal values
             if (txtValue.includes(".")) {
                 validationMessage =  "Value must not contain decimals";
-            }            
+            }
         }else
             if (dataType == "dec") {
-                //round up or down the decimal places
-                //parseFloat(txtValue).toFixed(2);
-                txtControl.val(inputIntValue.toFixed(Number(decPlaces)) );                
-        }else
-        if (dataType == "cur") {
-            //There is no custom validation for now
-        }else
-        if (dataType == "pct") {
-            //There is no custom validation for now
+                //There is no custom validation for now
+            }else
+                if (dataType == "cur") {
+                    //There is no custom validation for now
+                }else
+                    if (dataType == "pct") {
+                        //There is no custom validation for now
+                    }
+
+        //Round value off to the requiered number of decimal places for all non integer values
+        if (dataType != "int"){
+            //parseFloat(txtValue).toFixed(2);
+            txtControl.val(inputIntValue.toFixed(Number(decPlaces)) );
         }
 
         //Check Min and Max for all data types
@@ -427,5 +419,53 @@
             return "PASS";
         }
         return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
+    }
+    
+    function validateTxtField($txtControl){
+        //Validate the Entered Value
+        //$(this)
+        $txtControl.val($txtControl.val().trim());   //Trim the spaces from the input
+        var valMessage = "";
+        var newValue = $txtControl.val();
+        var valControl = $txtControl.parents(".buildingRow").first().find(".valValidationMsg").first();
+        //alert("New value is: " + valControl.prop("id") );
+
+        //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
+        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
+            $txtControl.val("N/A");
+            valMessage = "PASS";
+        }
+        else {
+            //Perform either the Numeric or the String Validations
+            if ("@Model.isNumeric" == "True") {
+                //Validate the input as a number
+                valMessage = validateNumEntry($txtControl, "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
+                //alert("result: " + valMessage);
+            }
+            else {
+                //Perform the String Validation
+                valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
+            }
+            //Check the result of the validation
+        }
+        if (valMessage == "PASS") {
+            //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
+            $txtControl.removeClass("error");
+            $txtControl.addClass("no-error");
+            valControl.hide();
+            $txtControl.parents(".buildingRow").find("#saveFlag").first().val("Y");
+            $("#frmModified").val("Y");
+            $("#btnSave").prop('disabled', false);
+        }
+        else{ //Validation Failed
+            $("#frmErrors").val(Number($("#frmErrors").val()) + 1);  //Increase the Form errors counter
+            $txtControl.focus();
+            $txtControl.removeClass("no-error");
+            $txtControl.addClass("error");
+            valControl.html(valMessage);
+            valControl.show();
+            $("#btnSave").prop('disabled', true);
+        }
+
     }
 </script>

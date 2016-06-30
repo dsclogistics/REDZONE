@@ -11,22 +11,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large">
         <div class="col-md-7 col-md-offset-2">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        DATA MANAGEMENT
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        @*<li>@Html.ActionLink("Find Observation", "Index", "Observation")</li>*@
-                        @*<li ><a href="/BasicMetric/Volume">Volume Metric</a></li>
-                        <li class="disabled"><a href="#">Metric #2</a></li>
-                        <li class="disabled"><a href="#">Metric #3</a></li>*@
-                        @*@Html.Action("_RedZoneDM", "Menu")*@
-                        @Html.Action("_RZDM_MenuItems", "Home")                        
-                    </ul>
-                </li>
-            </ul>
+            @Html.Action("_RZDM_MenuItems", "Home")
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

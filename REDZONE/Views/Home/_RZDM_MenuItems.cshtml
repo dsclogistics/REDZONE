@@ -1,5 +1,19 @@
 ﻿@model IEnumerable<REDZONE.Controllers.RZMetricMenu>
-@foreach (var item in Model)
+
+@if (Model.Count() > 0)
 {
-    <li><a href="@item.menuValue">@item.menuText</a></li>
+  <ul class="nav navbar-nav">
+     <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            DATA MANAGEMENT
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+           @foreach (var item in Model)
+           {
+               <li><a href="@item.menuValue">@item.menuText</a></li>
+           }
+        </ul>
+     </li>
+  </ul>
 }
