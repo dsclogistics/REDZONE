@@ -7,7 +7,7 @@
  var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1);
  string tblCaption = "";
  if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
- if (Model.isAuto) tblCaption = "Warning, the values for this metric and generated automatically. They cannot be modified.";
+ if (Model.isAuto) tblCaption = "Warning, the values for this metric are generated automatically. They cannot be modified.";
 }
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
@@ -110,7 +110,7 @@
                             {
                                 <span style="font-size:xx-small; color:blue; ">STATUS:</span>
                                 <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
-                                <a href="javascript: alert('Functionaly not enabled yet')"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
+                                <a href="javascript: alert('Functionality not enabled yet')"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
                             }
                         </div>
                     </div>
