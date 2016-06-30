@@ -253,6 +253,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-dialog.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -333,6 +334,7 @@
       <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
       <LastGenOutput>DSCREDZONE_ENTITY.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\bootstrap-dialog.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.js" />
@@ -352,6 +354,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\RZglobal.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Metric\_UploadPreview.cshtml">
       <SubType>Code</SubType>
