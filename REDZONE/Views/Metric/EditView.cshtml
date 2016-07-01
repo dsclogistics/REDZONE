@@ -6,7 +6,8 @@
  var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
  var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1);
  string tblCaption = "";
- if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
+
+ if (Model.metricPeriodStatus != null && Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
  if (Model.isAuto) tblCaption = "Warning, the values for this metric are generated automatically. They cannot be modified.";
 }
 
@@ -126,7 +127,7 @@
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">  <!-- Table -->
                     <div class="row" style="margin:0px 1px; padding:0; text-align:center; background-color:aliceblue; border-bottom: 1px solid lightgrey;">
                         <div class="row headerRow" >
-                            <div class="col-sm-2 col-sm-offset-1 buildingCol">
+                            <div class="col-sm-2 col-sm-offset-4 buildingCol">
                                 Building Name
                             </div>
                             <div class="col-sm-2 buildingCol">
@@ -138,18 +139,22 @@
                     @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                     {
                         <div class="row buildingRow" >
-                            <div class="col-sm-2 col-sm-offset-1 buildingCol">
+                            <div class="col-sm-2 col-sm-offset-4 buildingCol">
                                 @dscBldng.buildingName
                             </div>
-                            <div class="col-sm-2 buildingCol">
+                            <div class="col-sm-2 buildingCol" style="text-align:center">
                                 @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
                                 {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                    <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" readonly="readonly" /><br />
+                                    <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; " readonly="readonly" /><br />
                                 }
                                 else
                                 {
-                                    <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; margin-left: 20px" /><br />
-                                    <span class="valValidationMsg" style="color:red; font-style:italic; display:none">*Validation Message</span>
+                                    <div class="row">
+                                        <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
+                                    </div>
+                                    <div class="row" style="text-align:center;">
+                                        <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
+                                    </div>
                                 }
                                 <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
                                 <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
