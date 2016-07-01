@@ -45,7 +45,7 @@
             <input class="btn btn-primary" type="button" @*name="Submit"*@ id="btnValidate" value="Upload File" disabled="disabled" />
         </div>
         <div class="col-sm-2" >
-            <div class="row rowViewHide" style="font-weight:normal">
+            <div class="row rowViewHide" id="showErrorDiv" style="font-weight:normal; display:none">
                 <label><input type="checkbox" id="chkShowAll" value=""> Show Errors Only</label>
             </div>            
         </div>
@@ -89,6 +89,7 @@
         });
 
         $("#btnValidate").click(function () {
+            $("#showErrorDiv").show();
             var formData = new FormData($('#frmExcelUpload')[0]);
             var myFile = document.getElementById('UploadedFile').files[0];
             formData.append('UploadedFile', myFile, myFile.name);
