@@ -94,7 +94,7 @@ namespace REDZONE.AppCode
                     try
                     {
                         bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
-                        if (!Util.matchesSearchCriteria(bldg.buildingName.Trim().ToUpper(), allBuildings.ToUpper(), "Exact"))
+                        if (!Util.isValidBuilding(allBuildings, bldg.buildingName.Trim()))
                         {
                             bldg.buildingErrorMsg = "Building '" + bldg.buildingName + "' is not valid or it has not been set up.";
                             bldg.buildingViewClass = ERRORCLASS;

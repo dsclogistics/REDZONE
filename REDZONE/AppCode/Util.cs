@@ -103,5 +103,15 @@ namespace REDZONE.AppCode
             } 
         }
 
+        public static bool isValidBuilding(string list_of_buildings, string building_to_check)
+        {
+            string[] splitted_list_of_buildings = list_of_buildings.Split(new[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in splitted_list_of_buildings)
+            {
+                if (s.ToUpper().Equals(building_to_check.ToUpper())) { return true; }
+                else { continue; }
+            }
+            return false;
+        }
     }
 }
