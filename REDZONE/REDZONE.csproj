@@ -176,6 +176,7 @@
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ExecutiveSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Models\DSC_MTRC_LC_BLDG.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExecutiveSummaryView.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
@@ -411,6 +413,7 @@
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ExecutiveSummary\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
