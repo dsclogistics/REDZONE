@@ -150,6 +150,26 @@ namespace REDZONE.AppCode
             return rz_metric;
         }
 
+        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear, string userId)
+        {
+            string raw_data = api.closePeriod("Red Zone", "Month", metricId, metricMonth, metricYear, userId);
+            if (raw_data.ToLower().Contains("success"))
+            {
+                return "Success";
+            }
+            else
+            {
+                try {
+                    JObject parsed_result = JObject.Parse(raw_data);
+                    return (string)parsed_result["message"];
+                }
+                catch(Exception e)
+                {
+                    return e.Message;
+                }
+            }
+        }
+
         public int monthToInt(string monthName) {
             int monthNo = 0;
             switch (monthName) {

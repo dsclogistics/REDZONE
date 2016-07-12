@@ -34,6 +34,14 @@ namespace REDZONE.Controllers
 
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear)
+        {
+            string userName = Session["username"].ToString();
+            return parcer.closeRZMetricPeriod(metricId, metricMonth, metricYear, userName);
+
+        }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         //GET: Metric/UploadPreview
         public ActionResult UploadPreview(RZ_Metric myData)
