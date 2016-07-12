@@ -13,6 +13,7 @@ namespace REDZONE.AppCode
         {
             const string ERRORCLASS = "alert-danger";
             const string VALIDCLASS = "valid";
+            string[] splitted_list_of_buildings = allBuildings.Split(new[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
             ExcelMetric eMetric = new ExcelMetric();
             eMetric.MetricName = String.Empty;
             eMetric.Month = String.Empty;
@@ -94,7 +95,7 @@ namespace REDZONE.AppCode
                     try
                     {
                         bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();
-                        if (!Util.isValidBuilding(allBuildings, bldg.buildingName.Trim()))
+                        if (!Util.isValidBuilding(splitted_list_of_buildings, bldg.buildingName.Trim()))
                         {
                             bldg.buildingErrorMsg = "Building '" + bldg.buildingName + "' is not valid or it has not been set up.";
                             bldg.buildingViewClass = ERRORCLASS;

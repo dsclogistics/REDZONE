@@ -194,7 +194,7 @@ namespace REDZONE.AppCode
                     accessibleMetrics.Add(mtrc_period_id);
                 }
             }
-            catch(Exception e) {}            
+            catch {}            
             return accessibleMetrics;
         }
     }
