@@ -111,7 +111,7 @@
                             {
                                 <span style="font-size:xx-small; color:blue; ">STATUS:</span>
                                 <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
-                                <a href="javascript: alert('Functionality not enabled yet')"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
+                                <a href="javascript:closePeriod()"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
                             }
                         </div>
                     </div>
@@ -337,7 +337,25 @@
         });
         //----------------- END OF MODAL EVENTS ----------------------------------
     });
-
+    function closePeriod(){
+        alert("Closing");
+        $.ajax({
+            //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
+            url: '/Metric/closeRZMetricPeriod',
+            method: "POST",
+            cache: false,
+            data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
+            error: function () {
+                alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+               alert("Data Saved Successfully!");
+            }
+            else {
+                alert("ERROR Saving Form: " + d);
+            } });
+    }
     function buildJSON() {
         @*var periodId = @Model.metricPeriodID*@
         var userName = "";
@@ -425,7 +443,7 @@
         }
         return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
     }
-    
+
     function validateTxtField($txtControl){
         //Validate the Entered Value
         //$(this)
@@ -457,7 +475,7 @@
             //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
             $txtControl.removeClass("error");
             $txtControl.addClass("no-error");
-            valControl.hide();           
+            valControl.hide();
             $txtControl.parents(".buildingRow").find("#saveFlag").first().val("Y");
             $("#frmModified").val("Y");
             $("#btnSave").prop('disabled', false);

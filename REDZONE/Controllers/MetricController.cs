@@ -34,6 +34,7 @@ namespace REDZONE.Controllers
 
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        [HttpPost]
         public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear)
         {
             string userName = Session["username"].ToString();
