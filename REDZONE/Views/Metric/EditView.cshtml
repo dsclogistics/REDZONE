@@ -264,20 +264,54 @@
         });
 
         $(".updateField").on('change', function () {
-            validateTxtField($(this));
+            valMessage = validateTxtField($(this));
+            if (valMessage == "PASS"){
+                //Value Entered is Valid
+                $txtControl.removeClass("error");
+                $txtControl.addClass("no-error");
+                valControl.hide();
+                $txtControl.parents(".buildingRow").find("#saveFlag").first().val("Y");
+                $("#frmModified").val("Y");
+                $("#btnSave").prop('disabled', false);
+            }
+            else{
+                //Validation Failed. Value entered is not valid
+                var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
+                //Validation Failed. Increase the error count and report the error
+                $txtControl.removeClass("no-error");
+                $txtControl.addClass("error");
+                valControl.html(valMessage);
+                valControl.show();
+                $("#btnSave").prop('disabled', true);
+                $txtControl.focus();
+            }
         });
 
         $("#btnSave").click(function () {
             //Validate all input fields
             var errorsFound = 0;
+            var valMessage = "";
             $("#frmErrors").val("0"); // Reset the errors counter before form validation
-            //$(".updateField").each(function(){
-            //    validateTxtField($(this));
-            //});
+            //Loop through all text boxes to validate each one of them and cound how many failed.
+            $(".updateField").each(function(){
+                valMessage = validateTxtField($(this));
+                if (!(valMessage == "PASS")){
+                    var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
+                    //Validation Failed. Increase the error count and report the error
+                    errorsFound = errorsFound + 1;
+                    $txtControl.removeClass("no-error");
+                    $txtControl.addClass("error");
+                    valControl.html(valMessage);
+                    valControl.show();
+                    $("#btnSave").prop('disabled', true);
+                    $txtControl.focus();
+                }
+            });
+            $("#frmErrors").val(errorsFound);  //Save the total number of errors found
 
-            if(Number($("#frmErrors").val()) > 0){
+            if(errorsFound > 0){
                 // Errors were found
-                alert($("#frmErrors").val() + " Errors were found. Please correct errors before saving.");
+                alert(errorsFound + " Errors were found. Please correct errors before saving.");
             }
             else{
                 //Proceed saving the data
@@ -337,25 +371,63 @@
         });
         //----------------- END OF MODAL EVENTS ----------------------------------
     });
-    function closePeriod(){
-        alert("Closing");
-        $.ajax({
-            //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
-            url: '/Metric/closeRZMetricPeriod',
-            method: "POST",
-            cache: false,
-            data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
-            error: function () {
-                alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            if (d == "Success") {
-               alert("Data Saved Successfully!");
+    //----------------------------- FUNCTIONS --------------------------------------------------------
+    //------------------------------------------------------------------------------------------------
+    function canBeClosed(){
+        var errorsFound = 0;
+        $(".updateField").each(function(){
+            var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
+            var valMessage = "";
+            if ($(this).val == ""){ //No values can be left blank
+                valMessage = "Value is required before closing the metric.";
             }
             else {
-                alert("ERROR Saving Form: " + d);
-            } });
+                valMessage = validateTxtField($(this));               
+            }
+
+            if(!(valMessage == "PASS")){ //Validation Failed
+                errorsFound = errorsFound + 1;
+                $txtControl.removeClass("no-error");
+                $txtControl.addClass("error");
+                valControl.html(valMessage);
+                valControl.show();
+                $("#btnSave").prop('disabled', true);
+                $txtControl.focus();
+            }
+        });
+
+        if(errorsFound > 0){ 
+            alert("Warning! " + errorsFound + " error(s) need to be corrected before closing.");
+            return false;
+        }
+        else {
+            alert("Closing");
+            return true;
+        }
     }
+    //------------------------------------------------------------------------------------------------
+    function closePeriod(){
+        
+        if (canBeClosed()){
+            $.ajax({
+                //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
+                url: '/Metric/closeRZMetricPeriod',
+                method: "POST",
+                cache: false,
+                data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
+                error: function () {
+                    alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                if (d == "Success") {
+                    alert("Data Saved Successfully!");
+                }
+                else {
+                    alert("ERROR Saving Form: " + d);
+                } });        
+        }
+    }
+    //------------------------------------------------------------------------------------------------
     function buildJSON() {
         @*var periodId = @Model.metricPeriodID*@
         var userName = "";
@@ -385,7 +457,7 @@
 
         return jsonPayloadHeader + jsonPayloadDetail
     }
-
+    //------------------------------------------------------------------------------------------------
     function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces ) {
         // First Validation. If input values is null or empty. It passes
         if (txtControl.val() == "") return "PASS";
@@ -430,7 +502,7 @@
 
         return validationMessage;
     }
-
+    //------------------------------------------------------------------------------------------------
     function validateStrEntry(txtValue, strLength) {
         var stringLength = Number(strLength);
         if ( stringLength == 0 || isNaN(stringLength)) {
@@ -443,19 +515,18 @@
         }
         return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
     }
-
+    //------------------------------------------------------------------------------------------------
     function validateTxtField($txtControl){
+        var oldValue = $txtControl.val();
+        var newValue = $txtControl.val().trim();
         //Validate the Entered Value
         //$(this)
-        $txtControl.val($txtControl.val().trim());   //Trim the spaces from the input
+
         var valMessage = "";
-        var newValue = $txtControl.val();
-        var valControl = $txtControl.parents(".buildingRow").first().find(".valValidationMsg").first();
-        //alert("New value is: " + valControl.prop("id") );
 
         //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
         if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
-            $txtControl.val("N/A");
+            newValue = "N/A";
             valMessage = "PASS";
         }
         else {
@@ -471,24 +542,15 @@
             }
             //Check the result of the validation
         }
-        if (valMessage == "PASS") {
-            //Input Value is valid. Erase the error message and Change the "Control Updated" flag.
-            $txtControl.removeClass("error");
-            $txtControl.addClass("no-error");
-            valControl.hide();
+        
+        if (valMessage == "PASS" && !(oldValue == newValue)) {
+            //If the value was altered/changed in any way, update with new value and set appropiate flags
+            $txtControl.val(newValue);      //Update the text field with the new value if they are not equal.
             $txtControl.parents(".buildingRow").find("#saveFlag").first().val("Y");
             $("#frmModified").val("Y");
             $("#btnSave").prop('disabled', false);
         }
-        else{ //Validation Failed
-            $("#frmErrors").val(Number($("#frmErrors").val()) + 1);  //Increase the Form errors counter
-            $txtControl.focus();
-            $txtControl.removeClass("no-error");
-            $txtControl.addClass("error");
-            valControl.html(valMessage);
-            valControl.show();
-            $("#btnSave").prop('disabled', true);
-        }
 
+        return valMessage;
     }
 </script>
