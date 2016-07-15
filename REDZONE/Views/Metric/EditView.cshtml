@@ -317,36 +317,7 @@
             }
             else{
                 //Proceed saving the data
-                //alert("Saving Data...");
-                //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
-                var payload = buildJSON();
-                //alert("Posting Data: \n" + payload);
-                $("#posData").html(payload);    //For Debug Purposes
-                $.ajax({
-                    url: '/Metric/saveRZMetric',
-                    //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
-                    method: "POST",
-                    cache: false,
-                    //type: "POST",
-                    //data: payload,
-                    data: {raw_json:payload},
-                    //contentType: "application/json; charset=utf-8",
-                    //dataType: "json",
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d == "Success") {
-                        var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                        alert("Data Saved Successfully!");
-                        //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                        location.href = "/Metric/EditView/" + urlSufixx;
-                        //location.reload();
-                    } else {
-                        alert("Error Saving the data!\n" + JSON.stringify(d));
-                    }
-                    //$("#output").html(JSON.stringify(d));
-                });
+                saveMetricData();
             }
 
         });
@@ -375,14 +346,52 @@
     });
     //----------------------------- FUNCTIONS --------------------------------------------------------
     //------------------------------------------------------------------------------------------------
+    function saveMetricData(){
+        //alert("Saving Data...");
+        //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
+        var payload = buildJSON();
+        alert("Posting Data: \n" + payload);
+        //$("#posData").html(payload);    //For Debug Purposes
+        $.ajax({
+            url: '/Metric/saveRZMetric',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: {raw_json:payload},
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                return false;
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                alert("Data Saved Successfully!");
+                //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                location.href = "/Metric/EditView/" + urlSufixx;
+                //location.reload();
+                return true;
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+                return  false;
+            }
+            //$("#output").html(JSON.stringify(d));
+        });
+    }
+
     function canBeClosed(){
+        alert("Checking if Metric Can be closed...");
         var errorsFound = 0;
         $(".updateField").each(function(){
             var $txtControl = $(this);
             var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             var valMessage = "";
-            if ($(this).val == ""){ //No values can be left blank
-                valMessage = "Value is required before closing the metric.";
+            if ($txtControl.val() == "" ){ //No values can be left blank
+                alert("Value null was found.");
+                valMessage = "Value is required";
             }
             else {
                 valMessage = validateTxtField($(this));               
@@ -411,26 +420,30 @@
     //------------------------------------------------------------------------------------------------
     function closePeriod(){
         if (canBeClosed()){
-            alert("Closed completed!");
-            $.ajax({
-                //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
-                url: '/Metric/closeRZMetricPeriod',
-                method: "POST",
-                cache: false,
-                data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
-                error: function () {
-                    alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
- 
-                }
-            }).done(function (d) {
-                if (d == "Success") {
-                    alert("Period Successfully Closed!");
-                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                    //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                    location.href = "/Metric/EditView/" + urlSufixx;
-                }
-                else {alert("ERROR Closing Period: " + d); }
-            });
+            alert("Savind Data first...");
+            if (saveMetricData()){
+                $.ajax({
+                    //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
+                    url: '/Metric/closeRZMetricPeriod',
+                    method: "POST",
+                    cache: false,
+                    data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
+                    error: function () {
+                        alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Period Successfully Closed!");
+                        var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                        //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                        location.href = "/Metric/EditView/" + urlSufixx;
+                    }
+                    else {alert("ERROR Closing Period: " + d); }
+                });
+            }
+            else{
+                alert("Failed to save data. Clossing cannot continue.");
+            }
         }
     }
     //------------------------------------------------------------------------------------------------
