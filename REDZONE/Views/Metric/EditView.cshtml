@@ -104,7 +104,7 @@
                         <div class="row" style="text-align:center">
                             @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
                             {
-                                <img src="~/Images/locked.gif" width="35" /> <br />
+                                <img src="~/Images/locked.gif" width="35" style="margin-top:10px; margin-bottom:9px"/> <br />
                                 <span style="font-size:xx-small; color:blue; ">Period is Closed</span>
                             }
                             else
@@ -265,6 +265,7 @@
 
         $(".updateField").on('change', function () {
             var $txtControl = $(this);
+            var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             valMessage = validateTxtField($(this));
             if (valMessage == "PASS"){
                 //Value Entered is Valid

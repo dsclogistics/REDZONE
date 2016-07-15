@@ -18,6 +18,8 @@ namespace REDZONE.Controllers
         public ActionResult EditView(int? id, string month, string year)
         {
             int metricId = id ?? 0;
+            if (Session["username"] == null) { return RedirectToAction("Login", "Account"); 
+            }
             if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
             return View(parcer.getRZ_Metric(metricId, month, year));
         }
