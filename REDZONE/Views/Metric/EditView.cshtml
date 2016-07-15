@@ -264,6 +264,7 @@
         });
 
         $(".updateField").on('change', function () {
+            var $txtControl = $(this);
             valMessage = validateTxtField($(this));
             if (valMessage == "PASS"){
                 //Value Entered is Valid
@@ -376,6 +377,7 @@
     function canBeClosed(){
         var errorsFound = 0;
         $(".updateField").each(function(){
+            var $txtControl = $(this);
             var valControl = $(this).parents(".buildingRow").first().find(".valValidationMsg").first();
             var valMessage = "";
             if ($(this).val == ""){ //No values can be left blank
@@ -407,24 +409,27 @@
     }
     //------------------------------------------------------------------------------------------------
     function closePeriod(){
-        
         if (canBeClosed()){
+            alert("Closed completed!");
             $.ajax({
                 //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
                 url: '/Metric/closeRZMetricPeriod',
                 method: "POST",
                 cache: false,
-                data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
+                data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
                 error: function () {
-                    alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                    alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
+ 
                 }
             }).done(function (d) {
                 if (d == "Success") {
-                    alert("Data Saved Successfully!");
+                    alert("Period Successfully Closed!");
+                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                    //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                    location.href = "/Metric/EditView/" + urlSufixx;
                 }
-                else {
-                    alert("ERROR Saving Form: " + d);
-                } });        
+                else {alert("ERROR Closing Period: " + d); }
+            });
         }
     }
     //------------------------------------------------------------------------------------------------
