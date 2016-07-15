@@ -150,9 +150,9 @@ namespace REDZONE.AppCode
             return rz_metric;
         }
 
-        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear, string userId)
+        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear, string userId, string metricPeriodId)
         {
-            string raw_data = api.closePeriod("Red Zone", "Month", metricId, metricMonth, metricYear, userId);
+            string raw_data = api.closePeriod("Red Zone", "Month", metricId, metricMonth, metricYear, userId, metricPeriodId);
             if (raw_data.ToLower().Contains("success"))
             {
                 return "Success";

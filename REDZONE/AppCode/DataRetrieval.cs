@@ -98,7 +98,7 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
-        public string closePeriod(string productName, string tptName, string mtrcid, string calmonth, string calyear, string userId)
+        public string closePeriod(string productName, string tptName, string mtrcid, string calmonth, string calyear, string userId, string metricPeriodId)
         {
             string endPoint = "metricperiodclose";
             WebRequest request = WebRequest.Create(api_url + endPoint);
@@ -106,7 +106,7 @@ namespace REDZONE.AppCode
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
             string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
-                                     "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"user_id\":\"" + userId + "\"}";
+                                     "\",\"mtrc_period_id\":\""+ metricPeriodId +"\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"user_id\":\"" + userId + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;
             try

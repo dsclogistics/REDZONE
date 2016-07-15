@@ -343,7 +343,7 @@
             url: '/Metric/closeRZMetricPeriod',
             method: "POST",
             cache: false,
-            data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
+            data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
             error: function () {
                 alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
 

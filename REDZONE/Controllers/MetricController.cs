@@ -35,10 +35,10 @@ namespace REDZONE.Controllers
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
-        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear)
+        public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear, string metricPeriodId)
         {
             string userName = Session["username"].ToString();
-            return parcer.closeRZMetricPeriod(metricId, metricMonth, metricYear, userName);
+            return parcer.closeRZMetricPeriod(metricId, metricMonth, metricYear, userName, metricPeriodId);
 
         }
 
