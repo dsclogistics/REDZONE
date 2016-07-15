@@ -338,7 +338,6 @@
         //----------------- END OF MODAL EVENTS ----------------------------------
     });
     function closePeriod(){
-        alert("Closing");
         $.ajax({
             //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
             url: '/Metric/closeRZMetricPeriod',
@@ -346,14 +345,19 @@
             cache: false,
             data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear" },
             error: function () {
-                alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
+
             }
         }).done(function (d) {
             if (d == "Success") {
-               alert("Data Saved Successfully!");
+                alert("Period Successfully Closed!");
+                var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                location.href = "/Metric/EditView/" + urlSufixx;
+
             }
             else {
-                alert("ERROR Saving Form: " + d);
+                alert("ERROR Closing Period: " + d);
             } });
     }
     function buildJSON() {
