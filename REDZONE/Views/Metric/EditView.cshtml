@@ -32,35 +32,7 @@
         text-align:center;
     }
 </style>
-@*<style>
-    th {
-        background-color: aliceblue;
-    }
 
-    td.center {
-        text-align: center;
-    }
-
-    .alert-standard {
-        background-color: #f1f0f0;
-    }
-
-    /*.modal-content {
-        width: 80% !important;
-        margin: 30px auto !important;
-    }*/
-    .error {        
-        border: 1px solid red;
-        background: #FFCECE;
-    }
-    .no-error {
-        border: 1px solid black;
-        background-color : white;
-    }
-    .ROField {
-        border:none;
-    }
-</style>*@
 <link href="~/Content/bootstrap-dialog.css" rel="stylesheet" />
 
 
@@ -111,17 +83,20 @@
                             {
                                 <span style="font-size:xx-small; color:blue; ">STATUS:</span>
                                 <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
-                                <a href="javascript:closePeriod()"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
+                                <a href="javascript:saveMetricData(true)"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
                             }
                         </div>
                     </div>
                 </div>
 
-                @*<div class="row">
+
+                <div class="row">
                     Validation Rules: [ Data Type: @Model.metricDataType ], [ Importable?: @Model.isImportable ], [ Data Automatic?: @Model.isAuto ], [Data Numeric?: @Model.isNumeric ], [ N/A Allowed?: @Model.na_allowed ]
                     <br />
                      [Metric Min Value: @Model.mtrcMinVal ], [Metric Max Value: @Model.mtrcMaxVal ], [Val Dec Places: @Model.maxDecPlaces ], [Val String Length: @Model.maxStrSize]
-                </div>*@
+                </div>
+
+
             </div>
             <div class="panel-body">
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">  <!-- Table -->
@@ -151,6 +126,9 @@
                                 {
                                     <div class="row">
                                         <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
+                                        @if (dscBldng.naAllowed) {
+                                            <TEXT><span style="color:blue; font-weight:bold">*</span></TEXT>
+                                        }
                                     </div>
                                     <div class="row" style="text-align:center;">
                                         <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
@@ -162,6 +140,8 @@
                                 <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
                                 <input type="hidden" id="isManual" value="@dscBldng.isManual" />
                                 <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
+                                <input type="hidden" id="isNAallowed" value="@dscBldng.naAllowed.ToString()" />
+                                <input type="hidden" id="isNA" value="" />
                             </div>
                         </div> <!-- End of "buildingRow" DIV-->
                     }
@@ -317,7 +297,7 @@
             }
             else{
                 //Proceed saving the data
-                saveMetricData();
+                saveMetricData(false);
             }
 
         });
@@ -346,7 +326,7 @@
     });
     //----------------------------- FUNCTIONS --------------------------------------------------------
     //------------------------------------------------------------------------------------------------
-    function saveMetricData(){
+    function saveMetricData(doClose){
         //alert("Saving Data...");
         //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
         var payload = buildJSON();
@@ -364,22 +344,45 @@
             //dataType: "json",
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-                return false;
             }
         }).done(function (d) {
             if (d == "Success") {
                 var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                alert("Data Saved Successfully!");
                 //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                location.href = "/Metric/EditView/" + urlSufixx;
-                //location.reload();
-                return true;
+                if (doClose){ closePeriod(); }
+                else{
+                    alert("Data Saved Successfully!");
+                    location.href = "/Metric/EditView/" + urlSufixx;
+                }
+                
+                //location.reload();                
             } else {
                 alert("Error Saving the data!\n" + JSON.stringify(d));
-                return  false;
+
             }
             //$("#output").html(JSON.stringify(d));
         });
+    }
+
+    function closePeriod(){
+        $.ajax({
+            //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
+            url: '/Metric/closeRZMetricPeriod',
+            method: "POST",
+            cache: false,
+            data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
+            error: function () {
+                alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Period Successfully Closed!");
+                var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                location.href = "/Metric/EditView/" + urlSufixx;
+            }
+            else {alert("ERROR Closing Period: " + d); }
+        }); 
     }
 
     function canBeClosed(){
@@ -417,35 +420,7 @@
             return true;
         }
     }
-    //------------------------------------------------------------------------------------------------
-    function closePeriod(){
-        if (canBeClosed()){
-            alert("Savind Data first...");
-            if (saveMetricData()){
-                $.ajax({
-                    //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
-                    url: '/Metric/closeRZMetricPeriod',
-                    method: "POST",
-                    cache: false,
-                    data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
-                    error: function () {
-                        alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d == "Success") {
-                        alert("Period Successfully Closed!");
-                        var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                        //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                        location.href = "/Metric/EditView/" + urlSufixx;
-                    }
-                    else {alert("ERROR Closing Period: " + d); }
-                });
-            }
-            else{
-                alert("Failed to save data. Clossing cannot continue.");
-            }
-        }
-    }
+    
     //------------------------------------------------------------------------------------------------
     function buildJSON() {
         @*var periodId = @Model.metricPeriodID*@
@@ -463,9 +438,12 @@
         $(".buildingRow").each(function () {
             // Loop thoruh all building rows
             //alert("Building is "+$(this).find("#buildingName").first().val()+" and flag is "+$(this).find("#saveFlag").first().val());
+            var canUseNA = "";
+            if ($(this).find("#isNAallowed").first().val() == "True"){ canUseNA = "Y"}
+            else {canUseNA = "N"}
             if ($(this).find("#saveFlag").first().val() == "Y") {//If this Building Value was Edited add it to the payload
                 if (recordsChanged > 0) { jsonPayloadDetail = jsonPayloadDetail + ","; }
-                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","UserId": "@Session["username"].ToString()","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","bmp_na_allow_yn": "Y","mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '"}';
+                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","UserId": "@Session["username"].ToString()","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","bmp_na_allow_yn": "' + canUseNA + '", "mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '","mtrc_period_val_is_na_yn": "' + $(this).find("#isNA").first().val()  + '"}';
 
                 recordsChanged = recordsChanged + 1;
             }
@@ -538,15 +516,18 @@
     function validateTxtField($txtControl){
         var oldValue = $txtControl.val();
         var newValue = $txtControl.val().trim();
+        var isNAallowed = $txtControl.parents(".buildingRow").find("#isNAallowed").first().val();
+        
         //Validate the Entered Value
         //$(this)
 
         var valMessage = "";
 
         //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
-        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && "@Model.na_allowed" == "True") {
+        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && isNAallowed == "True") {
             newValue = "N/A";
             valMessage = "PASS";
+            $txtControl.parents(".buildingRow").find("#isNA").first().val("Y");
         }
         else {
             //Perform either the Numeric or the String Validations
@@ -560,6 +541,7 @@
                 valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
             }
             //Check the result of the validation
+            $txtControl.parents(".buildingRow").find("#isNA").first().val("N");
         }
         
         if (valMessage == "PASS" && !(oldValue == newValue)) {
