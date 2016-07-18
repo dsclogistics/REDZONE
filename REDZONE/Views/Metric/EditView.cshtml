@@ -332,36 +332,38 @@
         var payload = buildJSON();
         alert("Posting Data: \n" + payload);
         //$("#posData").html(payload);    //For Debug Purposes
-        $.ajax({
-            url: '/Metric/saveRZMetric',
-            //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
-            method: "POST",
-            cache: false,
-            //type: "POST",
-            //data: payload,
-            data: {raw_json:payload},
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            if (d == "Success") {
-                var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
-                //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                if (doClose){ closePeriod(); }
-                else{
-                    alert("Data Saved Successfully!");
-                    location.href = "/Metric/EditView/" + urlSufixx;
+        if (canBeClosed()){
+            $.ajax({
+                url: '/Metric/saveRZMetric',
+                //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: {raw_json:payload},
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
+            }).done(function (d) {
+                if (d == "Success") {
+                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                    //alert("Navigating to: /Metric/EditView/" + urlSufixx);
+                    if (doClose){ closePeriod(); }
+                    else{
+                        alert("Data Saved Successfully!");
+                        location.href = "/Metric/EditView/" + urlSufixx;
+                    }
                 
-                //location.reload();                
-            } else {
-                alert("Error Saving the data!\n" + JSON.stringify(d));
+                    //location.reload();                
+                } else {
+                    alert("Error Saving the data!\n" + JSON.stringify(d));
 
-            }
-            //$("#output").html(JSON.stringify(d));
-        });
+                }
+                //$("#output").html(JSON.stringify(d));
+            });        
+        }
     }
 
     function closePeriod(){
