@@ -332,7 +332,7 @@
         var payload = buildJSON();
         alert("Posting Data: \n" + payload);
         //$("#posData").html(payload);    //For Debug Purposes
-        if (canBeClosed()){
+        if (canBeClosed() || !doClose){
             $.ajax({
                 url: '/Metric/saveRZMetric',
                 //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
