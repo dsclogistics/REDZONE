@@ -18,7 +18,6 @@ namespace REDZONE.Models
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
         //-------- End of Constructor ----------
-
     }
 
     public class BuildingMetricEntity

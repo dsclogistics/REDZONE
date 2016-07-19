@@ -1,4 +1,5 @@
-﻿using System;
+﻿using REDZONE.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,8 +12,18 @@ namespace REDZONE.Controllers
         // GET: ExecutiveSummary/MonthlySummary
         public ActionResult MonthlySummary(string rptMonth)
         {
-            
-            return View();
+            ExecutiveSummaryViewModel testDashboard = new ExecutiveSummaryViewModel();
+
+            testDashboard = dummyData();
+            return View(testDashboard);
+        }
+
+        private ExecutiveSummaryViewModel dummyData()
+        {
+            ExecutiveSummaryViewModel temp = new ExecutiveSummaryViewModel();
+
+            temp.month = "June";
+            return temp;
         }
     }
 }
