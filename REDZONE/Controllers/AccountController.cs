@@ -114,7 +114,6 @@ namespace REDZONE.Controllers
                     && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
                 { return Redirect(ReturnUrl); }
                 else { return RedirectToAction("Index", "Home"); }
-
             }
             else
             {
@@ -127,10 +126,10 @@ namespace REDZONE.Controllers
         //--------------------------------------------------------------------------------------------------------------\\
         // GET: /Account/LogOff
         [HttpGet][AllowAnonymous]
-        public ActionResult LogOff()
+        public ActionResult LogOff(string backUrl)
         {
+            if (String.IsNullOrEmpty(backUrl)) { backUrl = "\\Home\\Index"; }
             FormsAuthentication.SignOut();
-            ViewBag.ReturnUrl = "\\Home\\Index";
             Session.Remove("emp_id");    //Session["emp_id"] = null;
             Session.Remove("role");      //Session["role"] = null;
             Session.Remove("first_name");
@@ -138,7 +137,7 @@ namespace REDZONE.Controllers
             Session.Remove("email");
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             //Session["ReturnURL"] = "";
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", new { returnUrl = backUrl });
         }
         //--------------------------------------------------------------------------------------------------------------\\
 

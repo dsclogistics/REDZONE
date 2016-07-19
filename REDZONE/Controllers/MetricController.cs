@@ -17,8 +17,10 @@ namespace REDZONE.Controllers
         // GET: Metric
         public ActionResult EditView(int? id, string month, string year)
         {
+            string returnURL = String.Format(@"/Metric/EditView/{0}?month={1}&year={2}", id, month, year);   // /Metric/EditView/6?month=June&year=2016
             int metricId = id ?? 0;
-            if (Session["username"] == null) { return RedirectToAction("Login", "Account");  }
+            if (metricId == 0) { returnURL = ""; }
+            if (Session["username"] == null) { return RedirectToAction("LogOff", "Account", new { backUrl = returnURL }); }
             if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
             return View(parcer.getRZ_Metric(metricId, month, year));
         }
@@ -40,7 +42,6 @@ namespace REDZONE.Controllers
         {
             string userName = Session["username"].ToString();
             return parcer.closeRZMetricPeriod(metricId, metricMonth, metricYear, userName, metricPeriodId);
-
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
