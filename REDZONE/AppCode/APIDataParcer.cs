@@ -18,10 +18,14 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             rz_metric.allBuildings = String.Empty;
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
+            
+            // At this point the json result can be empty (If no data was found) or an Error if an exception was caught 
+            // or an actual jason message if The API was successful
+
             //if (raw_data.Substring(0, 5).Equals("ERROR")) {
             //    HttpContext.Current.Server.Transfer("/Error/Index?ErrorMsg=" + raw_data.Substring(7));
             //}
-            
+
 
             try {
                 JObject parsed_result = JObject.Parse(raw_data);
@@ -74,6 +78,9 @@ namespace REDZONE.AppCode
                 rz_metric.metric_period_end_date = currentMonth;
                 rz_metric.periodName = "Requested Metric Period invalid or does not Exist";
                 rz_metric.metricPeriodID = 0;
+                rz_metric.metricPeriodStatus = "Closed";
+                rz_metric.metricPrevPeriodStatus = "disabled";
+                rz_metric.metricNextPeriodStatus = "disabled";
             }
 
             return rz_metric;
