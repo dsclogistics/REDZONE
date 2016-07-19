@@ -138,7 +138,7 @@ namespace REDZONE.AppCode
                 {
                     //parsed_result["metricdetail"]["nextperiod"] May-2016
                     string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    rz_metric.lastMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, next_date_time[0], next_date_time[1]);
+                    rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, next_date_time[0], next_date_time[1]);
                 }
 
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
