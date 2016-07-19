@@ -136,7 +136,7 @@ namespace REDZONE.AppCode
                 }
                 if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]))
                 {
-                    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                    //parsed_result["metricdetail"]["nextperiod"] has May-2016 format
                     string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, next_date_time[0], next_date_time[1]);
                 }
