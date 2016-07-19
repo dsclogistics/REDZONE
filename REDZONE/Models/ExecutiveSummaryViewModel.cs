@@ -22,7 +22,7 @@ namespace REDZONE.Models
     }
 
     public class BuildingMetricEntity
-    {
+    {// This represents a single Row in the Executive Summary Spreadsheet
         public string BuildingName { get; set; }
         public string score { get; set; }
         public string scoreColor { get; set; }
@@ -33,7 +33,8 @@ namespace REDZONE.Models
         //-------- End of Constructor ----------
     }
 
-    public class MeasuredMetric{
+    public class MeasuredMetric
+    {// This represents a single Cell in the Executive Summary Spreadsheet
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public string metricColor { get; set; }
