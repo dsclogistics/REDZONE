@@ -106,7 +106,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center; ">
+                    @{
+                        string fontColor = Model.metricPeriodStatus.ToUpper().Equals("CLOSED")?"darkgray":"black";
+                    }
+                    <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center; color:@fontColor">
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
                             <div class="row buildingRow">
