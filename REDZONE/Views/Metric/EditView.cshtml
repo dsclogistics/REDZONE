@@ -291,7 +291,10 @@
         //$("#posData").html(payload);    //For Debug Purposes
         var saveClose = !doClose;
         if (doClose){
-            saveClose = canBeClosed();
+            if(confirm("Are you sure you want to close the current Metric Period?")){
+                saveClose = canBeClosed();
+            }
+            else return;
         }
 
         if (saveClose){
