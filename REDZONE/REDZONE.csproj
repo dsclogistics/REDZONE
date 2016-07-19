@@ -215,7 +215,7 @@
     <Compile Include="Models\DSC_MTRC_LC_BLDG.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ExecutiveSummaryView.cs" />
+    <Compile Include="Models\ExecutiveSummaryViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />

@@ -5,28 +5,31 @@ using System.Web;
 
 namespace REDZONE.Models
 {
-    public class ExecutiveSummaryView
+    public class ExecutiveSummaryViewModel
     {
         public string month { get; set; }
-        MetricEntity goal = new MetricEntity();
-        MetricEntity redTotals = new MetricEntity();
-        List<MetricEntity> buildings = new List<MetricEntity>();
+        public string year { get; set; }
+        public string urlNextMonth { get; set; }
+        public string urlPrevMonth { get; set; }
+        BuildingMetricEntity goal = new BuildingMetricEntity();
+        BuildingMetricEntity redTotals = new BuildingMetricEntity();
+        List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
 
         //-------- Empty Constructor -----------
-        public ExecutiveSummaryView() { }
+        public ExecutiveSummaryViewModel() { }
         //-------- End of Constructor ----------
 
     }
 
-    public class MetricEntity
+    public class BuildingMetricEntity
     {
-        public string Name { get; set; }
+        public string BuildingName { get; set; }
         public string score { get; set; }
         public string scoreColor { get; set; }
         public List<MeasuredMetric> entityMetrics = new List<MeasuredMetric>();        
 
         //-------- Empty Constructor -----------
-        public MetricEntity() { }
+        public BuildingMetricEntity() { }
         //-------- End of Constructor ----------
     }
 
