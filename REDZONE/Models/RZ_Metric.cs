@@ -47,8 +47,9 @@ namespace REDZONE.Models
         public string metricNextPeriodStatus { set; get; }
         public string metricPrevPeriodStatus { set; get; }
 
-        public string lastMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); } }
-        public string nextMonthUrl { get { return String.Format("/Metric/EditView/{0}?month={1}&year={2}", id, metric_period_start_date.AddMonths(1).ToString("MMMM"), metric_period_start_date.AddMonths(1).ToString("yyyy")); } }
+        public string lastMonthUrl { get; set; }//
+            //{ return String.Format("/Metric/EditView/{0}?month={1}&year={2}",id,metric_period_start_date.AddMonths(-1).ToString("MMMM"), metric_period_start_date.AddMonths(-1).ToString("yyyy")); }
+        public string nextMonthUrl { get; set; }
   
         public List<Building> buildingList = new List<Building>();
         public string allBuildings { get; set; }
