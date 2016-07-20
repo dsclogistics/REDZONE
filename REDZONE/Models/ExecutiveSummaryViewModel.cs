@@ -16,6 +16,8 @@ namespace REDZONE.Models
         public BuildingMetricEntity goal = new BuildingMetricEntity();
         public BuildingMetricEntity redTotals = new BuildingMetricEntity();
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
+        public List<string> allBuildings = new List<string>();
+        public List<string> allMetrics = new List<string>();
 
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
@@ -30,6 +32,7 @@ namespace REDZONE.Models
         public string BuildingName { get; set; }
         public string score { get; set; }
         public string scoreColor { get; set; }
+
         public List<MeasuredMetric> entityMetrics = new List<MeasuredMetric>();        
 
         //-------- Empty Constructor -----------

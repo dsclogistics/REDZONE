@@ -80,10 +80,10 @@
                         <div class="col-sm-2 buildingCol" style=" text-align:center">
                             <span style="font-weight:bold"> @Model.month @Model.year</span>
                         </div>
-                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                        @foreach (string m in Model.allMetrics)
                         {
                             <div class="col-sm-1 buildingCol" style="text-align:center">
-                                @bldngMV.metricName
+                                @m
                             </div>
                         }
                         <div class="col-sm-1 buildingCol" style=" text-align:center">

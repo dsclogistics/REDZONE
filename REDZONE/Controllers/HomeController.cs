@@ -21,7 +21,7 @@ namespace REDZONE.Controllers
         public ActionResult Index()
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
-            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "June", "2016");
+            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "May", "2016");
 
             ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             // Load the Metric Header Info

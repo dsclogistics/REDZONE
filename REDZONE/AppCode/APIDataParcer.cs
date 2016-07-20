@@ -251,30 +251,57 @@ namespace REDZONE.AppCode
                 JObject parsed_result = JObject.Parse(raw_data);
                 JArray apiBuidings = (JArray)parsed_result["buildings"];
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
+                JArray allApiMetrics = (JArray)parsed_result["metrics"];
+                List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();
+                if (allApiMetrics.HasValues)
+                {
+                    foreach (var mtr in allApiMetrics)
+                    {
+                        eSummary.allMetrics.Add((string)mtr["MtrcName"]);
+                     
+                    }
+                    eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x).ToList();
+                }
                 if (apiBuidings.HasValues)
                 {
                     foreach(var bldg in apiBuidings)
                     {
-                        BuildingMetricEntity building = new BuildingMetricEntity();
-                        building.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
+                        
+                        //eSummary.allBuildings.Add((string)bldg["dsc_mtrc_lc_bldg_name"]);
+                        
                         if (apiBuildingsMetrics.HasValues)
                         {
+                            BuildingMetricEntity b = new BuildingMetricEntity();
+                            foreach (var mtr in eSummary.allMetrics)
+                            {                             
+                                MeasuredMetric temp = new MeasuredMetric();
+                                temp.metricName = mtr;
+                                b.entityMetrics.Add(temp);
+                            }
+                            b.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
+                            
+
                             foreach (var mtrc in apiBuildingsMetrics)
                             {
-                                if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== building.BuildingName)
+                               
+                                if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
-                                    MeasuredMetric bMetric = new MeasuredMetric();
-                                    bMetric.metricName = (string)mtrc["mtrc_name"];
-                                    bMetric.metricValue = (string)mtrc["mtrc_period_val_value"];
-                                    building.entityMetrics.Add(bMetric);                                     
+                                    foreach(var tmp in b.entityMetrics)
+                                    {
+                                        if(tmp.metricName == ((string)mtrc["mtrc_name"]))
+                                        {
+                                            tmp.metricValue = (string)mtrc["mtrc_period_val_value"];                                            
+                                        }
+                                    }                                    
                                 }
-                                                                                               
+                                
                             }
+                            buildings.Add(b);
                         }
-
-                        buildings.Add(building);
-                    }
-                    eSummary.buildings = buildings;
+                                               
+                    }      
+                                 
+                    eSummary.buildings = buildings.OrderBy(x => x.BuildingName).ToList(); ;
                 }
                
                
