@@ -409,11 +409,11 @@
     <Content Include="Views\Metric\Index.cshtml" />
     <Content Include="Views\Home\_RZDM_MenuItems.cshtml" />
     <Content Include="Views\Metric\_Upload.cshtml" />
+    <Content Include="Views\ExecutiveSummary\MonthlySummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ExecutiveSummary\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>

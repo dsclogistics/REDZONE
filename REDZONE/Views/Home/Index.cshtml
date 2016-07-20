@@ -1,38 +1,128 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model REDZONE.Models.ExecutiveSummaryViewModel
 
+@{
+    ViewBag.Title = "Executive Monthly Summary";
 }
-<br /><br /><br />
-<div class="jumbotron col-sm-12" style="border:1px solid black">
-    <h1>RED ZONE</h1>
-    <p class="lead">Red Zone Application Dashboard Placeholder</p>
-    <p >
-        @*<span style="color:blue; font-weight:bold"> API RESPONSE:</span>
-        <textarea cols="1000" rows="5" style="min-width:100%">@ViewBag.APIresponse</textarea>*@
-    </p>
-</div>
-<div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
-    </div>
-</div>
-<script>
-    // Page Startup Script
-    @*$(document).ready(function () {
-        var userName = '@Session["first_name"].ToString()' + " " + '@Session["last_name"].ToString()';
-        $("#divLoginInfo").html('<ul class="nav navbar-nav navbar-right" style="margin-top:20px"><li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;' + userName + '</span></a><ul class="dropdown-menu user-menu"><li style="margin: 0px, 3px"><a href="/Account/LogOff" style="color:red; font-weight:bold">Logout</a></li></ul></li></ul>');
 
-        //if (isUsrTokenValid()) {
-        //    //alert("A Valid token already exist:\nUSER:    " + getUsrName() + "   [" + getUsrRole() + "]\nTOKEN: " + getUsrToken() + "  [ " + getUsrTokenAge() + " minutes old]");
-        //    //$("#divLoginInfo").html(getUsrName() + "   [" + getUsrRole() + "]<br/>TOKEN: " + getUsrToken() + "  [ " + getUsrTokenAge() + " minutes old]");
-        //    $("#divLoginInfo").html('<ul class="nav navbar-nav navbar-right" style="margin-top:20px"><li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;' + userName + '</span></a><ul class="dropdown-menu user-menu"><li style="margin: 0px, 3px"><a href="/Account/LogOff" style="color:red; font-weight:bold">Logout</a></li></ul></li></ul>');
-        //} else {
-        //    alert("No User LogedIn... Logging In...");
+<style>
+    .headerRow {
+        padding: 4px;
+        font-weight: bold;
+        width: 98%;
+        margin-left: 1px;
+    }
 
-        //    setUsrIdentity("TestUser", "Admin", "5xh!ju75i!eh$5");
-        //}
-    });*@
-</script>
+    .buildingRow {
+        padding: 1px;
+        border-bottom: 1px solid #f1f1f1;
+        width: 98%;
+        margin-left: 1px;
+    }
+
+        .buildingRow:hover {
+            background-color: #f1f1f1;
+        }
+
+    .buildingCol {
+        border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
+        text-align: center;
+        padding: 2px;
+    }
+</style>
+
+
+@*<div>
+        <dl class="dl-horizontal">
+            <dt>            @Html.DisplayNameFor(model => model.month)        </dt>
+            <dd>            @Html.DisplayFor(model => model.month)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.year)        </dt>
+            <dd>            @Html.DisplayFor(model => model.year)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.urlNextMonth)        </dt>
+            <dd>            @Html.DisplayFor(model => model.urlNextMonth)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.urlPrevMonth)        </dt>
+            <dd>            @Html.DisplayFor(model => model.urlPrevMonth)        </dd>
+        </dl>
+    </div>*@
+<br />
+<div class="row" style="font-family:Arial; margin-top: 5px">
+    @*<div class="col-sm-1"></div>*@
+    <div class="col-md-10 " style="margin-left:15px; padding:0;">
+        <div class="panel panel-default" style="margin-bottom:0px; ">
+            <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row ">
+                            <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
+                                <span class="input-group-btn">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Month" @Model.statusPrevMonth>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control" value="@Model.month @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                <span class="input-group-btn">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMonth'" title="Navigate to Next Month" @Model.statusNextMonth>
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">
+                    <!-- Table -->
+                    <!-- ROWS -->
+                    <div class="row headerRow">
+                        <div class="col-sm-2 buildingCol" style=" text-align:center">
+                            <span style="font-weight:bold"> @Model.month @Model.year</span>
+                        </div>
+                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                        {
+                            <div class="col-sm-1 buildingCol" style="text-align:center">
+                                @bldngMV.metricName
+                            </div>
+                        }
+                        <div class="col-sm-1 buildingCol" style=" text-align:center">
+                            Score
+                        </div>
+                    </div><!-- TITLES ROWS -->
+                    <div class="row buildingRow">
+                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                            @Model.goal.BuildingName
+                        </div>
+                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                        {
+                            <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
+                                @bldngMV.metricValue
+                            </div>
+                        }
+                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@Model.goal.scoreColor">
+                            @Model.goal.score
+                        </div>
+                    </div><!-- GOAL ROWS -->
+                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                    {
+                        <div class="row buildingRow">
+                            <div class="col-sm-2 buildingCol" style="text-align:center">
+                                @dscBldng.BuildingName
+                            </div>
+                            @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
+                            {
+                                <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
+                                    @bldngMV.metricValue
+                                </div>
+                            }
+                            <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@dscBldng.scoreColor">
+                                @dscBldng.score
+                            </div>
+                        </div><!-- GOAL ROWS -->
+                    }
+                </div> <!-- End of DIV Table Table -->
+            </div>
+        </div>
+    </div>
+</div>
