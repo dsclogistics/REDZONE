@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using REDZONE.ServerAPIs;
 using Newtonsoft.Json.Linq;
 using REDZONE.AppCode;
+using REDZONE.Models;
 
 namespace REDZONE.Controllers
 {
@@ -19,13 +20,26 @@ namespace REDZONE.Controllers
 
         public ActionResult Index()
         {
-            //ServerAPIs.API_obs_getLC apiObject = new ServerAPIs.API_obs_getLC("DEV");
+            ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
 
-            //API_obs_getObserver apiObject = new API_obs_getObserver("DEV", "Feliciano", "Delgado", "feliciano.delgado@dsc-logistics.com");
-            ////string resultData = apiObject.getJasonData();
-            //ViewBag.APIresponse = apiObject.getJasonData();
+            // Load the Metric Header Info
+            dashBoard.month = "June";
+            dashBoard.year = "2016";
+            dashBoard.urlNextMonth = "";
+            dashBoard.urlPrevMonth = "";
+            dashBoard.statusNextMonth = "disabled";
+            dashBoard.statusPrevMonth = "disabled";
+            // Load the Goals Row (Use dummy values)
+            dashBoard.goal = new BuildingMetricEntity("GOAL");
+            //Load two sample building Rows
+            BuildingMetricEntity sampleBuilding = new BuildingMetricEntity("AP");
+            dashBoard.buildings.Add(sampleBuilding);
+            sampleBuilding = new BuildingMetricEntity("PP");
+            dashBoard.buildings.Add(sampleBuilding);
+            sampleBuilding = new BuildingMetricEntity("PC");
+            dashBoard.buildings.Add(sampleBuilding);
 
-            return View();
+            return View(dashBoard);
         }
 
 

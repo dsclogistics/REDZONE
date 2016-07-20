@@ -17,26 +17,26 @@ namespace REDZONE.Controllers
 
         private ExecutiveSummaryViewModel testDashboard()
         {
-            ExecutiveSummaryViewModel temp = new ExecutiveSummaryViewModel();
+            ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
 
             // Load the Metric Header Info
-            temp.month = "June";
-            temp.year = "2016";
-            temp.urlNextMonth = "";
-            temp.urlPrevMonth = "";
-            temp.statusNextMonth = "disabled";
-            temp.statusPrevMonth = "disabled";
+            dashBoard.month = "June";
+            dashBoard.year = "2016";
+            dashBoard.urlNextMonth = "";
+            dashBoard.urlPrevMonth = "";
+            dashBoard.statusNextMonth = "disabled";
+            dashBoard.statusPrevMonth = "disabled";
             // Load the Goals Row (Use dummy values)
-            temp.goal = new BuildingMetricEntity("GOAL");
+            dashBoard.goal = new BuildingMetricEntity("GOAL");
             //Load two sample building Rows
             BuildingMetricEntity sampleBuilding = new BuildingMetricEntity("AP");
-            temp.buildings.Add(sampleBuilding);
+            dashBoard.buildings.Add(sampleBuilding);
             sampleBuilding = new BuildingMetricEntity("PP");
-            temp.buildings.Add(sampleBuilding);
+            dashBoard.buildings.Add(sampleBuilding);
             sampleBuilding = new BuildingMetricEntity("PC");
-            temp.buildings.Add(sampleBuilding);
+            dashBoard.buildings.Add(sampleBuilding);
 
-            return temp;
+            return dashBoard;
         }
     }
 }

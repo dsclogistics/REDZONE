@@ -19,14 +19,14 @@ namespace REDZONE.Models
 
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
-        //-------- End of Constructor ----------
+        //\-------- End of Constructor ----------/
     }
 
     public class BuildingMetricEntity
     {// This represents a single Row in the Executive Summary Spreadsheet
         private const string BLUECOLOR = "lightblue";
         private const string GREENCOLOR = "lightgreen";
-        private const string REDCOLOR = "orangered";   //or #ffbb8b
+        private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string BuildingName { get; set; }
         public string score { get; set; }
         public string scoreColor { get; set; }
@@ -40,7 +40,7 @@ namespace REDZONE.Models
                 case "GOAL":
                     BuildingName = "Goal";
                     score = "<= 2";
-                    scoreColor = "blue";                
+                    scoreColor = BLUECOLOR;                
                     // Fill all the Cells For the Goal Row
                     addMetricValue("Net FTE", "0.00", BLUECOLOR);
                     addMetricValue("Turnover", "7.5%", BLUECOLOR);
@@ -54,7 +54,7 @@ namespace REDZONE.Models
                 case "AP":
                     BuildingName = "Allemtown 1";
                     score = "2";
-                    scoreColor = "green";
+                    scoreColor = GREENCOLOR;
                     // Fill all the Cells For the Goal Row
                     addMetricValue("Net FTE", "0.00", GREENCOLOR);
                     addMetricValue("Turnover", "7.00%", GREENCOLOR);
@@ -67,8 +67,8 @@ namespace REDZONE.Models
                     break;
                 case "PP":
                     BuildingName = "Des Plaines";
-                    score = "";
-                    scoreColor = "red";
+                    score = "4";
+                    scoreColor = REDCOLOR;
                     // Fill all the Cells For the Goal Row
                     addMetricValue("Net FTE", "-2.01", GREENCOLOR);
                     addMetricValue("Turnover", "11.00%", REDCOLOR);
@@ -77,12 +77,12 @@ namespace REDZONE.Models
                     addMetricValue("Safety", "3.54", REDCOLOR);
                     addMetricValue("Volume", "- 12.86%", GREENCOLOR);
                     addMetricValue("IT Tickets", "41", REDCOLOR);
-                    addMetricValue("Financial", "6.37%", REDCOLOR);
+                    addMetricValue("Financial", "6.31%", GREENCOLOR);
                     break;
                 case "PC":
                     BuildingName = "Perris";
                     score = "2";
-                    scoreColor = "green";
+                    scoreColor = GREENCOLOR;
                     // Fill all the Cells For the Goal Row
                     addMetricValue("Net FTE", "-1.96", GREENCOLOR);
                     addMetricValue("Turnover", "6.00%", GREENCOLOR);
@@ -103,7 +103,7 @@ namespace REDZONE.Models
             MeasuredMetric goal = new MeasuredMetric(p1, p2, p3);
             entityMetrics.Add(goal);
         }
-        //-------- End of Constructor ----------
+        //\-------- End of Constructor ----------/
     }
 
     public class MeasuredMetric
@@ -111,8 +111,9 @@ namespace REDZONE.Models
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public string metricColor { get; set; }
-        //-------- Empty Constructor -----------
+        //-------- Empty Constructor -----------\
         public MeasuredMetric() { }
+        //\------- End of Constructor ----------/
         public MeasuredMetric(string mName, string mValue, string mColor) {
             metricName = mName;
             metricValue = mValue;

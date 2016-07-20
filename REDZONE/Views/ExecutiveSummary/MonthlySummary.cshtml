@@ -9,12 +9,14 @@
         padding: 4px;
         font-weight: bold;
         width: 98%;
+        margin-left:1px;
     }
 
     .buildingRow {
-        padding: 3px;
+        padding: 1px;
         border-bottom: 1px solid #f1f1f1;
         width: 98%;
+        margin-left:1px;
     }
     .buildingRow:hover {
         background-color: #f1f1f1;
@@ -22,6 +24,7 @@
     .buildingCol {
         border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
         text-align: center;
+        padding:2px;
     }
 </style>
 
@@ -75,12 +78,15 @@
                          <div class="col-sm-2 buildingCol" style=" text-align:center">
                              <span style="font-weight:bold"> @Model.month @Model.year</span>
                          </div>
-                      @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
-                      {
+                       @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                       {
                          <div class="col-sm-1 buildingCol" style="text-align:center">
                              @bldngMV.metricName
                          </div>
-                      }
+                       }
+                       <div class="col-sm-1 buildingCol" style=" text-align:center">
+                           Score
+                       </div>
                    </div><!-- TITLES ROWS -->
                    <div class="row buildingRow">
                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
@@ -92,6 +98,9 @@
                                @bldngMV.metricValue
                            </div>
                        }
+                       <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@Model.goal.scoreColor">
+                           @Model.goal.score
+                       </div>
                    </div><!-- GOAL ROWS -->
                   @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
                   {
@@ -105,6 +114,9 @@
                                 @bldngMV.metricValue
                             </div>
                         }
+                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@dscBldng.scoreColor">
+                            @dscBldng.score
+                        </div>
                     </div><!-- GOAL ROWS -->
                   }
                </div> <!-- End of DIV Table Table -->
