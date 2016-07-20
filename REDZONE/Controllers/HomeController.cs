@@ -20,8 +20,10 @@ namespace REDZONE.Controllers
 
         public ActionResult Index()
         {
-            ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
+            //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
+            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "June", "2016");
 
+            ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             // Load the Metric Header Info
             dashBoard.month = "June";
             dashBoard.year = "2016";
@@ -39,7 +41,8 @@ namespace REDZONE.Controllers
             sampleBuilding = new BuildingMetricEntity("PC");
             dashBoard.buildings.Add(sampleBuilding);
 
-            return View(dashBoard);
+            dashBoardNew.goal = dashBoard.goal;
+            return View(dashBoardNew);
         }
 
 
