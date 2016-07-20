@@ -11,9 +11,9 @@ namespace REDZONE.Models
         public string year { get; set; }
         public string urlNextMonth { get; set; }
         public string urlPrevMonth { get; set; }
-        BuildingMetricEntity goal = new BuildingMetricEntity();
-        BuildingMetricEntity redTotals = new BuildingMetricEntity();
-        List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
+        public BuildingMetricEntity goal = new BuildingMetricEntity();
+        public BuildingMetricEntity redTotals = new BuildingMetricEntity();
+        public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
 
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }

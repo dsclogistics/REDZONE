@@ -238,6 +238,54 @@ namespace REDZONE.AppCode
             }
             return monthNo;
         }
+        public ExecutiveSummaryViewModel getExcecutiveSummaryView(int metric_id, string month, string year)
+        {
+            ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
+            string raw_data = api.getExecSummary("Red Zone", "Month", null, month, year);
+            eSummary.month = month;
+            eSummary.year = year;
+            try
+            {
+                List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
+                
+                JObject parsed_result = JObject.Parse(raw_data);
+                JArray apiBuidings = (JArray)parsed_result["buildings"];
+                JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
+                if (apiBuidings.HasValues)
+                {
+                    foreach(var bldg in apiBuidings)
+                    {
+                        BuildingMetricEntity building = new BuildingMetricEntity();
+                        building.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
+                        if (apiBuildingsMetrics.HasValues)
+                        {
+                            foreach (var mtrc in apiBuildingsMetrics)
+                            {
+                                if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== building.BuildingName)
+                                {
+                                    MeasuredMetric bMetric = new MeasuredMetric();
+                                    bMetric.metricName = (string)mtrc["mtrc_name"];
+                                    bMetric.metricValue = (string)mtrc["mtrc_period_val_value"];
+                                    building.entityMetrics.Add(bMetric);                                     
+                                }
+                                                                                               
+                            }
+                        }
+
+                        buildings.Add(building);
+                    }
+                    eSummary.buildings = buildings;
+                }
+               
+               
+            }
+            catch { }
+
+            return eSummary;
+
+
+        }
+
 
         public List<int> getEditableMetrics(string userName)
         {
