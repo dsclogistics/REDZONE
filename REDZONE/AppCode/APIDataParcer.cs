@@ -316,7 +316,7 @@ namespace REDZONE.AppCode
                 {
                     //parsed_result["metricdetail"]["nextperiod"] May-2016
                     string[] next_date_time = ((string)parsed_result["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    eSummary.urlNextMonth = String.Format("/Metric/EditView/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
+                    eSummary.urlNextMonth = String.Format("/Home/Index/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
                     eSummary.statusNextMonth = String.Empty;
                 }
                 else

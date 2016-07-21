@@ -18,14 +18,15 @@ namespace REDZONE.Controllers
         APIDataParcer parcer = new APIDataParcer();
         //=================================================================
 
-        public ActionResult Index()
+        public ActionResult Index(string month, string year)
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             DateTime defaultDate = DateTime.Today.AddMonths(-1);
             string curMonth = REDZONE.AppCode.APIDataParcer.intToMonth(defaultDate.Month);
             string curYear = defaultDate.Year.ToString();
-
-            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, curMonth, curYear);
+            month = String.IsNullOrEmpty(month) ? curMonth : month;
+            year = String.IsNullOrEmpty(year) ? curYear : year;
+            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year);
 
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             //// Load the Metric Header Info
