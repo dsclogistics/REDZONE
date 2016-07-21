@@ -2,21 +2,19 @@
 
 @{
     ViewBag.Title = "Executive Monthly Summary";
-    int buildingReds = 0;
-    int metricReds = 0;
 }
 
 <style>
     .headerRow {
-        padding: 4px;
-        font-weight: bold;
+        padding: 0px;        
         width: 98%;
-        margin:0;
+        margin:0px 0px 0px 1px;
         border-bottom: 1px solid gray;
         background-color: #fcfcfc;
         display: flex;
         flex-wrap: wrap;
-        min-width:100%
+        min-width:100%;
+        font-weight: bold;
     }
     .headerRow > div[class*='col-'] {
         display: flex;
@@ -36,8 +34,14 @@
     .buildingCol {
         border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
         text-align: center;
-        padding: 2px;
+        padding: 3px;
     }
+    .scoreCol {
+        border-left:1px solid black;
+    }
+    /*.headerCol {
+        border: 1px solid red;
+    }*/
 </style>
 
 
@@ -73,16 +77,16 @@
                     <!-- Table -->
                     <!-- ROWS -->
                     <div class="row headerRow row-eq-height" >
-                        <div class="col-sm-2 buildingCol" style=" text-align:center; ">
+                        <div class="col-sm-2 buildingCol headerCol" >
                             <span style="font-weight:bold"> @Model.month @Model.year</span>
                         </div>
                         @foreach (string m in Model.allMetrics)
                         {
-                            <div class="col-sm-1 buildingCol" style="text-align:center; ">
+                            <div class="col-sm-1 buildingCol headerCol">
                                 @m
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol" style=" text-align:center">
+                        <div class="col-sm-1 buildingCol headerCol scoreCol">
                             Score
                         </div>
                     </div><!-- TITLES ROWS -->
@@ -93,13 +97,15 @@
                         </div>
                         @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
                         {
-                            <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
+                            <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                 @bldngMV.metricValue
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@Model.goal.scoreColor">
-                            @if (String.IsNullOrEmpty(@Model.goal.score))  { <br /> }
-                            else  { @Model.goal.score }
+                        <div class="col-sm-1 buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                            @if (String.IsNullOrEmpty(@Model.goal.score))
+                            { <br /> }
+                            else
+                            { @Model.goal.score }
                         </div>
                     </div><!-- GOAL ROWS -->
 
@@ -111,14 +117,16 @@
                             </div>
                             @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
                             {
-                                <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
+                                <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue)) { <br/> }
                                     else { @bldngMV.metricValue }
                                 </div>
                             }
-                            <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@dscBldng.scoreColor">
-                                @if (String.IsNullOrEmpty(@dscBldng.score))  { <br /> }
-                                else { @dscBldng.score }
+                            <div class="col-sm-1 buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                                @if (String.IsNullOrEmpty(@dscBldng.score))
+                                { <br /> }
+                                else
+                                { @dscBldng.score }
                             </div>
                         </div><!-- GOAL ROWS -->
                     }
