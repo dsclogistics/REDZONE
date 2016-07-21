@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Executive Monthly Summary";
+    int buildingReds = 0;
+    int metricReds = 0;
 }
 
 <style>
@@ -9,19 +11,27 @@
         padding: 4px;
         font-weight: bold;
         width: 98%;
-        margin-left: 1px;
+        margin:0;
+        border-bottom: 1px solid gray;
+        background-color: #fcfcfc;
+        display: flex;
+        flex-wrap: wrap;
+        min-width:100%
     }
-
+    .headerRow > div[class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
     .buildingRow {
-        padding: 1px;
+        padding: 0;
         border-bottom: 1px solid #f1f1f1;
         width: 98%;
         margin-left: 1px;
+        min-width:100%
     }
-
-        .buildingRow:hover {
-            background-color: #f1f1f1;
-        }
+    .buildingRow:hover {
+        background-color: #f1f1f1;
+    }
 
     .buildingCol {
         border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
@@ -38,11 +48,10 @@
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
-                    <div class="col-sm-12">
                         <div class="row ">
                             <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-bottom:10px">
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
                                     <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Month" @Model.statusPrevMonth>
@@ -57,20 +66,19 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">
+            <div class="panel-body" style="margin:2px; padding:5px">
+                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
-                    <div class="row headerRow">
-                        <div class="col-sm-2 buildingCol" style=" text-align:center">
+                    <div class="row headerRow row-eq-height" >
+                        <div class="col-sm-2 buildingCol" style=" text-align:center; ">
                             <span style="font-weight:bold"> @Model.month @Model.year</span>
                         </div>
                         @foreach (string m in Model.allMetrics)
                         {
-                            <div class="col-sm-1 buildingCol" style="text-align:center">
+                            <div class="col-sm-1 buildingCol" style="text-align:center; ">
                                 @m
                             </div>
                         }
@@ -78,7 +86,8 @@
                             Score
                         </div>
                     </div><!-- TITLES ROWS -->
-                    <div class="row buildingRow">
+
+                    <div class="row buildingRow" style="background-color: aqua">
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.goal.BuildingName
                         </div>
@@ -89,11 +98,13 @@
                             </div>
                         }
                         <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@Model.goal.scoreColor">
-                            @Model.goal.score
+                            @if (String.IsNullOrEmpty(@Model.goal.score))  { <br /> }
+                            else  { @Model.goal.score }
                         </div>
                     </div><!-- GOAL ROWS -->
+
                     @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                    {
+                    {                        
                         <div class="row buildingRow">
                             <div class="col-sm-2 buildingCol" style="text-align:center">
                                 @dscBldng.BuildingName
@@ -101,11 +112,13 @@
                             @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
                             {
                                 <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
-                                    @bldngMV.metricValue
+                                    @if (String.IsNullOrEmpty(@bldngMV.metricValue)) { <br/> }
+                                    else { @bldngMV.metricValue }
                                 </div>
                             }
                             <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@dscBldng.scoreColor">
-                                @dscBldng.score
+                                @if (String.IsNullOrEmpty(@dscBldng.score))  { <br /> }
+                                else { @dscBldng.score }
                             </div>
                         </div><!-- GOAL ROWS -->
                     }
