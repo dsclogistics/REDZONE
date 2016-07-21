@@ -21,6 +21,9 @@ namespace REDZONE.Controllers
         public ActionResult Index()
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
+            string curDay = "";
+            string curMonth;
+
             ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "May", "2016");
 
             ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
