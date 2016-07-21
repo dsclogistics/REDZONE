@@ -238,6 +238,54 @@ namespace REDZONE.AppCode
             }
             return monthNo;
         }
+
+        public static string intToMonth(int monthNo)
+        {
+            string monthName = "";
+            switch (monthNo)
+            {
+                case 1:
+                    monthName = "January";
+                    break;
+                case 2:
+                    monthName = "February";
+                    break;
+                case 3:
+                    monthName = "March";
+                    break;
+                case 4:
+                    monthName = "April";
+                    break;
+                case 5:
+                    monthName = "May";
+                    break;
+                case 6:
+                    monthName = "June";
+                    break;
+                case 7:
+                    monthName = "July";
+                    break;
+                case 8:
+                    monthName = "August";
+                    break;
+                case 9:
+                    monthName = "September";
+                    break;
+                case 10:
+                    monthName = "October";
+                    break;
+                case 11:
+                    monthName = "November";
+                    break;
+                case 12:
+                    monthName = "December";
+                    break;
+                default:
+                    break;
+            }
+            return monthName;
+        }
+
         public ExecutiveSummaryViewModel getExcecutiveSummaryView(int metric_id, string month, string year)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
@@ -277,10 +325,15 @@ namespace REDZONE.AppCode
                 }
                 if (allApiMetrics.HasValues)
                 {
+                    eSummary.goal.BuildingName = "Goal";
                     foreach (var mtr in allApiMetrics)
                     {
-                        eSummary.allMetrics.Add((string)mtr["MtrcName"]);
-                     
+                        string metricName = (string)mtr["MtrcName"];
+                        eSummary.allMetrics.Add(metricName);
+                        MeasuredMetric goalMetric = new MeasuredMetric();
+                        goalMetric.metricName = metricName;
+                        goalMetric.metricValue = getGoalforMetric(metricName);
+                        eSummary.goal.entityMetrics.Add(goalMetric);
                     }
                     eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x).ToList();
                 }
@@ -333,6 +386,41 @@ namespace REDZONE.AppCode
             return eSummary;
 
 
+        }
+
+        private string getGoalforMetric(string metricName)
+        {
+            string value = "";
+            switch (metricName) { 
+                case "Net FTE":
+                    value = "0.00";
+                    break;
+                case "Turnover %":
+                    value = "7.5%";
+                    break;
+                case "Contribution Margin % Variance ":
+                    value = "+/- Goal";
+                    break;
+                case "IT Ticket Volume ":
+                    value = "25 month";
+                    break;
+                case "Safety (TIR)":
+                    value = "1.45";
+                    break;
+                case "Overtime %":
+                    value = "10.00 %";
+                    break;
+                case "Trainees %":
+                    value = "20 %";
+                    break;
+                case "Throughput Chg %":
+                    value = "+/- 20%";
+                    break;
+                default:
+                    value = "N/A";
+                    break;
+            }
+            return value;
         }
 
 

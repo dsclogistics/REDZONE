@@ -12,12 +12,9 @@ namespace REDZONE.Controllers
         // GET: ExecutiveSummary/MonthlySummary
         public ActionResult MonthlySummary(string rptMonth)
         {
-            return View(testDashboard());
-        }
 
-        private ExecutiveSummaryViewModel testDashboard()
-        {
             ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
+            //ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "May", "2016");
 
             // Load the Metric Header Info
             dashBoard.month = "June";
@@ -36,7 +33,7 @@ namespace REDZONE.Controllers
             sampleBuilding = new BuildingMetricEntity("PC");
             dashBoard.buildings.Add(sampleBuilding);
 
-            return dashBoard;
+            return View(dashBoard);
         }
     }
 }

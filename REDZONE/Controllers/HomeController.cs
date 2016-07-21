@@ -18,30 +18,34 @@ namespace REDZONE.Controllers
         APIDataParcer parcer = new APIDataParcer();
         //=================================================================
 
-        public ActionResult Index( string month, string year)
+        public ActionResult Index()
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
-            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "May", "2016");
-           // ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year);
-            ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
-            // Load the Metric Header Info
-            dashBoard.month = "June";
-            dashBoard.year = "2016";
-            dashBoard.urlNextMonth = "";
-            dashBoard.urlPrevMonth = "";
-            dashBoard.statusNextMonth = "disabled";
-            dashBoard.statusPrevMonth = "disabled";
-            // Load the Goals Row (Use dummy values)
-            dashBoard.goal = new BuildingMetricEntity("GOAL");
-            //Load two sample building Rows
-            BuildingMetricEntity sampleBuilding = new BuildingMetricEntity("AP");
-            dashBoard.buildings.Add(sampleBuilding);
-            sampleBuilding = new BuildingMetricEntity("PP");
-            dashBoard.buildings.Add(sampleBuilding);
-            sampleBuilding = new BuildingMetricEntity("PC");
-            dashBoard.buildings.Add(sampleBuilding);
+            DateTime defaultDate = DateTime.Today.AddMonths(-1);
+            string curMonth = REDZONE.AppCode.APIDataParcer.intToMonth(defaultDate.Month);
+            string curYear = defaultDate.Year.ToString();
 
-            dashBoardNew.goal = dashBoard.goal;
+            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, curMonth, curYear);
+
+            //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
+            //// Load the Metric Header Info
+            //dashBoard.month = curMonth;
+            //dashBoard.year = curYear;
+            //dashBoard.urlNextMonth = "";
+            //dashBoard.urlPrevMonth = "";
+            //dashBoard.statusNextMonth = "disabled";
+            //dashBoard.statusPrevMonth = "disabled";
+            //// Load the Goals Row (Use dummy values)
+            //dashBoard.goal = new BuildingMetricEntity("GOAL");
+            ////Load two sample building Rows
+            //BuildingMetricEntity sampleBuilding = new BuildingMetricEntity("AP");
+            //dashBoard.buildings.Add(sampleBuilding);
+            //sampleBuilding = new BuildingMetricEntity("PP");
+            //dashBoard.buildings.Add(sampleBuilding);
+            //sampleBuilding = new BuildingMetricEntity("PC");
+            //dashBoard.buildings.Add(sampleBuilding);
+
+            //dashBoardNew.goal = dashBoard.goal;
             return View(dashBoardNew);
         }
 
