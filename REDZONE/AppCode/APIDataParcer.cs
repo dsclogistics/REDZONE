@@ -253,6 +253,28 @@ namespace REDZONE.AppCode
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 JArray allApiMetrics = (JArray)parsed_result["metrics"];
                 List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();
+                if (!String.IsNullOrEmpty((string)parsed_result["previousperiod"]))
+                {
+                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
+                    string[] prev_date_time = ((string)parsed_result["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    eSummary.urlPrevMonth = String.Format("/Home/Index/?month={0}&year={1}", prev_date_time[0], prev_date_time[1]);
+                    eSummary.statusPrevMonth = String.Empty;
+                }
+                else
+                {
+                    eSummary.statusPrevMonth = "disabled";
+                }
+                if (!String.IsNullOrEmpty((string)parsed_result["nextperiod"]))
+                {
+                    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                    string[] next_date_time = ((string)parsed_result["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    eSummary.urlNextMonth = String.Format("/Metric/EditView/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
+                    eSummary.statusNextMonth = String.Empty;
+                }
+                else
+                {
+                    eSummary.statusNextMonth = "disabled";
+                }
                 if (allApiMetrics.HasValues)
                 {
                     foreach (var mtr in allApiMetrics)

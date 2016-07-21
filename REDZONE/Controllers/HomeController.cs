@@ -18,11 +18,11 @@ namespace REDZONE.Controllers
         APIDataParcer parcer = new APIDataParcer();
         //=================================================================
 
-        public ActionResult Index()
+        public ActionResult Index( string month, string year)
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, "May", "2016");
-
+           // ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year);
             ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             // Load the Metric Header Info
             dashBoard.month = "June";
