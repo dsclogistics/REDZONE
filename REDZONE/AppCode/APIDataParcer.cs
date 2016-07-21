@@ -303,10 +303,15 @@ namespace REDZONE.AppCode
                 List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();
                 if (allApiMetrics.HasValues)
                 {
+                    eSummary.goal.BuildingName = "Goal";
                     foreach (var mtr in allApiMetrics)
                     {
-                        eSummary.allMetrics.Add((string)mtr["MtrcName"]);
-                     
+                        string metricName = (string)mtr["MtrcName"];
+                        eSummary.allMetrics.Add(metricName);
+                        MeasuredMetric goalMetric = new MeasuredMetric();
+                        goalMetric.metricName = metricName;
+                        goalMetric.metricValue = getGoalforMetric(metricName);
+                        eSummary.goal.entityMetrics.Add(goalMetric);
                     }
                     eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x).ToList();
                 }
@@ -359,6 +364,41 @@ namespace REDZONE.AppCode
             return eSummary;
 
 
+        }
+
+        private string getGoalforMetric(string metricName)
+        {
+            string value = "";
+            switch (metricName) { 
+                case "Net FTE":
+                    value = "0.00";
+                    break;
+                case "Turnover %":
+                    value = "7.5%";
+                    break;
+                case "Contribution Margin % Variance ":
+                    value = "+/- Goal";
+                    break;
+                case "IT Ticket Volume ":
+                    value = "25 month";
+                    break;
+                case "Safety (TIR)":
+                    value = "1.45";
+                    break;
+                case "Overtime %":
+                    value = "10.00 %";
+                    break;
+                case "Trainees %":
+                    value = "20 %";
+                    break;
+                case "Throughput Chg %":
+                    value = "+/- 20%";
+                    break;
+                default:
+                    value = "N/A";
+                    break;
+            }
+            return value;
         }
 
 
