@@ -423,7 +423,7 @@ namespace REDZONE.AppCode
             //        else { mColor = "gray"; }
             //        break;
             //    case "Turnover %":  //LOGIC: More than 7.5% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.075) ? COLOR_RED : COLOR_GREEN; }
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 7.5) ? COLOR_RED : COLOR_GREEN; }
             //        else { mColor = "gray"; }
             //        break;
             //    case "Contribution Margin % Variance":     //LOGIC:  Ant Negative Value is Red
@@ -439,15 +439,15 @@ namespace REDZONE.AppCode
             //        else { mColor = "gray"; }
             //        break;
             //    case "Overtime %":  //LOGIC:  More than 10% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.1) ? COLOR_RED : COLOR_GREEN; }
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 10) ? COLOR_RED : COLOR_GREEN; }
             //        else { mColor = "gray"; }
             //        break;
             //    case "Trainees %":  //LOGIC:  More than 20% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > .20) ? COLOR_RED : COLOR_GREEN; }
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 20) ? COLOR_RED : COLOR_GREEN; }
             //        else { mColor = "gray"; }
             //        break;
             //    case "Throughput Chg %":  //LOGIC: More than 20% deviation is Red 
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.2 || dValue < -0.2) ? COLOR_RED : COLOR_GREEN; }
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 20 || dValue < -0.2) ? COLOR_RED : COLOR_GREEN; }
             //        else { mColor = "gray"; }
             //        break;
             //    default:
