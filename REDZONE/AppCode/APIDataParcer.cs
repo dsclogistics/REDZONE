@@ -102,7 +102,7 @@ namespace REDZONE.AppCode
                 rz_metric.metricPrevPeriodStatus = "disabled";
                 rz_metric.metricNextPeriodStatus = "disabled";
             }
-
+            rz_metric.buildingList = rz_metric.buildingList.OrderBy(x => x.buildingName).ToList();
             return rz_metric;
         }
 
@@ -189,6 +189,7 @@ namespace REDZONE.AppCode
                 rz_metric.periodName = "Requested Metric Period does not Exist";
                 rz_metric.metricPeriodID = 0;
             }
+            rz_metric.buildingList = rz_metric.buildingList.OrderBy(x => x.buildingName).ToList();
             return rz_metric;
         }
 
@@ -335,7 +336,7 @@ namespace REDZONE.AppCode
                     eSummary.goal.BuildingName = "Goal";
                     foreach (var mtr in allApiMetrics)
                     {
-                        string metricName = (string)mtr["MtrcName"];
+                        string metricName = (string)mtr["mtrc_name"];
                         eSummary.allMetrics.Add(metricName);
                         MeasuredMetric goalMetric = new MeasuredMetric();
                         goalMetric.metricName = metricName;
@@ -348,9 +349,7 @@ namespace REDZONE.AppCode
                 {
                     foreach(var bldg in apiBuidings)
                     {
-                        
-                        //eSummary.allBuildings.Add((string)bldg["dsc_mtrc_lc_bldg_name"]);
-                        
+                       
                         if (apiBuildingsMetrics.HasValues)
                         {
                             BuildingMetricEntity b = new BuildingMetricEntity();
@@ -366,18 +365,20 @@ namespace REDZONE.AppCode
 
                             foreach (var mtrc in apiBuildingsMetrics)
                             {
-                               
+                                string test = (string)mtrc["dsc_mtrc_lc_bldg_name"];
                                 if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
                                     int bldngReds = 0;
                                     foreach(var tmp in b.entityMetrics)
                                     {
-                                        if(tmp.metricName == ((string)mtrc["mtrc_name"]))
+                                        string test2 = (string)mtrc["mtrc_name"];
+                                        if (tmp.metricName == ((string)mtrc["mtrc_name"]))
                                         {
+                                            string test1 =(string)mtrc["mtrc_period_val_value"];
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
-                                            tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
+                                           // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
                                         }
-                                        if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
+                                        //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
                                     }
                                     if (bldngReds < 3)
                                     {
@@ -399,7 +400,7 @@ namespace REDZONE.AppCode
                
                
             }
-            catch { }
+            catch(Exception e) { string error = e.Message; }
 
             return eSummary;
         }

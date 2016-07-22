@@ -114,6 +114,11 @@ namespace REDZONE.Models
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public string metricColor { get; set; }
+        public string mtrc_period_id { get; set; }
+        public string mtrc_id { get; set; }
+        public string tm_period_id { get; set; }
+
+
         //-------- Empty Constructor -----------\
         public MeasuredMetric() { }
         //\------- End of Constructor ----------/
