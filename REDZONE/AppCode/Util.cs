@@ -82,7 +82,7 @@ namespace REDZONE.AppCode
                     int number;
                     if (int.TryParse(value, out number))
                     {
-                        if (number < Convert.ToInt16(mtrcMinVal) || number > Convert.ToInt16(mtrcMaxVal))
+                        if (number < (int)(Convert.ToDouble(mtrcMinVal)) || number > (int)(Convert.ToDouble(mtrcMaxVal)))
                         {
                             return "Value must be between [ " + mtrcMinVal + "] and " + mtrcMaxVal + " ]";
                         }

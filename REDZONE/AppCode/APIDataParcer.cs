@@ -341,9 +341,7 @@ namespace REDZONE.AppCode
                 {
                     foreach(var bldg in apiBuidings)
                     {
-                        
-                        //eSummary.allBuildings.Add((string)bldg["dsc_mtrc_lc_bldg_name"]);
-                        
+                       
                         if (apiBuildingsMetrics.HasValues)
                         {
                             BuildingMetricEntity b = new BuildingMetricEntity();
