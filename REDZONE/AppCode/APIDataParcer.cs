@@ -365,18 +365,21 @@ namespace REDZONE.AppCode
 
                             foreach (var mtrc in apiBuildingsMetrics)
                             {
-                                string test = (string)mtrc["dsc_mtrc_lc_bldg_name"];
+                                
                                 if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
                                     int bldngReds = 0;
                                     foreach(var tmp in b.entityMetrics)
                                     {
-                                        string test2 = (string)mtrc["mtrc_name"];
+                                        
                                         if (tmp.metricName == ((string)mtrc["mtrc_name"]))
-                                        {
-                                            string test1 =(string)mtrc["mtrc_period_val_value"];
+                                        {                                            
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
-                                           // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
+                                            tmp.mtrc_id = (string)mtrc["mtrc_id"];
+                                            tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
+                                            tmp.tm_period_id = (string)mtrc["tm_period_id"];
+                                            tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
+                                            // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
                                     }

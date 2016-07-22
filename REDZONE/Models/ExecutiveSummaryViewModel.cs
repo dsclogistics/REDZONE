@@ -117,6 +117,8 @@ namespace REDZONE.Models
         public string mtrc_period_id { get; set; }
         public string mtrc_id { get; set; }
         public string tm_period_id { get; set; }
+        public string dsc_mtrc_lc_bldg_id { get; set; }
+
 
 
         //-------- Empty Constructor -----------\
