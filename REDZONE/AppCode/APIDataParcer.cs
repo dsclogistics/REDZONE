@@ -12,6 +12,12 @@ namespace REDZONE.AppCode
     {
         DataRetrieval api = new DataRetrieval();
         ExcelReader excelReader = new ExcelReader();
+        //--------------------- CONSTANTS ---------------------
+        const string COLOR_YELLOW = "yellow";
+        const string COLOR_GREEN = "lightgreen";
+        const string COLOR_RED = "#ffbb8b";   //or #ffbb8b or "orangered"
+        //---------- END OF CONSTANTS SECTION -----------------
+
 
         public RZ_Metric getRZ_Metric(int metric_id, string month, string year)
         {
@@ -292,6 +298,7 @@ namespace REDZONE.AppCode
             string raw_data = api.getExecSummary("Red Zone", "Month", null, month, year);
             eSummary.month = month;
             eSummary.year = year;
+            eSummary.goal.score = "";
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -348,6 +355,7 @@ namespace REDZONE.AppCode
                             foreach (var mtr in eSummary.allMetrics)
                             {                             
                                 MeasuredMetric temp = new MeasuredMetric();
+                                //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
                                 temp.metricName = mtr;
                                 b.entityMetrics.Add(temp);
                             }
@@ -359,15 +367,25 @@ namespace REDZONE.AppCode
                                
                                 if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
+                                    int bldngReds = 0;
                                     foreach(var tmp in b.entityMetrics)
                                     {
                                         if(tmp.metricName == ((string)mtrc["mtrc_name"]))
                                         {
-                                            tmp.metricValue = (string)mtrc["mtrc_period_val_value"];                                            
+                                            tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
+                                            tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
                                         }
-                                    }                                    
+                                        if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
+                                    }
+                                    if (bldngReds < 3)
+                                    {
+                                        b.scoreColor = COLOR_GREEN;
+                                    }
+                                    else if (bldngReds == 3) { b.scoreColor = COLOR_YELLOW; }
+                                    else if (bldngReds == 4) { b.scoreColor = "orange"; }
+                                    else { b.scoreColor = COLOR_RED; }
+                                    b.score = bldngReds.ToString();
                                 }
-                                
                             }
                             buildings.Add(b);
                         }
@@ -382,42 +400,89 @@ namespace REDZONE.AppCode
             catch { }
 
             return eSummary;
-
-
         }
 
+        //========= This Function "getMetricColor" will be replaced by either some other logic or a value returned by an API =========
+        private string getMetricColor(string mName, string mValue)
+        {
+            string mColor = "lightgray";
+            //string mColor = "blue";
+            //double dValue = 0.00;
+            //if (String.IsNullOrEmpty(mValue)) return "lightgray";
+
+            //switch (mName)
+            //{
+            //    case "Net FTE":  //LOGIC: Any value below > 0 is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Turnover %":  //LOGIC: More than 7.5% is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.075) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Contribution Margin % Variance":     //LOGIC:  Ant Negative Value is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue < 0) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "IT Ticket Volume":   //LOGIC: More than 25 Tickets per month are RED
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 25) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Safety (TIR)":   //LOGIC: Any Number Greater than 1.45 is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 1.45) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Overtime %":  //LOGIC:  More than 10% is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.1) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Trainees %":  //LOGIC:  More than 20% is Red
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > .20) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    case "Throughput Chg %":  //LOGIC: More than 20% deviation is Red 
+            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0.2 || dValue < -0.2) ? COLOR_RED : COLOR_GREEN; }
+            //        else { mColor = "gray"; }
+            //        break;
+            //    default:
+            //        mColor = "N/A";
+            //        break;
+            //}
+            return mColor;
+        }
+        //========= This Function "getGoalforMetric" will be replaced by either some other logic or a value returned by an API =========
         private string getGoalforMetric(string metricName)
         {
             string value = "";
-            switch (metricName) { 
-                case "Net FTE":
-                    value = "0.00";
-                    break;
-                case "Turnover %":
-                    value = "7.5%";
-                    break;
-                case "Contribution Margin % Variance ":
-                    value = "+/- Goal";
-                    break;
-                case "IT Ticket Volume ":
-                    value = "25 month";
-                    break;
-                case "Safety (TIR)":
-                    value = "1.45";
-                    break;
-                case "Overtime %":
-                    value = "10.00 %";
-                    break;
-                case "Trainees %":
-                    value = "20 %";
-                    break;
-                case "Throughput Chg %":
-                    value = "+/- 20%";
-                    break;
-                default:
-                    value = "N/A";
-                    break;
-            }
+            //switch (metricName) { 
+            //    case "Net FTE":
+            //        value = "0.00";
+            //        break;
+            //    case "Turnover %":
+            //        value = "7.5%";
+            //        break;
+            //    case "Contribution Margin % Variance ":
+            //        value = "+/- Goal";
+            //        break;
+            //    case "IT Ticket Volume ":
+            //        value = "25 month";
+            //        break;
+            //    case "Safety (TIR)":
+            //        value = "1.45";
+            //        break;
+            //    case "Overtime %":
+            //        value = "10.00 %";
+            //        break;
+            //    case "Trainees %":
+            //        value = "20 %";
+            //        break;
+            //    case "Throughput Chg %":
+            //        value = "+/- 20%";
+            //        break;
+            //    default:
+            //        value = "N/A";
+            //        break;
+            //}
             return value;
         }
 
