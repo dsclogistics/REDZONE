@@ -293,10 +293,10 @@ namespace REDZONE.AppCode
             return monthName;
         }
 
-        public ExecutiveSummaryViewModel getExcecutiveSummaryView(int metric_id, string month, string year)
+        public ExecutiveSummaryViewModel getExcecutiveSummaryView(int metric_id, string month, string year, string buildingID)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
-            string raw_data = api.getExecSummary("Red Zone", "Month", null, month, year);
+            string raw_data = api.getExecSummary("Red Zone", "Month", null, month, year, buildingID);
             eSummary.month = month;
             eSummary.year = year;
             eSummary.goal.score = "";

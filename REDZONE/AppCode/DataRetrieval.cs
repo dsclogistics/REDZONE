@@ -156,7 +156,7 @@ namespace REDZONE.AppCode
             }
         }
 
-        public string getExecSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear)
+        public string getExecSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear, string buildingID)
         {
             // {"productname":"Red Zone", "tptname":"Month","mtrcid":3,"calmonth":"June","calyear":2016}
             string endPoint = "buildingsmetrics";
@@ -165,7 +165,7 @@ namespace REDZONE.AppCode
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
             string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
-                                     "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\"}";
+                                     "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\""+ buildingID + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;
             try

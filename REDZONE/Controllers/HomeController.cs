@@ -26,7 +26,7 @@ namespace REDZONE.Controllers
             string curYear = defaultDate.Year.ToString();
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
-            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year);
+            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year,null);
 
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             //// Load the Metric Header Info
