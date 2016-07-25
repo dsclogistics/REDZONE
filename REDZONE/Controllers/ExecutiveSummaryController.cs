@@ -35,5 +35,21 @@ namespace REDZONE.Controllers
 
             return View(dashBoard);
         }
+
+        // GET: ExecutiveSummary/BuildingSummary
+        public ActionResult BuildingSummary()
+        {
+
+ 
+            return View();
+        }
+
+        // GET: ExecutiveSummary/MetricSummary
+        public ActionResult MetricSummary()
+        {
+
+
+            return View();
+        }
     }
 }
