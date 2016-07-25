@@ -381,7 +381,7 @@ namespace REDZONE.AppCode
                                             tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
                                             tmp.tm_period_id = (string)mtrc["tm_period_id"];
                                             tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
-                                            tmp.metricMonth = (string)mtrc["tm_period_id"];
+                                            tmp.metricMonth = (string)mtrc["MonthName"];
                                             if (eSummary.allMonths.IndexOf(tmp.metricMonth) == -1)
                                             {
                                                 eSummary.allMonths.Add(tmp.metricMonth);
