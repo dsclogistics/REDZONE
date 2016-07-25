@@ -18,6 +18,7 @@ namespace REDZONE.Models
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
         public List<string> allBuildings = new List<string>();
         public List<string> allMetrics = new List<string>();
+        public List<string> allMonths = new List<string>();
 
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
@@ -32,7 +33,9 @@ namespace REDZONE.Models
         public string BuildingName { get; set; }
         public string score { get; set; }
         public string scoreColor { get; set; }
+        public string buildingId { get; set; }
 
+        public string url { get; set; }
         public List<MeasuredMetric> entityMetrics = new List<MeasuredMetric>();        
 
         //-------- Empty Constructor -----------
@@ -115,6 +118,7 @@ namespace REDZONE.Models
         public string metricValue { get; set; }
         public string metricColor { get; set; }
         public string mtrc_period_id { get; set; }
+        public string metricMonth { get; set; }
         public string mtrc_id { get; set; }
         public string tm_period_id { get; set; }
         public string dsc_mtrc_lc_bldg_id { get; set; }

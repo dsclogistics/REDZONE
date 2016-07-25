@@ -361,7 +361,9 @@ namespace REDZONE.AppCode
                                 b.entityMetrics.Add(temp);
                             }
                             b.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
-                            
+                            b.buildingId = (string)bldg["dsc_mtrc_lc_bldg_id"];
+                            b.url = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, b.buildingId);
+
 
                             foreach (var mtrc in apiBuildingsMetrics)
                             {
@@ -379,6 +381,12 @@ namespace REDZONE.AppCode
                                             tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
                                             tmp.tm_period_id = (string)mtrc["tm_period_id"];
                                             tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
+                                            tmp.metricMonth = (string)mtrc["tm_period_id"];
+                                            if (eSummary.allMonths.IndexOf(tmp.metricMonth) == -1)
+                                            {
+                                                eSummary.allMonths.Add(tmp.metricMonth);
+                                            }
+                                            
                                             // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }

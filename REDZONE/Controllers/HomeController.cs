@@ -26,7 +26,7 @@ namespace REDZONE.Controllers
             string curYear = defaultDate.Year.ToString();
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
-            ExecutiveSummaryViewModel dashBoardNew = parcer.getExcecutiveSummaryView(0, month, year,null);
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(0, month, year,null);
 
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             //// Load the Metric Header Info
@@ -47,7 +47,12 @@ namespace REDZONE.Controllers
             //dashBoard.buildings.Add(sampleBuilding);
 
             //dashBoardNew.goal = dashBoard.goal;
-            return View(dashBoardNew);
+            return View(dashBoard);
+        }
+        public ActionResult BuildingSummary(string year, string buildingID)
+        {
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(0, null, year, buildingID);
+            return View(dashBoard);
         }
 
 
@@ -59,7 +64,6 @@ namespace REDZONE.Controllers
             JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
             DateTime defDate = DateTime.Today.AddMonths(-1);
             string userName = User.Identity.Name;
-            //userName = "KURANCHIE_PETER";
 
             List<int> allowedMetrics = parcer.getEditableMetrics(userName);
             foreach (var res in parsed_result["metriclist"])

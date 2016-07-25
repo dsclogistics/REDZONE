@@ -106,7 +106,7 @@
                   {
                     <div class="row buildingRow">
                         <div class="col-sm-2 buildingCol" style="text-align:center">
-                            @dscBldng.BuildingName
+                            <a href="@Model.goal.url">@Model.goal.BuildingName</a>
                         </div>
                         @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
                         {
