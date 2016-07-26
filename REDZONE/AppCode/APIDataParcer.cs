@@ -346,7 +346,7 @@ namespace REDZONE.AppCode
                         goalMetric.metricValue = getGoalforMetric(metricName.metricName);
                         eSummary.goal.entityMetrics.Add(goalMetric);
                     }
-                    eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x).ToList();
+                    eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();
                 }
                 if (apiBuidings.HasValues)
                 {

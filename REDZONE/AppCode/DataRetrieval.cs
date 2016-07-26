@@ -159,7 +159,7 @@ namespace REDZONE.AppCode
         public string getExecSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear, string buildingID)
         {
             // {"productname":"Red Zone", "tptname":"Month","mtrcid":3,"calmonth":"June","calyear":2016}
-            string endPoint = "summary";
+            string endPoint = "buildingsmetrics";
             WebRequest request = WebRequest.Create(api_url + endPoint);
             request.Method = "POST";
             request.ContentType = "application/json";
