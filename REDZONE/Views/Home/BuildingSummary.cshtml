@@ -63,7 +63,7 @@
                                 </span>
                                 @foreach(REDZONE.Models.BuildingMetricEntity bldgHeader in Model.buildings)
                                 {
-                                    <input type="text" class="form-control" value="@bldgHeader.BuildingName  @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                    <input type="text" class="form-control" value="@bldgHeader.BuildingName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                                 }
                                 
                                 <span class="input-group-btn">
@@ -77,12 +77,26 @@
                 </div>
             </div>
             <div class="panel-body">
-                @foreach (REDZONE.Models.BuildingMetricEntity bldgHeader in Model.buildings)
-                {
-                    
-                }
-                 <!-- End of DIV Table Table -->
-            </div>
-        </div>
+                <div class="row headerRow">
+                    <div class="col-sm-2 buildingCol" style="text-align:center">
+                        <span style="font-weight:bold"> @Model.year</span>
+                    </div>                    
+                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                    {
+                        <div class="col-sm-2 buildingCol" style="text-align:center">
+                                @dscBldng.BuildingName
+                            </div>
+                    }
+                    <!-- End of DIV Table Table -->
+                </div>
+                <div class="row buildingRow">
+                    @foreach (var mtrcRow in Model.allMetrics)
+                    {
+                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
+                            @mtrcRow
+                        </div>
+                    }
+
+                </div>
     </div>
 </div>
