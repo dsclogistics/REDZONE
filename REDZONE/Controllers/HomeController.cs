@@ -22,7 +22,7 @@ namespace REDZONE.Controllers
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             DateTime defaultDate = DateTime.Today.AddMonths(-1);
-            string curMonth = REDZONE.AppCode.APIDataParcer.intToMonth(defaultDate.Month);
+            string curMonth = REDZONE.AppCode.Util.intToMonth(defaultDate.Month);
             string curYear = defaultDate.Year.ToString();
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;

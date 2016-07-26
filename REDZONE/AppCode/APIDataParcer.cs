@@ -24,7 +24,7 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             rz_metric.allBuildings = String.Empty;
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
-            
+
             // At this point the json result can be empty (If no data was found) or an Error if an exception was caught 
             // or an actual jason message if The API was successful
 
@@ -33,7 +33,8 @@ namespace REDZONE.AppCode
             //}
 
 
-            try {
+            try
+            {
                 JObject parsed_result = JObject.Parse(raw_data);
 
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
@@ -44,7 +45,7 @@ namespace REDZONE.AppCode
                 rz_metric.period_Type = METRICPERIODS.Month;
                 rz_metric.metric_period_start_date = (DateTime)parsed_result["metricdetail"]["tm_per_start_dtm"];
                 rz_metric.metric_period_end_date = (DateTime)parsed_result["metricdetail"]["tm_per_end_dtm"];
-                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"] ;
+                rz_metric.periodName = (string)parsed_result["metricdetail"]["mtrc_period_name"];
                 rz_metric.metricPeriodID = (int)parsed_result["metricdetail"]["mtrc_period_id"];
                 rz_metric.na_allowed = (string)parsed_result["metricdetail"]["mtrc_period_na_allow_yn"] == "Y" ? true : false;
                 rz_metric.isImportable = (string)parsed_result["metricdetail"]["mtrc_period_can_import_yn"] == "Y" ? true : false;
@@ -54,7 +55,7 @@ namespace REDZONE.AppCode
                 rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
-                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"])|| String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive")?"disabled":"";
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive") ? "disabled" : "";
                 rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
                 if (rz_metric.metricPeriodStatus.ToUpper().Equals("CLOSED")) { rz_metric.isImportable = false; }
                 rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) ? "disabled" : "";
@@ -87,9 +88,10 @@ namespace REDZONE.AppCode
                     rz_metric.buildingList.Add(bldg);
                 }
             }
-            catch {
+            catch
+            {
                 // Default Some Dummy Values since valid data could not be retrieved
-                DateTime currentMonth = new DateTime( Convert.ToInt16(year), monthToInt(month), 1);
+                DateTime currentMonth = new DateTime(Convert.ToInt16(year), REDZONE.AppCode.Util.monthToInt(month), 1);
                 rz_metric.prodName = "Red Zone";
                 rz_metric.id = metric_id;
                 rz_metric.metricName = "Requested Metric Period invalid or does not Exist";
@@ -132,8 +134,8 @@ namespace REDZONE.AppCode
                 rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
-                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"])? "disabled" : "";
-                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"])? "disabled" : "";
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) ? "disabled" : "";
                 if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]))
                 {
                     //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
@@ -162,16 +164,16 @@ namespace REDZONE.AppCode
                         try
                         {
                             bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
-                            if(bldg.metricPeriodValue.Equals("na")|| bldg.metricPeriodValue.Equals("n/a")|| bldg.metricPeriodValue.Equals("NA"))
+                            if (bldg.metricPeriodValue.Equals("na") || bldg.metricPeriodValue.Equals("n/a") || bldg.metricPeriodValue.Equals("NA"))
                             {
                                 bldg.metricPeriodValue = "N/A";
                             }
                             bldg.saveFlag = "Y";
                         }
                         catch { }
-                    }                  
+                    }
                     bldg.metricPeriodValueID = (string)res["mtrc_period_val_id"];
-                    
+
                     rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }
@@ -179,7 +181,7 @@ namespace REDZONE.AppCode
             catch
             {
                 // Default Some Dummy Values since valid data could not be retrieved
-                DateTime currentMonth = new DateTime(Convert.ToInt16(year), monthToInt(month), 1);
+                DateTime currentMonth = new DateTime(Convert.ToInt16(year), REDZONE.AppCode.Util.monthToInt(month), 1);
                 rz_metric.prodName = "Red Zone";
                 rz_metric.id = metric_id;
                 rz_metric.metricName = "Requested Metric Period does not Exist";
@@ -202,100 +204,22 @@ namespace REDZONE.AppCode
             }
             else
             {
-                try {
+                try
+                {
                     JObject parsed_result = JObject.Parse(raw_data);
                     return (string)parsed_result["message"];
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return e.Message;
                 }
             }
         }
 
-        public int monthToInt(string monthName) {
-            int monthNo = 0;
-            switch (monthName) {
-                case "January": monthNo = 1;
-                    break;
-                case "February": monthNo = 2;
-                    break;
-                case "March": monthNo = 3;
-                    break;
-                case "April": monthNo = 4;
-                    break;
-                case "May": monthNo = 5;
-                    break;
-                case "June": monthNo = 6;
-                    break;
-                case "July": monthNo = 7;
-                    break;
-                case "August": monthNo = 8;
-                    break;
-                case "September": monthNo = 9;
-                    break;
-                case "October": monthNo = 10;
-                    break;
-                case "November": monthNo = 11;
-                    break;
-                case "December": monthNo = 12;
-                    break;
-                default:
-                    break;
-            }
-            return monthNo;
-        }
-
-        public static string intToMonth(int monthNo)
-        {
-            string monthName = "";
-            switch (monthNo)
-            {
-                case 1:
-                    monthName = "January";
-                    break;
-                case 2:
-                    monthName = "February";
-                    break;
-                case 3:
-                    monthName = "March";
-                    break;
-                case 4:
-                    monthName = "April";
-                    break;
-                case 5:
-                    monthName = "May";
-                    break;
-                case 6:
-                    monthName = "June";
-                    break;
-                case 7:
-                    monthName = "July";
-                    break;
-                case 8:
-                    monthName = "August";
-                    break;
-                case 9:
-                    monthName = "September";
-                    break;
-                case 10:
-                    monthName = "October";
-                    break;
-                case 11:
-                    monthName = "November";
-                    break;
-                case 12:
-                    monthName = "December";
-                    break;
-                default:
-                    break;
-            }
-            return monthName;
-        }
 
         public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID)
         {
-            ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
+            ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();
 
             string raw_data = api.getExecSummary("Red Zone", "Month", metric_id, month, year, buildingID);
             eSummary.month = month;
@@ -304,7 +228,7 @@ namespace REDZONE.AppCode
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
-                
+
                 JObject parsed_result = JObject.Parse(raw_data);
                 JArray apiBuidings = (JArray)parsed_result["buildings"];
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
@@ -338,7 +262,7 @@ namespace REDZONE.AppCode
                     foreach (var mtr in allApiMetrics)
                     {
                         MetricHeader metricName = new MetricHeader();
-                        metricName.metricName =(string)mtr["mtrc_name"];
+                        metricName.metricName = (string)mtr["mtrc_name"];
                         metricName.metricID = (string)mtr["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
@@ -351,14 +275,14 @@ namespace REDZONE.AppCode
                 }
                 if (apiBuidings.HasValues)
                 {
-                    foreach(var bldg in apiBuidings)
+                    foreach (var bldg in apiBuidings)
                     {
-                       
+
                         if (apiBuildingsMetrics.HasValues)
                         {
                             BuildingMetricEntity b = new BuildingMetricEntity();
                             foreach (var mtr in eSummary.allMetrics)
-                            {                             
+                            {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
                                 temp.metricName = mtr.metricName;
@@ -372,15 +296,15 @@ namespace REDZONE.AppCode
 
                             foreach (var mtrc in apiBuildingsMetrics)
                             {
-                                
-                                if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
+
+                                if ((string)mtrc["dsc_mtrc_lc_bldg_name"] == b.BuildingName)
                                 {
                                     int bldngReds = 0;
-                                    foreach(var tmp in b.entityMetrics)
+                                    foreach (var tmp in b.entityMetrics)
                                     {
-                                        
+
                                         if (tmp.mtrc_id == ((string)mtrc["mtrc_id"]))
-                                        {                                            
+                                        {
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
                                             tmp.mtrc_id = (string)mtrc["mtrc_id"];
                                             tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
@@ -391,7 +315,7 @@ namespace REDZONE.AppCode
                                             {
                                                 eSummary.allMonths.Add(tmp.metricMonth);
                                             }
-                                            
+
                                             // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
@@ -408,15 +332,15 @@ namespace REDZONE.AppCode
                             }
                             buildings.Add(b);
                         }
-                                               
-                    }      
-                                 
+
+                    }
+
                     eSummary.buildings = buildings.OrderBy(x => x.BuildingName).ToList(); ;
                 }
-               
-               
+
+
             }
-            catch(Exception e) { string error = e.Message; }
+            catch (Exception e) { string error = e.Message; }
 
             return eSummary;
         }
@@ -425,8 +349,14 @@ namespace REDZONE.AppCode
         {
             BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();
             string raw_data = api.getBuildingSummary("Red Zone", "Month", null, null, year, buildingID);
-            bSummary.bName = "";
+            int intYear = 0; 
+            if (!(Int32.TryParse("year", out intYear))) { return invalidMetric(bSummary); }
             bSummary.year = year;
+            bSummary.statusPrevPeriod = "";
+            bSummary.statusNextPeriod = "";
+            bSummary.urlPrevPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear - 1).ToString(), buildingID);
+            bSummary.urlNextPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear + 1).ToString(), buildingID);
+
             try
             {
                 JObject parsed_result = JObject.Parse(raw_data);
@@ -448,7 +378,7 @@ namespace REDZONE.AppCode
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
                         {
-                            foreach(var m in months)
+                            foreach (var m in months)
                             {
                                 MeasuredCellEntity cell = new MeasuredCellEntity();
                                 cell.metricName = (string)m["Month"];
@@ -456,19 +386,19 @@ namespace REDZONE.AppCode
                                 {
                                     foreach (var apiCellValue in apiBuildingsMetrics)
                                     {
-                                        if(row.rowMeasuredId==(string)apiCellValue["mtrc_id"]&& cell.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
+                                        if (row.rowMeasuredId == (string)apiCellValue["mtrc_id"] && cell.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             cell.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                         }
                                     }
-                                 }
+                                }
                                 row.entityMetricCells.Add(cell);
                             }
                         }
                         rowMetrics.Add(row);
                     }
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
-                   
+
                 }
 
             }
@@ -477,6 +407,19 @@ namespace REDZONE.AppCode
 
 
 
+
+            return bSummary;
+        }
+
+        private BuildingSummaryViewModel invalidMetric(BuildingSummaryViewModel bSummary)
+        {
+
+            bSummary.bName = "METRIC DOES NOT EXIST";
+            bSummary.year = "9999";
+            bSummary.statusPrevPeriod = "";
+            bSummary.statusNextPeriod = "";
+            bSummary.urlPrevPeriod = "/Home/BuildingSummary/?year=9999&buildingID=0";
+            bSummary.urlNextPeriod = "";
 
             return bSummary;
         }
@@ -572,14 +515,15 @@ namespace REDZONE.AppCode
         {
             List<int> accessibleMetrics = new List<int>();
             JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
-            try {
+            try
+            {
                 foreach (var res in parsed_result["authorizationdetails"])
                 {
                     int mtrc_period_id = (int)res["mtrc_period_id"];
                     accessibleMetrics.Add(mtrc_period_id);
                 }
             }
-            catch {}            
+            catch { }
             return accessibleMetrics;
         }
     }

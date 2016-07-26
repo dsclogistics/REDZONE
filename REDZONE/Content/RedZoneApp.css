@@ -38,3 +38,46 @@ td.center {
 .ROField {
     border: none;
 }
+
+.headerRow {
+    padding: 0px;
+    width: 98%;
+    margin: 0px 0px 0px 1px;
+    border-bottom: 1px solid gray;
+    background-color: #fcfcfc;
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 100%;
+    font-weight: bold;
+}
+
+.headerRow > div[class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.buildingRow {
+    padding: 0;
+    border-bottom: 1px solid #f1f1f1;
+    width: 98%;
+    margin-left: 1px;
+    min-width: 100%;
+}
+
+.buildingRow:hover {
+    background-color: #f1f1f1;
+}
+
+.buildingCol {
+    border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
+    text-align: center;
+    padding: 3px;
+}
+
+.scoreCol {
+    border-left: 1px solid black;
+}
+
+/*.headerCol {
+        border: 1px solid red;
+}*/
