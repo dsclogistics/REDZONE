@@ -296,10 +296,15 @@ namespace REDZONE.AppCode
         public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
+            int intBuildingId = 0;
+            if( !(Int32.TryParse(buildingID, out intBuildingId))){ intBuildingId = 0; }
             string raw_data = api.getExecSummary("Red Zone", "Month", metric_id, month, year, buildingID);
             eSummary.month = month;
             eSummary.year = year;
-            eSummary.goal.score = "";
+            eSummary.statusNextMonth = (intBuildingId == 47) ? "disabled" : "";
+            eSummary.statusPrevMonth = (intBuildingId == 1)?"disabled":"";
+            eSummary.urlNextMonth = "/Home/BuildingSummary/?year=2016&buildingID=" + (intBuildingId + 1).ToString();
+            eSummary.urlPrevMonth = "/Home/BuildingSummary/?year=2016&buildingID=" + (intBuildingId - 1).ToString();
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -309,28 +314,28 @@ namespace REDZONE.AppCode
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 JArray allApiMetrics = (JArray)parsed_result["metrics"];
                 List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();
-                if (!String.IsNullOrEmpty((string)parsed_result["previousperiod"]))
-                {
-                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
-                    string[] prev_date_time = ((string)parsed_result["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    eSummary.urlPrevMonth = String.Format("/Home/Index/?month={0}&year={1}", prev_date_time[0], prev_date_time[1]);
-                    eSummary.statusPrevMonth = String.Empty;
-                }
-                else
-                {
-                    eSummary.statusPrevMonth = "disabled";
-                }
-                if (!String.IsNullOrEmpty((string)parsed_result["nextperiod"]))
-                {
-                    //parsed_result["metricdetail"]["nextperiod"] May-2016
-                    string[] next_date_time = ((string)parsed_result["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    eSummary.urlNextMonth = String.Format("/Home/Index/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
-                    eSummary.statusNextMonth = String.Empty;
-                }
-                else
-                {
-                    eSummary.statusNextMonth = "disabled";
-                }
+                //if (!String.IsNullOrEmpty((string)parsed_result["previousperiod"]))
+                //{
+                //    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
+                //    string[] prev_date_time = ((string)parsed_result["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                //    eSummary.urlPrevMonth = String.Format("/Home/Index/?month={0}&year={1}", prev_date_time[0], prev_date_time[1]);
+                //    eSummary.statusPrevMonth = String.Empty;
+                //}
+                //else
+                //{
+                //    eSummary.statusPrevMonth = "disabled";
+                //}
+                //if (!String.IsNullOrEmpty((string)parsed_result["nextperiod"]))
+                //{
+                //    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                //    string[] next_date_time = ((string)parsed_result["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                //    eSummary.urlNextMonth = String.Format("/Home/Index/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
+                //    eSummary.statusNextMonth = String.Empty;
+                //}
+                //else
+                //{
+                //    eSummary.statusNextMonth = "disabled";
+                //}
                 if (allApiMetrics.HasValues)
                 {
                     eSummary.goal.BuildingName = "Goal";

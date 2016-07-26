@@ -85,7 +85,12 @@
                                 <a href="@m.url">@m.metricName</a> 
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol headerCol scoreCol">
+                    @{
+                        int colsLeft = 10 - Model.allMetrics.Count;
+                        string colClass = "col-sm-1";
+                        if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
+                    }
+                        <div class="@colClass buildingCol headerCol scoreCol">
                             Score
                         </div>
                     </div><!-- TITLES ROWS -->
@@ -100,7 +105,7 @@
                                 @bldngMV.metricValue
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                        <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
                             @if (String.IsNullOrEmpty(@Model.goal.score))
                             { <br /> }
                             else
@@ -121,7 +126,7 @@
                                     else { @bldngMV.metricValue }
                                 </div>
                             }
-                            <div class="col-sm-1 buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                            <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
                                 @if (String.IsNullOrEmpty(@dscBldng.score))
                                 { <br /> }
                                 else
