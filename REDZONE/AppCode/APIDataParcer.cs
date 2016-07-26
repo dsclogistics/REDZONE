@@ -442,7 +442,7 @@ namespace REDZONE.AppCode
                     {
                         MeasuredRowEntity row = new MeasuredRowEntity();
                         row.rowName = (string)mtr["mtrc_prod_display_text"];
-                        row.rowMeasuredId = (string)mtr["mrtc_id"];
+                        row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
                         {
@@ -459,7 +459,7 @@ namespace REDZONE.AppCode
                                             cell.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                         }
                                     }
-                    }
+                                 }
                                 row.entityMetricCells.Add(cell);
                             }
                         }
