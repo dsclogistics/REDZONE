@@ -7,8 +7,8 @@ namespace REDZONE.Models
 {
     public class MetricSummaryViewModel
     {
-        //public string month { get; set; }
-        //public string year { get; set; }
+        public string metricName { get; set; }
+        public string year { get; set; }
         //public string urlNextMonth { get; set; }
         //public string urlPrevMonth { get; set; }
         //public string statusNextMonth { get; set; }
