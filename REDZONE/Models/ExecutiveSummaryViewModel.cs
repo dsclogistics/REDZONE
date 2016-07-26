@@ -43,7 +43,7 @@ namespace REDZONE.Models
         public string buildingId { get; set; }
 
         public string url { get; set; }
-        public List<MeasuredMetric> entityMetrics = new List<MeasuredMetric>();        
+        public List<MeasuredCellEntity> entityMetrics = new List<MeasuredCellEntity>();        
 
         //-------- Empty Constructor -----------
         public BuildingMetricEntity() { }
@@ -51,7 +51,7 @@ namespace REDZONE.Models
         //\-------- End of Constructor ----------/
     }
 
-    public class MeasuredMetric
+    public class MeasuredCellEntity
     {// This represents a single Cell in the Executive Summary Spreadsheet
         public string metricName { get; set; }
         public string metricValue { get; set; }
@@ -65,9 +65,9 @@ namespace REDZONE.Models
 
 
         //-------- Empty Constructor -----------\
-        public MeasuredMetric() { }
+        public MeasuredCellEntity() { }
         //\------- End of Constructor ----------/
-        public MeasuredMetric(string mName, string mValue, string mColor) {
+        public MeasuredCellEntity(string mName, string mValue, string mColor) {
             metricName = mName;
             metricValue = mValue;
             metricColor = mColor;
@@ -90,7 +90,7 @@ namespace REDZONE.Models
         public string scoreGoalColor { get; set; }
         public string redTotalColor { get; set; }        
 
-        public List<MeasuredMetric> entityMetricCells = new List<MeasuredMetric>();
+        public List<MeasuredCellEntity> entityMetricCells = new List<MeasuredCellEntity>();
 
         //-------- Empty Constructor ------------\
         public MeasuredRowEntity() { }

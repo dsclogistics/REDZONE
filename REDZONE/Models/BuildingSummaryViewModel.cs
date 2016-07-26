@@ -13,6 +13,7 @@ namespace REDZONE.Models
         public string urlPrevPeriod { get; set; }
         public string statusNextPeriod { get; set; }
         public string statusPrevPeriod { get; set; }
+        public MeasuredRowEntity buildingHeadings = new MeasuredRowEntity();
         public MeasuredRowEntity buildingScore = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
         //public List<string> allBuildings = new List<string>();

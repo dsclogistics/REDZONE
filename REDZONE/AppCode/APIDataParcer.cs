@@ -296,6 +296,7 @@ namespace REDZONE.AppCode
         public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();          
+
             string raw_data = api.getExecSummary("Red Zone", "Month", metric_id, month, year, buildingID);
             eSummary.month = month;
             eSummary.year = year;
@@ -308,7 +309,7 @@ namespace REDZONE.AppCode
                 JArray apiBuidings = (JArray)parsed_result["buildings"];
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 JArray allApiMetrics = (JArray)parsed_result["metrics"];
-                List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();
+                List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
                 if (!String.IsNullOrEmpty((string)parsed_result["previousperiod"]))
                 {
                     //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
@@ -341,7 +342,7 @@ namespace REDZONE.AppCode
                         metricName.metricID = (string)mtr["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
-                        MeasuredMetric goalMetric = new MeasuredMetric();
+                        MeasuredCellEntity goalMetric = new MeasuredCellEntity();
                         goalMetric.metricName = metricName.metricName;
                         goalMetric.metricValue = getGoalforMetric(metricName.metricName);
                         eSummary.goal.entityMetrics.Add(goalMetric);
@@ -358,7 +359,7 @@ namespace REDZONE.AppCode
                             BuildingMetricEntity b = new BuildingMetricEntity();
                             foreach (var mtr in eSummary.allMetrics)
                             {                             
-                                MeasuredMetric temp = new MeasuredMetric();
+                                MeasuredCellEntity temp = new MeasuredCellEntity();
                                 //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
                                 temp.metricName = mtr.metricName;
                                 b.entityMetrics.Add(temp);
@@ -422,12 +423,151 @@ namespace REDZONE.AppCode
         public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID)
         {
             BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();
-            string raw_data = api.getBuildingSummary("Red Zone", "Month", null, null, year, buildingID);
+            string raw_data = api.getExecSummary("Red Zone", "Month", null, null, year, buildingID);
             bSummary.bName = "";
             bSummary.year = year;
-            
 
-        
+            //Temp hardcoding for testing purposes
+            int intBuildingId = 0;
+            if (!(Int32.TryParse(buildingID, out intBuildingId))) { intBuildingId = 0; }
+            bSummary.year = year;
+            bSummary.statusNextPeriod = (intBuildingId == 47) ? "disabled" : "";
+            bSummary.statusPrevPeriod = (intBuildingId == 1) ? "disabled" : "";
+            bSummary.urlNextPeriod = "/Home/BuildingSummary/?year=2016&buildingID=" + (intBuildingId + 1).ToString();
+            bSummary.urlPrevPeriod = "/Home/BuildingSummary/?year=2016&buildingID=" + (intBuildingId - 1).ToString();
+            //populate all the Building Headings
+            bSummary.buildingHeadings.scoreGoal = "Goal";
+
+
+
+            ////Code copied from the executive summary data parcer:
+            try
+            {
+                List<MeasuredRowEntity> metricRow = new List<MeasuredRowEntity>();
+                List<MeasuredCellEntity> allAvailableMetricValues = new List<MeasuredCellEntity>();
+
+                JObject parsed_result = JObject.Parse(raw_data);
+                JArray apiBuidings = (JArray)parsed_result["buildings"];      //Returns a single Buildins (Theone requested)
+                JArray allApiMetrics = (JArray)parsed_result["metrics"];      //All collected Metric for building Requested
+                JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];  //All Values for each of the metric for each month on the requested Year
+
+                //if (!String.IsNullOrEmpty((string)parsed_result["previousperiod"]))
+                //{
+                //    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
+                //    string[] prev_date_time = ((string)parsed_result["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                //    bSummary.urlPrevMonth = String.Format("/Home/Index/?month={0}&year={1}", prev_date_time[0], prev_date_time[1]);
+                //    bSummary.statusPrevMonth = String.Empty;
+                //}
+                //else
+                //{
+                //    bSummary.statusPrevMonth = "disabled";
+                //}
+                //if (!String.IsNullOrEmpty((string)parsed_result["nextperiod"]))
+                //{
+                //    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                //    string[] next_date_time = ((string)parsed_result["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                //    bSummary.urlNextMonth = String.Format("/Home/Index/?month={0}&year={1}", next_date_time[0], next_date_time[1]);
+                //    bSummary.statusNextMonth = String.Empty;
+                //}
+                //else
+                //{
+                //    bSummary.statusNextMonth = "disabled";
+                //}
+                
+                if (apiBuidings.HasValues)
+                {
+                    foreach (var mtr in allApiMetrics)
+                    {
+                        bSummary.bName = (string)mtr["mtrc_name"];
+                        bSummary.buildingHeadings.rowName = bSummary.bName;
+                    }                    
+                }
+
+
+                if (allApiMetrics.HasValues)
+                {
+                    foreach (var mtr in allApiMetrics)
+                    {
+                        MeasuredRowEntity apiMetricRow = new MeasuredRowEntity();
+
+                        apiMetricRow.rowName = (string)mtr["mtrc_name"];
+                        apiMetricRow.rowMeasuredId = (string)mtr["mtrc_id"];
+                        apiMetricRow.rowURL = "/Home/MetricSummary/?year=2016&metricID=2";
+                        bSummary.metricRows.Add(apiMetricRow);
+
+                    }
+                    bSummary.metricRows = bSummary.metricRows.OrderBy(x => x.rowName).ToList();
+                }
+
+
+                //if (apiBuidings.HasValues)
+                //{
+                //    foreach (var bldg in apiBuidings)
+                //    {
+
+                //        if (apiBuildingsMetrics.HasValues)
+                //        {
+                //            BuildingMetricEntity b = new BuildingMetricEntity();
+                //            foreach (var mtr in bSummary.allMetrics)
+                //            {
+                //                MeasuredCellEntity temp = new MeasuredCellEntity();
+                //                //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
+                //                temp.metricName = mtr;
+                //                b.entityMetrics.Add(temp);
+                //            }
+                //            b.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
+                //            b.buildingId = (string)bldg["dsc_mtrc_lc_bldg_id"];
+                //            b.url = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, b.buildingId);
+
+
+                //            foreach (var mtrc in apiBuildingsMetrics)
+                //            {
+
+                //                if ((string)mtrc["dsc_mtrc_lc_bldg_name"] == b.BuildingName)
+                //                {
+                //                    int bldngReds = 0;
+                //                    foreach (var tmp in b.entityMetrics)
+                //                    {
+
+                //                        if (tmp.metricName == ((string)mtrc["mtrc_name"]))
+                //                        {
+                //                            tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
+                //                            tmp.mtrc_id = (string)mtrc["mtrc_id"];
+                //                            tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
+                //                            tmp.tm_period_id = (string)mtrc["tm_period_id"];
+                //                            tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
+                //                            tmp.metricMonth = (string)mtrc["MonthName"];
+                //                            if (bSummary.allMonths.IndexOf(tmp.metricMonth) == -1)
+                //                            {
+                //                                bSummary.allMonths.Add(tmp.metricMonth);
+                //                            }
+
+                //                            // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
+                //                        }
+                //                        //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
+                //                    }
+                //                    if (bldngReds < 3)
+                //                    {
+                //                        b.scoreColor = COLOR_GREEN;
+                //                    }
+                //                    else if (bldngReds == 3) { b.scoreColor = COLOR_YELLOW; }
+                //                    else if (bldngReds == 4) { b.scoreColor = "orange"; }
+                //                    else { b.scoreColor = COLOR_RED; }
+                //                    b.score = bldngReds.ToString();
+                //                }
+                //            }
+                //            buildings.Add(b);
+                //        }
+
+                //    }
+
+                    // bSummary.metrics = buildings.OrderBy(x => x.BuildingName).ToList(); ;
+                //}
+
+
+            }
+            catch (Exception e) { string error = e.Message; }
+
             return bSummary;
         }
 

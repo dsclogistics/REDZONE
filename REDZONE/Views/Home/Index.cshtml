@@ -85,7 +85,12 @@
                                 <a href="@m.url">@m.metricName</a> 
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol headerCol scoreCol">
+                    @{
+                        int colsLeft = 10 - Model.allMetrics.Count;
+                        string colClass = "col-sm-1";
+                        if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
+                    }
+                        <div class="@colClass buildingCol headerCol scoreCol">
                             Score
                         </div>
                     </div><!-- TITLES ROWS -->
@@ -94,13 +99,13 @@
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.goal.BuildingName
                         </div>
-                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
                         {
                             <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                 @bldngMV.metricValue
                             </div>
                         }
-                        <div class="col-sm-1 buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                        <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
                             @if (String.IsNullOrEmpty(@Model.goal.score))
                             { <br /> }
                             else
@@ -114,14 +119,14 @@
                             <div class="col-sm-2 buildingCol" style="text-align:center">
                                 <a href="@dscBldng.url">@dscBldng.BuildingName</a>
                             </div>
-                            @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
+                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                             {
                                 <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue)) { <br/> }
                                     else { @bldngMV.metricValue }
                                 </div>
                             }
-                            <div class="col-sm-1 buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                            <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
                                 @if (String.IsNullOrEmpty(@dscBldng.score))
                                 { <br /> }
                                 else

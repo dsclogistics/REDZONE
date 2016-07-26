@@ -78,7 +78,7 @@
                          <div class="col-sm-2 buildingCol" style=" text-align:center">
                              <span style="font-weight:bold"> @Model.month @Model.year</span>
                          </div>
-                       @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                       @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
                        {
                          <div class="col-sm-1 buildingCol" style="text-align:center">
                              @bldngMV.metricName
@@ -92,7 +92,7 @@
                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
                            @Model.goal.BuildingName
                        </div>
-                       @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                       @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
                        {
                            <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
                                @bldngMV.metricValue
@@ -108,7 +108,7 @@
                         <div class="col-sm-2 buildingCol" style="text-align:center">
                             <a href="@Model.goal.url">@Model.goal.BuildingName</a>
                         </div>
-                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
+                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                         {
                             <div class="col-sm-1 buildingCol" style="text-align:center; background-color:@bldngMV.metricColor">
                                 @bldngMV.metricValue
