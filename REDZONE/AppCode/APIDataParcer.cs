@@ -425,27 +425,6 @@ namespace REDZONE.AppCode
             string raw_data = api.getBuildingSummary("Red Zone", "Month", null, null, year, buildingID);
             bSummary.bName = "";
             bSummary.year = year;
-            try
-            {
-                JObject parsed_result = JObject.Parse(raw_data);
-                JArray apiMetrics = (JArray)parsed_result["metrics"];
-                JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
-                List<MeasuredRowEntity> rowMetrics = new List<MeasuredRowEntity>();//all metrics
-                List<MeasuredMetric> allAvailableMetrics = new List<MeasuredMetric>();//all metric values
-                if (apiMetrics.HasValues)
-                {
-                    foreach(var mtr in apiMetrics)
-                    {
-                        MeasuredRowEntity row = new MeasuredRowEntity();
-                        row.rowName = (string)mtr["mtrc_name"];
-                        row.rowMeasuredId = (string)mtr["mrtc_id"];
-                        row.scoreGoal = "";
-                        rowMetrics.Add(row);
-                    }
-                    bSummary.metricRows =rowMetrics;//at this point we should have all rows with metric ids in the model
-                }
-            }
-            catch { }
             
 
         
