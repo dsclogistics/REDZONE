@@ -437,6 +437,11 @@ namespace REDZONE.AppCode
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 List<MeasuredRowEntity> rowMetrics = new List<MeasuredRowEntity>();//all metrics
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();//all metric values
+                MeasuredRowEntity header = new MeasuredRowEntity();
+                MeasuredRowEntity score = new MeasuredRowEntity();
+                header.rowName = bSummary.bName;
+                score.rowName = "Score";
+
                 if (apiMetrics.HasValues)
                 {
                     foreach (var mtr in apiMetrics)
@@ -448,10 +453,12 @@ namespace REDZONE.AppCode
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
                         {
-                            foreach(var m in months)
+                            
+                            foreach (var m in months)
                             {
+                               
                                 MeasuredCellEntity cell = new MeasuredCellEntity();
-                                cell.metricName = (string)m["Month"];
+                                cell.metricName = (string)m["Month"];                                                              
                                 if (apiBuildingsMetrics.HasValues)
                                 {
                                     foreach (var apiCellValue in apiBuildingsMetrics)
@@ -467,6 +474,11 @@ namespace REDZONE.AppCode
                         }
                         rowMetrics.Add(row);
                     }
+
+                    foreach (var m in months)
+                    { header.entityMetricCells.Add(new MeasuredCellEntity((string)m["Month"])); }
+                    bSummary.buildingHeadings = header;
+                    bSummary.buildingScore = score;
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
                    
                 }

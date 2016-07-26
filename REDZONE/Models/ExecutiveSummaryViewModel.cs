@@ -67,6 +67,8 @@ namespace REDZONE.Models
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
         //\------- End of Constructor ----------/
+        public MeasuredCellEntity(string name)
+        { metricName = name; }
         public MeasuredCellEntity(string mName, string mValue, string mColor) {
             metricName = mName;
             metricValue = mValue;
@@ -94,7 +96,9 @@ namespace REDZONE.Models
 
         //-------- Empty Constructor ------------\
         public MeasuredRowEntity() { }
+
         //\-------- End of Constructor ----------/
+       
     }
 
   
