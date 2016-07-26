@@ -453,30 +453,34 @@ namespace REDZONE.AppCode
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
                         {
-                            
                             foreach (var m in months)
                             {
-                               
-                                MeasuredCellEntity cell = new MeasuredCellEntity();
-                                cell.metricName = (string)m["Month"];                                                              
-                                if (apiBuildingsMetrics.HasValues)
+                                MeasuredCellEntity temp = new MeasuredCellEntity();
+                                temp.metricName = (string)m["Month"];
+                                temp.metricValue = String.Empty;
+                                row.entityMetricCells.Add(temp);
+                                if(header.entityMetricCells.Count< months.Count)
+                                { header.entityMetricCells.Add(temp); }
+                                
+                            }
+                        }
+                        if (apiBuildingsMetrics.HasValues)
+                        {
+                            foreach (var apiCellValue in apiBuildingsMetrics)
+                            {
+                                if (row.rowMeasuredId == (string)apiCellValue["mtrc_id"])
                                 {
-                                    foreach (var apiCellValue in apiBuildingsMetrics)
+                                    foreach(var tmp in row.entityMetricCells)
                                     {
-                                        if(row.rowMeasuredId==(string)apiCellValue["mtrc_id"]&& cell.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
-                                        {
-                                            cell.metricValue = (string)apiCellValue["mtrc_period_val_value"];
-                                        }
+                                        if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
+                                        tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                     }
-                                 }
-                                row.entityMetricCells.Add(cell);
+                                   
+                                }
                             }
                         }
                         rowMetrics.Add(row);
-                    }
-
-                    foreach (var m in months)
-                    { header.entityMetricCells.Add(new MeasuredCellEntity((string)m["Month"])); }
+                    }                  
                     bSummary.buildingHeadings = header;
                     bSummary.buildingScore = score;
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
