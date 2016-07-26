@@ -6,7 +6,6 @@
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
-<br />
 <div class="row" style="font-family:Arial; margin-top: 5px">
     @*<div class="col-sm-1"></div>*@
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
@@ -61,12 +60,12 @@
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.goal.BuildingName
                         </div>
-                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
-                        {
-                            <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                      @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
+                      {
+                        <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                 @bldngMV.metricValue
-                            </div>
-                        }
+                        </div>
+                      }
                         <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
                             @if (String.IsNullOrEmpty(@Model.goal.score))
                             { <br /> }
@@ -74,29 +73,30 @@
                             { @Model.goal.score }
                         </div>
                     </div><!-- GOAL ROWS -->
-                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                    {
-                        <div class="row buildingRow">
-                            <div class="col-sm-2 buildingCol" style="text-align:center">
-                                <a href="@dscBldng.url">@dscBldng.BuildingName</a>
-                            </div>
-                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
-                            {
-                                <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
-                                    @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                    { <br /> }
-                                    else
-                                    { @bldngMV.metricValue }
-                                </div>
-                            }
-                            <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
-                                @if (String.IsNullOrEmpty(@dscBldng.score))
+
+                 @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                 {
+                    <div class="row buildingRow">
+                        <div class="col-sm-2 buildingCol" style="text-align:center">
+                            <a href="@dscBldng.url">@dscBldng.BuildingName</a>
+                        </div>
+                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                        {
+                            <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                 { <br /> }
                                 else
-                                { @dscBldng.score }
+                                { @bldngMV.metricValue }
                             </div>
-                        </div><!-- GOAL ROWS -->
-                    }
+                        }
+                        <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                            @if (String.IsNullOrEmpty(@dscBldng.score))
+                            { <br /> }
+                            else
+                            { @dscBldng.score }
+                        </div>
+                    </div><!-- building ROWS -->
+                 }
                 </div> <!-- End of DIV Table Table -->
             </div>
         </div>

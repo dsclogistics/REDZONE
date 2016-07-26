@@ -58,7 +58,9 @@
 
                 @foreach (var buildingRow in Model.metricRows)
                 {
+                    <div class="row buildingRow ">
 
+                    </div>
                     <div class="col-sm-2"></div>  <!-- Metric Name Column -->
                     <div class="col-sm-1"></div>  <!-- Goal Column -->
                     <div class="col-sm-9"></div>  <!-- 12 Month Value Columns -->
@@ -68,10 +70,10 @@
 
 
 
-                  <div class="row buildingRow">
+                  <div class="row ">
                       <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
                           @buildingRow.rowName
-                      </div>                      
+                      </div>
                     @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                     {
                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
