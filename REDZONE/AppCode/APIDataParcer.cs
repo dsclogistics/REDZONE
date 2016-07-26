@@ -362,6 +362,7 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
                                 temp.metricName = mtr.metricName;
+                                temp.mtrc_id = mtr.metricID;
                                 b.entityMetrics.Add(temp);
                             }
                             b.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
@@ -378,7 +379,7 @@ namespace REDZONE.AppCode
                                     foreach(var tmp in b.entityMetrics)
                                     {
                                         
-                                        if (tmp.metricName == ((string)mtrc["mtrc_name"]))
+                                        if (tmp.mtrc_id == ((string)mtrc["mtrc_id"]))
                                         {                                            
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
                                             tmp.mtrc_id = (string)mtrc["mtrc_id"];
@@ -441,7 +442,8 @@ namespace REDZONE.AppCode
                     foreach (var mtr in apiMetrics)
                     {
                         MeasuredRowEntity row = new MeasuredRowEntity();
-                        row.rowName = (string)mtr["mtrc_prod_display_text"];
+                        //row.rowName = (string)mtr["mtrc_prod_display_text"];
+                        row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
