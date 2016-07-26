@@ -80,10 +80,10 @@
                         <div class="col-sm-2 buildingCol headerCol" >
                             <span style="font-weight:bold"> @Model.month @Model.year</span>
                         </div>
-                        @foreach (string m in Model.allMetrics)
+                        @foreach (var m in Model.allMetrics)
                         {
                             <div class="col-sm-1 buildingCol headerCol">
-                                @m
+                                <a href="@m.url">@m.metricName</a> 
                             </div>
                         }
                         <div class="col-sm-1 buildingCol headerCol scoreCol">

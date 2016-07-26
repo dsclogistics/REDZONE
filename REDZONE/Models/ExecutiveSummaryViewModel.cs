@@ -17,12 +17,19 @@ namespace REDZONE.Models
         public BuildingMetricEntity redTotals = new BuildingMetricEntity();
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
         public List<string> allBuildings = new List<string>();
-        public List<string> allMetrics = new List<string>();
+        public List<MetricHeader> allMetrics = new List<MetricHeader>();
         public List<string> allMonths = new List<string>();
 
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
         //\-------- End of Constructor ----------/
+    }
+
+    public class MetricHeader
+    {
+        public string metricName;
+        public string metricID;
+        public string url;
     }
 
     public class BuildingMetricEntity

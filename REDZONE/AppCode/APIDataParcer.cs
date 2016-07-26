@@ -336,11 +336,14 @@ namespace REDZONE.AppCode
                     eSummary.goal.BuildingName = "Goal";
                     foreach (var mtr in allApiMetrics)
                     {
-                        string metricName = (string)mtr["mtrc_name"];
+                        MetricHeader metricName = new MetricHeader();
+                        metricName.metricName =(string)mtr["mtrc_name"];
+                        metricName.metricID = (string)mtr["mtrc_id"];
+                        metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", metricName.metricID, year);
                         eSummary.allMetrics.Add(metricName);
                         MeasuredMetric goalMetric = new MeasuredMetric();
-                        goalMetric.metricName = metricName;
-                        goalMetric.metricValue = getGoalforMetric(metricName);
+                        goalMetric.metricName = metricName.metricName;
+                        goalMetric.metricValue = getGoalforMetric(metricName.metricName);
                         eSummary.goal.entityMetrics.Add(goalMetric);
                     }
                     eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x).ToList();
@@ -357,7 +360,7 @@ namespace REDZONE.AppCode
                             {                             
                                 MeasuredMetric temp = new MeasuredMetric();
                                 //temp.metricColor = "#f8ffbe";          //Default backgroud for empty values
-                                temp.metricName = mtr;
+                                temp.metricName = mtr.metricName;
                                 b.entityMetrics.Add(temp);
                             }
                             b.BuildingName = (string)bldg["dsc_mtrc_lc_bldg_name"];
