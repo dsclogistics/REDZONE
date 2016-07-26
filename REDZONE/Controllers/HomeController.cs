@@ -26,7 +26,7 @@ namespace REDZONE.Controllers
             string curYear = defaultDate.Year.ToString();
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
-            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(0, month, year,null);
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null);
 
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             //// Load the Metric Header Info
@@ -51,7 +51,12 @@ namespace REDZONE.Controllers
         }
         public ActionResult BuildingSummary(string year, string buildingID)
         {
-            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(0, null, year, buildingID);
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, null, year, buildingID);
+            return View(dashBoard);
+        }
+        public ActionResult MetricSummary(string year, string metricID)
+        {
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(metricID, null, year, null);
             return View(dashBoard);
         }
 
