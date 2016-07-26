@@ -413,6 +413,7 @@
     <Content Include="Views\Metric\_Upload.cshtml" />
     <Content Include="Views\ExecutiveSummary\MonthlySummary.cshtml" />
     <Content Include="Views\Home\BuildingSummary.cshtml" />
+    <Content Include="Views\Home\MetricSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

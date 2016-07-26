@@ -1,0 +1,102 @@
+﻿@model REDZONE.Models.ExecutiveSummaryViewModel
+
+@{
+    ViewBag.Title = "Building Summary";
+}
+
+<style>
+    .headerRow {
+        padding: 4px;
+        font-weight: bold;
+        width: 98%;
+        margin-left: 1px;
+    }
+
+    .buildingRow {
+        padding: 1px;
+        border-bottom: 1px solid #f1f1f1;
+        width: 98%;
+        margin-left: 1px;
+    }
+
+        .buildingRow:hover {
+            background-color: #f1f1f1;
+        }
+
+    .buildingCol {
+        border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
+        text-align: center;
+        padding: 2px;
+    }
+</style>
+
+
+@*<div>
+        <dl class="dl-horizontal">
+            <dt>            @Html.DisplayNameFor(model => model.month)        </dt>
+            <dd>            @Html.DisplayFor(model => model.month)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.year)        </dt>
+            <dd>            @Html.DisplayFor(model => model.year)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.urlNextMonth)        </dt>
+            <dd>            @Html.DisplayFor(model => model.urlNextMonth)        </dd>
+            <dt>            @Html.DisplayNameFor(model => model.urlPrevMonth)        </dt>
+            <dd>            @Html.DisplayFor(model => model.urlPrevMonth)        </dd>
+        </dl>
+    </div>*@
+
+<div class="row" style="font-family:Arial; margin-top: 5px">
+    @*<div class="col-sm-1"></div>*@
+    <div class="col-md-10 " style="margin-left:15px; padding:0;">
+        <div class="panel panel-default" style="margin-bottom:0px; ">
+            <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row ">
+                            <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
+                                <span class="input-group-btn">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Month" @Model.statusPrevMonth>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    </button>
+                                </span>
+                                @foreach (REDZONE.Models.BuildingMetricEntity bldgHeader in Model.buildings)
+                                {
+                                    <input type="text" class="form-control" value="@bldgHeader.BuildingName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                }
+
+                                <span class="input-group-btn">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMonth'" title="Navigate to Next Month" @Model.statusNextMonth>
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row headerRow">
+                    <div class="col-sm-2 buildingCol" style="text-align:center">
+                        <span style="font-weight:bold"> @Model.year</span>
+                    </div>
+                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                    {
+                        <div class="col-sm-2 buildingCol" style="text-align:center">
+                            @dscBldng.BuildingName
+                        </div>
+                    }
+                    <!-- End of DIV Table Table -->
+                </div>
+                <div class="row buildingRow">
+                    @foreach (var mtrcRow in Model.allMetrics)
+                    {
+                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
+                            @mtrcRow
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>

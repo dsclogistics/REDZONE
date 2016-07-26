@@ -44,7 +44,6 @@
     }*/
 </style>
 
-
 <br />
 <div class="row" style="font-family:Arial; margin-top: 5px">
     @*<div class="col-sm-1"></div>*@
@@ -135,3 +134,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $(".menuItem").removeClass("menuSelected");
+        //$(".menuItem").addClass("menuUnselected");
+        $("#mDashboard").addClass("menuSelected");
+    });
+</script>

@@ -1,4 +1,10 @@
-﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+﻿<style>
+    .menuSelected {
+        border-radius: 5px;
+        background-color: #10395c;
+    }
+</style>
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <a style="position:fixed; top:0; left:0" href="/home">
         <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
     </a>
@@ -11,8 +17,11 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large">
         <div class="col-md-7 col-md-offset-2">
+            <ul class="nav navbar-nav menuItem" id="mDashboard">
+                <li><a href="\Home\Index">DASHBOARD</a></li>
+            </ul>
             @Html.Action("_RZDM_MenuItems", "Home")
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav menuItem">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         ACTION PLANS
@@ -26,7 +35,7 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav menuItem" id="mTables">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         DB TABLES
@@ -34,7 +43,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         @*<li>@Html.ActionLink("Find Observation", "Index", "Observation")</li>*@
-                        <li ><a href="/DSC_CUST_ACCT">Customer Accounts</a></li>
+                        <li><a href="/DSC_CUST_ACCT">Customer Accounts</a></li>
                         <li><a href="/DSC_LC">LCs</a></li>
                         <li><a href="/DSC_MTRC_LC_BLDG">Buildings</a></li>
                         <li><a href="/MTRC_PRODUCT">Metric Products</a></li>
@@ -50,3 +59,20 @@
     <br />
 </nav>
 
+@*<script>
+    $(document).ready(function () {
+        $(".menuItem").removeClass("menuSelected");
+        $(".menuItem").click(function () {
+            $(this).addClass("menuSelected");
+            alert("You clicked: " + $(this).prop("id"));
+        });
+    });
+</script>*@
+
+@*<script>
+    $(document).ready(function () {
+        $(".menuItem").removeClass("menuSelected");
+        //$(".menuItem").addClass("menuUnselected");
+        $("#mDashboard").addClass("menuSelected");
+    });
+</script>*@
