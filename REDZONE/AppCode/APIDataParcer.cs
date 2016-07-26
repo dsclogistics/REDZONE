@@ -339,7 +339,7 @@ namespace REDZONE.AppCode
                         MetricHeader metricName = new MetricHeader();
                         metricName.metricName =(string)mtr["mtrc_name"];
                         metricName.metricID = (string)mtr["mtrc_id"];
-                        metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", metricName.metricID, year);
+                        metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
                         MeasuredMetric goalMetric = new MeasuredMetric();
                         goalMetric.metricName = metricName.metricName;
