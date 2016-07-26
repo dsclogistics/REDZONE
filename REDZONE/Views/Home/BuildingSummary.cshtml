@@ -1,4 +1,4 @@
-﻿@model REDZONE.Models.ExecutiveSummaryViewModel
+﻿@model REDZONE.Models.BuildingSummaryViewModel
 
 @{
     ViewBag.Title = "Building Summary";
@@ -39,20 +39,18 @@
                         <div class="row ">
                             <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
                         </div>
-                        <div class="row">
+
+
+                        <div class="row" style="margin-bottom:10px">
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
-                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Building" @Model.statusPrevMonth>
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Building" @Model.statusPrevPeriod>
                                         <span class="glyphicon glyphicon-chevron-left"></span>
                                     </button>
                                 </span>
-                                @foreach(REDZONE.Models.BuildingMetricEntity bldgHeader in Model.buildings)
-                                {
-                                    <input type="text" class="form-control" value="@bldgHeader.BuildingName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
-                                }
-
+                                <input type="text" class="form-control" value="@Model.bName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                                 <span class="input-group-btn">
-                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMonth'" title="Navigate to Next Building" @Model.statusNextMonth>
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
                                         <span class="glyphicon glyphicon-chevron-right"></span>
                                     </button>
                                 </span>
@@ -66,23 +64,29 @@
                     <div class="col-sm-2 buildingCol" style="text-align:center">
                         <span style="font-weight:bold"> @Model.year</span>
                     </div>
-                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                    @foreach (REDZONE.Models.MeasuredMetric dscBldng in Model.buildingScore.entityMetricCells)
                     {
                         <div class="col-sm-2 buildingCol" style="text-align:center">
-                            @dscBldng.BuildingName
+                            @dscBldng.metricName
                         </div>
                     }
                     <!-- End of DIV Table Table -->
                 </div>
-                <div class="row buildingRow">
-                    @foreach (var mtrcRow in Model.allMetrics)
-                    {
-                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
-                            @mtrcRow
-                        </div>
-                    }
 
-                </div>
+                @foreach (var buildingRow in Model.metricRows)
+                {
+                  <div class="row buildingRow">
+                      <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
+                          @buildingRow.rowName
+                      </div>                      
+                    @foreach (REDZONE.Models.MeasuredMetric buildingCell in buildingRow.entityMetricCells)
+                    {
+                       <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
+                            @buildingCell.metricValue
+                       </div>
+                    }
+                  </div>
+                }
             </div>
         </div>
     </div>
