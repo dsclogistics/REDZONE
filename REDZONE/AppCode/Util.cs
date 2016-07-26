@@ -113,5 +113,89 @@ namespace REDZONE.AppCode
             }
             return false;
         }
+
+        public static int monthToInt(string monthName)
+        {
+            int monthNo = 0;
+            switch (monthName)
+            {
+                case "January": monthNo = 1;
+                    break;
+                case "February": monthNo = 2;
+                    break;
+                case "March": monthNo = 3;
+                    break;
+                case "April": monthNo = 4;
+                    break;
+                case "May": monthNo = 5;
+                    break;
+                case "June": monthNo = 6;
+                    break;
+                case "July": monthNo = 7;
+                    break;
+                case "August": monthNo = 8;
+                    break;
+                case "September": monthNo = 9;
+                    break;
+                case "October": monthNo = 10;
+                    break;
+                case "November": monthNo = 11;
+                    break;
+                case "December": monthNo = 12;
+                    break;
+                default:
+                    break;
+            }
+            return monthNo;
+        }
+
+        public static string intToMonth(int monthNo)
+        {
+            string monthName = "";
+            switch (monthNo)
+            {
+                case 1:
+                    monthName = "January";
+                    break;
+                case 2:
+                    monthName = "February";
+                    break;
+                case 3:
+                    monthName = "March";
+                    break;
+                case 4:
+                    monthName = "April";
+                    break;
+                case 5:
+                    monthName = "May";
+                    break;
+                case 6:
+                    monthName = "June";
+                    break;
+                case 7:
+                    monthName = "July";
+                    break;
+                case 8:
+                    monthName = "August";
+                    break;
+                case 9:
+                    monthName = "September";
+                    break;
+                case 10:
+                    monthName = "October";
+                    break;
+                case 11:
+                    monthName = "November";
+                    break;
+                case 12:
+                    monthName = "December";
+                    break;
+                default:
+                    break;
+            }
+            return monthName;
+        }
+
+
     }
 }
