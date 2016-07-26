@@ -8,6 +8,7 @@ namespace REDZONE.Models
     public class BuildingSummaryViewModel
     {
         public string bName { get; set; }
+        public string bId { get; set; }
         public string year { get; set; }
         public string urlNextPeriod { get; set; }
         public string urlPrevPeriod { get; set; }
