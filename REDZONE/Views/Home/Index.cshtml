@@ -99,7 +99,7 @@
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.goal.BuildingName
                         </div>
-                        @foreach (REDZONE.Models.MeasuredMetric bldngMV in Model.goal.entityMetrics)
+                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
                         {
                             <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                 @bldngMV.metricValue
@@ -119,7 +119,7 @@
                             <div class="col-sm-2 buildingCol" style="text-align:center">
                                 <a href="@dscBldng.url">@dscBldng.BuildingName</a>
                             </div>
-                            @foreach (REDZONE.Models.MeasuredMetric bldngMV in dscBldng.entityMetrics)
+                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                             {
                                 <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue)) { <br/> }

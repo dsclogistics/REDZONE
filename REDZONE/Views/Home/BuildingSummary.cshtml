@@ -64,7 +64,7 @@
                     <div class="col-sm-2 buildingCol" style="text-align:center">
                         <span style="font-weight:bold"> @Model.year</span>
                     </div>
-                    @foreach (REDZONE.Models.MeasuredMetric dscBldng in Model.buildingScore.entityMetricCells)
+                    @foreach (REDZONE.Models.MeasuredCellEntity dscBldng in Model.buildingScore.entityMetricCells)
                     {
                         <div class="col-sm-2 buildingCol" style="text-align:center">
                             @dscBldng.metricName
@@ -79,7 +79,7 @@
                       <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
                           @buildingRow.rowName
                       </div>                      
-                    @foreach (REDZONE.Models.MeasuredMetric buildingCell in buildingRow.entityMetricCells)
+                    @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                     {
                        <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
                             @buildingCell.metricValue
