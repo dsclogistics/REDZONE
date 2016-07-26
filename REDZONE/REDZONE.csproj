@@ -189,6 +189,7 @@
     <Compile Include="Models\Building.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\BuildingSummaryViewModel.cs" />
     <Compile Include="Models\DSCCustAccount.cs" />
     <Compile Include="Models\DSCREDZONE_ENTITY.Context.cs">
       <AutoGen>True</AutoGen>
@@ -219,6 +220,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\MetricSummaryViewModel.cs" />
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>

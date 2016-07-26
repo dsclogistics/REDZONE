@@ -68,24 +68,7 @@ namespace REDZONE.Models
         //-------- End of Constructor ----------
     }
 
-    public class BuildingSummaryViewModel
-    {
-        public string bName { get; set; }
-        public string year { get; set; }
-        public string urlNextPeriod { get; set; }
-        public string urlPrevPeriod { get; set; }
-        public string statusNextPeriod { get; set; }
-        public string statusPrevPeriod { get; set; }
-        public MeasuredRowEntity buildingScore = new MeasuredRowEntity();
-        public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
-        //public List<string> allBuildings = new List<string>();
-        //public List<string> allMetrics = new List<string>();
-        //public List<string> allMonths = new List<string>();
-
-        //-------- Empty Constructor -----------
-        public BuildingSummaryViewModel() { }
-        //\-------- End of Constructor ----------/
-    }
+   
 
     public class MeasuredRowEntity
     {// This represents a single Row in the Building Summary Spreadsheet
@@ -107,24 +90,5 @@ namespace REDZONE.Models
         //\-------- End of Constructor ----------/
     }
 
-    public class MetricSummaryViewModel
-    {
-        //public string month { get; set; }
-        //public string year { get; set; }
-        //public string urlNextMonth { get; set; }
-        //public string urlPrevMonth { get; set; }
-        //public string statusNextMonth { get; set; }
-        //public string statusPrevMonth { get; set; }
-        //public BuildingMetricEntity goal = new BuildingMetricEntity();
-        //public BuildingMetricEntity redTotals = new BuildingMetricEntity();
-        //public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
-        //public List<string> allBuildings = new List<string>();
-        //public List<string> allMetrics = new List<string>();
-        //public List<string> allMonths = new List<string>();
-
-        //-------- Empty Constructor -----------
-        public MetricSummaryViewModel() { }
-        //\-------- End of Constructor ----------/
-    }
-
+  
 }
