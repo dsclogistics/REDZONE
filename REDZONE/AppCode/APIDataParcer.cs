@@ -338,7 +338,7 @@ namespace REDZONE.AppCode
                     foreach (var mtr in allApiMetrics)
                     {
                         MetricHeader metricName = new MetricHeader();
-                        metricName.metricName =(string)mtr["mtrc_name"];
+                        metricName.metricName =(string)mtr["mtrc_prod_display_text"];
                         metricName.metricID = (string)mtr["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
@@ -447,8 +447,8 @@ namespace REDZONE.AppCode
                     foreach (var mtr in apiMetrics)
                     {
                         MeasuredRowEntity row = new MeasuredRowEntity();
-                        //row.rowName = (string)mtr["mtrc_prod_display_text"];
-                        row.rowName = (string)mtr["mtrc_name"];
+                        row.rowName = (string)mtr["mtrc_prod_display_text"];
+                        //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = "Goal";
                         if (months.HasValues)
