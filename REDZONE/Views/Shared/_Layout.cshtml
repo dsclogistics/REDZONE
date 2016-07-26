@@ -47,9 +47,17 @@
             border-top: 1px solid #666;
         }
         .container-fluid {
-            max-width: 1500px;
-            padding: 25px; /*Whitespace or outside gutter*/
+            max-width: 1700px;
+            padding: 15px; /*Whitespace or outside gutter*/
+            /*margin-left:180px*/
         }
+        .container {
+            width: 1700px;
+            padding: 10px; /*Whitespace or outside gutter*/
+            text-align:center;
+            /*margin-left:180px*/
+        }
+
         .nopadding {
             padding: 0 !important;
             margin: 0 !important;
@@ -80,9 +88,11 @@
         @*-----------------------------------------------------------------------------------*@
 
 
-        @* ------- Render the partial View that contains the Application BODY  ------------- *@
-        <div class="container-fluid body-content">
-            @RenderBody()
+        @* ------- Render the partial View that contains the Application BODY  ------------- *@        
+        <div class="container">
+            <div class="container-fluid body-content text-center">
+                @RenderBody()
+            </div>
         </div>
         @*-----------------------------------------------------------------------------------*@
 
