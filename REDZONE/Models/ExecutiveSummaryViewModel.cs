@@ -40,75 +40,7 @@ namespace REDZONE.Models
 
         //-------- Empty Constructor -----------
         public BuildingMetricEntity() { }
-        public BuildingMetricEntity(string action) {
-            switch (action.ToUpper())
-            {
-                case "GOAL":
-                    BuildingName = "Goal";
-                    score = "<= 2";
-                    scoreColor = BLUECOLOR;                
-                    // Fill all the Cells For the Goal Row
-                    addMetricValue("Net FTE", "0.00", BLUECOLOR);
-                    addMetricValue("Turnover", "7.5%", BLUECOLOR);
-                    addMetricValue("OT", "10.00 %", BLUECOLOR);
-                    addMetricValue("Trainees", "20.00 %", BLUECOLOR);
-                    addMetricValue("Safety", "1.45", BLUECOLOR);
-                    addMetricValue("Volume", "+/- 20%", BLUECOLOR);
-                    addMetricValue("IT Tickets", "25/M", BLUECOLOR);
-                    addMetricValue("Financial", "+/- Goal", BLUECOLOR);
-                    break;
-                case "AP":
-                    BuildingName = "Allemtown 1";
-                    score = "2";
-                    scoreColor = GREENCOLOR;
-                    // Fill all the Cells For the Goal Row
-                    addMetricValue("Net FTE", "0.00", GREENCOLOR);
-                    addMetricValue("Turnover", "7.00%", GREENCOLOR);
-                    addMetricValue("OT", "12.70 %", REDCOLOR);
-                    addMetricValue("Trainees", "20.00 %", GREENCOLOR);
-                    addMetricValue("Safety", "0.74", GREENCOLOR);
-                    addMetricValue("Volume", "- 5.10%", GREENCOLOR);
-                    addMetricValue("IT Tickets", "4", GREENCOLOR);
-                    addMetricValue("Financial", "- 2.67%", REDCOLOR);
-                    break;
-                case "PP":
-                    BuildingName = "Des Plaines";
-                    score = "4";
-                    scoreColor = REDCOLOR;
-                    // Fill all the Cells For the Goal Row
-                    addMetricValue("Net FTE", "-2.01", GREENCOLOR);
-                    addMetricValue("Turnover", "11.00%", REDCOLOR);
-                    addMetricValue("OT", "12.67 %", REDCOLOR);
-                    addMetricValue("Trainees", "13.80 %", GREENCOLOR);
-                    addMetricValue("Safety", "3.54", REDCOLOR);
-                    addMetricValue("Volume", "- 12.86%", GREENCOLOR);
-                    addMetricValue("IT Tickets", "41", REDCOLOR);
-                    addMetricValue("Financial", "6.31%", GREENCOLOR);
-                    break;
-                case "PC":
-                    BuildingName = "Perris";
-                    score = "2";
-                    scoreColor = GREENCOLOR;
-                    // Fill all the Cells For the Goal Row
-                    addMetricValue("Net FTE", "-1.96", GREENCOLOR);
-                    addMetricValue("Turnover", "6.00%", GREENCOLOR);
-                    addMetricValue("OT", "11.59 %", REDCOLOR);
-                    addMetricValue("Trainees", "18.70 %", GREENCOLOR);
-                    addMetricValue("Safety", "0.65", GREENCOLOR);
-                    addMetricValue("Volume", "- 11.30%", GREENCOLOR);
-                    addMetricValue("IT Tickets", "64", REDCOLOR);
-                    addMetricValue("Financial", "10.41%", GREENCOLOR);
-                    break;
-                default:
-                    break;
-            }
-        }
 
-        private void addMetricValue(string p1, string p2, string p3)
-        {
-            MeasuredMetric goal = new MeasuredMetric(p1, p2, p3);
-            entityMetrics.Add(goal);
-        }
         //\-------- End of Constructor ----------/
     }
 
@@ -122,7 +54,7 @@ namespace REDZONE.Models
         public string mtrc_id { get; set; }
         public string tm_period_id { get; set; }
         public string dsc_mtrc_lc_bldg_id { get; set; }
-
+        public string cellValueURL { get; set; }
 
 
         //-------- Empty Constructor -----------\
@@ -135,4 +67,64 @@ namespace REDZONE.Models
         }
         //-------- End of Constructor ----------
     }
+
+    public class BuildingSummaryViewModel
+    {
+        public string bName { get; set; }
+        public string year { get; set; }
+        public string urlNextPeriod { get; set; }
+        public string urlPrevPeriod { get; set; }
+        public string statusNextPeriod { get; set; }
+        public string statusPrevPeriod { get; set; }
+        public MeasuredRowEntity buildingScore = new MeasuredRowEntity();
+        public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
+        //public List<string> allBuildings = new List<string>();
+        //public List<string> allMetrics = new List<string>();
+        //public List<string> allMonths = new List<string>();
+
+        //-------- Empty Constructor -----------
+        public BuildingSummaryViewModel() { }
+        //\-------- End of Constructor ----------/
+    }
+
+    public class MeasuredRowEntity
+    {// This represents a single Row in the Building Summary Spreadsheet
+        private const string BLUECOLOR = "lightblue";
+        private const string GREENCOLOR = "lightgreen";
+        private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
+        public string rowName { get; set; }        //Row represents a "Metric"
+        public string rowMeasuredId { get; set; }
+        public string rowURL { get; set; }
+        public string scoreGoal { get; set; }
+        public string redTotals { get; set; }
+        public string scoreGoalColor { get; set; }
+        public string redTotalColor { get; set; }        
+
+        public List<MeasuredMetric> entityMetricCells = new List<MeasuredMetric>();
+
+        //-------- Empty Constructor ------------\
+        public MeasuredRowEntity() { }
+        //\-------- End of Constructor ----------/
+    }
+
+    public class MetricSummaryViewModel
+    {
+        //public string month { get; set; }
+        //public string year { get; set; }
+        //public string urlNextMonth { get; set; }
+        //public string urlPrevMonth { get; set; }
+        //public string statusNextMonth { get; set; }
+        //public string statusPrevMonth { get; set; }
+        //public BuildingMetricEntity goal = new BuildingMetricEntity();
+        //public BuildingMetricEntity redTotals = new BuildingMetricEntity();
+        //public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
+        //public List<string> allBuildings = new List<string>();
+        //public List<string> allMetrics = new List<string>();
+        //public List<string> allMonths = new List<string>();
+
+        //-------- Empty Constructor -----------
+        public MetricSummaryViewModel() { }
+        //\-------- End of Constructor ----------/
+    }
+
 }
