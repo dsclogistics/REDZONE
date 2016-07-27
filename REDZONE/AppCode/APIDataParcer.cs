@@ -425,10 +425,18 @@ namespace REDZONE.AppCode
         {
             BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();
             string raw_data = api.getBuildingSummary("Red Zone", "Month", null, null, year, buildingID);
-            bSummary.bName = "";
             bSummary.year = year;
             try
             {
+                //-------Temp hardcoding data until API provides correct Values -----------
+                int intYear = 0;
+                if (!(Int32.TryParse(year, out intYear))) { intYear = 9999; }
+                bSummary.urlNextPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear + 1).ToString(), buildingID );
+                bSummary.urlPrevPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear - 1).ToString(), buildingID );
+                bSummary.statusNextPeriod = "disabled";
+                bSummary.statusPrevPeriod = "disabled";
+                //------- END of hardcoding data ------------------------------------------
+
                 JObject parsed_result = JObject.Parse(raw_data);
                 bSummary.bName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
                 bSummary.bId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
@@ -582,7 +590,6 @@ namespace REDZONE.AppCode
             //}
             return value;
         }
-
 
         public List<int> getEditableMetrics(string userName)
         {

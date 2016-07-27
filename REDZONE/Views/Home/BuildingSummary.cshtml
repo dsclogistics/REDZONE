@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Building Summary";
 }
-
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
 <div class="row" style="font-family:Arial; margin-top: 5px">
@@ -33,56 +32,65 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="row headerRow">
-                    <div class="col-sm-2 buildingCol">
-                        <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
-                    </div>  <!-- Metric Name Column -->
-                    <div class="col-sm-1 buildingCol">
-                        @Model.buildingHeadings.scoreGoal
-                    </div>  <!-- Goal Column -->
-                    <div class="row">
+            <div class="panel-body" style="margin:2px; padding:5px">
+                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
+                    <!-- Table -->
+                    <!-- ROWS -->
+                    <div class="row headerRow row-eq-height">
+                        <div class="col-sm-2 buildingCol headerCol">
+                            <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
+                        </div>  <!-- Metric Name Column -->
+                        <div class="col-sm-1 buildingCol headerCol">
+                            @Model.buildingHeadings.scoreGoal (Goal)
+                        </div>  <!-- Goal Column -->
                         <div class="col-sm-9">
                             <div class="row">
-                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in Model.buildingHeadings.entityMetricCells)
+                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
                                 {
-                                    <div class="col-sm-1">    @*One column for each month*@
-                                          @dscBldngHdr.metricName
+                                    <div class="col-sm-1 buildingCol headerCol">
+                                        <a href="#">@dscBldngHdr.metricName</a>
                                     </div>
                                 }
                             </div>
-                        </div>  <!-- DIV That holds all 12 Month Value Columns -->
-                    </div>
-                    <!-- End of DIV Table Table -->
-                </div>
+                        </div>
+                    </div><!-- TITLES ROW -->
 
+                @*Begin Displaying All Rows for Metric*@
                 @foreach (var buildingRow in Model.metricRows)
                 {
                     <div class="row buildingRow ">
+                        <div class="col-sm-2 buildingCol">
+                            <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
+                        </div>  <!-- Metric Name Column -->
 
+                        <div class="col-sm-1 buildingCol">
+                            @buildingRow.scoreGoal
+                        </div>  <!-- Goal Column -->
+                        <div class="col-sm-9">
+                            <div class="row ">
+                                @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
+                                {
+                                   <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
+                                      @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                      { <br /> }
+                                      else
+                                      { @buildingCell.metricValue }
+                                   </div>
+                                }
+                            </div>
+                        </div>  <!-- End of block with 12 Month Value Columns -->
                     </div>
-                    <div class="col-sm-2"></div>  <!-- Metric Name Column -->
-                    <div class="col-sm-1"></div>  <!-- Goal Column -->
-                    <div class="col-sm-9"></div>  <!-- 12 Month Value Columns -->
-
-
-
-
-
-
-                  <div class="row ">
-                      <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
-                          @buildingRow.rowName
-                      </div>
-                    @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
-                    {
-                       <div class="col-sm-1 buildingCol" style="text-align:center; background-color: white">
-                            @buildingCell.metricValue
-                       </div>
-                    }
-                  </div>
                 }
+                </div> <!-- End of DIV Table Table -->
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $(".menuItem").removeClass("menuSelected");
+        //$(".menuItem").addClass("menuUnselected");
+        $("#mDashboard").addClass("menuSelected");
+    });
+</script>
