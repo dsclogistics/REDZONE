@@ -216,5 +216,36 @@ namespace REDZONE.AppCode
                 return "ERROR: " + e.Message;
             }
         }
+        public string getMetricSummary(string productName, string tptName, string mtrcid, string calyear)
+        {
+            
+            string endPoint = "metricsummary";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            // {"productname":"Red Zone", "tptname":"Month","calyear":2016 , "mtrc_id":"3"  }
+            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
+                                     "\",\"calyear\":\"" + calyear + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return "ERROR: " + e.Message;
+            }
+        }
     }
 }
