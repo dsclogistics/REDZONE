@@ -77,7 +77,7 @@ namespace REDZONE.Controllers
                 if (allowedMetrics.IndexOf((int)res["mtrc_period_id"]) != -1)
                 {
                     RZMetricMenu menuItem = new RZMetricMenu();
-                    menuItem.menuText = (string)res["mtrc_name"];
+                    menuItem.menuText = (string)res["mtrc_prod_display_text"];
                     menuItem.menuValue = "/Metric/EditView/" + (string)res["mtrc_id"] + "?month=" + defDate.ToString("MMMM") + "&year=" + defDate.ToString("yyyy");
                     RZMenu.Add(menuItem);
                 }               

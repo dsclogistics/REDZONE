@@ -38,7 +38,7 @@ namespace REDZONE.AppCode
 
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
-                rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_name"];
+                rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
                 rz_metric.metricDataType = (string)parsed_result["metricdetail"]["data_type_token"];
                 rz_metric.isNumeric = (string)parsed_result["metricdetail"]["data_type_num_yn"] == "Y" ? true : false;
                 rz_metric.period_Type = METRICPERIODS.Month;
@@ -116,7 +116,7 @@ namespace REDZONE.AppCode
             {
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
-                rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_name"];
+                rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
                 rz_metric.metricDataType = (string)parsed_result["metricdetail"]["data_type_token"];
                 rz_metric.isNumeric = (string)parsed_result["metricdetail"]["data_type_num_yn"] == "Y" ? true : false;
                 rz_metric.period_Type = METRICPERIODS.Month;
