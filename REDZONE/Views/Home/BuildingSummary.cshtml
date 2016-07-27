@@ -47,9 +47,13 @@
                             <div class="row">
                                 @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
                                 {
-                                    <div class="col-sm-1 buildingCol headerCol">
-                                        <a href="#">@dscBldngHdr.metricName</a>
-                                    </div>
+                                    if (dscBldngHdr.isViewable)
+                                    {
+                                        <div class="col-sm-1 buildingCol headerCol">
+                                            <a href="#">@dscBldngHdr.metricName</a>
+                                        </div>
+                                    }
+
                                 }
                             </div>
                         </div>
@@ -70,12 +74,15 @@
                             <div class="row ">
                                 @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                                 {
-                                   <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
-                                      @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                      { <br /> }
-                                      else
-                                      { @buildingCell.metricValue }
-                                   </div>
+                                    if (buildingCell.isViewable)
+                                    {
+                                        <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
+                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                            { <br /> }
+                                            else
+                                            { @buildingCell.metricValue }
+                                        </div>
+                                    }
                                 }
                             </div>
                         </div>  <!-- End of block with 12 Month Value Columns -->

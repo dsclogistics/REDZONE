@@ -62,6 +62,7 @@ namespace REDZONE.Models
         public string tm_period_id { get; set; }
         public string dsc_mtrc_lc_bldg_id { get; set; }
         public string cellValueURL { get; set; }
+        public bool isViewable { get; set; }
 
 
         //-------- Empty Constructor -----------\

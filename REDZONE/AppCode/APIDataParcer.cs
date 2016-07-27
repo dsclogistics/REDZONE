@@ -466,6 +466,7 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
+                                temp.isViewable = false;
                                 row.entityMetricCells.Add(temp);
                                 if(header.entityMetricCells.Count< months.Count)
                                 { header.entityMetricCells.Add(temp); }
@@ -481,7 +482,11 @@ namespace REDZONE.AppCode
                                     foreach(var tmp in row.entityMetricCells)
                                     {
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
-                                        tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                        {
+                                            tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                            tmp.isViewable = true;
+                                        }
+                                       
                                     }
                                    
                                 }
@@ -538,6 +543,7 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
+                                temp.isViewable = false;
                                 row.entityMetricCells.Add(temp);
                                 if (header.entityMetricCells.Count < months.Count)
                                 { header.entityMetricCells.Add(temp); }
@@ -555,7 +561,11 @@ namespace REDZONE.AppCode
                                     foreach (var tmp in row.entityMetricCells)
                                     {
                                         if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
+                                        {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                            tmp.isViewable = true;
+                                        }
+                                        
                                     }
 
                                 }
