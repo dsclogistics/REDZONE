@@ -58,10 +58,7 @@
                             <div class="col-sm-2 buildingCol">
                                 <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                             </div>  <!-- Metric Name Column -->
-
-                            <div class="col-sm-1 buildingCol">
-                                @buildingRow.scoreGoal
-                            </div>  <!-- Goal Column -->
+                         
                             <div class="col-sm-9">
                                 <div class="row ">
                                     @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
