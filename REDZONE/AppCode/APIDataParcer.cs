@@ -677,6 +677,7 @@ namespace REDZONE.AppCode
             return value;
         }
 
+        //This method returns the list of all metrics user is authorized to edit. 
         public List<int> getEditableMetrics(string userName)
         {
             List<int> accessibleMetrics = new List<int>();
@@ -690,6 +691,17 @@ namespace REDZONE.AppCode
             }
             catch {}            
             return accessibleMetrics;
+        }
+
+
+        //This is a HELPER method that should determine what the next and prev url for metric summary.
+        //It returns an array of 2 records. [0]=prev url, [1]=next url
+        public string[] getPrevNextMetricsUrl(string metricID, string year)
+        {
+            string[] prevNext = new string[2];
+
+            return prevNext;
+
         }
     }
 }
