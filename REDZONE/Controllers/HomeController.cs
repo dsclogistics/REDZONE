@@ -57,7 +57,8 @@ namespace REDZONE.Controllers
         }
         public ActionResult MetricSummary(string year, string metricID)
         {
-            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(metricID, null, year, null);
+            MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID);
+           
             return View(dashBoard);
         }
 

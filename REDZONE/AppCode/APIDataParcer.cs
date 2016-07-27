@@ -496,6 +496,82 @@ namespace REDZONE.AppCode
 
             return bSummary;
         }
+        public MetricSummaryViewModel getMetricSummaryView(string year, string metricID)
+        {
+            MetricSummaryViewModel mSummary = new MetricSummaryViewModel();
+            string raw_data = api.getMetricSummary("Red Zone", "Month", metricID,year);
+            mSummary.metricName = "";
+            mSummary.year = year;
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+                JArray apiBuildings = (JArray)parsed_result["buildings"];
+                JArray months = (JArray)parsed_result["Months"];
+                JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
+                List<MeasuredRowEntity> rowMetrics = new List<MeasuredRowEntity>();
+                List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
+                mSummary.metricName = (string)parsed_result["mtrc_prod_display_text"];
+                mSummary.metricID = (string)parsed_result["mtrc_id"];
+                MeasuredRowEntity header = new MeasuredRowEntity();
+                header.rowName = "";
+                MeasuredRowEntity goal = new MeasuredRowEntity();
+                goal.rowName = "Goal";
+                if (apiBuildings.HasValues)
+                {
+                    foreach(var b in apiBuildings)
+                    {
+                        MeasuredRowEntity row = new MeasuredRowEntity();
+                        row.rowName = (string)b["dsc_mtrc_lc_bldg_name"];
+                        row.rowMeasuredId = (string)b["dsc_mtrc_lc_bldg_id"];
+                        if (months.HasValues)
+                        {
+                            foreach (var m in months)
+                            {
+                                MeasuredCellEntity temp = new MeasuredCellEntity();
+                                temp.metricName = (string)m["Month"];
+                                temp.metricValue = String.Empty;
+                                row.entityMetricCells.Add(temp);
+                                if (header.entityMetricCells.Count < months.Count)
+                                { header.entityMetricCells.Add(temp); }
+                                if (goal.entityMetricCells.Count < months.Count)
+                                { goal.entityMetricCells.Add(new MeasuredCellEntity(String.Empty)); }
+
+                            }
+                        }
+                        if (apiBuildingsMetrics.HasValues)
+                        {
+                            foreach (var apiCellValue in apiBuildingsMetrics)
+                            {
+                                if (row.rowMeasuredId == (string)apiCellValue["dsc_mtrc_lc_bldg_id"])
+                                {
+                                    foreach (var tmp in row.entityMetricCells)
+                                    {
+                                        if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
+                                            tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                    }
+
+                                }
+                            }
+                        }
+                        rowMetrics.Add(row);
+                    }
+                    mSummary.rowGoal = goal;
+                    mSummary.rowHeadings = header;
+                    mSummary.metricRows = rowMetrics;
+                }
+
+
+            }
+            catch(Exception e)
+            { string error = e.Message; }
+
+
+
+
+
+
+            return mSummary;
+        }
 
 
 
