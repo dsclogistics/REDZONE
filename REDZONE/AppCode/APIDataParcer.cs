@@ -440,6 +440,11 @@ namespace REDZONE.AppCode
                 JObject parsed_result = JObject.Parse(raw_data);
                 bSummary.bName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
                 bSummary.bId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
+                string[] prevNext = getPrevNextBuildingUrl(year, bSummary.bId);//prevNext[0]=prev url, prevNext[1]=next url
+                bSummary.statusPrevPeriod = prevNext[0] == "disabled" ? prevNext[0] : "";
+                bSummary.statusNextPeriod = prevNext[1] == "disabled" ? prevNext[1] : "";
+                bSummary.urlPrevPeriod = prevNext[0];
+                bSummary.urlNextPeriod = prevNext[1];
                 JArray apiMetrics = (JArray)parsed_result["metrics"];
                 JArray months = (JArray)parsed_result["Months"];
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
@@ -721,6 +726,50 @@ namespace REDZONE.AppCode
                 }               
 
             }
+            return prevNext;
+
+        }
+
+        //This is a HELPER method that should determine what the next and prev url for building summary.
+        //It returns an array of 2 records. [0]=prev url, [1]=next url
+        public string[] getPrevNextBuildingUrl(string year, string buildingID)
+        {
+            string[] prevNext = new string[] {"disabled","disabled"};
+            try
+            {
+                JObject parsed_result = JObject.Parse(api.getAllBuildings("Red Zone", "Month", year));
+                JArray apiBuildings = (JArray)parsed_result["resource"];
+                if (apiBuildings.HasValues)
+                {
+                    JToken current = (JToken)apiBuildings.FirstOrDefault(x => x["dsc_mtrc_lc_bldg_id"].ToString() == buildingID);
+                    if (current == apiBuildings.Last)
+                    {
+                        JToken next = apiBuildings.First;
+                        JToken prev = current.Previous;
+                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
+                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                    }
+                    else if (current == apiBuildings.First)
+                    {
+                        JToken next = current.Next;
+                        JToken prev = apiBuildings.Last;
+                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
+                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                    }
+                    else
+                    {
+                        JToken next = current.Next;
+                        JToken prev = current.Previous;
+                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
+                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                    }
+                }
+
+              }//end of try
+                catch{ }
+           
+
+            
             return prevNext;
 
         }
