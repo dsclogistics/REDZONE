@@ -15,8 +15,8 @@ namespace REDZONE.Models
         public string statusNextPeriod { get; set; }
         public string statusPrevPeriod { get; set; }
         public MeasuredRowEntity buildingHeadings = new MeasuredRowEntity();
-        public MeasuredRowEntity buildingScore = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
+        public MeasuredRowEntity buildingScoreRow = new MeasuredRowEntity();
         //public List<string> allBuildings = new List<string>();
         //public List<string> allMetrics = new List<string>();
         //public List<string> allMonths = new List<string>();

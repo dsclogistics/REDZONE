@@ -300,7 +300,7 @@ namespace REDZONE.AppCode
             string raw_data = api.getExecSummary("Red Zone", "Month", metric_id, month, year, buildingID);
             eSummary.month = month;
             eSummary.year = year;
-            eSummary.goal.score = "";
+            eSummary.goal.score = " - ";
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -495,18 +495,13 @@ namespace REDZONE.AppCode
                         rowMetrics.Add(row);
                     }                  
                     bSummary.buildingHeadings = header;
-                    bSummary.buildingScore = score;
+                    bSummary.buildingScoreRow = score;
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
                    
                 }
 
             }
             catch (Exception e) { string error = e.Message; }
-
-
-
-
-
             return bSummary;
         }
         public MetricSummaryViewModel getMetricSummaryView(string year, string metricID)
@@ -583,11 +578,6 @@ namespace REDZONE.AppCode
             catch(Exception e)
             { string error = e.Message; }
 
-
-
-
-
-
             return mSummary;
         }
 
@@ -645,7 +635,7 @@ namespace REDZONE.AppCode
         private string getGoalforMetric(string metricName)
         {
             string value = "";
-            //switch (metricName) { 
+            switch (metricName) { 
             //    case "Net FTE":
             //        value = "0.00";
             //        break;
@@ -670,10 +660,10 @@ namespace REDZONE.AppCode
             //    case "Throughput Chg %":
             //        value = "+/- 20%";
             //        break;
-            //    default:
-            //        value = "N/A";
-            //        break;
-            //}
+                default:
+                    value = " - ";
+                    break;
+            }
             return value;
         }
 

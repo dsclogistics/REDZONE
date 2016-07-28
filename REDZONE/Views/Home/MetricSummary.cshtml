@@ -5,6 +5,13 @@
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
+@if (String.IsNullOrEmpty(Model.metricID)) { 
+<div style="margin-top:250px; color:red">
+    <img src="~/Images/confused-emoticon.jpg" />
+    <h2>Please Select a valid Metric </h2>
+</div>
+}
+else { 
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
         <div class="panel panel-default" style="margin-bottom:0px; ">
@@ -21,7 +28,7 @@
                                         <span class="glyphicon glyphicon-chevron-left"></span>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" value="@Model.metricName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                <input type="text" class="form-control" value="@Model.metricName @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                                 <span class="input-group-btn">
                                     <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href=''" title="Navigate to Next Building">
                                         <span class="glyphicon glyphicon-chevron-right"></span>
@@ -55,6 +62,36 @@
                             </div>
                         </div>
                     </div><!-- TITLES ROW -->
+
+                    <div class="row buildingRow" style="background-color: aqua; ">
+                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                            @Model.rowGoal.rowName
+                        </div>
+                    <div class="col-sm-9">
+                        <div class="row ">
+                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
+                            {
+                                if (bldngMV.isViewable)
+                                {
+                                    <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                        { <br /> }
+                                        else
+                                        { @bldngMV.metricValue }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                        @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                            @if (String.IsNullOrEmpty(@Model.goal.score))
+                            { <br /> }
+                            else
+                            { @Model.goal.score }
+                        </div>*@
+                    </div><!-- GOAL ROWS -->
+
                     @*Begin Displaying All Rows for Metric*@
                     @foreach (var buildingRow in Model.metricRows)
                     {
@@ -76,7 +113,6 @@
                                             { @buildingCell.metricValue }
                                         </div>
                                        }
-
                                     }
                                 </div>
                             </div>  <!-- End of block with 12 Month Value Columns -->
@@ -87,7 +123,7 @@
         </div>
     </div>
 </div>
-
+}
 <script>
     $(document).ready(function () {
         $(".menuItem").removeClass("menuSelected");
