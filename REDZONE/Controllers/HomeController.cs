@@ -27,26 +27,6 @@ namespace REDZONE.Controllers
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
             ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null);
-
-            //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
-            //// Load the Metric Header Info
-            //dashBoard.month = curMonth;
-            //dashBoard.year = curYear;
-            //dashBoard.urlNextMonth = "";
-            //dashBoard.urlPrevMonth = "";
-            //dashBoard.statusNextMonth = "disabled";
-            //dashBoard.statusPrevMonth = "disabled";
-            //// Load the Goals Row (Use dummy values)
-            //dashBoard.goal = new BuildingMetricEntity("GOAL");
-            ////Load two sample building Rows
-            //BuildingMetricEntity sampleBuilding = new BuildingMetricEntity("AP");
-            //dashBoard.buildings.Add(sampleBuilding);
-            //sampleBuilding = new BuildingMetricEntity("PP");
-            //dashBoard.buildings.Add(sampleBuilding);
-            //sampleBuilding = new BuildingMetricEntity("PC");
-            //dashBoard.buildings.Add(sampleBuilding);
-
-            //dashBoardNew.goal = dashBoard.goal;
             return View(dashBoard);
         }
 
