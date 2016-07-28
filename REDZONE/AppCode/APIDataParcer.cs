@@ -520,6 +520,10 @@ namespace REDZONE.AppCode
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
                 mSummary.metricName = (string)parsed_result["mtrc_prod_display_text"];
                 mSummary.metricID = (string)parsed_result["mtrc_id"];
+                mSummary.statusNextMetric = "";
+                mSummary.statusPrevMetric = "";
+                mSummary.urlPrevMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[0];
+                mSummary.urlNextMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[1];
                 MeasuredRowEntity header = new MeasuredRowEntity();
                 header.rowName = "";
                 MeasuredRowEntity goal = new MeasuredRowEntity();
@@ -686,10 +690,37 @@ namespace REDZONE.AppCode
 
         //This is a HELPER method that should determine what the next and prev url for metric summary.
         //It returns an array of 2 records. [0]=prev url, [1]=next url
-        public string[] getPrevNextMetricsUrl(string metricID, string year)
+        public string[] getPrevNextMetricsUrl(string year, string metricID)
         {
             string[] prevNext = new string[2];
+            JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
+            JArray apiMetrics = (JArray)parsed_result["metriclist"];
+            if (apiMetrics.HasValues)
+            {
+                JToken current = (JToken)apiMetrics.FirstOrDefault(x => x["mtrc_id"].ToString() == metricID);
+                if (current == apiMetrics.Last)
+                {
+                    JToken next = apiMetrics.First;
+                    JToken prev = current.Previous;
+                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                }
+                else if (current == apiMetrics.First)
+                {
+                    JToken next = current.Next;
+                    JToken prev = apiMetrics.Last;
+                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                }
+                else
+                {
+                    JToken next = current.Next;
+                    JToken prev = current.Previous;
+                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                }               
 
+            }
             return prevNext;
 
         }
