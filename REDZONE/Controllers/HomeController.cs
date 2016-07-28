@@ -49,6 +49,7 @@ namespace REDZONE.Controllers
             //dashBoardNew.goal = dashBoard.goal;
             return View(dashBoard);
         }
+
         public ActionResult BuildingSummary(string year, string buildingID)
         {
             BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID);
