@@ -464,6 +464,7 @@ namespace REDZONE.AppCode
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = "Goal";
+                        row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         if (months.HasValues)
                         {
                             foreach (var m in months)
@@ -525,8 +526,9 @@ namespace REDZONE.AppCode
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
                 mSummary.metricName = (string)parsed_result["mtrc_prod_display_text"];
                 mSummary.metricID = (string)parsed_result["mtrc_id"];
-                mSummary.statusNextMetric = "";
-                mSummary.statusPrevMetric = "";
+                string[] prevNext = getPrevNextMetricsUrl(year, mSummary.metricID);//prevNext[0]=prev url, prevNext[1]=next url
+                mSummary.statusPrevMetric = prevNext[0] == "disabled" ? prevNext[0] : "";
+                mSummary.statusNextMetric = prevNext[1] == "disabled" ? prevNext[1] : "";
                 mSummary.urlPrevMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[0];
                 mSummary.urlNextMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[1];
                 MeasuredRowEntity header = new MeasuredRowEntity();
@@ -540,6 +542,7 @@ namespace REDZONE.AppCode
                         MeasuredRowEntity row = new MeasuredRowEntity();
                         row.rowName = (string)b["dsc_mtrc_lc_bldg_name"];
                         row.rowMeasuredId = (string)b["dsc_mtrc_lc_bldg_id"];
+                        row.rowURL = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, row.rowMeasuredId);
                         if (months.HasValues)
                         {
                             foreach (var m in months)
@@ -697,35 +700,40 @@ namespace REDZONE.AppCode
         //It returns an array of 2 records. [0]=prev url, [1]=next url
         public string[] getPrevNextMetricsUrl(string year, string metricID)
         {
-            string[] prevNext = new string[2];
-            JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
-            JArray apiMetrics = (JArray)parsed_result["metriclist"];
-            if (apiMetrics.HasValues)
+            string[] prevNext = new string[] { "disabled", "disabled" };
+            try
             {
-                JToken current = (JToken)apiMetrics.FirstOrDefault(x => x["mtrc_id"].ToString() == metricID);
-                if (current == apiMetrics.Last)
+                JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
+                JArray apiMetrics = (JArray)parsed_result["metriclist"];
+                if (apiMetrics.HasValues)
                 {
-                    JToken next = apiMetrics.First;
-                    JToken prev = current.Previous;
-                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
-                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
-                }
-                else if (current == apiMetrics.First)
-                {
-                    JToken next = current.Next;
-                    JToken prev = apiMetrics.Last;
-                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
-                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
-                }
-                else
-                {
-                    JToken next = current.Next;
-                    JToken prev = current.Previous;
-                    prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
-                    prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
-                }               
+                    JToken current = (JToken)apiMetrics.FirstOrDefault(x => x["mtrc_id"].ToString() == metricID);
+                    if (current == apiMetrics.Last)
+                    {
+                        JToken next = apiMetrics.First;
+                        JToken prev = current.Previous;
+                        prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                        prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                    }
+                    else if (current == apiMetrics.First)
+                    {
+                        JToken next = current.Next;
+                        JToken prev = apiMetrics.Last;
+                        prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                        prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                    }
+                    else
+                    {
+                        JToken next = current.Next;
+                        JToken prev = current.Previous;
+                        prevNext[0] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)prev["mtrc_id"]);
+                        prevNext[1] = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, (string)next["mtrc_id"]);
+                    }
 
+                }
             }
+            catch { }
+            
             return prevNext;
 
         }
