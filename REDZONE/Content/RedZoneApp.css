@@ -58,7 +58,7 @@ td.center {
 
 .buildingRow {
     padding: 0;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #c6c4c4;
     width: 98%;
     margin-left: 1px;
     min-width: 100%;
@@ -69,7 +69,7 @@ td.center {
 }
 
 .buildingCol {
-    border-right: 1px dashed #f1f1f1; /*#f1f1f1*/
+    border-right: 1px dashed #c6c4c4; /*#f1f1f1*/
     text-align: center;
     padding: 3px;
 }
