@@ -64,7 +64,11 @@ td.center {
     min-width: 100%;
 }
 
-.buildingRow:hover {
+.buildingRow:hover{
+    background-color: #f1f1f1 !important;
+}
+
+.buildingRow:hover td{
     background-color: #f1f1f1 !important;
 }
 
@@ -77,6 +81,10 @@ td.center {
 .scoreCol {
     border-left: 1px solid black;
 }
+
+/*.valueRow:hover td  {
+    background-color: #f1f1f1 !important;
+}*/
 
 /*.headerCol {
         border: 1px solid red;

@@ -21,21 +21,38 @@
                             </div>
 
                         </div>
-                        <div class="row" style="margin-bottom:10px">
+                        <div class="row" style="margin-bottom:3px">
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
-                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Building" @Model.statusPrevPeriod>
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevBuilding'" title="Navigate to Previous Building" @Model.statusPrevBuilding>
                                         <span class="glyphicon glyphicon-chevron-left"></span>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" value="@Model.bName - @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                <input type="text" class="form-control" value="@Model.bName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                                 <span class="input-group-btn">
-                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextBuilding'" title="Navigate to Next Building" @Model.statusNextBuilding>
                                         <span class="glyphicon glyphicon-chevron-right"></span>
                                     </button>
                                 </span>
                             </div>
-                        </div>
+                        </div>@* <----------- Navigation Field by Building*@
+                        <div class="row" style="margin-bottom:10px; padding:0px;">
+                            <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px;">
+                                <span class="input-group-btn" style="padding:0px;">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Building" @Model.statusPrevPeriod>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    </button>
+                                </span>
+                                @*<span style="min-width:100%; text-align:center; vertical-align:middle; font-size:large; padding:0px">Calendar Period: @Model.year</span>*@
+                                <input type="text" class="form-control" value="Calendar Period: @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large; padding:0px">
+                                <span class="input-group-btn">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>@* <----------- Navigation Field by Year *@
+
                     </div>
                 </div>
             </div>
@@ -43,28 +60,34 @@
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
-                    <div class="row headerRow row-eq-height">
+                    <div class="row headerRow row-eq-height"> <!-- TITLES ROW START-->
                         <div class="col-sm-2 buildingCol headerCol">
                             <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
-                        </div>  <!-- Metric Name Column -->
+                        </div>  <!-- Metric Name Header Column -->
                         <div class="col-sm-1 buildingCol headerCol" style="background-color: #bbedff">
                             Goal
                         </div>  <!-- Goal Column -->
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             <div class="row">
-                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
-                                {
-                                    if (dscBldngHdr.isViewable)
-                                    {
-                                        <div class="col-sm-1 buildingCol headerCol">
-                                            <a href="#">@dscBldngHdr.metricName</a>
-                                        </div>
-                                    }
-
-                                }
+                                <table style="width:100%">
+                                    <tr>
+                                        @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
+                                        {
+                                            if (dscBldngHdr.isViewable)
+                                            {
+                                                <td class="col-sm-1 buildingCol headerCol">
+                                                    @dscBldngHdr.metricName
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                </table>
                             </div>
                         </div>
-                    </div><!-- TITLES ROW -->
+                        <div class="col-sm-1 buildingCol headerCol" >
+                            Red Totals
+                        </div>  <!-- Goal Column -->
+                    </div><!-- TITLES ROW END -->
 
                 @*Begin Displaying All Rows for Metric*@
                 @foreach (var buildingRow in Model.metricRows)
@@ -77,55 +100,62 @@
                         <div class="col-sm-1 buildingCol" style="background-color: #bbedff">
                             @buildingRow.scoreGoal
                         </div>  <!-- Goal Column -->
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             <div class="row ">
-                                @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
-                                {
-                                    if (buildingCell.isViewable)
-                                    {
-                                        <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
-                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                            { <br /> }
-                                            else
-                                            { @buildingCell.metricValue }
-                                        </div>
-                                    }
-                                }
-                                <div class="col-sm-1 buildingCol">
-                                    -
-                                </div>
+                                <table style="width:100%">
+                                    <tr class="valueRow">
+                                        @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
+                                        {
+                                            if (buildingCell.isViewable)
+                                            {
+                                                <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                    @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                                    { <br /> }
+                                                    else
+                                                    { @buildingCell.metricValue }
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                </table>
                             </div>
-                        </div>  <!-- End of block with 12 Month Value Columns -->
-                    </div>
+                        </div>  <!-- End of 'Months' columns block -->
+                        <div class="col-sm-1 buildingCol">
+                            -
+                        </div>
+                    </div> @*  <------- End of BuildingRow Rows Data Section ---- *@
                 }
                     <div class="row buildingRow " style="background-color: lightgreen">
                         <div class="col-sm-2 buildingCol">
-                            <a href="#">Goals Missed</a>
+                            @Model.buildingScoreRow.rowName
                         </div>  <!-- Metric Name Column -->
-
                         <div class="col-sm-1 buildingCol" >
-                            <text>-</text>
+                            <br />
                         </div>  <!-- Goal Column -->
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             <div class="row ">
-                                @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in Model.buildingScoreRow.entityMetricCells)
-                                {
-                                    if (buildingCell.isViewable)
-                                    {
-                                        <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
-                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                            { <br /> }
-                                            else
-                                            { @buildingCell.metricValue }
-                                        </div>
-                                    }
-                                }
-                                <div class="col-sm-1 buildingCol">
-                                    -
-                                </div>
+                                <table style="width:100%">
+                                    <tr class="valueRow">
+                                        @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in Model.buildingScoreRow.entityMetricCells)
+                                        {
+                                            if (buildingCell.isViewable)
+                                            {
+                                                <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                    @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                                    { <br /> }
+                                                    else
+                                                    { @buildingCell.metricValue }
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                </table>
                             </div>
                         </div>  <!-- End of Goals Missed block with 12 Month Value Columns -->
-                    </div>
+                        <div class="col-sm-1 buildingCol">
+                            -
+                        </div>
+                    </div> @*  <------- End of Total Goals Missed Data Section ---- *@
                 </div> <!-- End of DIV Table Table -->
             </div>
         </div>

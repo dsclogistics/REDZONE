@@ -431,29 +431,32 @@ namespace REDZONE.AppCode
                 //-------Temp hardcoding data until API provides correct Values -----------
                 int intYear = 0;
                 if (!(Int32.TryParse(year, out intYear))) { intYear = 9999; }
-                bSummary.urlNextPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear + 1).ToString(), buildingID );
-                bSummary.urlPrevPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear - 1).ToString(), buildingID );
-                bSummary.statusNextPeriod = "disabled";
-                bSummary.statusPrevPeriod = "disabled";
+
+                bSummary.urlNextPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear + 1).ToString(), buildingID);
+                bSummary.urlPrevPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear - 1).ToString(), buildingID);
+                //bSummary.urlNextBuilding = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, intBuilding + 1);
+                //bSummary.urlPrevBuilding = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, intBuilding - 1);
+                bSummary.statusPrevPeriod = (intYear < 2016) ? "disabled" : "";
+                bSummary.statusNextPeriod = (DateTime.Today.Year == intYear) ? "disabled" : "";
                 //------- END of hardcoding data ------------------------------------------
 
                 JObject parsed_result = JObject.Parse(raw_data);
                 bSummary.bName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
                 bSummary.bId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
                 string[] prevNext = getPrevNextBuildingUrl(year, bSummary.bId);//prevNext[0]=prev url, prevNext[1]=next url
-                bSummary.statusPrevPeriod = prevNext[0] == "disabled" ? prevNext[0] : "";
-                bSummary.statusNextPeriod = prevNext[1] == "disabled" ? prevNext[1] : "";
-                bSummary.urlPrevPeriod = prevNext[0];
-                bSummary.urlNextPeriod = prevNext[1];
+                bSummary.statusPrevBuilding = prevNext[0] == "disabled" ? prevNext[0] : "";
+                bSummary.statusNextBuilding = prevNext[1] == "disabled" ? prevNext[1] : "";
+                bSummary.urlPrevBuilding = prevNext[0];
+                bSummary.urlNextBuilding = prevNext[1];
                 JArray apiMetrics = (JArray)parsed_result["metrics"];
                 JArray months = (JArray)parsed_result["Months"];
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 List<MeasuredRowEntity> rowMetrics = new List<MeasuredRowEntity>();//all metrics
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();//all metric values
                 MeasuredRowEntity header = new MeasuredRowEntity();
-                MeasuredRowEntity score = new MeasuredRowEntity();
+                MeasuredRowEntity rowTotals = new MeasuredRowEntity();
                 header.rowName = bSummary.bName;
-                score.rowName = "Score";
+                rowTotals.rowName = "Goals Missed";
 
                 if (apiMetrics.HasValues)
                 {
@@ -463,25 +466,32 @@ namespace REDZONE.AppCode
                         row.rowName = (string)mtr["mtrc_prod_display_text"];
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
-                        row.scoreGoal = "Goal";
+                        row.scoreGoal = "<Undefined>";
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         if (months.HasValues)
                         {
                             foreach (var m in months)
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity totalCol = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
                                 temp.isViewable = false;
                                 row.entityMetricCells.Add(temp);
                                 if(header.entityMetricCells.Count< months.Count)
-                                { header.entityMetricCells.Add(temp); }
-                                
+                                { 
+                                    header.entityMetricCells.Add(temp);
+                                    //We also add a corresponding Cell to the "Totals" Row
+                                    totalCol.metricName = (string)m["Month"];
+                                    totalCol.metricValue = "---";
+                                    totalCol.isViewable = false;
+                                    rowTotals.entityMetricCells.Add(totalCol);
+                                }
                             }
                         }
                         if (apiBuildingsMetrics.HasValues)
                         {
-                            foreach (var apiCellValue in apiBuildingsMetrics)
+                            foreach (var apiCellValue in apiBuildingsMetrics)  // For each element of the full values Array retrieved by API
                             {
                                 if (row.rowMeasuredId == (string)apiCellValue["mtrc_id"])
                                 {
@@ -490,26 +500,46 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                            //If value missed the Goal, increase the Missed Goals counter
+                                               // ---- TO DO ----  ////
+                                            // <--- Finished increasing th Missed Goal Counter
                                             tmp.isViewable = true;
                                         }
-                                       
                                     }
-                                   
                                 }
+                                //Set the correponding month column Goal as viewable, since there is data for that column
+                                var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
+                                goalRow.isViewable = true;                                
                             }
+                            // Populate the number of columns that are "Viewable"
                         }
                         rowMetrics.Add(row);
                     }                  
                     bSummary.buildingHeadings = header;
-                    bSummary.buildingScoreRow = score;
+                    bSummary.buildingScoreRow = rowTotals;
+                    bSummary.activeColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
-                   
+                    // Loop through all the Goals Missed Row and set the color accordingly
+                    foreach (var goalRowColTotal in bSummary.buildingScoreRow.entityMetricCells)
+                    { 
+                        try{
+                            int totalReds = Convert.ToInt16(goalRowColTotal.metricValue);
+                            if ( goalRowColTotal.metricValue.Equals("---") || totalReds < 3) { goalRowColTotal.metricColor = "lightgreen"; }
+                            else if (totalReds == 3) { goalRowColTotal.metricColor = "yellow"; }
+                            else if (totalReds == 4) { goalRowColTotal.metricColor = "orange"; }
+                            else { goalRowColTotal.metricColor = "red"; }
+                        }
+                        catch{
+                            goalRowColTotal.metricColor = "lightgreen";
+                        }                    
+                    }
                 }
 
             }
             catch (Exception e) { string error = e.Message; }
             return bSummary;
         }
+
         public MetricSummaryViewModel getMetricSummaryView(string year, string metricID)
         {
             MetricSummaryViewModel mSummary = new MetricSummaryViewModel();
@@ -750,36 +780,31 @@ namespace REDZONE.AppCode
                 if (apiBuildings.HasValues)
                 {
                     JToken current = (JToken)apiBuildings.FirstOrDefault(x => x["dsc_mtrc_lc_bldg_id"].ToString() == buildingID);
+                    JToken next;
+                    JToken prev;
                     if (current == apiBuildings.Last)
                     {
-                        JToken next = apiBuildings.First;
-                        JToken prev = current.Previous;
-                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
-                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                        next = apiBuildings.First;
+                        prev = current.Previous;
                     }
                     else if (current == apiBuildings.First)
                     {
-                        JToken next = current.Next;
-                        JToken prev = apiBuildings.Last;
-                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
-                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                        next = current.Next;
+                        prev = apiBuildings.Last;
+                        
                     }
                     else
                     {
-                        JToken next = current.Next;
-                        JToken prev = current.Previous;
-                        prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
-                        prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
+                        next = current.Next;
+                        prev = current.Previous;                        
                     }
+                    prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)prev["dsc_mtrc_lc_bldg_id"]);
+                    prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, (string)next["dsc_mtrc_lc_bldg_id"]);
                 }
-
-              }//end of try
-                catch{ }
-           
-
+            }//end of try
+            catch{ }
             
             return prevNext;
-
         }
     }
 }

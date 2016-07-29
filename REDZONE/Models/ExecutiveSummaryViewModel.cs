@@ -43,7 +43,7 @@ namespace REDZONE.Models
         public string buildingId { get; set; }
 
         public string url { get; set; }
-        public List<MeasuredCellEntity> entityMetrics = new List<MeasuredCellEntity>();        
+        public List<MeasuredCellEntity> entityMetrics = new List<MeasuredCellEntity>();
 
         //-------- Empty Constructor -----------
         public BuildingMetricEntity() { }
