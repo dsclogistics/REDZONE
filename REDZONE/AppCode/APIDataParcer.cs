@@ -35,7 +35,23 @@ namespace REDZONE.AppCode
 
             try {
                 JObject parsed_result = JObject.Parse(raw_data);
-
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive") ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
+               
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) ? "disabled" : "";
+                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]))
+                {
+                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
+                    string[] prev_date_time = ((string)parsed_result["metricdetail"]["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    rz_metric.lastMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, prev_date_time[0], prev_date_time[1]);
+                }
+                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]))
+                {
+                    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                    string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, next_date_time[0], next_date_time[1]);
+                }
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
                 rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
@@ -54,24 +70,7 @@ namespace REDZONE.AppCode
                 rz_metric.maxDecPlaces = (string)parsed_result["metricdetail"]["mtrc_max_dec_places"];
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
-                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"])|| String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive")?"disabled":"";
-                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
                 if (rz_metric.metricPeriodStatus.ToUpper().Equals("CLOSED")) { rz_metric.isImportable = false; }
-                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) ? "disabled" : "";
-                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) ? "disabled" : "";
-                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]))
-                {
-                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
-                    string[] prev_date_time = ((string)parsed_result["metricdetail"]["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    rz_metric.lastMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, prev_date_time[0], prev_date_time[1]);
-                }
-                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]))
-                {
-                    //parsed_result["metricdetail"]["nextperiod"] May-2016
-                    string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, next_date_time[0], next_date_time[1]);
-                }
-
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
                 {
@@ -90,17 +89,19 @@ namespace REDZONE.AppCode
             catch {
                 // Default Some Dummy Values since valid data could not be retrieved
                 DateTime currentMonth = new DateTime( Convert.ToInt16(year), monthToInt(month), 1);
+                rz_metric.metric_period_start_date = currentMonth;
                 rz_metric.prodName = "Red Zone";
                 rz_metric.id = metric_id;
                 rz_metric.metricName = "Requested Metric Period invalid or does not Exist";
                 rz_metric.period_Type = METRICPERIODS.Month;
-                rz_metric.metric_period_start_date = currentMonth;
-                rz_metric.metric_period_end_date = currentMonth;
-                rz_metric.periodName = "Requested Metric Period invalid or does not Exist";
-                rz_metric.metricPeriodID = 0;
+               
+                //rz_metric.metric_period_start_date = currentMonth;
+                //rz_metric.metric_period_end_date = currentMonth;
+               rz_metric.periodName = "Requested Metric Period invalid or does not Exist";
+                
                 rz_metric.metricPeriodStatus = "Closed";
-                rz_metric.metricPrevPeriodStatus = "disabled";
-                rz_metric.metricNextPeriodStatus = "disabled";
+                //rz_metric.metricPrevPeriodStatus = "disabled";
+                //rz_metric.metricNextPeriodStatus = "disabled";
             }
             rz_metric.buildingList = rz_metric.buildingList.OrderBy(x => x.buildingName).ToList();
             return rz_metric;
@@ -114,6 +115,23 @@ namespace REDZONE.AppCode
             ExcelMetric eMetric = excelReader.readValidatedExcelFile(file);
             try
             {
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]).Equals("Inactive") ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) || String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]).Equals("Inactive") ? "disabled" : "";
+
+                rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]) ? "disabled" : "";
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]) ? "disabled" : "";
+                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]))
+                {
+                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
+                    string[] prev_date_time = ((string)parsed_result["metricdetail"]["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    rz_metric.lastMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, prev_date_time[0], prev_date_time[1]);
+                }
+                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]))
+                {
+                    //parsed_result["metricdetail"]["nextperiod"] May-2016
+                    string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, next_date_time[0], next_date_time[1]);
+                }
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
                 rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
@@ -133,19 +151,7 @@ namespace REDZONE.AppCode
                 rz_metric.maxStrSize = (string)parsed_result["metricdetail"]["mtrc_max_str_size"];
                 rz_metric.metricPeriodStatus = (string)parsed_result["metricdetail"]["rz_mps_status"];
                 rz_metric.metricPrevPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"])? "disabled" : "";
-                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"])? "disabled" : "";
-                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["previousperiod"]))
-                {
-                    //parsed_result["metricdetail"]["previousperiod"] has May-2016 format
-                    string[] prev_date_time = ((string)parsed_result["metricdetail"]["previousperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    rz_metric.lastMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, prev_date_time[0], prev_date_time[1]);
-                }
-                if (!String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"]))
-                {
-                    //parsed_result["metricdetail"]["nextperiod"] has May-2016 format
-                    string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", rz_metric.id, next_date_time[0], next_date_time[1]);
-                }
+                rz_metric.metricNextPeriodStatus = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["nextperiod"])? "disabled" : "";           
 
                 JArray jbldg = (JArray)parsed_result["locationdetails"];
                 foreach (var res in jbldg)
@@ -180,14 +186,19 @@ namespace REDZONE.AppCode
             {
                 // Default Some Dummy Values since valid data could not be retrieved
                 DateTime currentMonth = new DateTime(Convert.ToInt16(year), monthToInt(month), 1);
+                rz_metric.metric_period_start_date = currentMonth;
                 rz_metric.prodName = "Red Zone";
                 rz_metric.id = metric_id;
-                rz_metric.metricName = "Requested Metric Period does not Exist";
+                rz_metric.metricName = "Requested Metric Period invalid or does not Exist";
                 rz_metric.period_Type = METRICPERIODS.Month;
-                rz_metric.metric_period_start_date = currentMonth;
-                rz_metric.metric_period_end_date = currentMonth;
-                rz_metric.periodName = "Requested Metric Period does not Exist";
-                rz_metric.metricPeriodID = 0;
+
+                //rz_metric.metric_period_start_date = currentMonth;
+                //rz_metric.metric_period_end_date = currentMonth;
+                rz_metric.periodName = "Requested Metric Period invalid or does not Exist";
+
+                rz_metric.metricPeriodStatus = "Closed";
+                //rz_metric.metricPrevPeriodStatus = "disabled";
+                //rz_metric.metricNextPeriodStatus = "disabled";
             }
             rz_metric.buildingList = rz_metric.buildingList.OrderBy(x => x.buildingName).ToList();
             return rz_metric;
