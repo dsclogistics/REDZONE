@@ -12,37 +12,14 @@
 }
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
-
-
-<style>
-    .buildingRow:hover {
-        background-color: #f1f1f1;
-    }
-    .headerRow {
-       padding: 4px; 
-       font-weight:bold;
-       width:98%;
-    }
-    .buildingRow {
-        padding: 3px;
-        border-bottom: 1px solid #f1f1f1;
-        width:98%;
-    }
-    .buildingCol {
-        border-right: 1px dashed #f1f1f1;   /*#f1f1f1*/
-        text-align:center;
-    }
-</style>
-
 <div class="row">
     <input type="hidden" id="frmModified" value="N" />
     <input type="hidden" id="frmErrors" value="0" />
 </div>
-<div class="row" style="font-family:Arial; margin-top: 5px">
-    <div class="col-sm-1"></div>
-    <div class="col-md-10 " style="margin-left:15px; padding:0;">
-        <div class="panel panel-default" style="margin-bottom:0px; " title="@tblCaption">
-            <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
+<div class="row" style="font-family:Arial; margin-top: 5px; width:100%;">
+    <div class="col-md-10 " style="margin-left:20px; padding:0;">
+        <div class="panel panel-default" style="margin: 0px 0px 0px 0px;" title="@tblCaption">
+            <div class="panel-heading" style="text-align:center; padding: 0px 15px;">
                 <div class="row">
                     <div class="col-sm-11">
                         <div class="row @titleClass">
@@ -87,18 +64,16 @@
                     <br />
                      [Metric Min Value: @Model.mtrcMinVal ], [Metric Max Value: @Model.mtrcMaxVal ], [Val Dec Places: @Model.maxDecPlaces ], [Val String Length: @Model.maxStrSize]
                 </div>*@
-
-
             </div>
 
         @if (!Model.periodName.Equals("Requested Metric Period invalid or does not Exist"))
         {
-            <div class="panel-body">
-                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 10px">
+            <div class="panel-body" style="padding: 8px; width:100%">
+                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; width:100%" >
                     <!-- Table -->
-                    <div class="row" style="margin:0px 1px; padding:0; text-align:center; background-color:aliceblue; border-bottom: 1px solid lightgrey;">
-                        <div class="row headerRow">
-                            <div class="col-sm-2 col-sm-offset-4 buildingCol">
+                    <div class="row" style="margin:0px 1px; padding:0; text-align:center; background-color:aliceblue; border-bottom: 1px solid lightgrey; width:98.7%">
+                        <div class="row headerRow" style="margin-right:50px">
+                            <div class="col-sm-2 col-sm-offset-4 buildingCol" >
                                 Building Name
                             </div>
                             <div class="col-sm-2 buildingCol">
@@ -109,27 +84,27 @@
                     @{
                         string fontColor = Model.metricPeriodStatus.ToUpper().Equals("CLOSED")?"darkgray":"black";
                     }
-                    <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; text-align:center; color:@fontColor">
+                    <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; overflow-x:hidden; text-align:center; color:@fontColor">
                         @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                         {
                             <div class="row buildingRow">
                                 <div class="col-sm-2 col-sm-offset-4 buildingCol">
                                     @dscBldng.buildingName
                                 </div>
-                                <div class="col-sm-2 buildingCol" style="text-align:center">
+                                <div class="col-sm-2 buildingCol">
                                     <div class="row">
-                                      @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
-                                      {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                        <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; " readonly="readonly" /><br />
-                                      }
-                                      else
-                                      {
-                                          <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
-                                          if (dscBldng.naAllowed) 
-                                          { 
-                                              <TEXT><span style="color:blue; font-weight:bold">*</span></TEXT>
-                                          }
-                                      }
+                                        @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
+                                        {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
+                                            <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; " readonly="readonly" /><br />
+                                        }
+                                        else
+                                        {
+                                            <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
+                                            if (dscBldng.naAllowed)
+                                            {
+                                                <TEXT><span style="color:blue; font-weight:bold">*</span></TEXT>
+                                            }
+                                        }
                                     </div>
                                     <div class="row" style="text-align:center;">
                                         <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
@@ -168,9 +143,6 @@
 </div>
 <br />
 
-<div id="posData" class="alert-info">
-    @*@Model.headerJson*@
-</div>
 <div id="output"></div>
 
 @* //=============================================== MODAL CONTAINER FOR POP UP WINDOWS ==================================\\
@@ -288,7 +260,6 @@
         //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
         var payload = buildJSON();
         //alert("Posting Data: \n" + payload);
-        //$("#posData").html(payload);    //For Debug Purposes
         var saveClose = !doClose;
         if (doClose){
             if(confirm("Are you sure you want to close the current Metric Period?")){
