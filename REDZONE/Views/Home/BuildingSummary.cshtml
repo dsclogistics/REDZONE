@@ -17,7 +17,8 @@
                                 <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
                             </div>
                             <div class="col-sm-1">
-                                <input type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">
+                                <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" /></a>
+                                @*<input type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">*@
                             </div>
                         </div>
                         <div class="row" style="margin-bottom:3px">
@@ -43,7 +44,7 @@
                                     </button>
                                 </span>
                                 @*<span style="min-width:100%; text-align:center; vertical-align:middle; font-size:large; padding:0px">Period: @Model.year</span>*@
-                                <input type="text" class="form-control" value="Period: @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large; padding:0px">
+                                <input type="text" class="form-control" value="@Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large; padding:0px">
                                 <span class="input-group-btn">
                                     <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
                                         <span class="glyphicon glyphicon-chevron-right"></span>

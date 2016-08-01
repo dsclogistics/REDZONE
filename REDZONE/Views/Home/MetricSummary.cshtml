@@ -25,7 +25,8 @@ else {
                                 <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Summary</span>
                             </div>
                             <div class="col-sm-1">
-                                <input type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">
+                                <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" /></a>
+                                @*<input if="backToDashboard" type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">*@
                             </div>
                         </div>
                         <div class="row" style="margin-bottom:10px">
@@ -61,7 +62,8 @@ else {
                                     if (dscBldngHdr.isViewable)
                                     {
                                         <div class="col-sm-1 buildingCol headerCol">
-                                            <a href="#">@dscBldngHdr.metricName</a>
+                                            <span style="font-weight:bold">@dscBldngHdr.metricName</span>
+                                            @*<a href="#">@dscBldngHdr.metricName</a>*@
                                         </div>
                                     }
 
@@ -139,5 +141,8 @@ else {
         $(".menuItem").removeClass("menuSelected");
         //$(".menuItem").addClass("menuUnselected");
         $("#mDashboard").addClass("menuSelected");
+        $("#backToDashboard").click(function () {
+            location.href("/Home/Index");
+        })
     });
 </script>
