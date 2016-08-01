@@ -91,7 +91,8 @@ namespace REDZONE.Models
         public string scoreGoal { get; set; }
         public string redTotals { get; set; }
         public string scoreGoalColor { get; set; }
-        public string redTotalColor { get; set; }        
+        public string redTotalColor { get; set; }
+        public string displayClass { get; set; }
 
         public List<MeasuredCellEntity> entityMetricCells = new List<MeasuredCellEntity>();
 

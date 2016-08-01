@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Building Summary";
-    int colCounter = 0;
+    int colCounter = 0;    
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
@@ -59,10 +59,17 @@ else {
                             <div class="row">
                                 @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                 {
+                                    string sortIcon = String.IsNullOrEmpty(dscBldngHdr.metricColor) ? "glyphicon-sort" : Model.metricName.Equals("ASC") ? "glyphicon-sort-by-attributes" : "lyphicon-sort-by-attributes-alt";
+                                    string hdrClass = String.IsNullOrEmpty(dscBldngHdr.metricColor) ? "btn-default" : "btn-primary";
                                     if (dscBldngHdr.isViewable)
                                     {
                                         <div class="col-sm-1 buildingCol headerCol">
-                                            <span style="font-weight:bold">@dscBldngHdr.metricName</span>
+                                            <button type="button" class="btn btn-default btn-sm" aria-label="Sort by">
+                                                <span class="glyphicon glyphicon-sort" aria-hidden="true"><span style="font-weight:bold"> @dscBldngHdr.metricName</span></span>
+                                            </button>
+
+
+                                            @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
                                             @*<a href="#">@dscBldngHdr.metricName</a>*@
                                         </div>
                                     }
