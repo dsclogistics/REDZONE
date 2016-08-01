@@ -398,6 +398,10 @@ namespace REDZONE.AppCode
                                             tmp.tm_period_id = (string)mtrc["tm_period_id"];
                                             tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
                                             tmp.metricMonth = (string)mtrc["MonthName"];
+                                            if((string)mtrc["data_type_token"]=="pct" && tmp.metricValue != "N/A")
+                                            {
+                                                tmp.metricValue = tmp.metricValue + "%";
+                                            }
                                             if (eSummary.allMonths.IndexOf(tmp.metricMonth) == -1)
                                             {
                                                 eSummary.allMonths.Add(tmp.metricMonth);
@@ -511,6 +515,10 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                            if((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
+                                            {
+                                                tmp.metricValue = tmp.metricValue + "%";
+                                            }
                                             //If value missed the Goal, increase the Missed Goals counter
                                                // ---- TO DO ----  ////
                                             // <--- Finished increasing th Missed Goal Counter
@@ -592,7 +600,8 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity goalCell = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
-                                temp.isViewable = false;
+                                temp.metricDoubleValue = -99999;
+                                temp.isViewable = false;                                
                                 row.entityMetricCells.Add(temp);
 
                                 goalCell.metricMonth = (string)m["Month"];
@@ -614,7 +623,12 @@ namespace REDZONE.AppCode
                                         if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                            tmp.metricDoubleValue = tmp.metricValue == "N/A" ? 9999 : Convert.ToDouble(tmp.metricValue);
                                             tmp.isViewable = true;
+                                            if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A")
+                                            {
+                                                tmp.metricValue = tmp.metricValue + "%";
+                                            }
                                         }
                                     }
                                 }

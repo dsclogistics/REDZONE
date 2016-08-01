@@ -39,7 +39,9 @@ namespace REDZONE.Controllers
         public ActionResult MetricSummary(string year, string metricID)
         {
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID);
-           
+            //dashBoard.metricRows = dashBoard.metricRows.OrderBy(row => row.entityMetricCells.Single(x=>x.metricName=="May").metricDoubleValue).ToList();
+
+
             return View(dashBoard);
         }
 

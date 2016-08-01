@@ -55,6 +55,7 @@ namespace REDZONE.Models
     {// This represents a single Cell in the Executive Summary Spreadsheet
         public string metricName { get; set; }
         public string metricValue { get; set; }
+        public double metricDoubleValue { get; set; }
         public string metricColor { get; set; }
         public string mtrc_period_id { get; set; }
         public string metricMonth { get; set; }
