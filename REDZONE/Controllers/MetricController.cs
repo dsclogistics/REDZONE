@@ -22,7 +22,8 @@ namespace REDZONE.Controllers
             if (metricId == 0) { returnURL = ""; }
             if (Session["username"] == null) { return RedirectToAction("LogOff", "Account", new { backUrl = returnURL }); }
             if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
-            return View(parcer.getRZ_Metric(metricId, month, year));
+            RZ_Metric rz_metric = parcer.getRZ_Metric(metricId, month, year);
+            return View(rz_metric);
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
