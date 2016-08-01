@@ -578,15 +578,18 @@ namespace REDZONE.AppCode
                             foreach (var m in months)
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity goalCell = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
                                 temp.isViewable = false;
                                 row.entityMetricCells.Add(temp);
+
+                                goalCell.metricMonth = (string)m["Month"];
+                                goalCell.metricValue = "---";              //getMonthGoal((string)m["Month"]);
                                 if (header.entityMetricCells.Count < months.Count)
                                 { header.entityMetricCells.Add(temp); }
                                 if (goal.entityMetricCells.Count < months.Count)
-                                { goal.entityMetricCells.Add(new MeasuredCellEntity(String.Empty)); }
-
+                                { goal.entityMetricCells.Add(goalCell); }
                             }
                         }
                         if (apiBuildingsMetrics.HasValues)
@@ -602,10 +605,11 @@ namespace REDZONE.AppCode
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                             tmp.isViewable = true;
                                         }
-                                        
                                     }
-
                                 }
+                                //Set the correponding month column Goal as viewable, since there is data for that column
+                                var goalRow = goal.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]);
+                                goalRow.isViewable = true;
                             }
                         }
                         rowMetrics.Add(row);
