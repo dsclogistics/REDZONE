@@ -156,10 +156,14 @@ else {
             var sort_Month = $(this).parent().find("#sortMonth").first().val();
             var sort_Dir = $(this).parent().find("#sortOrder").first().val();
             //alert("Current Sort is: " + sort_Dir);
+            
             if (sort_Dir == "" || sort_Dir == "DESC") { sort_Dir = "ASC"; } else { sort_Dir = "DESC"; };
-            var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;            
+            var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;
             //alert(gotoURL);
-            location.href(gotoURL);            
+            location.href=gotoURL;
+            
+
+
         });
     });
 </script>
