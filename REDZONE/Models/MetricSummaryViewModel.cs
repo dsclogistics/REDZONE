@@ -21,6 +21,15 @@ namespace REDZONE.Models
         public MeasuredRowEntity rowHeadings = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
 
+        public int viewableColumns { get; set; }
+        public string metricColWidth
+        {
+            get
+            {
+                viewableColumns = (viewableColumns == 0) ? 1 : viewableColumns;   //Default a value of 1 if zero
+                return (1.00 / viewableColumns).ToString("0.0%");
+            }
+        }
         //-------- Empty Constructor -----------
         public MetricSummaryViewModel() { }
         //\-------- End of Constructor ----------/

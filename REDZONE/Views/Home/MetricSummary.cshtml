@@ -5,7 +5,11 @@
     int colCounter = 0;    
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
-
+<style>
+    .monthCol {
+        width: 120px;
+    }
+</style>
 @if (String.IsNullOrEmpty(Model.metricID)) { 
 <div style="margin-top:250px; color:red">
     <img src="~/Images/confused-emoticon.jpg" />
@@ -52,18 +56,23 @@ else {
                     <!-- Table -->
                     <!-- ROWS -->
                     <div class="row headerRow row-eq-height">
-                        <div class="col-sm-2 buildingCol headerCol">
-                            <span style="font-weight:bold"> @Model.rowHeadings.rowName</span>
+                        <div class="col-sm-2 buildingCol headerCol" >
+                            <button type="button" id="sortBuilding" class="btn btn-sm" aria-label="Sort by" style="padding:0px 2px">
+                                <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true">
+                                    <span style="font-weight:bold"> @Model.rowHeadings.rowName</span>
+                                </span>                                
+                            </button>                            
                         </div>  <!-- Metric Name Column -->                        
                         <div class="col-sm-9">
                             <div class="row">
                                 @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                 {
                                     string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+                                    //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
                                     string btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
                                     if (dscBldngHdr.isViewable)
                                     {
-                                        <div class="col-sm-1 buildingCol headerCol">
+                                        <div class="col-sm-1 buildingCol headerCol monthCol">
                                             <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
                                             <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
                                             <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px">
@@ -90,7 +99,7 @@ else {
                             {
                                 if (bldngMV.isViewable)
                                 {
-                                    <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                    <div class="col-sm-1 buildingCol monthCol" style="background-color:@bldngMV.metricColor">
                                         @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                         { <br /> }
                                         else
@@ -124,14 +133,14 @@ else {
                                     {
                                         bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
                                         if (cellIsViewable)
-                                       {
-                                        <div class="col-sm-1 buildingCol" style="background-color:@buildingCell.metricColor">
-                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                            { <br /> }
-                                            else
-                                            { @buildingCell.metricValue }
-                                        </div>
-                                       }
+                                        {
+                                            <div class="col-sm-1 buildingCol monthCol" style="background-color:@buildingCell.metricColor">
+                                                @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                                { <br /> }
+                                                else
+                                                { @buildingCell.metricValue }
+                                            </div>
+                                        }
                                         colCounter++;
                                     }
                                 </div>
@@ -156,14 +165,15 @@ else {
             var sort_Month = $(this).parent().find("#sortMonth").first().val();
             var sort_Dir = $(this).parent().find("#sortOrder").first().val();
             //alert("Current Sort is: " + sort_Dir);
-            
+
             if (sort_Dir == "" || sort_Dir == "DESC") { sort_Dir = "ASC"; } else { sort_Dir = "DESC"; };
             var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;
             //alert(gotoURL);
             location.href=gotoURL;
-            
-
-
+        });
+        $("#sortBuilding").click(function () {
+            var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID";
+            location.href = gotoURL;
         });
     });
 </script>

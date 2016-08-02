@@ -581,7 +581,7 @@ namespace REDZONE.AppCode
                 mSummary.urlPrevMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[0];
                 mSummary.urlNextMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[1];
                 MeasuredRowEntity header = new MeasuredRowEntity();
-                header.rowName = "";
+                header.rowName = "Buildings";
                 MeasuredRowEntity goal = new MeasuredRowEntity();
                 goal.rowName = "Goal";
                 if (apiBuildings.HasValues)
@@ -641,6 +641,7 @@ namespace REDZONE.AppCode
                     }
                     mSummary.rowGoal = goal;
                     mSummary.rowHeadings = header;
+                    mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;
                 }
 

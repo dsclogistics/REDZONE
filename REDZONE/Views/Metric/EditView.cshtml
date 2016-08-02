@@ -450,7 +450,7 @@
 
         if (dataType == "int")
         {// Integer Value cannot have decimal values
-            if (txtValue.includes(".")) {
+            if (txtValue.indexOf(".") >= 0) {
                 validationMessage =  "Value must not contain decimals";
             }
         }else
