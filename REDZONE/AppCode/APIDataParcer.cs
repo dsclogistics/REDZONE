@@ -15,7 +15,9 @@ namespace REDZONE.AppCode
         //--------------------- CONSTANTS ---------------------
         const string COLOR_YELLOW = "yellow";
         const string COLOR_GREEN = "lightgreen";
-        const string COLOR_RED = "#ffbb8b";   //or #ffbb8b or "orangered"
+        const string COLOR_LIGHT_GREEN = "#7CFC00";//#7CFC00 or "LawnGreen"  FELICIANO, FEEL FREE TO CHANGE THIS!!!!!!!
+        const string COLOR_RED = "#ffbb8b";   //or #ffbb8b or "orangered"   
+        const string COLOR_LIGHT_RED = "#FA8072";// #FA8072 or Salmon        FELICIANO, FEEL FREE TO CHANGE THIS!!!!!!!
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -365,7 +367,8 @@ namespace REDZONE.AppCode
                         eSummary.allMetrics.Add(metricName);
                         MeasuredCellEntity goalMetric = new MeasuredCellEntity();
                         goalMetric.metricName = metricName.metricName;
-                        goalMetric.metricValue = getGoalforMetric(metricName.metricName);
+                        //goalMetric.metricValue = getGoalforMetric(metricName.metricName);
+                        goalMetric.metricValue = (string)mtr["mpg_display_text"];
                         eSummary.goal.entityMetrics.Add(goalMetric);
                     }
                     //eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();
@@ -417,7 +420,7 @@ namespace REDZONE.AppCode
                                                 eSummary.allMonths.Add(tmp.metricMonth);
                                             }
                                             
-                                            // tmp.metricColor = getMetricColor(tmp.metricName, tmp.metricValue);
+                                            tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"],"");
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
                                     }
@@ -491,7 +494,7 @@ namespace REDZONE.AppCode
                         row.rowName = (string)mtr["mtrc_prod_display_text"];
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
-                        row.scoreGoal = "<Undefined>";
+                        row.scoreGoal = (string)mtr["mpg_display_text"];
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         if (months.HasValues)
                         {
@@ -529,8 +532,9 @@ namespace REDZONE.AppCode
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
                                             //If value missed the Goal, increase the Missed Goals counter
-                                               // ---- TO DO ----  ////
+                                            // ---- TO DO ----  ////
                                             // <--- Finished increasing th Missed Goal Counter
                                             tmp.isViewable = true;
                                         }
@@ -585,6 +589,7 @@ namespace REDZONE.AppCode
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
                 mSummary.metricName = (string)parsed_result["mtrc_prod_display_text"];
                 mSummary.metricID = (string)parsed_result["mtrc_id"];
+                string mGoalText = (string)parsed_result["mpg_display_text"];
                 string[] prevNext = getPrevNextMetricsUrl(year, mSummary.metricID);//prevNext[0]=prev url, prevNext[1]=next url
                 mSummary.statusPrevMetric = prevNext[0] == "disabled" ? prevNext[0] : "";
                 mSummary.statusNextMetric = prevNext[1] == "disabled" ? prevNext[1] : "";
@@ -615,7 +620,7 @@ namespace REDZONE.AppCode
                                 row.entityMetricCells.Add(temp);
 
                                 goalCell.metricMonth = (string)m["Month"];
-                                goalCell.metricValue = "---";              //getMonthGoal((string)m["Month"]);
+                                goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
                                 if (header.entityMetricCells.Count < months.Count)
                                 { header.entityMetricCells.Add(temp); }
                                 if (goal.entityMetricCells.Count < months.Count)
@@ -639,7 +644,9 @@ namespace REDZONE.AppCode
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
                                         }
+                                        
                                     }
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
@@ -666,12 +673,18 @@ namespace REDZONE.AppCode
 
 
         //========= This Function "getMetricColor" will be replaced by either some other logic or a value returned by an API =========
-        private string getMetricColor(string mName, string mValue)
+        private string getMetricColor(string mValue, string isGoalMet,string status)
         {
             string mColor = "lightgray";
-            //string mColor = "blue";
-            //double dValue = 0.00;
-            //if (String.IsNullOrEmpty(mValue)) return "lightgray";
+
+            if (String.IsNullOrEmpty(mValue)|| mValue == "N/A") return "lightgray";
+            if (status == "Open")
+            {
+                if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;
+                if (isGoalMet == "N") return COLOR_LIGHT_RED;
+            }
+            if (isGoalMet == "Y") return COLOR_GREEN;
+            if (isGoalMet == "N") return COLOR_RED;
 
             //switch (mName)
             //{
