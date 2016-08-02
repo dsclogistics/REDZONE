@@ -159,7 +159,7 @@ else {
             if (sort_Dir == "" || sort_Dir == "DESC") { sort_Dir = "ASC"; } else { sort_Dir = "DESC"; };
             var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;            
             //alert(gotoURL);
-            location.href(gotoURL);            
+            location.href = gotoURL;            
         });
     });
 </script>
