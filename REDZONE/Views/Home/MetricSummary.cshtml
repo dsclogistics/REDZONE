@@ -59,15 +59,16 @@ else {
                             <div class="row">
                                 @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                 {
-                                    string sortIcon = String.IsNullOrEmpty(dscBldngHdr.metricColor) ? "glyphicon-sort" : Model.metricName.Equals("ASC") ? "glyphicon-sort-by-attributes" : "lyphicon-sort-by-attributes-alt";
-                                    string hdrClass = String.IsNullOrEmpty(dscBldngHdr.metricColor) ? "btn-default" : "btn-primary";
+                                    string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+                                    string btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
                                     if (dscBldngHdr.isViewable)
                                     {
                                         <div class="col-sm-1 buildingCol headerCol">
-                                            <button type="button" class="btn btn-default btn-sm" aria-label="Sort by">
-                                                <span class="glyphicon glyphicon-sort" aria-hidden="true"><span style="font-weight:bold"> @dscBldngHdr.metricName</span></span>
+                                            <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
+                                            <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
+                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by">
+                                                <span class="glyphicon @sortIcon" aria-hidden="true"><span style="font-weight:bold"> @dscBldngHdr.metricName</span></span>
                                             </button>
-
 
                                             @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
                                             @*<a href="#">@dscBldngHdr.metricName</a>*@
@@ -150,6 +151,15 @@ else {
         $("#mDashboard").addClass("menuSelected");
         $("#backToDashboard").click(function () {
             location.href("/Home/Index");
-        })
+        });
+        $(".sortButton").click(function () {
+            var sort_Month = $(this).parent().find("#sortMonth").first().val();
+            var sort_Dir = $(this).parent().find("#sortOrder").first().val();
+            //alert("Current Sort is: " + sort_Dir);
+            if (sort_Dir == "" || sort_Dir == "DESC") { sort_Dir = "ASC"; } else { sort_Dir = "DESC"; };
+            var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;            
+            //alert(gotoURL);
+            location.href(gotoURL);            
+        });
     });
 </script>

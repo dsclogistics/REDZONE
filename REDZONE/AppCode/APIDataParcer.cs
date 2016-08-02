@@ -562,7 +562,7 @@ namespace REDZONE.AppCode
         public MetricSummaryViewModel getMetricSummaryView(string year, string metricID)
         {
             MetricSummaryViewModel mSummary = new MetricSummaryViewModel();
-            string raw_data = api.getMetricSummary("Red Zone", "Month", metricID,year);
+            string raw_data = api.getMetricSummary("Red Zone", "Month", metricID, year);
             mSummary.metricName = "";
             mSummary.year = year;
             try

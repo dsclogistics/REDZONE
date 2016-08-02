@@ -64,7 +64,7 @@ namespace REDZONE.Models
         public string dsc_mtrc_lc_bldg_id { get; set; }
         public string cellValueURL { get; set; }
         public bool isViewable { get; set; }
-
+        public string displayClass { get; set; }
 
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
@@ -93,7 +93,6 @@ namespace REDZONE.Models
         public string redTotals { get; set; }
         public string scoreGoalColor { get; set; }
         public string redTotalColor { get; set; }
-        public string displayClass { get; set; }
 
         public List<MeasuredCellEntity> entityMetricCells = new List<MeasuredCellEntity>();
 
