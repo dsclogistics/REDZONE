@@ -172,6 +172,16 @@ namespace REDZONE.AppCode
                             {
                                 bldg.metricPeriodValue = "N/A";
                             }
+                            else if (!String.IsNullOrEmpty(rz_metric.metricDataType) &&(rz_metric.metricDataType == "pct"|| rz_metric.metricDataType == "cur" || rz_metric.metricDataType == "dec" ) &&!String.IsNullOrEmpty(rz_metric.maxDecPlaces))//if true we need to round the value from the spreadsheet
+                            {
+                                int decDigits = 0;
+                                try
+                                {
+                                   decDigits = bldg.metricPeriodValue.IndexOf(".") == -1 ? decDigits : bldg.metricPeriodValue.Substring(bldg.metricPeriodValue.IndexOf(".") + 1).Length;
+                                    bldg.metricPeriodValue = Math.Round(Convert.ToDouble(bldg.metricPeriodValue), Convert.ToInt32(rz_metric.maxDecPlaces)).ToString();
+                                }
+                                catch { }
+                            }
                             bldg.saveFlag = "Y";
                         }
                         catch { }
