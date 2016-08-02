@@ -65,9 +65,11 @@ namespace REDZONE.AppCode
                     catch { }
                     if (float.TryParse(value, out res))
                     {
-                        if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<decDigits)
+                        //if (res < min || res > max ||  Convert.ToInt16(maxDecPlaces)<decDigits)
+                        if (res < min || res > max)
                         {
-                            return "Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
+                            //return "Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
+                            return "Value must be between [" + min + "] and [" + max + " ]";
                         }
                         else
                         {
@@ -76,8 +78,10 @@ namespace REDZONE.AppCode
                     }
                     else
                     {
-                        return "Value:[ " + value + " ] is invalid for this metric. Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
-                    }                  
+                        // return "Value:[ " + value + " ] is invalid for this metric. Value must be between [" + min + "] and [" + max + " ] and have no more than [" + maxDecPlaces + " ] digit(s) after decimal point";
+                        return "Value:[ " + value + " ] is invalid for this metric. Value must be between [" + min + "] and [" + max + " ] ";
+
+                    }
                 case "int":
                     int number;
                     if (int.TryParse(value, out number))
