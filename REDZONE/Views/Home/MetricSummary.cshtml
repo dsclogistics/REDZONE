@@ -66,10 +66,10 @@ else {
                                         <div class="col-sm-1 buildingCol headerCol">
                                             <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
                                             <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
-                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by">
-                                                <span class="glyphicon @sortIcon" aria-hidden="true"><span style="font-weight:bold"> @dscBldngHdr.metricName</span></span>
+                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px">
+                                                <span class="glyphicon @sortIcon" aria-hidden="true"></span>
                                             </button>
-
+                                            <span style="font-weight:bold">@dscBldngHdr.metricName</span>
                                             @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
                                             @*<a href="#">@dscBldngHdr.metricName</a>*@
                                         </div>
