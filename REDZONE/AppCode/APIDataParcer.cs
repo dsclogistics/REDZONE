@@ -14,9 +14,11 @@ namespace REDZONE.AppCode
         ExcelReader excelReader = new ExcelReader();
         //--------------------- CONSTANTS ---------------------
         const string COLOR_YELLOW = "yellow";
-        const string COLOR_GREEN = "lightgreen";
-        const string COLOR_LIGHT_GREEN = "#7CFC00"; //#7CFC00 or "LawnGreen"
-        const string COLOR_RED = "#FA8072";   // #FA8072 or Salmon
+        //const string COLOR_GREEN = "lightgreen";
+        const string COLOR_GREEN = "#33cc00";
+        const string COLOR_LIGHT_GREEN = "#b3ff99"; //#7CFC00 or "LawnGreen"
+       // const string COLOR_RED = "#FA8072";   // #FA8072 or Salmon
+        const string COLOR_RED = "#ff3300";
         const string COLOR_LIGHT_RED ="#ffbb8b";         //or #ffbb8b or "orangered"   
        
         //---------- END OF CONSTANTS SECTION -----------------
@@ -681,7 +683,7 @@ namespace REDZONE.AppCode
 
 
 
-        //========= This Function "getMetricColor" will be replaced by either some other logic or a value returned by an API =========
+        //========= This Function "getMetricColor" returns the color the metric value cell should have based on the value, isGoalMet flag and metric status =========
         private string getMetricColor(string mValue, string isGoalMet,string status)
         {
             string mColor = "lightgray";
