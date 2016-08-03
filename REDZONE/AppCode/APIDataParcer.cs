@@ -419,7 +419,7 @@ namespace REDZONE.AppCode
                                                 eSummary.allMonths.Add(tmp.metricMonth);
                                             }
                                             
-                                            tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"],"");
+                                            tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
                                     }
@@ -533,7 +533,7 @@ namespace REDZONE.AppCode
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
-                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                             if(tmp.isGoalMet=="N")
                                             {
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
@@ -650,7 +650,7 @@ namespace REDZONE.AppCode
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
-                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                         }
                                         
                                     }
