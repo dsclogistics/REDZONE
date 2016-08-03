@@ -15,9 +15,9 @@ namespace REDZONE.AppCode
         //--------------------- CONSTANTS ---------------------
         const string COLOR_YELLOW = "yellow";
         const string COLOR_GREEN = "lightgreen";
-        const string COLOR_LIGHT_GREEN = "#7CFC00";//#7CFC00 or "LawnGreen"  FELICIANO, FEEL FREE TO CHANGE THIS!!!!!!!
-        const string COLOR_RED = "#ffbb8b";   //or #ffbb8b or "orangered"   
-        const string COLOR_LIGHT_RED = "#FA8072";// #FA8072 or Salmon        FELICIANO, FEEL FREE TO CHANGE THIS!!!!!!!
+        const string COLOR_LIGHT_GREEN = "#7CFC00"; //#7CFC00 or "LawnGreen"
+        const string COLOR_RED = "#ffbb8b";         //or #ffbb8b or "orangered"   
+        const string COLOR_LIGHT_RED = "#FA8072";   // #FA8072 or Salmon
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -367,7 +367,6 @@ namespace REDZONE.AppCode
                         eSummary.allMetrics.Add(metricName);
                         MeasuredCellEntity goalMetric = new MeasuredCellEntity();
                         goalMetric.metricName = metricName.metricName;
-                        //goalMetric.metricValue = getGoalforMetric(metricName.metricName);
                         goalMetric.metricValue = (string)mtr["mpg_display_text"];
                         eSummary.goal.entityMetrics.Add(goalMetric);
                     }
@@ -693,80 +692,7 @@ namespace REDZONE.AppCode
             if (isGoalMet == "Y") return COLOR_GREEN;
             if (isGoalMet == "N") return COLOR_RED;
 
-            //switch (mName)
-            //{
-            //    case "Net FTE":  //LOGIC: Any value below > 0 is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 0) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Turnover %":  //LOGIC: More than 7.5% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 7.5) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Contribution Margin % Variance":     //LOGIC:  Ant Negative Value is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue < 0) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "IT Ticket Volume":   //LOGIC: More than 25 Tickets per month are RED
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 25) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Safety (TIR)":   //LOGIC: Any Number Greater than 1.45 is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 1.45) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Overtime %":  //LOGIC:  More than 10% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 10) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Trainees %":  //LOGIC:  More than 20% is Red
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 20) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    case "Throughput Chg %":  //LOGIC: More than 20% deviation is Red 
-            //        if (double.TryParse(mValue, out dValue)) { mColor = (dValue > 20 || dValue < -0.2) ? COLOR_RED : COLOR_GREEN; }
-            //        else { mColor = "gray"; }
-            //        break;
-            //    default:
-            //        mColor = "N/A";
-            //        break;
-            //}
             return mColor;
-        }
-        //========= This Function "getGoalforMetric" will be replaced by either some other logic or a value returned by an API =========
-        private string getGoalforMetric(string metricName)
-        {
-            string value = "";
-            switch (metricName) { 
-            //    case "Net FTE":
-            //        value = "0.00";
-            //        break;
-            //    case "Turnover %":
-            //        value = "7.5%";
-            //        break;
-            //    case "Contribution Margin % Variance ":
-            //        value = "+/- Goal";
-            //        break;
-            //    case "IT Ticket Volume ":
-            //        value = "25 month";
-            //        break;
-            //    case "Safety (TIR)":
-            //        value = "1.45";
-            //        break;
-            //    case "Overtime %":
-            //        value = "10.00 %";
-            //        break;
-            //    case "Trainees %":
-            //        value = "20 %";
-            //        break;
-            //    case "Throughput Chg %":
-            //        value = "+/- 20%";
-            //        break;
-                default:
-                    value = " - ";
-                    break;
-            }
-            return value;
         }
 
         //This method returns the list of all metrics user is authorized to edit. 
