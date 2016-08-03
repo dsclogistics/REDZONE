@@ -14,12 +14,10 @@ namespace REDZONE.AppCode
         ExcelReader excelReader = new ExcelReader();
         //--------------------- CONSTANTS ---------------------
         const string COLOR_YELLOW = "yellow";
-        //const string COLOR_GREEN = "lightgreen";
         const string COLOR_GREEN = "#33cc00";
-        const string COLOR_LIGHT_GREEN = "#b3ff99"; //#7CFC00 or "LawnGreen"
-       // const string COLOR_RED = "#FA8072";   // #FA8072 or Salmon
+        const string COLOR_LIGHT_GREEN = "#b3ff99";      
         const string COLOR_RED = "#ff3300";
-        const string COLOR_LIGHT_RED ="#ffbb8b";         //or #ffbb8b or "orangered"   
+        const string COLOR_LIGHT_RED ="#ffbb8b";   
        
         //---------- END OF CONSTANTS SECTION -----------------
 
@@ -328,7 +326,7 @@ namespace REDZONE.AppCode
             eSummary.year = year;
             eSummary.goal.score = " - ";
             eSummary.goal.BuildingName = "Goal";
-            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";
+            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";        
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -375,6 +373,7 @@ namespace REDZONE.AppCode
                         goalMetric.metricValue = (string)mtrValue["mpg_display_text"];
                         totalColMetric.metricName = metricName.metricName;
                         eSummary.goal.entityMetrics.Add(goalMetric);
+                        totalColMetric.score = 0;
                         eSummary.goalsMissedRow.entityMetrics.Add(totalColMetric);
                     }
                     //eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();
@@ -413,6 +412,7 @@ namespace REDZONE.AppCode
                                         {   //The correct Cell Value was found to be inserted into the Building/Metric Dashboard Cell
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
                                             tmp.mtrc_id = (string)mtrc["mtrc_id"];
+                                            tmp.isGoalMet = (string)mtrc["mpg_mtrc_passyn"];
                                             tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
                                             tmp.tm_period_id = (string)mtrc["tm_period_id"];
                                             tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
@@ -427,6 +427,13 @@ namespace REDZONE.AppCode
                                             }
                                             
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
+                                          
+                                            if (tmp.isGoalMet == "N")
+                                            {
+                                                eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                                eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                            }
+
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
 
