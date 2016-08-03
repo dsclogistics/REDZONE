@@ -11,7 +11,7 @@
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
                     <div class="row ">
-                            <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
+                        <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
                     </div>
                     <div class="row" style="margin-bottom:10px">
                         <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
@@ -31,80 +31,82 @@
                 </div>
             </div>
             <div class="panel-body" style="margin:2px; padding:5px">
+             @if (Model.buildings.Count() == 0)
+             {
+                <br />
+                <div class="row" style="color:red; font-size:large; border:4px double black; margin:5px 15px; padding:40px; background-color: lightgray; border-radius:8px">
+                   <span style="font-weight:bold; ">THERE IS NO DATA AVAILABLE FOR THE SELECTED PERIOD</span>
+                   <br /><span style="text-align:center">@Model.month @Model.year</span>
+                </div>
+                <br />
+             }
+             else
+             {
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
                     <div class="row headerRow row-eq-height">
-                        <div class="col-sm-2 buildingCol headerCol">
-                            <span style="font-weight:bold"> @Model.month @Model.year</span>
-                        </div>
-                        @foreach (var m in Model.allMetrics)
-                        {
-                            <div class="col-sm-1 buildingCol headerCol">
-                                <a href="@m.url">@m.metricName</a>
+                            <div class="col-sm-2 buildingCol headerCol">
+                                <span style="font-weight:bold"> @Model.month @Model.year</span>
                             </div>
-                        }
-                        @{
+                            @foreach (var m in Model.allMetrics)
+                            {
+                                <div class="col-sm-1 buildingCol headerCol">
+                                    <a href="@m.url">@m.metricName</a>
+                                </div>
+                            }
+                            @{
                             int colsLeft = 10 - Model.allMetrics.Count;
                             string colClass = "col-sm-1";
                             if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
-                        }
-                        <div class="@colClass buildingCol headerCol scoreCol">
-                            Score
-                        </div>
-                    </div><!-- TITLES ROWS -->
+                            }
+                            <div class="@colClass buildingCol headerCol scoreCol">
+                                Score
+                            </div>
+                        </div><!-- TITLES ROWS -->
 
                     <div class="row buildingRow" style="background-color: #bbedff">
-                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
-                            @Model.goal.BuildingName
-                        </div>
-                      @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
-                      {
-                        <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
-                                @bldngMV.metricValue
-                        </div>
-                      }
-                        <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                            @if (String.IsNullOrEmpty(@Model.goal.score))
-                            { <br /> }
-                            else
-                            { @Model.goal.score }
-                        </div>
-                    </div><!-- GOAL ROWS -->
-
-                 @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                 {
-                    <div class="row buildingRow">
-                        <div class="col-sm-2 buildingCol" style="text-align:center">
-                            <a href="@dscBldng.url">@dscBldng.BuildingName</a>
-                        </div>
-                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
-                        {
-                            <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
-                                @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                            <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                                @Model.goal.BuildingName
+                            </div>
+                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
+                            {
+                                <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                    @bldngMV.metricValue
+                                </div>
+                            }
+                            <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                                @if (String.IsNullOrEmpty(@Model.goal.score))
                                 { <br /> }
                                 else
-                                { @bldngMV.metricValue }
+                                { @Model.goal.score }
                             </div>
-                        }
-                        <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
-                            @if (String.IsNullOrEmpty(@dscBldng.score))
-                            { <br /> }
-                            else
-                            { @dscBldng.score }
-                        </div>
-                    </div><!-- building ROWS -->
-                 }
-                @if (Model.buildings.Count() == 0)
-                {
-                    <br />
-                    <div class="row" style="color:red; font-size:large; border:4px double black; margin:5px 15px; padding:40px; background-color: lightgray; border-radius:8px">
-                        <span style="font-weight:bold; ">THERE IS NO DATA AVAILABLE FOR THE SELECTED PERIOD</span>
-                        <br /><span style="text-align:center">@Model.month @Model.year</span>
-                    </div>
-                    <br />
-                }
+                        </div><!-- GOAL ROWS -->
+                     @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                     {
+                        <div class="row buildingRow">
+                              <div class="col-sm-2 buildingCol" style="text-align:center">
+                                    <a href="@dscBldng.url">@dscBldng.BuildingName</a>
+                                </div>
+                         @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                         {
+                              <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                        { <br /> }
+                                        else
+                                        { @bldngMV.metricValue }
+                                    </div>
+                         }
+                          <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                              @if (String.IsNullOrEmpty(@dscBldng.score))
+                              { <br /> }
+                              else
+                              { @dscBldng.score }
+                          </div>
+                        </div><!-- building ROWS -->
+                     }
                 </div> <!-- End of DIV Table Table -->
+             }
             </div>
         </div>
     </div>
