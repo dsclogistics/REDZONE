@@ -38,7 +38,7 @@ namespace REDZONE.Models
         private const string GREENCOLOR = "lightgreen";
         private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string BuildingName { get; set; }
-        public string score { get; set; }
+        public int rowScore { get; set; }
         public string scoreColor { get; set; }
         public string buildingId { get; set; }
 
