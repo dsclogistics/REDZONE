@@ -20,6 +20,7 @@ namespace REDZONE.Models
         public MeasuredRowEntity rowGoal = new MeasuredRowEntity();
         public MeasuredRowEntity rowHeadings = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
+        public MeasuredRowEntity missedGoals = new MeasuredRowEntity();
 
         public int viewableColumns { get; set; }
         public string metricColWidth

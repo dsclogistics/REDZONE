@@ -628,6 +628,7 @@ namespace REDZONE.AppCode
                 mSummary.urlPrevMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[0];
                 mSummary.urlNextMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[1];
                 MeasuredRowEntity header = new MeasuredRowEntity();
+                mSummary.missedGoals.rowName = "Missed Goals"; 
                 header.rowName = "Buildings";
                 MeasuredRowEntity goal = new MeasuredRowEntity();
                 goal.rowName = "Goal";
@@ -645,18 +646,24 @@ namespace REDZONE.AppCode
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 MeasuredCellEntity goalCell = new MeasuredCellEntity();
+                                MeasuredCellEntity missedGoalCell= new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
                                 temp.metricDoubleValue = -99999;
                                 temp.isViewable = false;                                
-                                row.entityMetricCells.Add(temp);
-
+                                row.entityMetricCells.Add(temp);                                
                                 goalCell.metricMonth = (string)m["Month"];
                                 goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
+                                missedGoalCell.metricName = (string)m["Month"];
+                                missedGoalCell.score = 0;
                                 if (header.entityMetricCells.Count < months.Count)
                                 { header.entityMetricCells.Add(temp); }
                                 if (goal.entityMetricCells.Count < months.Count)
                                 { goal.entityMetricCells.Add(goalCell); }
+                                if (mSummary.missedGoals.entityMetricCells.Count < months.Count)
+                                {
+                                    mSummary.missedGoals.entityMetricCells.Add(missedGoalCell);
+                                }
                             }
                         }
                         if (apiBuildingsMetrics.HasValues)
@@ -672,11 +679,17 @@ namespace REDZONE.AppCode
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                             tmp.metricDoubleValue = tmp.metricValue == "N/A" ? 9999 : Convert.ToDouble(tmp.metricValue);
                                             tmp.isViewable = true;
+                                            tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
                                             if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A")
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                            if (tmp.isGoalMet == "N")
+                                            {
+                                                mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                                mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = mSummary.missedGoals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                            }
                                         }
                                         
                                     }
