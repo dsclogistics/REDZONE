@@ -324,6 +324,8 @@ namespace REDZONE.AppCode
             eSummary.month = month;
             eSummary.year = year;
             eSummary.goal.score = " - ";
+            eSummary.goal.BuildingName = "Goal";
+            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -356,19 +358,21 @@ namespace REDZONE.AppCode
                     eSummary.statusNextMonth = "disabled";
                 }
                 if (allApiMetrics.HasValues)
-                {
-                    eSummary.goal.BuildingName = "Goal";
-                    foreach (var mtr in allApiMetrics)
+                {                    
+                    foreach (var mtrValue in allApiMetrics)
                     {
                         MetricHeader metricName = new MetricHeader();
-                        metricName.metricName =(string)mtr["mtrc_prod_display_text"];
-                        metricName.metricID = (string)mtr["mtrc_id"];
+                        metricName.metricName =(string)mtrValue["mtrc_prod_display_text"];
+                        metricName.metricID = (string)mtrValue["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
                         MeasuredCellEntity goalMetric = new MeasuredCellEntity();
+                        MeasuredCellEntity totalColMetric = new MeasuredCellEntity();
                         goalMetric.metricName = metricName.metricName;
-                        goalMetric.metricValue = (string)mtr["mpg_display_text"];
+                        goalMetric.metricValue = (string)mtrValue["mpg_display_text"];
+                        totalColMetric.metricName = metricName.metricName;
                         eSummary.goal.entityMetrics.Add(goalMetric);
+                        eSummary.goalsMissedRow.entityMetrics.Add(totalColMetric);
                     }
                     //eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();
                 }
@@ -399,11 +403,11 @@ namespace REDZONE.AppCode
                                 if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
                                     int bldngReds = 0;
+                                    int tmpIndex = 0;      //To keep track of the Cell Index being processed by the foreach loop
                                     foreach(var tmp in b.entityMetrics)
                                     {
-                                        
                                         if (tmp.mtrc_id == ((string)mtrc["mtrc_id"]))
-                                        {                                            
+                                        {   //The correct Cell Value was found to be inserted into the Building/Metric Dashboard Cell
                                             tmp.metricValue = (string)mtrc["mtrc_period_val_value"];
                                             tmp.mtrc_id = (string)mtrc["mtrc_id"];
                                             tmp.mtrc_period_id = (string)mtrc["mtrc_period_id"];
@@ -422,6 +426,9 @@ namespace REDZONE.AppCode
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"],"");
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
+
+                                        //Increase the current Index of the Building Metric
+                                        tmpIndex++;
                                     }
                                     if (bldngReds < 3)
                                     {

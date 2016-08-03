@@ -14,7 +14,7 @@ namespace REDZONE.Models
         public string statusNextMonth { get; set; }
         public string statusPrevMonth { get; set; }
         public BuildingMetricEntity goal = new BuildingMetricEntity();
-        public BuildingMetricEntity redTotals = new BuildingMetricEntity();
+        public BuildingMetricEntity goalsMissedRow = new BuildingMetricEntity();
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
         public List<string> allBuildings = new List<string>();
         public List<MetricHeader> allMetrics = new List<MetricHeader>();
@@ -101,7 +101,6 @@ namespace REDZONE.Models
         public MeasuredRowEntity() { }
 
         //\-------- End of Constructor ----------/
-       
     }
 
   
