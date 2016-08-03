@@ -16,8 +16,9 @@ namespace REDZONE.AppCode
         const string COLOR_YELLOW = "yellow";
         const string COLOR_GREEN = "lightgreen";
         const string COLOR_LIGHT_GREEN = "#7CFC00"; //#7CFC00 or "LawnGreen"
-        const string COLOR_RED = "#ffbb8b";         //or #ffbb8b or "orangered"   
-        const string COLOR_LIGHT_RED = "#FA8072";   // #FA8072 or Salmon
+        const string COLOR_RED = "#FA8072";   // #FA8072 or Salmon
+        const string COLOR_LIGHT_RED ="#ffbb8b";         //or #ffbb8b or "orangered"   
+       
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -547,8 +548,10 @@ namespace REDZONE.AppCode
                                     }
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
-                                var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
-                                goalRow.isViewable = true;                                
+                                //var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
+                                header.entityMetricCells.Find(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                //goalRow.isViewable = true;                                
                             }
                             // Populate the number of columns that are "Viewable"
                         }
