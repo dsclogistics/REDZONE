@@ -62,7 +62,7 @@
                    if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
                }
                    <div class="@colClass buildingCol headerCol scoreCol">
-                                Score
+                        Building Score
                    </div>
                </div><!-- TITLES ROW -->
 
@@ -77,10 +77,7 @@
                                 </div>
                             }
                             <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                                @if (String.IsNullOrEmpty(@Model.goal.score))
-                                { <br /> }
-                                else
-                                { @Model.goal.score }
+                                @Model.goal.rowScore
                             </div>
                         </div><!-- GOAL ROWS -->
              @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
@@ -92,17 +89,15 @@
                   @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                   {
                     <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
-                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                        { <br /> }
-                                        else
-                                        { @bldngMV.metricValue }
-                                    </div>
+                      @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                      { <br /> }
+                      else
+                      { @bldngMV.metricValue }
+                    </div>
+                      
                   }
                     <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
-                        @if (String.IsNullOrEmpty(@dscBldng.score))
-                        { <br /> }
-                        else
-                        { @dscBldng.score }
+                        @dscBldng.rowScore 
                     </div>
                </div><!-- building ROWS -->
               }
@@ -113,17 +108,11 @@
                    @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
                    {
                        <div class="col-sm-1 buildingCol" style="background-color:@metricTotalCell.metricColor">
-                           @if (String.IsNullOrEmpty(@metricTotalCell.metricValue))
-                           { <br /> }
-                           else
-                           { @metricTotalCell.metricValue }
+                           @metricTotalCell.score.ToString("0")
                        </div>
                    }
                    <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goalsMissedRow.scoreColor">
-                       @if (String.IsNullOrEmpty(@Model.goalsMissedRow.score))
-                       { <br /> }
-                       else
-                       { @Model.goalsMissedRow.score }
+                       @Model.goalsMissedRow.rowScore
                    </div>
                </div><!-- Goals Not Met Totals -->
             </div> <!-- End of DIV Table Table -->

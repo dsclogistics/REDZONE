@@ -324,7 +324,7 @@ namespace REDZONE.AppCode
             string raw_data = api.getExecSummary("Red Zone", "Month", metric_id, month, year, buildingID);
             eSummary.month = month;
             eSummary.year = year;
-            eSummary.goal.score = " - ";
+            eSummary.goal.rowScore = 0;
             eSummary.goal.BuildingName = "Goal";
             eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";        
             try
@@ -425,7 +425,12 @@ namespace REDZONE.AppCode
                                             {
                                                 eSummary.allMonths.Add(tmp.metricMonth);
                                             }
-                                            
+                                            tmp.isGoalMet = (string)mtrc["mpg_mtrc_passyn"];
+                                            //If the goal is not met, then increase the counter of the total goals not met
+                                            if (tmp.isGoalMet.Equals("N")) { 
+                                               eSummary.goalsMissedRow.entityMetrics[tmpIndex].score++;
+                                               b.rowScore++;
+                                            }
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
                                           
                                             if (tmp.isGoalMet == "N")
@@ -447,7 +452,7 @@ namespace REDZONE.AppCode
                                     else if (bldngReds == 3) { b.scoreColor = COLOR_YELLOW; }
                                     else if (bldngReds == 4) { b.scoreColor = "orange"; }
                                     else { b.scoreColor = COLOR_RED; }
-                                    b.score = bldngReds.ToString();
+                                    b.rowScore = bldngReds;
                                 }
                             }
                             buildings.Add(b);
