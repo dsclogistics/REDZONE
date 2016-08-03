@@ -656,6 +656,7 @@ namespace REDZONE.AppCode
                                 goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
                                 missedGoalCell.metricName = (string)m["Month"];
                                 missedGoalCell.score = 0;
+                                missedGoalCell.metricValue = "0";
                                 if (header.entityMetricCells.Count < months.Count)
                                 { header.entityMetricCells.Add(temp); }
                                 if (goal.entityMetricCells.Count < months.Count)
