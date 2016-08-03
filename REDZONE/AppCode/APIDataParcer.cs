@@ -511,7 +511,7 @@ namespace REDZONE.AppCode
                                     header.entityMetricCells.Add(temp);
                                     //We also add a corresponding Cell to the "Totals" Row
                                     totalCol.metricName = (string)m["Month"];
-                                    totalCol.metricValue = "---";
+                                    totalCol.metricValue = "0";
                                     totalCol.score = 0;                              
                                     totalCol.isViewable = false;
                                     rowTotals.entityMetricCells.Add(totalCol);
@@ -529,12 +529,13 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
-                                            if((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
+                                            tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
+                                            if ((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
-                                            if(tmp.metricColor== "lightgreen" || tmp.metricColor== "COLOR_LIGHT_GREEN")
+                                            if(tmp.isGoalMet=="N")
                                             {
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
