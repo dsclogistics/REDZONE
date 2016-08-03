@@ -14,10 +14,13 @@ namespace REDZONE.AppCode
         ExcelReader excelReader = new ExcelReader();
         //--------------------- CONSTANTS ---------------------
         const string COLOR_YELLOW = "yellow";
-        const string COLOR_GREEN = "lightgreen";
-        const string COLOR_LIGHT_GREEN = "#7CFC00"; //#7CFC00 or "LawnGreen"
-        const string COLOR_RED = "#ffbb8b";         //or #ffbb8b or "orangered"   
-        const string COLOR_LIGHT_RED = "#FA8072";   // #FA8072 or Salmon
+        //const string COLOR_GREEN = "lightgreen";
+        const string COLOR_GREEN = "#33cc00";
+        const string COLOR_LIGHT_GREEN = "#b3ff99"; //#7CFC00 or "LawnGreen"
+       // const string COLOR_RED = "#FA8072";   // #FA8072 or Salmon
+        const string COLOR_RED = "#ff3300";
+        const string COLOR_LIGHT_RED ="#ffbb8b";         //or #ffbb8b or "orangered"   
+       
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -423,7 +426,7 @@ namespace REDZONE.AppCode
                                                 eSummary.allMonths.Add(tmp.metricMonth);
                                             }
                                             
-                                            tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"],"");
+                                            tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
 
@@ -517,7 +520,7 @@ namespace REDZONE.AppCode
                                     header.entityMetricCells.Add(temp);
                                     //We also add a corresponding Cell to the "Totals" Row
                                     totalCol.metricName = (string)m["Month"];
-                                    totalCol.metricValue = "---";
+                                    totalCol.metricValue = "0";
                                     totalCol.score = 0;                              
                                     totalCol.isViewable = false;
                                     rowTotals.entityMetricCells.Add(totalCol);
@@ -535,12 +538,13 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
-                                            if((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
+                                            tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
+                                            if ((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
-                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
-                                            if(tmp.metricColor== "lightgreen" || tmp.metricColor== "COLOR_LIGHT_GREEN")
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                            if(tmp.isGoalMet=="N")
                                             {
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
@@ -553,8 +557,10 @@ namespace REDZONE.AppCode
                                     }
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
-                                var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
-                                goalRow.isViewable = true;                                
+                                //var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
+                                header.entityMetricCells.Find(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                //goalRow.isViewable = true;                                
                             }
                             // Populate the number of columns that are "Viewable"
                         }
@@ -656,7 +662,7 @@ namespace REDZONE.AppCode
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
-                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
+                                            tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                         }
                                         
                                     }
@@ -684,7 +690,7 @@ namespace REDZONE.AppCode
 
 
 
-        //========= This Function "getMetricColor" will be replaced by either some other logic or a value returned by an API =========
+        //========= This Function "getMetricColor" returns the color the metric value cell should have based on the value, isGoalMet flag and metric status =========
         private string getMetricColor(string mValue, string isGoalMet,string status)
         {
             string mColor = "lightgray";

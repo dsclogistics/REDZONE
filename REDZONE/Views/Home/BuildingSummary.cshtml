@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Building Summary";
+    int colCounter = 0;
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
@@ -92,6 +93,7 @@
                 @*Begin Displaying All Rows for Metric*@
                 @foreach (var buildingRow in Model.metricRows)
                 {
+                    colCounter = 0;
                     <div class="row buildingRow ">
                         <div class="col-sm-2 buildingCol">
                             <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
@@ -106,7 +108,8 @@
                                     <tr class="valueRow">
                                         @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                                         {
-                                            if (buildingCell.isViewable)
+                                            bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                            if (cellIsViewable)
                                             {
                                                 <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
                                                     @if (String.IsNullOrEmpty(@buildingCell.metricValue))
@@ -115,6 +118,7 @@
                                                     { @buildingCell.metricValue }
                                                 </td>
                                             }
+                                            colCounter++;
                                         }
                                     </tr>
                                 </table>

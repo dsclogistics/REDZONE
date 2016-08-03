@@ -64,6 +64,7 @@ namespace REDZONE.Models
         public string dsc_mtrc_lc_bldg_id { get; set; }
         public string cellValueURL { get; set; }
         public bool isViewable { get; set; }  
+        public string isGoalMet { get; set; }
         public int score { get; set; }    
         public string displayClass { get; set; }
 
