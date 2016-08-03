@@ -147,6 +147,40 @@ else {
                             </div>  <!-- End of block with 12 Month Value Columns -->
                         </div>
                     }
+
+
+                    <div class="row buildingRow" style="background-color: lightgray; ">
+                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                            @Model.missedGoals.rowName
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="row ">
+                                @{colCounter = 0;}
+                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in @Model.missedGoals.entityMetricCells)
+                                {
+                                    bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
+                                    if (cellIsViewable)
+                                    {
+                                        <div class="col-sm-1 buildingCol monthCol" style="background-color:@bldngMV.metricColor">
+                                            @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                            { <br /> }
+                                            else
+                                            { @bldngMV.metricValue }
+                                        </div>
+                                    }
+                                    colCounter++;
+                                }
+                            </div>
+                        </div>
+
+                        @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
+                @if (String.IsNullOrEmpty(@Model.goal.score))
+                { <br /> }
+                else
+                { @Model.goal.score }
+            </div>*@
+                    </div><!-- GOAL ROWS -->
+
                 </div> <!-- End of DIV Table Table -->
             </div>
         </div>
