@@ -326,7 +326,8 @@ namespace REDZONE.AppCode
             eSummary.year = year;
             eSummary.goal.rowScore = 0;
             eSummary.goal.BuildingName = "Goal";
-            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";        
+            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";
+            eSummary.goalsMissedRow.scoreColor = "lightgray";
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -374,6 +375,7 @@ namespace REDZONE.AppCode
                         totalColMetric.metricName = metricName.metricName;
                         eSummary.goal.entityMetrics.Add(goalMetric);
                         totalColMetric.score = 0;
+                        totalColMetric.metricColor = "lightgray";
                         eSummary.goalsMissedRow.entityMetrics.Add(totalColMetric);
                     }
                     //eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();
@@ -404,7 +406,6 @@ namespace REDZONE.AppCode
                                 
                                 if ((string)mtrc["dsc_mtrc_lc_bldg_name"]== b.BuildingName)
                                 {
-                                    int bldngReds = 0;
                                     int tmpIndex = 0;      //To keep track of the Cell Index being processed by the foreach loop
                                     foreach(var tmp in b.entityMetrics)
                                     {
@@ -433,11 +434,11 @@ namespace REDZONE.AppCode
                                             }
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
                                           
-                                            if (tmp.isGoalMet == "N")
-                                            {
-                                                eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
-                                                eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName == tmp.metricName).score.ToString();
-                                            }
+                                            //if (tmp.isGoalMet == "N")
+                                            //{
+                                            //    eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                            //    eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                            //}
 
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
@@ -445,14 +446,15 @@ namespace REDZONE.AppCode
                                         //Increase the current Index of the Building Metric
                                         tmpIndex++;
                                     }
-                                    if (bldngReds < 3)
-                                    {
-                                        b.scoreColor = COLOR_GREEN;
-                                    }
-                                    else if (bldngReds == 3) { b.scoreColor = COLOR_YELLOW; }
-                                    else if (bldngReds == 4) { b.scoreColor = "orange"; }
-                                    else { b.scoreColor = COLOR_RED; }
-                                    b.rowScore = bldngReds;
+                                    //Hard Code al Row Score Colors are Green for now
+                                    b.scoreColor = COLOR_GREEN;
+                                    //if (b.rowScore < 3)
+                                    //{
+                                    //    b.scoreColor = COLOR_GREEN;
+                                    //}
+                                    //else if (b.rowScore == 3) { b.scoreColor = COLOR_YELLOW; }
+                                    //else if (b.rowScore == 4) { b.scoreColor = "orange"; }
+                                    //else { b.scoreColor = COLOR_RED; }
                                 }
                             }
                             buildings.Add(b);

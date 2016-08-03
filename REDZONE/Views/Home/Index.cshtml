@@ -77,7 +77,8 @@
                                 </div>
                             }
                             <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                                @Model.goal.rowScore
+                                @*@Model.goal.rowScore*@
+                                ---
                             </div>
                         </div><!-- GOAL ROWS -->
              @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
@@ -102,7 +103,7 @@
                </div><!-- building ROWS -->
               }
                <div class="row buildingRow">
-                   <div class="col-sm-2 buildingCol" style="text-align:center">
+                   <div class="col-sm-2 buildingCol" style="text-align:center; font-weight:bold">
                        <span>@Model.goalsMissedRow.BuildingName</span>
                    </div>
                    @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
