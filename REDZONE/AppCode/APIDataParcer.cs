@@ -494,7 +494,7 @@ namespace REDZONE.AppCode
                         row.rowName = (string)mtr["mtrc_prod_display_text"];
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
-                        row.scoreGoal = (string)mtr["mpg_display_text"];
+                        row.scoreGoal = (string)mtr["mpg_display_text"];                              
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         if (months.HasValues)
                         {
@@ -512,6 +512,7 @@ namespace REDZONE.AppCode
                                     //We also add a corresponding Cell to the "Totals" Row
                                     totalCol.metricName = (string)m["Month"];
                                     totalCol.metricValue = "---";
+                                    totalCol.score = 0;                              
                                     totalCol.isViewable = false;
                                     rowTotals.entityMetricCells.Add(totalCol);
                                 }
@@ -533,6 +534,11 @@ namespace REDZONE.AppCode
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], "");
+                                            if(tmp.metricColor== "lightgreen" || tmp.metricColor== "COLOR_LIGHT_GREEN")
+                                            {
+                                                rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                                rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                            }
                                             //If value missed the Goal, increase the Missed Goals counter
                                             // ---- TO DO ----  ////
                                             // <--- Finished increasing th Missed Goal Counter
@@ -553,19 +559,19 @@ namespace REDZONE.AppCode
                     bSummary.activeColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
                     // Loop through all the Goals Missed Row and set the color accordingly
-                    foreach (var goalRowColTotal in bSummary.buildingScoreRow.entityMetricCells)
-                    { 
-                        try{
-                            int totalReds = Convert.ToInt16(goalRowColTotal.metricValue);
-                            if ( goalRowColTotal.metricValue.Equals("---") || totalReds < 3) { goalRowColTotal.metricColor = "lightgreen"; }
-                            else if (totalReds == 3) { goalRowColTotal.metricColor = "yellow"; }
-                            else if (totalReds == 4) { goalRowColTotal.metricColor = "orange"; }
-                            else { goalRowColTotal.metricColor = "red"; }
-                        }
-                        catch{
-                            goalRowColTotal.metricColor = "lightgreen";
-                        }                    
-                    }
+                    //foreach (var goalRowColTotal in bSummary.buildingScoreRow.entityMetricCells)
+                    //{ 
+                    //    try{
+                    //        int totalReds = Convert.ToInt16(goalRowColTotal.metricValue);
+                    //        if ( goalRowColTotal.metricValue.Equals("---") || totalReds < 3) { goalRowColTotal.metricColor = "lightgreen"; }
+                    //        else if (totalReds == 3) { goalRowColTotal.metricColor = "yellow"; }
+                    //        else if (totalReds == 4) { goalRowColTotal.metricColor = "orange"; }
+                    //        else { goalRowColTotal.metricColor = "red"; }
+                    //    }
+                    //    catch{
+                    //        goalRowColTotal.metricColor = "lightgreen";
+                    //    }                    
+                    //}
                 }
 
             }

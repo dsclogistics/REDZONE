@@ -63,7 +63,8 @@ namespace REDZONE.Models
         public string tm_period_id { get; set; }
         public string dsc_mtrc_lc_bldg_id { get; set; }
         public string cellValueURL { get; set; }
-        public bool isViewable { get; set; }
+        public bool isViewable { get; set; }  
+        public int score { get; set; }    
         public string displayClass { get; set; }
 
         //-------- Empty Constructor -----------\
@@ -90,7 +91,7 @@ namespace REDZONE.Models
         public string rowMeasuredId { get; set; }
         public string rowURL { get; set; }
         public string scoreGoal { get; set; }
-        public string redTotals { get; set; }
+        public int redTotals { get; set; }
         public string scoreGoalColor { get; set; }
         public string redTotalColor { get; set; }
 
