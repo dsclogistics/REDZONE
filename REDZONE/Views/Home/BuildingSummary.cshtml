@@ -6,6 +6,12 @@
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
+<style>
+    .valueCell {
+    font-weight:bold;
+    /*font-size:medium;*/
+}
+</style>
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
         <div class="panel panel-default" style="margin-bottom:0px; ">
@@ -111,7 +117,7 @@
                                             bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
                                             if (cellIsViewable)
                                             {
-                                                <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth;">
                                                     @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                                     { <br /> }
                                                     else

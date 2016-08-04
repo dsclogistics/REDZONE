@@ -9,6 +9,10 @@
     .monthCol {
         width: 120px;
     }
+    .valueCell {
+        font-weight:bold;
+        /*font-size:medium;*/
+    }
 </style>
 @if (String.IsNullOrEmpty(Model.metricID)) { 
 <div style="margin-top:250px; color:red">
@@ -56,12 +60,20 @@ else {
                     <!-- Table -->
                     <!-- ROWS -->
                     <div class="row headerRow row-eq-height">
-                        <div class="col-sm-2 buildingCol headerCol" >
-                            <button type="button" id="sortBuilding" class="btn btn-sm" aria-label="Sort by" style="padding:0px 2px">
-                                <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true">
-                                    <span style="font-weight:bold"> @Model.rowHeadings.rowName</span>
-                                </span>                                
-                            </button>                            
+                    @{
+                        string sortIcon = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "glyphicon-sort" : Model.rowHeadings.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+                        //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
+                        string btnClass = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "btn-default" : "btn-primary";
+                    }
+                        <div class="col-sm-2 buildingCol" >
+                            <div class="row" style="margin:0; ">
+                                <input type="hidden" id="sortMonth" value="Building" />
+                                <input type="hidden" id="sortOrder" value=@Model.rowHeadings.displayClass />
+                                <span style="font-weight:bold;"> @Model.rowHeadings.rowName</span>
+                                <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                    <span class="glyphicon @sortIcon" aria-hidden="true"></span>
+                                </button>
+                            </div>
                         </div>  <!-- Metric Name Column -->                        
                         <div class="col-sm-9">
                             <div class="row">
@@ -69,18 +81,18 @@ else {
                                     <tr class="valueRow">
                                         @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                         {
-                                            string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+                                            sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
                                             //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
-                                            string btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
+                                            btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
                                             if (dscBldngHdr.isViewable)
                                             {
-                                                <td class="buildingCol headerCol monthCol" style="width:@Model.metricColWidth">
+                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth">
                                                     <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
                                                     <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
-                                                    <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px">
+                                                    <span style="font-weight:bold">@dscBldngHdr.metricName</span>
+                                                    <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
                                                         <span class="glyphicon @sortIcon" aria-hidden="true"></span>
                                                     </button>
-                                                    <span style="font-weight:bold">@dscBldngHdr.metricName</span>
                                                     @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
                                                     @*<a href="#">@dscBldngHdr.metricName</a>*@
                                                 </td>
@@ -97,7 +109,7 @@ else {
                     </div><!-- TITLES ROW -->
 
                     <div class="row buildingRow" style="background-color: #bbedff; ">
-                        <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                        <div class="col-sm-2 buildingCol" >
                             @Model.rowGoal.rowName
                         </div>
                         <div class="col-sm-9">
@@ -131,7 +143,7 @@ else {
                             else
                             { @Model.goal.score }
                         </div>*@
-                    </div><!-- GOAL ROWS -->
+                    </div><!-- ------------ GOALS ROW ---------------- -->
 
                     @*Begin Displaying All Rows for Metric*@
                     @foreach (var buildingRow in Model.metricRows)
@@ -151,7 +163,7 @@ else {
                                                 bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
                                                 if (cellIsViewable)
                                                 {
-                                                    <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                    <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
                                                         @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                                         { <br /> }
                                                         else

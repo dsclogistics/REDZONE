@@ -91,7 +91,8 @@ namespace REDZONE.Models
         private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string rowName { get; set; }        //Row represents a "Metric"
         public string rowMeasuredId { get; set; }
-        public string rowURL { get; set; }      
+        public string rowURL { get; set; }
+        public string displayClass { get; set; }
         public string scoreGoal { get; set; }
         public int redTotals { get; set; }
         public string scoreGoalColor { get; set; }

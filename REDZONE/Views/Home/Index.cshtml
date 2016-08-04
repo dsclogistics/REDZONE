@@ -89,17 +89,17 @@
                     </div>
                   @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                   {
-                    <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
-                      @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                      { <br /> }
-                      else
-                      { @bldngMV.metricValue }
+                    <div class="col-sm-1 buildingCol" style="font-weight:bold; background-color:@bldngMV.metricColor">
+                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                        { <br /> }
+                        else
+                        { @bldngMV.metricValue }
                     </div>
-                      
+
                   }
-                    <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
-                        @dscBldng.rowScore 
-                    </div>
+                   <div class="@colClass buildingCol scoreCol" style="background-color:@dscBldng.scoreColor">
+                       @dscBldng.rowScore
+                   </div>
                </div><!-- building ROWS -->
               }
                <div class="row buildingRow">
