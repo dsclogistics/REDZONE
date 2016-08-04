@@ -65,27 +65,34 @@ else {
                         </div>  <!-- Metric Name Column -->                        
                         <div class="col-sm-9">
                             <div class="row">
-                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
-                                {
-                                    string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
-                                    //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
-                                    string btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
-                                    if (dscBldngHdr.isViewable)
-                                    {
-                                        <div class="col-sm-1 buildingCol headerCol monthCol">
-                                            <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
-                                            <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
-                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px">
-                                                <span class="glyphicon @sortIcon" aria-hidden="true"></span>
-                                            </button>
-                                            <span style="font-weight:bold">@dscBldngHdr.metricName</span>
-                                            @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
-                                            @*<a href="#">@dscBldngHdr.metricName</a>*@
-                                        </div>
-                                    }
-
-                                }
+                                <table style="width:100%">
+                                    <tr class="valueRow">
+                                        @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
+                                        {
+                                            string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+                                            //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
+                                            string btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
+                                            if (dscBldngHdr.isViewable)
+                                            {
+                                                <td class="buildingCol headerCol monthCol" style="width:@Model.metricColWidth">
+                                                    <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
+                                                    <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
+                                                    <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px">
+                                                        <span class="glyphicon @sortIcon" aria-hidden="true"></span>
+                                                    </button>
+                                                    <span style="font-weight:bold">@dscBldngHdr.metricName</span>
+                                                    @*<span class="glyphicon glyphicon-sort"> @dscBldngHdr.metricName</span>*@
+                                                    @*<a href="#">@dscBldngHdr.metricName</a>*@
+                                                </td>
+                                            }
+                                            colCounter++;
+                                        }
+                                    </tr>
+                                </table>
                             </div>
+                        </div>
+                        <div class="col-sm-1" style="font-size:small; padding-top:5px">
+                            Goals Missed
                         </div>
                     </div><!-- TITLES ROW -->
 
@@ -93,22 +100,30 @@ else {
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.rowGoal.rowName
                         </div>
-                    <div class="col-sm-9">
-                        <div class="row ">
-                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
-                            {
-                                if (bldngMV.isViewable)
-                                {
-                                    <div class="col-sm-1 buildingCol monthCol" style="background-color:@bldngMV.metricColor">
-                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                        { <br /> }
-                                        else
-                                        { @bldngMV.metricValue }
-                                    </div>
-                                }
-                            }
+                        <div class="col-sm-9">
+                            <div class="row ">
+                                <table style="width:100%">
+                                    <tr class="valueRow">
+                                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
+                                        {
+                                            if (bldngMV.isViewable)
+                                            {
+                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth; background-color:@bldngMV.metricColor">
+                                                    @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                                    { <br /> }
+                                                    else
+                                                    { @bldngMV.metricValue }
+                                                </td>
+                                            }
+                                            colCounter++;
+                                        }
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-sm-1" style="font-size:small; padding-top:5px">
+                            ---
+                        </div>
 
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
                             @if (String.IsNullOrEmpty(@Model.goal.score))
@@ -129,25 +144,31 @@ else {
                          
                             <div class="col-sm-9">
                                 <div class="row ">
-                                    @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
-                                    {
-                                        bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
-                                        if (cellIsViewable)
-                                        {
-                                            <div class="col-sm-1 buildingCol monthCol" style="background-color:@buildingCell.metricColor">
-                                                @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                                { <br /> }
-                                                else
-                                                { @buildingCell.metricValue }
-                                            </div>
-                                        }
-                                        colCounter++;
-                                    }
+                                    <table style="width:100%">
+                                        <tr class="valueRow">
+                                            @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
+                                            {
+                                                bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
+                                                if (cellIsViewable)
+                                                {
+                                                    <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                        @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                                        { <br /> }
+                                                        else
+                                                        { @buildingCell.metricValue }
+                                                    </td>
+                                                }
+                                                colCounter++;
+                                            }
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>  <!-- End of block with 12 Month Value Columns -->
+                            <div class="col-sm-1" style="font-size:small; padding-top:5px">
+                                @buildingRow.redTotals
+                            </div>
                         </div>
-                    }
-
+                    } <!-- DISPLAY OF DATA ROWS LOOP END -->
 
                     <div class="row buildingRow" style="background-color: lightgray; ">
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
@@ -156,30 +177,38 @@ else {
                         <div class="col-sm-9">
                             <div class="row ">
                                 @{colCounter = 0;}
-                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in @Model.missedGoals.entityMetricCells)
-                                {
-                                    bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
-                                    if (cellIsViewable)
-                                    {
-                                        <div class="col-sm-1 buildingCol monthCol" style="background-color:@bldngMV.metricColor">
-                                            @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                            { <br /> }
-                                            else
-                                            { @bldngMV.metricValue }
-                                        </div>
-                                    }
-                                    colCounter++;
-                                }
+                                <table style="width:100%">
+                                    <tr class="valueRow">
+                                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in @Model.missedGoals.entityMetricCells)
+                                        {
+                                            if (Model.rowHeadings.entityMetricCells[colCounter].isViewable)
+                                            {
+                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth; background-color:@bldngMV.metricColor">
+                                                    @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                                    { <br /> }
+                                                    else
+                                                    { @bldngMV.metricValue }
+                                                </td>
+                                            }
+                                            colCounter++;
+                                        }
+                                    </tr>
+                                </table>
+
+
                             </div>
                         </div>
-
+                        <div class="col-sm-1" style="font-size:small; padding-top:5px">
+                            @*@Model.missedGoals.redTotals*@
+                        </div>
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                @if (String.IsNullOrEmpty(@Model.goal.score))
-                { <br /> }
-                else
-                { @Model.goal.score }
-            </div>*@
-                    </div><!-- GOAL ROWS -->
+                            @if (String.IsNullOrEmpty(@Model.goal.score))
+                            { <br /> }
+                            else
+                            { @Model.goal.score }
+                          </div>
+                        *@
+                    </div><!-- MISSED GOALS TOTAL ROW -->
 
                 </div> <!-- End of DIV Table Table -->
             </div>
