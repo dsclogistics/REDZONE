@@ -85,8 +85,8 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-1 buildingCol headerCol" >
-                            Red Totals
+                        <div class="col-sm-1 buildingCol headerCol" style="font-size:small">
+                            Goals Missed
                         </div>  <!-- Goal Column -->
                     </div><!-- TITLES ROW END -->
 
@@ -125,10 +125,11 @@
                             </div>
                         </div>  <!-- End of 'Months' columns block -->
                         <div class="col-sm-1 buildingCol">
-                            -
+                            @buildingRow.redTotals
                         </div>
                     </div> @*  <------- End of BuildingRow Rows Data Section ---- *@
                 }
+
                     <div class="row buildingRow " style="background-color: lightgreen">
                         <div class="col-sm-2 buildingCol">
                             @Model.buildingScoreRow.rowName
@@ -157,7 +158,6 @@
                             </div>
                         </div>  <!-- End of Goals Missed block with 12 Month Value Columns -->
                         <div class="col-sm-1 buildingCol">
-                            -
                         </div>
                     </div> @*  <------- End of Total Goals Missed Data Section ---- *@
                 </div> <!-- End of DIV Table Table -->

@@ -562,6 +562,7 @@ namespace REDZONE.AppCode
                                             {
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                                row.redTotals++;
                                             }
                                             //If value missed the Goal, increase the Missed Goals counter
                                             // ---- TO DO ----  ////
@@ -582,7 +583,7 @@ namespace REDZONE.AppCode
                     }                  
                     bSummary.buildingHeadings = header;
                     bSummary.buildingScoreRow = rowTotals;
-                    bSummary.activeColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
+                    bSummary.viewableColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
                     // Loop through all the Goals Missed Row and set the color accordingly
                     //foreach (var goalRowColTotal in bSummary.buildingScoreRow.entityMetricCells)
@@ -673,6 +674,7 @@ namespace REDZONE.AppCode
                             {
                                 if (row.rowMeasuredId == (string)apiCellValue["dsc_mtrc_lc_bldg_id"])
                                 {
+                                    //int tmpIndex = 0;      //To keep track of the Cell Index being processed by the 'foreach' loop
                                     foreach (var tmp in row.entityMetricCells)
                                     {
                                         if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
@@ -690,6 +692,9 @@ namespace REDZONE.AppCode
                                             {
                                                 mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
                                                 mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = mSummary.missedGoals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+
+                                                //mSummary.missedGoals.entityMetricCells[tmpIndex].score++;
+                                                row.redTotals++;
                                             }
                                         }
                                         

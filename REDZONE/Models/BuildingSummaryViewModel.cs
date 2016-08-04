@@ -25,13 +25,13 @@ namespace REDZONE.Models
         //public List<string> allMetrics = new List<string>();
         //public List<string> allMonths = new List<string>();
 
-        public int activeColumns { get; set; }
+        public int viewableColumns { get; set; }
         public string metricColWidth
         {
             get
             {
-                activeColumns = (activeColumns == 0) ? 1 : activeColumns;   //Default a value of 1 if zero
-                return (1.00 / activeColumns).ToString("0.0%");
+                viewableColumns = (viewableColumns == 0) ? 1 : viewableColumns;   //Default a value of 1 if zero
+                return (1.00 / viewableColumns).ToString("0.0%");
             }
         }
 
