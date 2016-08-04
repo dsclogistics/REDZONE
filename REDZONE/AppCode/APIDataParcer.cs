@@ -602,7 +602,7 @@ namespace REDZONE.AppCode
             return bSummary;
         }
 
-        public MetricSummaryViewModel getMetricSummaryView(string year, string metricID)
+        public MetricSummaryViewModel getMetricSummaryView(string year, string metricID, string sortDir)
         {
             MetricSummaryViewModel mSummary = new MetricSummaryViewModel();
             string raw_data = api.getMetricSummary("Red Zone", "Month", metricID, year);
@@ -646,7 +646,8 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity missedGoalCell= new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
-                                temp.metricDoubleValue = -99999;
+                                
+                                temp.metricDoubleValue = sortDir=="ASC"?99999:-99999;
                                 temp.isViewable = false;                                
                                 row.entityMetricCells.Add(temp);                                
                                 goalCell.metricMonth = (string)m["Month"];
@@ -676,7 +677,21 @@ namespace REDZONE.AppCode
                                         if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
-                                            tmp.metricDoubleValue = tmp.metricValue == "N/A" ? 9999 : Convert.ToDouble(tmp.metricValue);
+                                            if (tmp.metricValue == "N/A")
+                                            {
+                                                if (sortDir == "ASC") { tmp.metricDoubleValue = 99998; }
+
+                                                if (sortDir == "DESC") { tmp.metricDoubleValue = -99998; }
+
+                                            }
+                                            else if (String.IsNullOrEmpty(tmp.metricValue))
+                                            {
+                                                tmp.metricDoubleValue = sortDir == "ASC" ? 99999 : -99999;
+                                            }                                          
+                                            else
+                                            {
+                                                tmp.metricDoubleValue =Convert.ToDouble(tmp.metricValue);
+                                            }                                      
                                             tmp.isViewable = true;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
                                             if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A")

@@ -38,7 +38,7 @@ namespace REDZONE.Controllers
         }
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
-            MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID);
+            MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID,sortDir);
             if (!String.IsNullOrEmpty(sortMonth)) {
                 if (sortDir.Equals("ASC")) { dashBoard.metricRows = dashBoard.metricRows.OrderBy(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
                 else { dashBoard.metricRows = dashBoard.metricRows.OrderByDescending(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
