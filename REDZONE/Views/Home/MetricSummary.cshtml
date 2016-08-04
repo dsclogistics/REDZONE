@@ -182,7 +182,7 @@ else {
                         </div>
                     } <!-- DISPLAY OF DATA ROWS LOOP END -->
 
-                    <div class="row buildingRow" style="background-color: lightgray; ">
+                    <div class="row buildingRow totalsRow" >
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.missedGoals.rowName
                         </div>
@@ -210,16 +210,16 @@ else {
 
                             </div>
                         </div>
-                        <div class="col-sm-1 buildingCol " >
+                        <div class="col-sm-1 buildingCol ">
                             <br />
                             @*@Model.missedGoals.redTotals*@
                         </div>
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                            @if (String.IsNullOrEmpty(@Model.goal.score))
-                            { <br /> }
-                            else
-                            { @Model.goal.score }
-                          </div>
+              @if (String.IsNullOrEmpty(@Model.goal.score))
+              { <br /> }
+              else
+              { @Model.goal.score }
+            </div>
                         *@
                     </div><!-- MISSED GOALS TOTAL ROW -->
 
