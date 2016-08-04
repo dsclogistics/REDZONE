@@ -325,6 +325,7 @@ namespace REDZONE.AppCode
             eSummary.month = month;
             eSummary.year = year;
             eSummary.goal.rowScore = 0;
+            eSummary.total = 0;
             eSummary.goal.BuildingName = "Goal";
             eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";
             eSummary.goalsMissedRow.scoreColor = "lightgray";
@@ -430,6 +431,7 @@ namespace REDZONE.AppCode
                                             //If the goal is not met, then increase the counter of the total goals not met
                                             if (tmp.isGoalMet.Equals("N")) { 
                                                eSummary.goalsMissedRow.entityMetrics[tmpIndex].score++;
+                                                eSummary.total++;
                                                b.rowScore++;
                                             }
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);

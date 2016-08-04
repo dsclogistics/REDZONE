@@ -9,6 +9,7 @@ namespace REDZONE.Models
     {
         public string month { get; set; }
         public string year { get; set; }
+        public int total { get; set; }
         public string urlNextMonth { get; set; }
         public string urlPrevMonth { get; set; }
         public string statusNextMonth { get; set; }
