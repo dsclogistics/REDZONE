@@ -443,7 +443,7 @@ namespace REDZONE.AppCode
                                         tmpIndex++;
                                     }
                                     //Hard Code al Row Score Colors are Green for now
-                                    b.scoreColor = COLOR_GREEN;
+                                    b.scoreColor = "";
                                     //if (b.rowScore < 3)
                                     //{
                                     //    b.scoreColor = COLOR_GREEN;
