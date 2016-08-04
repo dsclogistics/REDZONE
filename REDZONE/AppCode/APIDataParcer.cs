@@ -436,12 +436,6 @@ namespace REDZONE.AppCode
                                             }
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
                                           
-                                            //if (tmp.isGoalMet == "N")
-                                            //{
-                                            //    eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
-                                            //    eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = eSummary.goalsMissedRow.entityMetrics.Single(x => x.metricName == tmp.metricName).score.ToString();
-                                            //}
-
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
 
