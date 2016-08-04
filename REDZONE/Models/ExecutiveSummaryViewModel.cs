@@ -28,8 +28,9 @@ namespace REDZONE.Models
 
     public class MetricHeader
     {
-        public string metricName;
         public string metricID;
+        public string metricName;
+        public string metricDescription;
         public string url;
     }
 

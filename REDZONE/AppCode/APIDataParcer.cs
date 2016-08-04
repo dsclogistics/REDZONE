@@ -327,8 +327,8 @@ namespace REDZONE.AppCode
             eSummary.goal.rowScore = 0;
             eSummary.total = 0;
             eSummary.goal.BuildingName = "Goal";
-            eSummary.goalsMissedRow.BuildingName = "Goals not Met (By Metric)";
-            eSummary.goalsMissedRow.scoreColor = "lightgray";
+            eSummary.goalsMissedRow.BuildingName = "Goals not Met";
+            eSummary.goalsMissedRow.scoreColor = "";
             try
             {
                 List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -366,6 +366,7 @@ namespace REDZONE.AppCode
                     {
                         MetricHeader metricName = new MetricHeader();
                         metricName.metricName =(string)mtrValue["mtrc_prod_display_text"];
+                        metricName.metricDescription = (string)mtrValue["mtrc_name"];
                         metricName.metricID = (string)mtrValue["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
@@ -376,7 +377,7 @@ namespace REDZONE.AppCode
                         totalColMetric.metricName = metricName.metricName;
                         eSummary.goal.entityMetrics.Add(goalMetric);
                         totalColMetric.score = 0;
-                        totalColMetric.metricColor = "lightgray";
+                        //totalColMetric.metricColor = "lightgray";
                         eSummary.goalsMissedRow.entityMetrics.Add(totalColMetric);
                     }
                     //eSummary.allMetrics = eSummary.allMetrics.OrderBy(x => x.metricName).ToList();

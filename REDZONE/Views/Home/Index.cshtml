@@ -52,7 +52,7 @@
                    </div>
                 @foreach (var m in Model.allMetrics)
                 {
-                   <div class="col-sm-1 buildingCol headerCol">
+                   <div class="col-sm-1 buildingCol headerCol" title="@m.metricDescription">
                        <a href="@m.url">@m.metricName</a>
                    </div>
                 }
@@ -67,12 +67,12 @@
                </div><!-- TITLES ROW -->
 
                <div class="row buildingRow" style="background-color: #bbedff">
-                            <div class="col-sm-2 buildingCol" style="text-align:center; ">
+                            <div class="col-sm-2 buildingCol" style="font-weight:bold ">
                                 @Model.goal.BuildingName
                             </div>
                             @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
                             {
-                                <div class="col-sm-1 buildingCol" style="background-color:@bldngMV.metricColor">
+                                <div class="col-sm-1 buildingCol" style="color:blue; font-weight:bold; background-color:@bldngMV.metricColor">
                                     @bldngMV.metricValue
                                 </div>
                             }
@@ -112,7 +112,7 @@
                            @metricTotalCell.score.ToString("0")
                        </div>
                    }
-                   <div class="@colClass buildingCol scoreCol" style="background-color:@Model.goalsMissedRow.scoreColor">
+                   <div class="@colClass buildingCol " style="background-color:@Model.goalsMissedRow.scoreColor">
                        @Model.total
                        @*@Model.goalsMissedRow.rowScore*@
                    </div>
