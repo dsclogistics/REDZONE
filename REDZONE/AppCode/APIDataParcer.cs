@@ -27,6 +27,7 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             rz_metric.allBuildings = String.Empty;
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
+           
             
             // At this point the json result can be empty (If no data was found) or an Error if an exception was caught 
             // or an actual jason message if The API was successful
@@ -88,6 +89,14 @@ namespace REDZONE.AppCode
                     rz_metric.allBuildings = rz_metric.allBuildings + bldg.buildingName + "~";
                     rz_metric.buildingList.Add(bldg);
                 }
+                //if (rz_metric.isImportable)
+                //{
+                //    try
+                //    {
+                //        ExcelBuilder.CreateExcelTemplate(rz_metric.metricName, year, month, rz_metric.allBuildings.Split(new[] { '~' }, StringSplitOptions.RemoveEmptyEntries));
+                //    }
+                //    catch { }                  
+                //}
             }
             catch {
                 // Default Some Dummy Values since valid data could not be retrieved
@@ -420,7 +429,7 @@ namespace REDZONE.AppCode
                                             tmp.tm_period_id = (string)mtrc["tm_period_id"];
                                             tmp.dsc_mtrc_lc_bldg_id = (string)mtrc["dsc_mtrc_lc_bldg_id"];
                                             tmp.metricMonth = (string)mtrc["MonthName"];
-                                            if((string)mtrc["data_type_token"]=="pct" && tmp.metricValue != "N/A")
+                                            if((string)mtrc["data_type_token"]=="pct" && tmp.metricValue != "N/A"&& !String.IsNullOrEmpty(tmp.metricValue) )
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
@@ -550,7 +559,7 @@ namespace REDZONE.AppCode
                                         {
                                             tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
-                                            if ((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A")
+                                            if ((string)apiCellValue["data_type_token"] =="pct"&& tmp.metricValue != "N/A" && !String.IsNullOrEmpty(tmp.metricValue))
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
@@ -695,7 +704,7 @@ namespace REDZONE.AppCode
                                             }                                      
                                             tmp.isViewable = true;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
-                                            if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A")
+                                            if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A" && !String.IsNullOrEmpty(tmp.metricValue))
                                             {
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
