@@ -8,9 +8,9 @@
 
 <style>
     .valueCell {
-    font-weight:bold;
-    /*font-size:medium;*/
-}
+        font-weight: bold;
+        /*font-size:medium;*/
+    }
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="col-md-10 " style="margin-left:15px; padding:0;">
@@ -67,7 +67,8 @@
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
-                    <div class="row headerRow row-eq-height"> <!-- TITLES ROW START-->
+                    <div class="row headerRow row-eq-height">
+                        <!-- TITLES ROW START-->
                         <div class="col-sm-2 buildingCol headerCol">
                             <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
                         </div>  <!-- Metric Name Header Column -->
@@ -91,50 +92,49 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-1 buildingCol headerCol scoreCol" style="font-size:small">
+                        <div class="col-sm-1 buildingCol headerCol scoreCol" >
                             Goals Missed
                         </div>  <!-- Goal Column -->
                     </div><!-- TITLES ROW END -->
+                    @*Begin Displaying All Rows for Metric*@
+                    @foreach (var buildingRow in Model.metricRows)
+                    {
+                        colCounter = 0;
+                        <div class="row buildingRow ">
+                            <div class="col-sm-2 buildingCol">
+                                <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
+                            </div>  <!-- Metric Name Column -->
 
-                @*Begin Displaying All Rows for Metric*@
-                @foreach (var buildingRow in Model.metricRows)
-                {
-                    colCounter = 0;
-                    <div class="row buildingRow ">
-                        <div class="col-sm-2 buildingCol">
-                            <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
-                        </div>  <!-- Metric Name Column -->
-
-                        <div class="col-sm-1 buildingCol" style="background-color: #bbedff">
-                            @buildingRow.scoreGoal
-                        </div>  <!-- Goal Column -->
-                        <div class="col-sm-8">
-                            <div class="row ">
-                                <table style="width:100%">
-                                    <tr class="valueRow">
-                                        @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
-                                        {
-                                            bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
-                                            if (cellIsViewable)
+                            <div class="col-sm-1 buildingCol" style="background-color: #bbedff">
+                                @buildingRow.scoreGoal
+                            </div>  <!-- Goal Column -->
+                            <div class="col-sm-8">
+                                <div class="row ">
+                                    <table style="width:100%">
+                                        <tr class="valueRow">
+                                            @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                                             {
-                                                <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth;">
-                                                    @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                                    { <br /> }
-                                                    else
-                                                    { @buildingCell.metricValue }
-                                                </td>
+                                                bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                                if (cellIsViewable)
+                                                {
+                                                    <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth;">
+                                                        @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                                        { <br /> }
+                                                        else
+                                                        { @buildingCell.metricValue }
+                                                    </td>
+                                                }
+                                                colCounter++;
                                             }
-                                            colCounter++;
-                                        }
-                                    </tr>
-                                </table>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>  <!-- End of 'Months' columns block -->
+                            <div class="col-sm-1 buildingCol scoreCol">
+                                @buildingRow.redTotals
                             </div>
-                        </div>  <!-- End of 'Months' columns block -->
-                        <div class="col-sm-1 buildingCol scoreCol">
-                            @buildingRow.redTotals
-                        </div>
-                    </div> @*  <------- End of BuildingRow Rows Data Section ---- *@
-                }
+                        </div> @*  <------- End of BuildingRow Rows Data Section ---- *@
+                    }
 
                     <div class="row buildingRow totalsRow">
                         <div class="col-sm-2 buildingCol">

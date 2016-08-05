@@ -103,7 +103,7 @@ else {
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-1 scoreCol" style="font-size:small; padding-top:5px">
+                        <div class="col-sm-1 scoreCol" >
                             Goals Missed
                         </div>
                     </div><!-- TITLES ROW -->
@@ -149,6 +149,7 @@ else {
                     @foreach (var buildingRow in Model.metricRows)
                     {
                         colCounter = 0;
+                        bool allNAs = true;
                         <div class="row buildingRow ">
                             <div class="col-sm-2 buildingCol">
                                 <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
@@ -167,7 +168,10 @@ else {
                                                         @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                                         { <br /> }
                                                         else
-                                                        { @buildingCell.metricValue }
+                                                        {
+                                                            if (!buildingCell.metricValue.Equals("N/A")) { allNAs = false; }                                                            
+                                                            @buildingCell.metricValue 
+                                                        }
                                                     </td>
                                                 }
                                                 colCounter++;
@@ -177,7 +181,8 @@ else {
                                 </div>
                             </div>  <!-- End of block with 12 Month Value Columns -->
                             <div class="col-sm-1 buildingCol scoreCol">
-                                @buildingRow.redTotals
+                                @if (allNAs) { <text>---</text>}
+                                else { @buildingRow.redTotals }                                
                             </div>
                         </div>
                     } <!-- DISPLAY OF DATA ROWS LOOP END -->
