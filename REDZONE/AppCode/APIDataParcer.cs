@@ -366,7 +366,7 @@ namespace REDZONE.AppCode
                     {
                         MetricHeader metricName = new MetricHeader();
                         metricName.metricName =(string)mtrValue["mtrc_prod_display_text"];
-                        metricName.metricDescription = (string)mtrValue["mtrc_name"];
+                        metricName.metricDescription = (string)mtrValue["mtrc_period_desc"];
                         metricName.metricID = (string)mtrValue["mtrc_id"];
                         metricName.url = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, metricName.metricID);
                         eSummary.allMetrics.Add(metricName);
