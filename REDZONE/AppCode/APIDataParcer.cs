@@ -483,8 +483,8 @@ namespace REDZONE.AppCode
                 bSummary.urlNextPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear + 1).ToString(), buildingID);
                 bSummary.urlPrevPeriod = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", (intYear - 1).ToString(), buildingID);
                 //bSummary.urlNextBuilding = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, intBuilding + 1);
-                //bSummary.urlPrevBuilding = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, intBuilding - 1);
-                bSummary.statusPrevPeriod = (intYear < 2016) ? "disabled" : "";
+                //bSummary.urlPrevBuilding = String.Format("/Home/BuildingSummary/?year=    {0}&buildingID={1}", year, intBuilding - 1);
+                bSummary.statusPrevPeriod = (intYear <= 2016) ? "disabled" : "";
                 bSummary.statusNextPeriod = (DateTime.Today.Year == intYear) ? "disabled" : "";
                 //------- END of hardcoding data ------------------------------------------
 
