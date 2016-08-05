@@ -124,6 +124,7 @@ namespace REDZONE.AppCode
             RZ_Metric rz_metric = new RZ_Metric();
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
             JObject parsed_result = JObject.Parse(raw_data);
+            string eValue = String.Empty;
             ExcelMetric eMetric = excelReader.readValidatedExcelFile(file);
             try
             {
@@ -179,7 +180,13 @@ namespace REDZONE.AppCode
                     {
                         try
                         {
-                            bldg.metricPeriodValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                            eValue = eMetric.buildingList.First(x => x.buildingName.ToUpper() == bldg.buildingName.ToUpper()).metricPeriodValue;
+                            if (!String.IsNullOrEmpty(eValue))
+                            {
+                                bldg.metricPeriodValue = eValue;
+                                bldg.saveFlag = "Y";
+                                eValue = String.Empty;
+                            }                           
                             if(bldg.metricPeriodValue.Equals("na")|| bldg.metricPeriodValue.Equals("n/a")|| bldg.metricPeriodValue.Equals("NA"))
                             {
                                 bldg.metricPeriodValue = "N/A";
@@ -194,7 +201,7 @@ namespace REDZONE.AppCode
                                 }
                                 catch { }
                             }
-                            bldg.saveFlag = "Y";
+                            //bldg.saveFlag = "Y";
                         }
                         catch { }
                     }                  
@@ -748,8 +755,9 @@ namespace REDZONE.AppCode
         private string getMetricColor(string mValue, string isGoalMet,string status)
         {
             string mColor = "lightgray";
-
-            if (String.IsNullOrEmpty(mValue)|| mValue == "N/A") return "lightgray";
+            if (String.IsNullOrEmpty(mValue)) return "";
+            //if (mValue == "N/A"|| String.IsNullOrEmpty(mValue)) return "lightgray";
+            if (mValue == "N/A" ) return "lightgray";
             if (status == "Open")
             {
                 if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;
