@@ -38,7 +38,7 @@ namespace REDZONE.Models
         public int metricPeriodID { set; get; }
         public bool isNumeric { set; get; }
         public bool isAuto { set; get; }
-
+        public bool isModelValid { set; get; }
         public string mtrcMinVal { set; get; }
         public string mtrcMaxVal { set; get; }
         public string maxDecPlaces { set; get; }

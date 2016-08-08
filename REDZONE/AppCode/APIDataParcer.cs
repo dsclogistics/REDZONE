@@ -26,6 +26,7 @@ namespace REDZONE.AppCode
         {
             RZ_Metric rz_metric = new RZ_Metric();
             rz_metric.allBuildings = String.Empty;
+            rz_metric.maxDecPlaces = "0";
             string raw_data = api.getMetricperiod("Red Zone", "Month", metric_id.ToString(), month, year);
            
             
@@ -56,6 +57,7 @@ namespace REDZONE.AppCode
                     string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, next_date_time[0], next_date_time[1]);
                 }
+                rz_metric.isModelValid =  String.IsNullOrEmpty( (string)parsed_result["metricdetail"]["prod_name"])?false: true;  // If jason product value can't be parse we assume no data could be retrieved.
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
                 rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
@@ -100,6 +102,7 @@ namespace REDZONE.AppCode
             }
             catch {
                 // Default Some Dummy Values since valid data could not be retrieved
+                rz_metric.isModelValid = false;
                 DateTime currentMonth = new DateTime( Convert.ToInt16(year), monthToInt(month), 1);
                 rz_metric.metric_period_start_date = currentMonth;
                 rz_metric.prodName = "Red Zone";
