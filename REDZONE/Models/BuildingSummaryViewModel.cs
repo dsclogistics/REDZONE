@@ -31,7 +31,7 @@ namespace REDZONE.Models
             get
             {
                 viewableColumns = (viewableColumns == 0) ? 1 : viewableColumns;   //Default a value of 1 if zero
-                return (1.00 / viewableColumns).ToString("0.0%");
+                return (0.6668 / viewableColumns).ToString("0.00%");
             }
         }
 

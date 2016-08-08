@@ -5,8 +5,7 @@
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
-<div class="row" style="font-family:Arial; margin-top: 5px; width:100%">
-  <div class="col-md-10 " style="margin-left:20px; padding:0;">
+<div class="row" style="font-family:Arial; margin-top: 5px; ">
      <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
             <div class="row">
@@ -66,7 +65,7 @@
                    </div>
                </div><!-- TITLES ROW -->
 
-               <div class="row buildingRow" style="background-color: #bbedff">
+               <div class="row buildingRowX" style="background-color: #bbedff">
                             <div class="col-sm-2 buildingCol" style="font-weight:bold ">
                                 @Model.goal.BuildingName
                             </div>
@@ -83,7 +82,7 @@
                         </div><!-- GOAL ROWS -->
              @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
              {
-               <div class="row buildingRow">
+               <div class="row buildingRowX">
                     <div class="col-sm-2 buildingCol" style="text-align:center">
                         <a href="@dscBldng.url">@dscBldng.BuildingName</a>
                     </div>
@@ -102,8 +101,8 @@
                    </div>
                </div><!-- building ROWS -->
               }
-                <div class="row buildingRow totalsRow">
-                    <div class="col-sm-2 buildingCol" style="text-align:center; font-weight:bold">
+                <div class="row buildingRowX totalsRow">
+                    <div class="col-sm-2 buildingCol" style="font-weight:bold">
                         <span>@Model.goalsMissedRow.BuildingName</span>
                     </div>
                     @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
@@ -120,8 +119,7 @@
             </div> <!-- End of DIV Table Table -->
          }
         </div>
-     </div>
-  </div>
+     </div>  
 </div>
 
 <script>

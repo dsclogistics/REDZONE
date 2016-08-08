@@ -43,7 +43,7 @@ td.center {
     padding: 0px;
     width: 98%;
     margin-left: 1px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid black;
     min-width: 100%;
     background-color: #f0eaea;
     font-weight: bold;
@@ -57,7 +57,13 @@ td.center {
     flex-direction: column;
 }
 
-.buildingRow {
+.rowHeader {
+    padding: 0px;
+    border-bottom: 1px solid gray;
+    background-color: #f0eaea;
+    font-weight: bold;
+}
+.buildingRowX {
     padding: 0;
     width: 98%;
     margin-left: 1px;
@@ -65,9 +71,13 @@ td.center {
     min-width: 100%;
 }
 
+.buildingRow {
+    border-top: 1px solid #c6c4c4;
+}
+
 .buildingRow:hover{
     background-color: #f1f1f1 !important;
-    border: 1px dashed gray;
+    /*border: 1px dashed gray;*/
 }
 
 .buildingRow:hover td{
@@ -75,17 +85,20 @@ td.center {
 }
 
 .buildingCol {
-    border-right: 1px solid #c6c4c4; /*#f1f1f1*/
-    text-align: center;
+    border-left: 1px solid #c6c4c4;     /*#f1f1f1*/
+    text-align: center;    
     padding: 3px;
+    vertical-align: middle !important;
 }
 
 .scoreCol {
-    border-left: 2px solid black;
+    border-left: 1px solid gray !important;
+    font-weight:bold;
 }
 
 .totalsRow {
-    border-top: 2px solid black;
+    border-top: 1px solid gray !important;
+    font-weight:bold;
 }
 /*.valueRow:hover td  {
     background-color: #f1f1f1 !important;

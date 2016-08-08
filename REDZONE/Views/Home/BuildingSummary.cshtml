@@ -10,10 +10,11 @@
     .valueCell {
         font-weight: bold;
         /*font-size:medium;*/
+        padding-top:5px;
+        padding-bottom:5px;
     }
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px">
-    <div class="col-md-10 " style="margin-left:15px; padding:0;">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
@@ -63,114 +64,89 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body" style="margin:2px; padding:5px">
+            <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
-                    <!-- Table -->
-                    <!-- ROWS -->
-                    <div class="row headerRow row-eq-height">
-                        <!-- TITLES ROW START-->
-                        <div class="col-sm-2 buildingCol headerCol">
-                            <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
-                        </div>  <!-- Metric Name Header Column -->
-                        <div class="col-sm-1 buildingCol headerCol" style="background-color: #bbedff">
-                            Goal
-                        </div>  <!-- Goal Column -->
-                        <div class="col-sm-8">
-                            <div class="row">
-                                <table style="width:100%">
-                                    <tr>
-                                        @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
-                                        {
-                                            if (dscBldngHdr.isViewable)
-                                            {
-                                                <td class="col-sm-1 buildingCol headerCol">
-                                                    @dscBldngHdr.metricName
-                                                </td>
-                                            }
-                                        }
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-sm-1 buildingCol headerCol scoreCol" >
-                            Goals Missed
-                        </div>  <!-- Goal Column -->
-                    </div><!-- TITLES ROW END -->
-                    @*Begin Displaying All Rows for Metric*@
-                    @foreach (var buildingRow in Model.metricRows)
-                    {
+                    <table class="" style="width:100%;">
+                        <tr class="rowHeader">
+                            <td class="buildingCol" style="width:16.66%">
+                                <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
+                            </td>
+                            <td class="buildingCol" style="width:8.33%; background-color: #bbedff">
+                                Goal
+                            </td>
+                            @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.buildingHeadings.entityMetricCells)
+                            {
+                                if (dscBldngHdr.isViewable)
+                                {
+                                    <td class="buildingCol" style="width:@Model.metricColWidth">
+                                        @dscBldngHdr.metricName
+                                    </td>
+                                }
+                            }
+                            <td class="buildingCol" style="width:8.33%;">
+                                Goals Not Met
+                            </td>
+                        </tr>
+
+                     @foreach (var buildingRow in Model.metricRows)
+                     {
                         colCounter = 0;
-                        <div class="row buildingRow ">
-                            <div class="col-sm-2 buildingCol">
-                                <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
-                            </div>  <!-- Metric Name Column -->
+                        <tr class="buildingRow">
+                                <td class="buildingCol" style="width:16.66%">
+                                    <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
+                                </td> <!-- Metric Name Column -->
+                                <td class="buildingCol" style="width:8.33%; background-color: #bbedff">
+                                    @buildingRow.scoreGoal
+                                </td> <!-- Goal Column -->
+                                @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
+                                {
+                                    bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                    if (cellIsViewable)
+                                    {
+                                        <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                            @*@Model.metricColWidth*@
+                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                            { <br /> }
+                                            else
+                                            { @buildingCell.metricValue }
+                                        </td>
+                                    }
+                                    colCounter++;
+                                }
+                                <td class="buildingCol scoreCol" style="width:8.33%;">
+                                    @buildingRow.redTotals
+                                </td>
+                            </tr>
+                     }  @*  <------- End of BuildingRow Rows Section ---- *@
 
-                            <div class="col-sm-1 buildingCol" style="background-color: #bbedff">
-                                @buildingRow.scoreGoal
-                            </div>  <!-- Goal Column -->
-                            <div class="col-sm-8">
-                                <div class="row ">
-                                    <table style="width:100%">
-                                        <tr class="valueRow">
-                                            @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
-                                            {
-                                                bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
-                                                if (cellIsViewable)
-                                                {
-                                                    <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth;">
-                                                        @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                                        { <br /> }
-                                                        else
-                                                        { @buildingCell.metricValue }
-                                                    </td>
-                                                }
-                                                colCounter++;
-                                            }
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>  <!-- End of 'Months' columns block -->
-                            <div class="col-sm-1 buildingCol scoreCol">
-                                @buildingRow.redTotals
-                            </div>
-                        </div> @*  <------- End of BuildingRow Rows Data Section ---- *@
-                    }
-
-                    <div class="row buildingRow totalsRow">
-                        <div class="col-sm-2 buildingCol">
-                            @Model.buildingScoreRow.rowName
-                        </div>  <!-- Metric Name Column -->
-                        <div class="col-sm-1 buildingCol">
-                            <br />
-                        </div>  <!-- Goal Column -->
-                        <div class="col-sm-8">
-                            <div class="row ">
-                                <table style="width:100%">
-                                    <tr class="valueRow">
-                                        @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in Model.buildingScoreRow.entityMetricCells)
-                                        {
-                                            if (buildingCell.isViewable)
-                                            {
-                                                <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
-                                                    @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                                    { <br /> }
-                                                    else
-                                                    { @buildingCell.metricValue }
-                                                </td>
-                                            }
-                                        }
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>  <!-- End of Goals Missed block with 12 Month Value Columns -->
-                        <div class="col-sm-1 buildingCol ">
-                            <br />
-                        </div>
-                    </div> @*  <------- End of Total Goals Missed Data Section ---- *@
+                        <tr class="buildingRow totalsRow" >
+                            <td class="buildingCol " style="width:16.66%">
+                                @*@Model.buildingScoreRow.rowName*@
+                                Building Score
+                            </td><!-- Metric Name Column -->
+                            <td class="buildingCol " style="width:8.33%; ">
+                                <br />
+                            </td><!-- Goal Column -->
+                          @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in Model.buildingScoreRow.entityMetricCells)
+                          {
+                            if (buildingCell.isViewable)
+                            {
+                              <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                 @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                 { <br /> }
+                                 else
+                                 { @buildingCell.metricValue }
+                              </td>
+                            }
+                          }
+                            <td class="buildingCol scoreCol" style="width:8.33%;">
+                                <br />
+                            </td>
+                        </tr> <!-- End of Total Goals Missed Data Section -->
+                    </table>
                 </div> <!-- End of DIV Table Table -->
             </div>
         </div>
-    </div>
 </div>
 
 <script>

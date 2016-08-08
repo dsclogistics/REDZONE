@@ -86,7 +86,8 @@
 
         @* ------- Render the partial View that contains the Application BODY  ------------- *@        
 
-            <div class="container-fluid body-content text-center">
+            <div class="container body-content text-center" style="width:100%; max-width:1500px; margin-top:22px" >
+            @*<div class="container-fluid body-content text-center" style="border:1px solid blue;" >*@
                 @RenderBody()
             </div>
 
