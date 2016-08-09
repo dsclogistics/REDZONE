@@ -35,15 +35,24 @@ namespace REDZONE.Controllers
             string fileName = @"RZ_" + metricName + "_" + month + "_" + year + ".xlsx";
             //string path = @"C:\DSC\RZ_" + metricName + "_" + month + "_" + year + ".xlsx";            
             //FileInfo newFile = new FileInfo(downloadPath);
-            int curCell = 6;
+            int curRow = 6;
             using (ExcelPackage package = new ExcelPackage())
             {
                 ExcelWorksheet ws = package.Workbook.Worksheets.Add(metricName + " " + month + ", " + year);
                 //package.File = newFile;
+                ws.View.ShowGridLines = false;
                 ws.Cells["A1"].Value = "R/Z METRIC NAME";
                 ws.Cells["A1"].Style.Font.Bold = true;
                 ws.Cells["A1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 ws.Cells["A1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                ws.Cells["A2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells["A2"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                ws.Cells["A3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells["A3"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                ws.Cells["A5"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells["A5"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                ws.Cells["B5"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells["B5"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
                 ws.Cells["B1"].Value = metricName;
                 ws.Cells["A2"].Value = "YEAR";
                 ws.Cells["A2"].Style.Font.Bold = true;
@@ -55,13 +64,23 @@ namespace REDZONE.Controllers
                 ws.Cells["A5"].Style.Font.Bold = true;
                 ws.Cells["B5"].Value = "Metric Value";
                 ws.Cells["B5"].Style.Font.Bold = true;
+                //ws.Column(1).AutoFit();
+                //ws.Column(2).AutoFit();
+                ws.Column(1).Width = 22;
+                ws.Column(2).Width = 18;
+                ws.Cells[1,1,3,2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                ws.Cells[5, 1].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+                ws.Cells[5,2].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+                
                 for (int i = 0; i < buildings.Length; i++)
                 {
-                    ws.Cells["A" + curCell.ToString()].Value = buildings[i];
-                    curCell++;
+                    ws.Cells[curRow, 1].Value = buildings[i];
+                    ws.Cells[curRow, 1].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+                    ws.Cells[curRow, 2].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+                    ws.Row(curRow).Height = 16;
+                    curRow++;
                 }
-                ws.Column(1).AutoFit();
-                ws.Column(2).AutoFit();
+
                 //newFile.Create();
                 //newFile.MoveTo(@"C:/testSheet.xlsx");
                 //package.SaveAs(newFile);
