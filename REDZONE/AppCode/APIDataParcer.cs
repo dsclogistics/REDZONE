@@ -734,6 +734,7 @@ namespace REDZONE.AppCode
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
                                 var goalRow = goal.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]);
+                                header.entityMetricCells.Single(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
                                 goalRow.isViewable = true;
                             }
                         }
