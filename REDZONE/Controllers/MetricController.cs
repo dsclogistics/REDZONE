@@ -28,8 +28,9 @@ namespace REDZONE.Controllers
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
-        public ActionResult downloadTemplate(string metricName, string month, string year, string[] buildings) 
+        public ActionResult downloadTemplate(string metricName, string month, string year, string allBuildings) 
         {
+            string[] buildings = allBuildings.Split(new[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
             string fileName = @"RZ_" + metricName + "_" + month + "_" + year + ".xlsx";
             //string path = @"C:\DSC\RZ_" + metricName + "_" + month + "_" + year + ".xlsx";            
             //FileInfo newFile = new FileInfo(downloadPath);
@@ -61,7 +62,9 @@ namespace REDZONE.Controllers
                 //newFile.Create();
                 //newFile.MoveTo(@"C:/testSheet.xlsx");
                 //package.SaveAs(newFile);
-                package.Save();
+                
+                //package.Save();
+                
                 //package.SaveAs(newFile);
 
 

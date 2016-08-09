@@ -244,19 +244,19 @@
                     <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>         } style="width:80px" /></div>
                     <div class="col-sm-2 ">               <input id="btnCancel" class="btn btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
                     <div class="col-sm-1 col-sm-offset-2">
-                        <button id="btnDwnldTemplate" @*type="submit"*@ class="btn btn-default" style="float:right">
+                        @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
-                        </button>
+                        </button>*@
 
-                        @*<form id="exportToExcel" action="../ExportTo/Excel/" target="_blank" method="post">
-                                <input type="hidden" id="metricName" name="someData" />
-                                <input type="hidden" id="year" name="anotherData" />
-                                <input type="hidden" id="month" name="moreData" />
-                                <input type="hidden" id="month" name="moreData" />
-                                <button id="btnDwnldTemplate" type="submit" class="btn btn-default" style="float:right">
-                                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
-                                </button>
-                            </form>*@
+                        <form id="exportToExcel" action="/Metric/downloadTemplate" target="_blank" method="post">
+                            <input type="hidden" name="metricName" value="@Model.metricName" />
+                            <input type="hidden" name="year" value="@curYear" />
+                            <input type="hidden" name="month" value="@curMonth" />
+                            <input type="hidden" name="allBuildings" value="@Model.allBuildings" />
+                            <button id="btnDwnldTemplate1" type="submit" class="btn btn-default" style="float:right">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
+                            </button>
+                        </form>
 
                     </div>
                 </div>
