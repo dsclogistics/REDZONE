@@ -6,6 +6,7 @@ using System.Web;
 using OfficeOpenXml;
 using System.Collections.Generic;
 using System.IO;
+using OfficeOpenXml.Style;
 
 namespace REDZONE.Controllers
 {
@@ -39,13 +40,15 @@ namespace REDZONE.Controllers
             {
                 ExcelWorksheet ws = package.Workbook.Worksheets.Add(metricName + " " + month + ", " + year);
                 //package.File = newFile;
-                ws.Cells["A1"].Value = "R/Z Metric Name";
+                ws.Cells["A1"].Value = "R/Z METRIC NAME";
                 ws.Cells["A1"].Style.Font.Bold = true;
+                ws.Cells["A1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                ws.Cells["A1"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
                 ws.Cells["B1"].Value = metricName;
-                ws.Cells["A2"].Value = "Year";
+                ws.Cells["A2"].Value = "YEAR";
                 ws.Cells["A2"].Style.Font.Bold = true;
                 ws.Cells["B2"].Value = year;
-                ws.Cells["A3"].Value = "Month";
+                ws.Cells["A3"].Value = "MONTH";
                 ws.Cells["A3"].Style.Font.Bold = true;
                 ws.Cells["B3"].Value = month;
                 ws.Cells["A5"].Value = "Building";
