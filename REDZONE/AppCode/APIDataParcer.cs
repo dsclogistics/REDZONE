@@ -97,7 +97,7 @@ namespace REDZONE.AppCode
                 //    {
                 //        ExcelBuilder.CreateExcelTemplate(rz_metric.metricName, year, month, rz_metric.allBuildings.Split(new[] { '~' }, StringSplitOptions.RemoveEmptyEntries));
                 //    }
-                //    catch { }                  
+                //    catch { }
                 //}
             }
             catch {

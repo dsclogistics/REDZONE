@@ -11,7 +11,7 @@ namespace REDZONE.AppCode
     {
         public static void CreateExcelTemplate(string metricName, string year, string month, string[] buildings )
         {
-            string path = @"C:\RedZone\RZ_"+metricName+"_"+month+"_"+year+".xlsx";
+            string path = @"C:\DSC\RZ_"+metricName+"_"+month+"_"+year+".xlsx";
             FileInfo newFile = new FileInfo(path);
             int curCell = 6;         
             using (ExcelPackage package = new ExcelPackage())
