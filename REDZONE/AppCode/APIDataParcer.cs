@@ -148,6 +148,7 @@ namespace REDZONE.AppCode
                     string[] next_date_time = ((string)parsed_result["metricdetail"]["nextperiod"]).Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     rz_metric.nextMonthUrl = String.Format("/Metric/EditView/{0}?month={1}&year={2}", metric_id, next_date_time[0], next_date_time[1]);
                 }
+                rz_metric.isModelValid = String.IsNullOrEmpty((string)parsed_result["metricdetail"]["prod_name"]) ? false : true;  // If jason product value can't be parse we assume no data could be retrieved.
                 rz_metric.prodName = (string)parsed_result["metricdetail"]["prod_name"];
                 rz_metric.id = (int)parsed_result["metricdetail"]["mtrc_id"];
                 rz_metric.metricName = (string)parsed_result["metricdetail"]["mtrc_prod_display_text"];
