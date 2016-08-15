@@ -72,9 +72,10 @@ namespace REDZONE.Models
 
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
-        //\------- End of Constructor ----------/
+        //-------- Metric Specific Constructor -----------\
         public MeasuredCellEntity(string name)
         { metricName = name; }
+        //-------- Instantiated Constructor -----------\
         public MeasuredCellEntity(string mName, string mValue, string mColor) {
             metricName = mName;
             metricValue = mValue;
@@ -87,9 +88,6 @@ namespace REDZONE.Models
 
     public class MeasuredRowEntity
     {// This represents a single Row in the Building Summary Spreadsheet
-        private const string BLUECOLOR = "lightblue";
-        private const string GREENCOLOR = "lightgreen";
-        private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string rowName { get; set; }        //Row represents a "Metric"
         public string rowMeasuredId { get; set; }
         public string rowURL { get; set; }

@@ -21,6 +21,7 @@ namespace REDZONE.Models
         public MeasuredRowEntity buildingHeadings = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
         public MeasuredRowEntity buildingScoreRow = new MeasuredRowEntity();
+        public MeasuredRowEntity buildingActionsRow = new MeasuredRowEntity();
         //public List<string> allBuildings = new List<string>();
         //public List<string> allMetrics = new List<string>();
         //public List<string> allMonths = new List<string>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -200,5 +201,40 @@ namespace REDZONE.AppCode
             return monthName;
         }
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        // This function reads the current Server Webconfig File and retrieves the value of the Appsetting Variable passed as a parameter "key"
+        public static string ReadSetting(string key)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            string result = appSettings[key] ?? "";
+            return result;
+        }
+
+        // ===== Retrieve the API URL USed for the application based on the current Environment's Server NAme
+        public static string getAPIurl()
+        {
+            string serverName = Environment.MachineName.ToUpper();
+            string applicationAPIurl = String.Empty;
+
+            switch (serverName)
+            {
+                case "DSCAPPSQA1":
+                    //QA Server
+                    applicationAPIurl = ReadSetting("apiBaseURLQA");
+                    break;
+                case "122":
+                    //PROD Server
+                    applicationAPIurl = ReadSetting("apiBaseURLPROD");
+                    break;
+                default:
+                    //Default to the Development Server
+                    applicationAPIurl = ReadSetting("apiBaseURL");
+                    break;
+            }
+            return applicationAPIurl;
+        }
+
     }
+
+
 }
