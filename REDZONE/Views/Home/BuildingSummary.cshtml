@@ -143,6 +143,39 @@
                                 <br />
                             </td>
                         </tr> <!-- End of Total Goals Missed Data Section -->
+
+
+
+                        <tr class="buildingRow totalsRow">  <!-- ACTIONS ROW   -->
+                            <td class="buildingCol " style="width:16.66%">
+                                <br />
+                            </td>
+                            <td class="buildingCol " style="width:8.33%; ">
+                                <br />
+                            </td><!-- Goal Column -->
+                        @{colCounter = 0;}
+                            @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
+                            {
+                                bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                if (cellIsViewable)
+                                {
+                                    <td class="buildingCol valueCell" style="background-color:@actionCell.metricColor; width:@Model.metricColWidth">
+                                        @if (String.IsNullOrEmpty(@actionCell.metricValue) || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
+                                        { <br /> }
+                                        else
+                                        {
+                                            <a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>
+                                        }
+                                    </td>
+                                }
+                                colCounter++;
+                            }
+                            <td class="buildingCol scoreCol" style="width:8.33%;">
+                                <br />
+                            </td>
+                        </tr> <!-- End of Actions Row -->
+
+
                     </table>
                 </div> <!-- End of DIV Table Table -->
             </div>
