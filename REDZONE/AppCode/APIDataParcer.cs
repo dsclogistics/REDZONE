@@ -17,8 +17,8 @@ namespace REDZONE.AppCode
         const string COLOR_GREEN = "#33cc00";
         const string COLOR_LIGHT_GREEN = "#b3ff99";      
         const string COLOR_RED = "#ff3300";
-        const string COLOR_LIGHT_RED ="#ffbb8b";   
-       
+        const string COLOR_LIGHT_RED ="#ffbb8b";
+        const string COLOR_ORANGE = "orange";
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -602,10 +602,10 @@ namespace REDZONE.AppCode
                             //After all Metric Values have been processed, loop thorugh the Scores and set the appropiate Score Color
                             //int indexPos = 0;
                             foreach (var temp in totalsRow.entityMetricCells) {
-                                if (temp.score < 3) { temp.metricColor = "green"; }
-                                else if (temp.score == 3) {  temp.metricColor = "yellow";}
-                                else if (temp.score == 4) { temp.metricColor = "orange"; }
-                                else  { temp.metricColor = "red"; }
+                                if (temp.score < 3) { temp.metricColor = COLOR_LIGHT_GREEN; }
+                                else if (temp.score == 3) {  temp.metricColor = COLOR_YELLOW;}
+                                else if (temp.score == 4) { temp.metricColor = COLOR_ORANGE; }
+                                else  { temp.metricColor = COLOR_LIGHT_RED; }
                                 //indexPos++; 
                             }
 
@@ -836,11 +836,11 @@ namespace REDZONE.AppCode
             if (mValue == "N/A" ) return "lightgray";
             if (status == "Open")
             {
-                if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;
-                if (isGoalMet == "N") return COLOR_LIGHT_RED;
+                if (isGoalMet == "Y") return COLOR_GREEN;               //Open
+                if (isGoalMet == "N") return COLOR_RED;
             }
-            if (isGoalMet == "Y") return COLOR_GREEN;
-            if (isGoalMet == "N") return COLOR_RED;
+            if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;             //Closed
+            if (isGoalMet == "N") return COLOR_LIGHT_RED;
 
             return mColor;
         }
