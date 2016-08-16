@@ -226,6 +226,10 @@ namespace REDZONE.AppCode
                     //PROD Server
                     applicationAPIurl = ReadSetting("apiBaseURLPROD");
                     break;
+                case "RasulMachineName":
+                    //Local API URL for Development Testing using Local Host API
+                    applicationAPIurl = ReadSetting("apiBaseURLLocal");
+                    break;
                 default:
                     //Default to the Development Server
                     applicationAPIurl = ReadSetting("apiBaseURL");
