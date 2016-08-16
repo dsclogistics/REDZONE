@@ -226,6 +226,7 @@ namespace REDZONE.AppCode
                     //PROD Server  192.168.1.181,  192.168.1.183 and 192.168.1.184
                     applicationAPIurl = ReadSetting("apiBaseURLPROD");
                     break;
+                case "L-9L28F12":
                 case "RASULMACHINENAME":
                     //Local API URL for Development Testing using Local Host API
                     applicationAPIurl = ReadSetting("apiBaseURLLocal");
