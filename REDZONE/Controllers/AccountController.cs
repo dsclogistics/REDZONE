@@ -93,12 +93,12 @@ namespace REDZONE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
-            if (!ModelState.IsValid) { return View(loginModel); }            
+            if (!ModelState.IsValid) { return View(loginModel); }
             
             //Model State is Valid. Check Password
             if (isLogonValid(loginModel))
             {  // Is password is Valid, set the Authorization cookie and redirect
-                // the user to the link it came from (Or the Home page is noreturn URL was specified)
+                // the user to the link it came from (Or the Home page is no return URL was specified)
 
                 //JObject parsed_result = JObject.Parse(data_retrieval.getObserver(Session["first_name"].ToString(), Session["last_name"].ToString(), Session["email"].ToString()));
                 //foreach (var res in parsed_result["resource"])
