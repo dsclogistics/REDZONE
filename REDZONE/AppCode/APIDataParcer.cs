@@ -648,7 +648,7 @@ namespace REDZONE.AppCode
             //If the Metric Date is one of the previous two months then it's viewable
             actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate.AddMonths(2) == todayDate)) ? true : false;
             actionCell.metricMonth = actionMonth;
-            actionCell.metricValue = actionCell.isViewable? "Action Required - Click Here":"";
+            actionCell.metricValue = actionCell.isViewable ? "Action Required [ Click Here ]" : "";
             //actionCell.metricColor = actionCell.isViewable ? "red" : "";
 
             switch (actionMonth.ToUpper()) { 
