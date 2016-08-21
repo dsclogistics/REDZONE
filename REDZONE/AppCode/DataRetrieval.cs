@@ -11,8 +11,8 @@ namespace REDZONE.AppCode
     public class DataRetrieval
     {
         //private string api_url = Common.ReadSetting("apiBaseURL");
-        private const string api_url =  "http://dscapidev/dscmtrc/api/v1/metric/";
-        //private const string api_url = "http://localhost:8080/com.dsc.mtrc.rest/api/v1/metric/";//RA: This URL is to test API on my local machine
+        //private const string api_url =  "http://dscapidev/dscmtrc/api/v1/metric/";
+        private const string api_url = "http://localhost:8080/com.dsc.mtrc.rest/api/v1/metric/";//RA: This URL is to test API on my local machine
         public string getMetricname( string productName, string tptName)
         {
             string endPoint = "metricname";
