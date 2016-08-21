@@ -17,8 +17,8 @@ namespace REDZONE.AppCode
         const string COLOR_GREEN = "#33cc00";
         const string COLOR_LIGHT_GREEN = "#b3ff99";      
         const string COLOR_RED = "#ff3300";
-        const string COLOR_LIGHT_RED ="#ffbb8b";   
-       
+        const string COLOR_LIGHT_RED ="#ffbb8b";
+        const string COLOR_ORANGE = "orange";
         //---------- END OF CONSTANTS SECTION -----------------
 
 
@@ -521,10 +521,12 @@ namespace REDZONE.AppCode
                 JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
                 List<MeasuredRowEntity> rowMetrics = new List<MeasuredRowEntity>();//all metrics
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();//all metric values
-                MeasuredRowEntity header = new MeasuredRowEntity();
-                MeasuredRowEntity rowTotals = new MeasuredRowEntity();
-                header.rowName = bSummary.bName;
-                rowTotals.rowName = "Goals Missed";
+                MeasuredRowEntity headerRow = new MeasuredRowEntity();
+                MeasuredRowEntity totalsRow = new MeasuredRowEntity();
+                MeasuredRowEntity actionsRow = new MeasuredRowEntity();
+                headerRow.rowName = bSummary.bName;
+                totalsRow.rowName = "Goals Missed";
+                actionsRow.rowName = "ACTIONS PLAN";
 
                 if (apiMetrics.HasValues)
                 {
@@ -546,15 +548,18 @@ namespace REDZONE.AppCode
                                 temp.metricValue = String.Empty;
                                 temp.isViewable = false;
                                 row.entityMetricCells.Add(temp);
-                                if(header.entityMetricCells.Count< months.Count)
-                                { 
-                                    header.entityMetricCells.Add(temp);
-                                    //We also add a corresponding Cell to the "Totals" Row
+                                if(headerRow.entityMetricCells.Count< months.Count)
+                                {
+                                    //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row
+                                    headerRow.entityMetricCells.Add(temp);                                    
                                     totalCol.metricName = (string)m["Month"];
                                     totalCol.metricValue = "0";
-                                    totalCol.score = 0;                              
+                                    totalCol.score = 0;
                                     totalCol.isViewable = false;
-                                    rowTotals.entityMetricCells.Add(totalCol);
+                                    totalsRow.entityMetricCells.Add(totalCol);
+                                    //Set the Cell Value and URL to use for the Actions Row.
+                                    totalCol = getActionDataforMonth( (string)m["Month"], bSummary.year );
+                                    actionsRow.entityMetricCells.Add(totalCol);
                                 }
                             }
                         }
@@ -577,8 +582,8 @@ namespace REDZONE.AppCode
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                             if(tmp.isGoalMet=="N")
                                             {
-                                                rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
-                                                rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                                totalsRow.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                                totalsRow.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = totalsRow.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
                                                 row.redTotals++;
                                             }
                                             //If value missed the Goal, increase the Missed Goals counter
@@ -590,18 +595,28 @@ namespace REDZONE.AppCode
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
                                 //var goalRow = rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]);
-                                header.entityMetricCells.Find(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
-                                rowTotals.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                headerRow.entityMetricCells.Find(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                totalsRow.entityMetricCells.Find(p => p.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
                                 //goalRow.isViewable = true;                                
                             }
-                            // Populate the number of columns that are "Viewable"
+                            //After all Metric Values have been processed, loop thorugh the Scores and set the appropiate Score Color
+                            //int indexPos = 0;
+                            foreach (var temp in totalsRow.entityMetricCells) {
+                                if (temp.score < 3) { temp.metricColor = COLOR_LIGHT_GREEN; }
+                                else if (temp.score == 3) {  temp.metricColor = COLOR_YELLOW;}
+                                else if (temp.score == 4) { temp.metricColor = COLOR_ORANGE; }
+                                else  { temp.metricColor = COLOR_LIGHT_RED; }
+                                //indexPos++; 
+                            }
+
                         }
                         rowMetrics.Add(row);
                     }                  
-                    bSummary.buildingHeadings = header;
-                    bSummary.buildingScoreRow = rowTotals;
+                    bSummary.buildingHeadings = headerRow;
+                    bSummary.buildingScoreRow = totalsRow;
                     bSummary.viewableColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = rowMetrics;//at this point we should have all rows with metric ids and months in the model
+                    bSummary.buildingActionsRow = actionsRow;
                     // Loop through all the Goals Missed Row and set the color accordingly
                     //foreach (var goalRowColTotal in bSummary.buildingScoreRow.entityMetricCells)
                     //{ 
@@ -621,6 +636,62 @@ namespace REDZONE.AppCode
             }
             catch (Exception e) { string error = e.Message; }
             return bSummary;
+        }
+
+        private MeasuredCellEntity getActionDataforMonth(string actionMonth, string actionYear)
+        {
+            const string urlBase = "http://goo.gl/forms/";
+            MeasuredCellEntity actionCell = new MeasuredCellEntity();
+            DateTime metricDate = new DateTime(Convert.ToInt16(actionYear), monthToInt(actionMonth), 1);
+            DateTime todayDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1);
+
+            //If the Metric Date is one of the previous two months then it's viewable
+            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate.AddMonths(2) == todayDate)) ? true : false;
+            actionCell.metricMonth = actionMonth;
+            actionCell.metricValue = actionCell.isViewable ? "Action Required [ Click Here ]" : "";
+            //actionCell.metricColor = actionCell.isViewable ? "red" : "";
+
+            switch (actionMonth.ToUpper()) { 
+                case "JANUARY":
+                    actionCell.cellValueURL = "";
+                    break;
+                case "FEBRUARY":
+                    actionCell.cellValueURL = "";
+                    break;
+                case "MARCH":
+                    actionCell.cellValueURL = urlBase + "nb12u9n1UO";
+                    break;
+                case "APRIL":
+                    actionCell.cellValueURL = urlBase + "WDlp7YwLlZ";
+                    break;
+                case "MAY":
+                    actionCell.cellValueURL = urlBase + "YNks1ixnyE";
+                    break;
+                case "JUNE":
+                    actionCell.cellValueURL = urlBase + "S04aEDUqvW";
+                    break;
+                case "JULY":
+                    actionCell.cellValueURL = urlBase + "F68sI8WHeS";
+                    break;
+                case "AUGUST":
+                    actionCell.cellValueURL = urlBase + "HUoFwJS06H";
+                    break;
+                case "SEPTEMBER":
+                    actionCell.cellValueURL = urlBase + "A0HgyAeQ9t";
+                    break;
+                case "OCTOBER":
+                    actionCell.cellValueURL = urlBase + "QzlBPKTXFU";
+                    break;
+                case "NOVEMBER":
+                    actionCell.cellValueURL = urlBase + "j3ehSK7uX2";
+                    break;
+                case "DECEMBER":
+                    actionCell.cellValueURL = urlBase + "E9oK92nwL9";
+                    break;
+                default:
+                    break;            
+            }
+            return actionCell;
         }
 
         public MetricSummaryViewModel getMetricSummaryView(string year, string metricID, string sortDir)
@@ -765,11 +836,11 @@ namespace REDZONE.AppCode
             if (mValue == "N/A" ) return "lightgray";
             if (status == "Open")
             {
-                if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;
-                if (isGoalMet == "N") return COLOR_LIGHT_RED;
+                if (isGoalMet == "Y") return COLOR_GREEN;               //Open
+                if (isGoalMet == "N") return COLOR_RED;
             }
-            if (isGoalMet == "Y") return COLOR_GREEN;
-            if (isGoalMet == "N") return COLOR_RED;
+            if (isGoalMet == "Y") return COLOR_LIGHT_GREEN;             //Closed
+            if (isGoalMet == "N") return COLOR_LIGHT_RED;
 
             return mColor;
         }

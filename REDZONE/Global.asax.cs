@@ -24,6 +24,7 @@ namespace REDZONE
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
+
         protected void Session_Start(object sender, EventArgs e)
         {
 
@@ -71,7 +72,8 @@ namespace REDZONE
             // Get the exception object.
             Exception exc = Server.GetLastError();
 
-            if (exc == null) {
+            if (exc == null)
+            {
                 exc = new Exception("An Unknown Error occurred.");
             }
             //System.Diagnostics.Debug.WriteLine(exc);
@@ -134,5 +136,4 @@ namespace REDZONE
         }
 
     }
-
 }

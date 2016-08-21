@@ -58,7 +58,7 @@ else {
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
-                    <div class="row headerRow row-eq-height">
+                    <div class="row headerRow row-eq-height">  <!-- Column Header Titles Row -->
                     @{
                         string sortIcon = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "glyphicon-sort" : Model.rowHeadings.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
                         //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
@@ -114,10 +114,14 @@ else {
                         <div class="col-sm-9">
                             <div class="row ">
                                 <table style="width:100%">
+                                    @{colCounter = 0;}
                                     <tr class="valueRow">
+                                        
                                         @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
                                         {
-                                            if (bldngMV.isViewable)
+                                            bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
+                                            //if (bldngMV.isViewable)
+                                            if (cellIsViewable)
                                             {
                                                 <td class="buildingCol monthCol" style="width:@Model.metricColWidth; background-color:@bldngMV.metricColor">
                                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue))

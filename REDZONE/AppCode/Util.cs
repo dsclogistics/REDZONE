@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -200,5 +201,47 @@ namespace REDZONE.AppCode
             return monthName;
         }
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        // This function reads the current Server Webconfig File and retrieves the value of the Appsetting Variable passed as a parameter "key"
+        public static string ReadSetting(string key)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            string result = appSettings[key] ?? "";
+            return result;
+        }
+
+        // ===== Retrieve the API URL USed for the application based on the current Environment's Server Name
+        public static string getAPIurl()
+        {
+            string serverName = Environment.MachineName.ToUpper();
+            string applicationAPIurl = String.Empty;
+
+            switch (serverName)
+            {
+                case "DSCAPPSQA1":
+                    //QA Server
+                    applicationAPIurl = ReadSetting("apiBaseURLQA");
+                    break;
+                case "DSCAPPSPROD1":
+                    //PROD Server  192.168.1.181,  192.168.1.183 and 192.168.1.184
+                    applicationAPIurl = ReadSetting("apiBaseURLPROD");
+                    break;
+                case "RASULMACHINENAME":
+                    //Local API URL for Development Testing using Local Host API
+                    applicationAPIurl = ReadSetting("apiBaseURLLocal");
+                    break;
+                case "L-9L28F12":
+                    applicationAPIurl = ReadSetting("apiBaseURL");
+                    break;
+                default:
+                    //Default to the Development Server   192.168.43.43
+                    applicationAPIurl = ReadSetting("apiBaseURL");
+                    break;
+            }
+            return applicationAPIurl;
+        }
+
     }
+
+
 }

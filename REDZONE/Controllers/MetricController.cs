@@ -39,7 +39,9 @@ namespace REDZONE.Controllers
             using (ExcelPackage package = new ExcelPackage())
             {
                 ExcelWorksheet ws = package.Workbook.Worksheets.Add(metricName + " " + month + ", " + year);
+
                 //package.File = newFile;
+
                 ws.View.ShowGridLines = false;
                 ws.Cells["A1"].Value = "R/Z METRIC NAME";
                 ws.Cells["A1"].Style.Font.Bold = true;
