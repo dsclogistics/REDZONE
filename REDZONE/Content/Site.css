@@ -22,3 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.bordered {
+    border:1px solid black;
+}
+.bordered-r {
+    border:1px solid red;
+}
+.bordered-b {
+    border:1px solid blue;
+}
