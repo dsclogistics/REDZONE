@@ -114,6 +114,7 @@ namespace REDZONE.Controllers
             else { return status; }
 
         }
+        
         [HttpPost]
         public string reloadVolume(string metricId, string month, string year)
         {
@@ -123,7 +124,6 @@ namespace REDZONE.Controllers
                 return "Success";
             }
             else { return status; }
-
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]

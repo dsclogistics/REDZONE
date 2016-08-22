@@ -166,63 +166,8 @@
                 </div>
               </div>
 
-
-                @*<br /><br /><br />
-    <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%">
-        <!-- Table -->
-        <div class="row" style="margin:0px; padding:0; text-align:center; border-bottom: 1px solid lightgrey; ">
-            <div class="row headerRow" style="margin-right:60px; width:95%" >
-                <div class="col-sm-2 col-sm-offset-4 ">
-                    Building Name
-                </div>
-                <div class="col-sm-2 ">
-                    @Model.periodName
-                </div>
-            </div>
-        </div>
-        <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; overflow-x:hidden; text-align:center; color:@fontColor">
-            @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
-            {
-                <div class="row bldngRow buildingRow">
-                    <div class="col-sm-2 col-sm-offset-4 buildingCol">
-                        @dscBldng.buildingName
-                    </div>
-                    <div class="col-sm-2 buildingCol">
-                        <div class="row">
-                            @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
-                            {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; " readonly="readonly" /><br />
-                            }
-                            else
-                            {
-                                <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
-                                if (!dscBldng.naAllowed)
-                                {
-                                    <text><span style="color:red; font-weight:bold">*</span></text>
-                                }
-                            }
-                        </div>
-                        <div class="row" style="text-align:center;">
-                            <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
-                        </div>
-
-                        <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
-                        <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
-                        <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
-                        <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
-                        <input type="hidden" id="isManual" value="@dscBldng.isManual" />
-                        <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
-                        <input type="hidden" id="isNAallowed" value="@dscBldng.naAllowed.ToString()" />
-                        <input type="hidden" id="isNA" value="" />
-                    </div>
-                </div> <!-- End of "buildingRow" DIV-->
-            }
-        </div>
-    </div> <!-- End of DIV Table Table -->*@
-
             </div>
 
-            <hr />
             if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
             {
                 <div class="row" style="margin:0; ">
@@ -240,11 +185,19 @@
                         {
                             @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
                         }
+                        @*else
+                        {
+                            <input type="button" class="btn btn-primary" value="Reload" />
+                        }*@
+                        @if (Model.metricName.Equals("Volume"))
+                        {
+                            <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
+                        }
                     </div>
                     <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>         } style="width:80px" /></div>
                     <div class="col-sm-2 ">               <input id="btnCancel" class="btn btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
                  @if (Model.isImportable)
-                 {
+                 {// Dsisplay the Download Template Button (To be used for importing/uploading the metric data)
                     <div class="col-sm-1 col-sm-offset-2">
                         @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
@@ -373,7 +326,7 @@
             alert("Template Download Function Not implemented yet.");
             //$.ajax({
             //    type: 'POST',
-            //    url: '/Reports/ExportMyData', 
+            //    url: '/Reports/ExportMyData',
             //    data: '{ "dataprop1": "test", "dataprop2" : "test2" }',
             //    contentType: 'application/json; charset=utf-8',
             //    dataType: 'json',
@@ -385,6 +338,38 @@
             //document.getElementById('calendar').src = loc;
             //$("#fileFrame").prop("src", "http://www.msn.com");
             //$("#fileFrame").prop("src", "/metric/downloadTemplate");
+        });
+
+        $("#btnRecalcMetric").click(function(){
+
+            var metricId = "@Model.id";
+            var metricDateInfo =  "@Model.displayPeriodName".split(" ");
+            var metricMonth = metricDateInfo[0];
+            var metricYear = metricDateInfo[1];
+            alert("Reloading metric Id: "+ metricId + "\nFor Month!: "+ metricMonth + "\nFor Year!: "+ metricYear);
+
+            // We need parameters: "metricId", "month", "year"
+            $.ajax({
+                url: '/Metric/reloadVolume',   //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: {metricId:metricId, month: metricMonth, year: metricYear},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Reload Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                if (d == "Success") {
+                    alert("Data Reloaded Successfully!");
+                    //location.reload();
+                } else {
+                    alert("Error performing Data Reload: \n" + JSON.stringify(d));
+                }
+                //$("#output").html(JSON.stringify(d));
+            }); //----- End of Ajax Call
+
+
         });
 
         //-------------------------- MODAL EVENTS --------------------------------
