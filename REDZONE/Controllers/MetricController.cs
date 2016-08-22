@@ -114,6 +114,17 @@ namespace REDZONE.Controllers
             else { return status; }
 
         }
+        [HttpPost]
+        public string reloadVolume(string metricId, string month, string year)
+        {
+            string status = api.reloadVolume("volume", "Month", metricId, month, year);
+            if (status.ToLower().Contains("success"))
+            {
+                return "Success";
+            }
+            else { return status; }
+
+        }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
         public string closeRZMetricPeriod(string metricId, string metricMonth, string metricYear, string metricPeriodId)
