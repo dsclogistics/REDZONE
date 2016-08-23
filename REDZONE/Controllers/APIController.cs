@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 namespace REDZONE.Controllers
 {
     //-------------------------------------------------------------------------------------------
-    // THIS CONTEOLLER IS FOR TESTING PURPOSES - NOT USED ON THE ACTUAL APPLICATION !!!!!!!!!!!
+    // THIS CONTROLLER IS FOR TESTING PURPOSES - NOT USED ON THE ACTUAL APPLICATION !!!!!!!!!!!
     //-------------------------------------------------------------------------------------------
 
     [AllowAnonymous]

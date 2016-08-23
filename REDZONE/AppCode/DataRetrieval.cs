@@ -279,7 +279,7 @@ namespace REDZONE.AppCode
             }
         }
 
-        public string reloadVolume(string packageName, string tptName, string mtrcid, string calmonth, string calyear)
+        public string reloadMetricValues(string packageName, string tptName, string mtrcid, string calmonth, string calyear)
         {
             // {"packagename":"volume", "tptname":"Month", "calmonth":"July", "calyear":2016,"mtrc_id": "6" }
             string endPoint = "autouploadmetric";
@@ -287,7 +287,7 @@ namespace REDZONE.AppCode
             request.Method = "POST";
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"packagename\":\"" + packageName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
+            string parsedContent = "{\"packagename\":\"" + packageName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
                                      "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;

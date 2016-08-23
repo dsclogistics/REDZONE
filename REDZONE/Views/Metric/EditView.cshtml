@@ -46,6 +46,51 @@
         float: left;
         border-bottom-width: 0;
     }
+    .group-label {
+        color: #555;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-bottom-left-radius:4px;
+        border-top-left-radius:4px;
+        float:right;        
+        display: table-cell;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        /*line-height: 1;*/
+        /*height: 30px;*/
+        line-height: 1.5;
+        width: auto;
+        /*width: 1%;*/
+    }
+    .group-value {
+        border: 1px solid #ccc;
+        border-bottom-right-radius: 6px;
+        border-top-right-radius: 6px;
+        float:left;
+        display: table-cell;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.5;
+        width: auto;
+        padding-top:7px;
+        padding-bottom:10px;
+        min-width:100px;
+    }
+    .hdrLabel {
+        padding: 4px 20px;
+        white-space: nowrap;
+        display: table-cell;
+        /*background-color: #caf0f4;*/
+    }
+
 </style>
 
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
@@ -109,33 +154,69 @@
                 //string editStatus = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "readonly" : "";
             }
 
-
-              <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%">
-                <div class="row" style="margin:0; font-weight:bold; background-color: #e3f3f6; padding:5px; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
-                    <div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
-                    <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>
+              <div class="row" id="sectionWait" style="padding:20px; display:none">
+                  <div style="margin-top:10%; width:60%; margin:0 auto; margin-bottom:10%; border:1px solid #eeeeee">
+                      <div class="alert-info" style="font-size:large; ">Please wait while information is updated...</div>
+                      <br /><br /><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                  </div>
+              </div>
+              <div class="row" id="sectionBuildings" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; ">
+                <div class="row " style="margin:0; font-weight:bold; background-color: #e3f3f6; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
+                    <table style="width:100%">
+                        <tr>
+                            <td class="" style="">
+                                <div class="row " style="margin:0">
+                                    <div class=" row " style="width:70%; min-width:300px; margin:0 auto;">
+                                        <div class="col-xs-5" style="text-align:right;  padding:0">
+                                            <span class="hdrLabel" style="float:right; border-right: 1px solid lightgray">
+                                                Building Name
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-7 " style="text-align:left; padding: 0">
+                                            <span class="hdrLabel" style="float:left; border-left: 1px solid lightgray">
+                                                @Model.periodName
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="" style="width:18px"><br /></td>
+                        </tr>
+                    </table>
+                    @*<div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
+                    <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>*@
                 </div>
 
-                <div class="pnlScrollable" >
+                <div class="pnlScrollable " >
                   @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                   {
-                    <div class="row bldngRow" style="padding-bottom:1px; padding-top:3px; color:@fontColor">
+                    <div class="row bldngRow " style="margin:0; padding-bottom:1px; padding-top:3px; color:@fontColor">
                         <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2" >
-                                <div class="row input-group" style="width:100%; ">
-                                    <span class="input-group-addon" style="width:30%; min-width:155px; font-weight:bold">@dscBldng.buildingName</span>
+                            <div class=" row " style="width:70%; min-width:250px; margin:0 auto; ">
+                                <div class="col-xs-5 " style="text-align:right; padding: 0">
+                                    <span class="group-label" style="min-width:50px; width:155px; ">@dscBldng.buildingName</span>
+                                </div>
+                                <div class="col-xs-7 " style="text-align:left; padding:0">
                                     @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
                                     {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                        <input type="text" id="newMetricVal" class="form-control txtInput ROField" value="@dscBldng.metricPeriodValue" readonly="readonly" style="border:1px solid lightgray; border-bottom-right-radius:4px; border-top-right-radius:4px;"/>
-                                        if (!dscBldng.isEditable) { <text><span style="color:blue; font-weight:bold; font-size:small; float:left">+</span></text> }
+                                        <input type="text" class="group-value txtInput ROField" id="newMetricVal" value="@dscBldng.metricPeriodValue"
+                                               readonly="readonly" title="This Value Cannot be Edited" />
+                                        if (!dscBldng.isEditable)
+                                        { <text><span style="color:blue; font-weight:bold; font-size:small; float:left">+</span></text> }
                                     }
                                     else
                                     {
-                                        <input type="text" id="newMetricVal" class="form-control txtInput updateField" value="@dscBldng.metricPeriodValue" style="border-bottom-right-radius:4px; border-top-right-radius:4px;"/>
-                                        if (!dscBldng.naAllowed) { <text><span style="color:red; font-weight:bold; font-size:medium; float:left">*</span></text> }
-                                    }                                    
+                                        string valueTitle = "";
+                                        if (!dscBldng.naAllowed) { valueTitle = "Value is required ('N/A' not allowed)"; }
+                                        else { valueTitle = "Enter value or N/A"; }
+                                        <input type="text" class="group-value txtInput updateField" id="newMetricVal"
+                                               value="@dscBldng.metricPeriodValue" title="@valueTitle" />
+                                        if (!dscBldng.naAllowed)
+                                        { <text><span style="color:red; font-weight:bold; font-size:medium; float:left">*</span></text> }
+                                    }
                                 </div>
                             </div>
+
                             @*<div class="col-sm-1">
                                 @if (!dscBldng.isEditable) { <text><span style="color:blue; font-weight:bold; float:left">+</span></text> }
                             </div>*@
@@ -158,72 +239,20 @@
                   }
                     <br />                    
                 </div>
-                <div class="row" style="text-align:left">
-                    <div class="col-sm-9 col-sm-offset-2">
-                        <span style="color:red"> * N/A not Allowed</span>
-                        <span style="color:blue; margin-left:30px"> + System Generated Value</span>
-                    </div>                        
+                  <br />
+                <div class="row">
+                    <div class="col-xs-11" >
+                        <div class="row " style="max-width:400px; margin:0 auto">
+                            <span style="color:red"> * Value is Required</span>
+                            <span style="color:blue; margin-left:45px"> + Authomated Value</span>
+                        </div>
+                    </div>
                 </div>
               </div>
 
-
-                @*<br /><br /><br />
-    <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%">
-        <!-- Table -->
-        <div class="row" style="margin:0px; padding:0; text-align:center; border-bottom: 1px solid lightgrey; ">
-            <div class="row headerRow" style="margin-right:60px; width:95%" >
-                <div class="col-sm-2 col-sm-offset-4 ">
-                    Building Name
-                </div>
-                <div class="col-sm-2 ">
-                    @Model.periodName
-                </div>
-            </div>
-        </div>
-        <div class="row" style="margin:0px 1px; padding:0; height:550px; overflow-y:auto; overflow-x:hidden; text-align:center; color:@fontColor">
-            @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
-            {
-                <div class="row bldngRow buildingRow">
-                    <div class="col-sm-2 col-sm-offset-4 buildingCol">
-                        @dscBldng.buildingName
-                    </div>
-                    <div class="col-sm-2 buildingCol">
-                        <div class="row">
-                            @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
-                            {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                <input type="text" id="newMetricVal" class="ROField" value="@dscBldng.metricPeriodValue" style="text-align:center; " readonly="readonly" /><br />
-                            }
-                            else
-                            {
-                                <input type="text" id="newMetricVal" class="updateField" value="@dscBldng.metricPeriodValue" style="text-align:center; " />
-                                if (!dscBldng.naAllowed)
-                                {
-                                    <text><span style="color:red; font-weight:bold">*</span></text>
-                                }
-                            }
-                        </div>
-                        <div class="row" style="text-align:center;">
-                            <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
-                        </div>
-
-                        <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
-                        <input type="hidden" id="buildingName" value="@dscBldng.buildingName" />
-                        <input type="hidden" id="buildingId" value="@dscBldng.buildingCode" />
-                        <input type="hidden" id="isEditable" value="@dscBldng.isEditable" />
-                        <input type="hidden" id="isManual" value="@dscBldng.isManual" />
-                        <input type="hidden" id="periodValId" value="@dscBldng.metricPeriodValueID" />
-                        <input type="hidden" id="isNAallowed" value="@dscBldng.naAllowed.ToString()" />
-                        <input type="hidden" id="isNA" value="" />
-                    </div>
-                </div> <!-- End of "buildingRow" DIV-->
-            }
-        </div>
-    </div> <!-- End of DIV Table Table -->*@
-
             </div>
 
-            <hr />
-            if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
+            if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
             {
                 <div class="row" style="margin:0; ">
                     <div class="col-sm-10 ">
@@ -233,18 +262,23 @@
             }
             else
             {
-                <div class="row" style="margin:0">
+                <div class="row" id="sectionButtons" style="margin:0">
                     @*--------- Form Buttons Sections --------------*@
                     <div class="col-sm-2 col-sm-offset-1">
                         @if (Model.isImportable)
                         {
                             @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
                         }
+                        
+                        @if (Model.isAuto)
+                        {                          @*@if (Model.metricName.Equals("Volume"))*@
+                            <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
+                        }
                     </div>
-                    <div class="col-sm-2 col-sm-offset-2"><input id="btnSave" class="btn btn-primary" type="button" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>         } style="width:80px" /></div>
-                    <div class="col-sm-2 ">               <input id="btnCancel" class="btn btn-primary" type="button" value="CANCEL" style="width:80px" /></div>
+                    <div class="col-sm-2 col-sm-offset-2"><input type="button" id="btnSave" class="btn btn-primary" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>          } style="width:80px" /></div>
+                    <div class="col-sm-2 ">               <input type="button" id="btnCancel" class="btn btn-primary" value="CANCEL" style="width:80px" /></div>
                  @if (Model.isImportable)
-                 {
+                 {// Dsisplay the Download Template Button (To be used for importing/uploading the metric data)
                     <div class="col-sm-1 col-sm-offset-2">
                         @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
@@ -373,7 +407,7 @@
             alert("Template Download Function Not implemented yet.");
             //$.ajax({
             //    type: 'POST',
-            //    url: '/Reports/ExportMyData', 
+            //    url: '/Reports/ExportMyData',
             //    data: '{ "dataprop1": "test", "dataprop2" : "test2" }',
             //    contentType: 'application/json; charset=utf-8',
             //    dataType: 'json',
@@ -385,6 +419,45 @@
             //document.getElementById('calendar').src = loc;
             //$("#fileFrame").prop("src", "http://www.msn.com");
             //$("#fileFrame").prop("src", "/metric/downloadTemplate");
+        });
+
+        $("#btnRecalcMetric").click(function(){
+
+            var metricId = "@Model.id";
+            var metricDateInfo =  "@Model.displayPeriodName".split(" ");
+            var metricMonth = metricDateInfo[0];
+            var metricYear = metricDateInfo[1];
+            //alert("Reloading metric Id: "+ metricId + "\nFor Month: "+ metricMonth + "\nFor Year: "+ metricYear);
+
+            //show the "loading" animation until ajax call completes
+            $("#sectionButtons").hide();
+            $("#sectionBuildings").hide();
+            $("#sectionWait").show();
+
+            // We need parameters: "metricId", "month", "year"
+            $.ajax({
+                url: '/Metric/reloadVolume',   //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: {metricId:metricId, month: metricMonth, year: metricYear},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Reload Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    hideAnimation();
+                }
+            }).done(function (d) {
+                if (d == "Success") {
+                    alert("Data Reloaded Successfully!");
+                    location.reload();
+                } else {
+                    alert("Error performing Data Reload: \n" + JSON.stringify(d));
+                }
+                hideAnimation();
+                //$("#output").html(JSON.stringify(d));
+            }); //----- End of Ajax Call
+
+
         });
 
         //-------------------------- MODAL EVENTS --------------------------------
@@ -404,6 +477,7 @@
         $('#modal-container').on('hidden.bs.modal', function () {
             $(this).removeData('bs.modal');
         });
+
         $('#CancelModal').on('click', function () {
             return false;
         });
@@ -413,6 +487,13 @@
 
     //----------------------------- FUNCTIONS --------------------------------------------------------
     //------------------------------------------------------------------------------------------------
+    function hideAnimation(){
+        //Hide the "loading" animation and show all data elements once Ajax call completes
+        $("#sectionWait").hide();
+        $("#sectionButtons").show();
+        $("#sectionBuildings").show();
+    };
+
     function saveMetricData(doClose){
         //alert("Saving Data...");
         //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
@@ -483,21 +564,20 @@
     function canBeClosed(){
         //alert("Checking if Metric Can be closed...");
         var errorsFound = 0;
-
         //Check the Read Only fields (For the automated metric values)
         $(".ROField").each(function(){
             var $txtControl = $(this);
-
+            var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
             var valControl = $(this).parents(".bldngRow").first().find(".valValidationMsg").first();
-
-            //Remove the readonly property of the control
-            $txtControl.attr("readonly", false);
-
             var valMessage = "";
+
+            //Remove the readonly property of the control since we will be manipulating it's value
+            $txtControl.attr("readonly", false);
 
             if ($txtControl.val() == "" ){ //No values can be left blank
                 //alert("Value null was found.");
-                valMessage = "Value is required";
+                if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -519,12 +599,14 @@
         // Verify the Data values of each of the input Fields
         $(".updateField").each(function(){
             var $txtControl = $(this);
-
+            var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
             var valControl = $(this).parents(".bldngRow").first().find(".valValidationMsg").first();
             var valMessage = "";
             if ($txtControl.val() == "" ){ //No values can be left blank
                 //alert("Value null was found.");
-                valMessage = "Value is required";
+                //valMessage = "Value is required";
+                if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -540,9 +622,6 @@
                 $txtControl.focus();
             }
         });
-
-
-
         if(errorsFound > 0){
             $("#messageLine").html('<span style="margin-right:10px">FAILED TO CLOSE:</span>' + errorsFound + ' error(s) need to be corrected before closing.');
             $("#messageLine").show();

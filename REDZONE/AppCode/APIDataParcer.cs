@@ -21,7 +21,6 @@ namespace REDZONE.AppCode
         const string COLOR_ORANGE = "orange";
         //---------- END OF CONSTANTS SECTION -----------------
 
-
         public RZ_Metric getRZ_Metric(int metric_id, string month, string year)
         {
             RZ_Metric rz_metric = new RZ_Metric();

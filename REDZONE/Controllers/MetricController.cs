@@ -17,6 +17,7 @@ namespace REDZONE.Controllers
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         // GET: Metric
+
         public ActionResult EditView(int? id, string month, string year)
         {
             string returnURL = String.Format(@"/Metric/EditView/{0}?month={1}&year={2}", id, month, year);   // /Metric/EditView/6?month=June&year=2016
@@ -114,16 +115,16 @@ namespace REDZONE.Controllers
             else { return status; }
 
         }
+        
         [HttpPost]
-        public string reloadVolume(string metricId, string month, string year)
+        public string reloadMetric(string metricId, string month, string year)
         {
-            string status = api.reloadVolume("volume", "Month", metricId, month, year);
+            string status = api.reloadMetricValues("volume", "Month", metricId, month, year);
             if (status.ToLower().Contains("success"))
             {
                 return "Success";
             }
             else { return status; }
-
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
