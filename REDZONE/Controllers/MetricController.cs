@@ -117,9 +117,9 @@ namespace REDZONE.Controllers
         }
         
         [HttpPost]
-        public string reloadVolume(string metricId, string month, string year)
+        public string reloadMetric(string metricId, string month, string year)
         {
-            string status = api.reloadVolume("volume", "Month", metricId, month, year);
+            string status = api.reloadMetricValues("volume", "Month", metricId, month, year);
             if (status.ToLower().Contains("success"))
             {
                 return "Success";

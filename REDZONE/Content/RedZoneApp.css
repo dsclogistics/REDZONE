@@ -1,6 +1,9 @@
 ﻿/*@import url('http://getbootstrap.com/dist/css/bootstrap.css');*/
 
 @media screen and (min-width: 768px) {
+    #sectionBuildings {
+        width: 70%;
+    }
 .modal-custom {
         width: 60%;
         /* either % (e.g. 60%) or px (400px) */
@@ -33,10 +36,6 @@ td.center {
 .no-error {
     border: 1px solid black;
     background-color: white;
-}
-
-.ROField {
-    border: none;
 }
 
 .headerRow {
