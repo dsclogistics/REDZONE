@@ -282,7 +282,7 @@ namespace REDZONE.AppCode
         public string reloadVolume(string packageName, string tptName, string mtrcid, string calmonth, string calyear)
         {
             // {"packagename":"volume", "tptname":"Month", "calmonth":"July", "calyear":2016,"mtrc_id": "6" }
-            string endPoint = "throughputload";
+            string endPoint = "autouploadmetric";
             WebRequest request = WebRequest.Create(api_url + endPoint);
             request.Method = "POST";
             request.ContentType = "application/json";
