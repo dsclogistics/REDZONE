@@ -7,8 +7,8 @@
        font-size:small;
     }*/
 </style>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <a style="position:fixed; top:0; left:0" href="/home">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="font-family:Arial">
+    <a class="hidden-sm" style="position:fixed; top:0; left:0" href="/home">
         <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
     </a>
     <div class="navbar-header">
@@ -54,7 +54,7 @@
                 </li>
             </ul>*@
         </div>
-        <div class="col-md-2" id="divLoginInfo" style="margin-right: 10px">
+        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; ">
             @Html.Partial("_LoginPartial");
         </div>
     </div>

@@ -109,8 +109,13 @@
                 //string editStatus = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "readonly" : "";
             }
 
-
-              <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%">
+              <div class="row" id="sectionWait" style="padding:20px; display:none">
+                  <div style="margin-top:10%; width:60%; margin:0 auto; margin-bottom:10%; border:1px solid #eeeeee">
+                      <div class="alert-info" style="font-size:large; ">Please wait while information is updated...</div>
+                      <br /><br /><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                  </div>
+              </div>
+              <div class="row" id="sectionBuildings" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%; ">
                 <div class="row" style="margin:0; font-weight:bold; background-color: #e3f3f6; padding:5px; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
                     <div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
                     <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>
@@ -168,7 +173,7 @@
 
             </div>
 
-            if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
+            if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
             {
                 <div class="row" style="margin:0; ">
                     <div class="col-sm-10 ">
@@ -178,19 +183,16 @@
             }
             else
             {
-                <div class="row" style="margin:0">
+                <div class="row" id="sectionButtons" style="margin:0">
                     @*--------- Form Buttons Sections --------------*@
                     <div class="col-sm-2 col-sm-offset-1">
                         @if (Model.isImportable)
                         {
                             @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
                         }
-                        @*else
-                        {
-                            <input type="button" class="btn btn-primary" value="Reload" />
-                        }*@
-                        @if (Model.metricName.Equals("Volume"))
-                        {
+                        
+                        @if (Model.isAuto)
+                        {                          @*@if (Model.metricName.Equals("Volume"))*@
                             <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
                         }
                     </div>
@@ -346,7 +348,12 @@
             var metricDateInfo =  "@Model.displayPeriodName".split(" ");
             var metricMonth = metricDateInfo[0];
             var metricYear = metricDateInfo[1];
-            alert("Reloading metric Id: "+ metricId + "\nFor Month!: "+ metricMonth + "\nFor Year!: "+ metricYear);
+            //alert("Reloading metric Id: "+ metricId + "\nFor Month: "+ metricMonth + "\nFor Year: "+ metricYear);
+
+            //show the "loading" animation until ajax call completes
+            $("#sectionButtons").hide();
+            $("#sectionBuildings").hide();
+            $("#sectionWait").show();
 
             // We need parameters: "metricId", "month", "year"
             $.ajax({
@@ -358,14 +365,16 @@
                 data: {metricId:metricId, month: metricMonth, year: metricYear},
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Failed to Reload Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    hideAnimation();
                 }
             }).done(function (d) {
                 if (d == "Success") {
                     alert("Data Reloaded Successfully!");
-                    //location.reload();
+                    location.reload();
                 } else {
                     alert("Error performing Data Reload: \n" + JSON.stringify(d));
                 }
+                hideAnimation();
                 //$("#output").html(JSON.stringify(d));
             }); //----- End of Ajax Call
 
@@ -389,6 +398,7 @@
         $('#modal-container').on('hidden.bs.modal', function () {
             $(this).removeData('bs.modal');
         });
+
         $('#CancelModal').on('click', function () {
             return false;
         });
@@ -398,6 +408,13 @@
 
     //----------------------------- FUNCTIONS --------------------------------------------------------
     //------------------------------------------------------------------------------------------------
+    function hideAnimation(){
+        //Hide the "loading" animation and show all data elements once Ajax call completes
+        $("#sectionWait").hide();
+        $("#sectionButtons").show();
+        $("#sectionBuildings").show();
+    };
+
     function saveMetricData(doClose){
         //alert("Saving Data...");
         //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
