@@ -116,27 +116,36 @@
                   </div>
               </div>
               <div class="row" id="sectionBuildings" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; width:70%; ">
-                <div class="row" style="margin:0; font-weight:bold; background-color: #e3f3f6; padding:5px; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
-                    <div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
-                    <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>
+                <div class="row " style="margin:0; font-weight:bold; background-color: #e3f3f6; padding:5px; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
+                    <div class="col-sm-8 col-sm-offset-2 bordered-b">
+                        <br />
+                    </div>
+                    @*<div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
+                    <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>*@
                 </div>
 
-                <div class="pnlScrollable" >
+                <div class="pnlScrollable " >
                   @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
                   {
                     <div class="row bldngRow" style="padding-bottom:1px; padding-top:3px; color:@fontColor">
                         <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2" >
+                            <div class="col-sm-8 col-sm-offset-2 bordered-b" >
                                 <div class="row input-group" style="width:100%; ">
                                     <span class="input-group-addon" style="width:30%; min-width:155px; font-weight:bold">@dscBldng.buildingName</span>
                                     @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
                                     {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
-                                        <input type="text" id="newMetricVal" class="form-control txtInput ROField" value="@dscBldng.metricPeriodValue" readonly="readonly" style="border:1px solid lightgray; border-bottom-right-radius:4px; border-top-right-radius:4px;"/>
+                                        <input type="text" id="newMetricVal" class="form-control txtInput ROField" value="@dscBldng.metricPeriodValue" readonly="readonly" 
+                                               style="border:1px solid lightgray; border-bottom-right-radius:4px; border-top-right-radius:4px;"
+                                               title="This Value Cannot be Edited"/>
                                         if (!dscBldng.isEditable) { <text><span style="color:blue; font-weight:bold; font-size:small; float:left">+</span></text> }
                                     }
                                     else
                                     {
-                                        <input type="text" id="newMetricVal" class="form-control txtInput updateField" value="@dscBldng.metricPeriodValue" style="border-bottom-right-radius:4px; border-top-right-radius:4px;"/>
+                                        string valueTitle = "";
+                                        if (!dscBldng.naAllowed) { valueTitle = "Value is required ('N/A' not allowed)"; }
+                                        else {valueTitle = "Enter value or N/A";}
+                                        <input type="text" id="newMetricVal" class="form-control txtInput updateField" value="@dscBldng.metricPeriodValue" 
+                                               style="border-bottom-right-radius:4px; border-top-right-radius:4px;" title="@valueTitle"/>
                                         if (!dscBldng.naAllowed) { <text><span style="color:red; font-weight:bold; font-size:medium; float:left">*</span></text> }
                                     }                                    
                                 </div>
@@ -165,8 +174,8 @@
                 </div>
                 <div class="row" style="text-align:left">
                     <div class="col-sm-9 col-sm-offset-2">
-                        <span style="color:red"> * N/A not Allowed</span>
-                        <span style="color:blue; margin-left:30px"> + System Generated Value</span>
+                        <span style="color:red"> * Value is Required</span>
+                        <span style="color:blue; margin-left:30px"> + Authomated Value</span>
                     </div>                        
                 </div>
               </div>
@@ -485,21 +494,20 @@
     function canBeClosed(){
         //alert("Checking if Metric Can be closed...");
         var errorsFound = 0;
-
         //Check the Read Only fields (For the automated metric values)
         $(".ROField").each(function(){
             var $txtControl = $(this);
-
+            var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
             var valControl = $(this).parents(".bldngRow").first().find(".valValidationMsg").first();
-
-            //Remove the readonly property of the control
-            $txtControl.attr("readonly", false);
-
             var valMessage = "";
+
+            //Remove the readonly property of the control since we will be manipulating it's value
+            $txtControl.attr("readonly", false);
 
             if ($txtControl.val() == "" ){ //No values can be left blank
                 //alert("Value null was found.");
-                valMessage = "Value is required";
+                if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -521,12 +529,14 @@
         // Verify the Data values of each of the input Fields
         $(".updateField").each(function(){
             var $txtControl = $(this);
-
+            var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
             var valControl = $(this).parents(".bldngRow").first().find(".valValidationMsg").first();
             var valMessage = "";
             if ($txtControl.val() == "" ){ //No values can be left blank
                 //alert("Value null was found.");
-                valMessage = "Value is required";
+                //valMessage = "Value is required";
+                if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -542,9 +552,6 @@
                 $txtControl.focus();
             }
         });
-
-
-
         if(errorsFound > 0){
             $("#messageLine").html('<span style="margin-right:10px">FAILED TO CLOSE:</span>' + errorsFound + ' error(s) need to be corrected before closing.');
             $("#messageLine").show();

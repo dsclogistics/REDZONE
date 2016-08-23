@@ -32,7 +32,7 @@
           <div class="row">
               <div class="col-sm-12">
                   <div class="row ">
-                            <div class="col-xs-1 ">
+                            <div class="col-xs-1">
                                 <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>
                             </div>
                             <div class="col-xs-10">
@@ -176,7 +176,8 @@
                                         { <br /> }
                                         else
                                         {
-                                            <a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>
+                                            @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
+                                            <a href="@actionCell.cellValueURL" style="color:red; ">Action Required<br/>[ Click Here ]</a>                                            
                                         }
                                     </td>
                                 }
@@ -289,7 +290,6 @@
 <script>
     $(document).ready(function () {
         $(".menuItem").removeClass("menuSelected");
-        //$(".menuItem").addClass("menuUnselected");
         $("#mDashboard").addClass("menuSelected");
     });
 </script>

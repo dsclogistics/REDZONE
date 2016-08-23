@@ -135,5 +135,63 @@ namespace REDZONE
 
         }
 
+        // To push our user's Role details in this principle object we override the .NET "Application_PostAuthenticateRequest" method
+        // For MVC 4 or later versions
+        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        {
+            if (FormsAuthentication.CookiesSupported == true)
+            {
+                if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+                {
+                    try
+                    {
+                        //let us take out the username now                
+                        string username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+                        string roles = string.Empty;
+                        //retrieve roles from DB or some other way
+                        roles = getUserRoles(username);
+                        //using (userDbEntities entities = new userDbEntities())
+                        //{
+                        //    User user = entities.Users.SingleOrDefault(u => u.username == username);
+
+                        //    roles = user.Roles;
+                        //}
+
+                        //let us extract the roles from our own custom cookie
+
+                        //Let us set the Pricipal with our user specific details
+                        HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(
+                          new System.Security.Principal.GenericIdentity(username, "Forms"), roles.Split(';'));
+                    }
+                    catch (Exception)
+                    {
+                        //somehting went wrong
+                    }
+                }
+            }
+        }
+
+        private string getUserRoles(string username)
+        {
+            //Get User Role from DB or from 
+            string appUserRoles = String.Empty;
+            switch (username.ToUpper())
+            {
+                // Set ADMIN Group Level
+                case "DELGADO_FELICIANO":    
+                    appUserRoles = "ADMIN;AUTO;MANUAL";
+                    break;
+                case "RASUL ABDUGUEV":
+                case "KEVIN POGANI":
+                    appUserRoles = "AUTO";
+                    break;
+                default:
+                    appUserRoles = "MANUAL";
+                    break;
+            }
+
+            return appUserRoles;
+        } 
+
     }
 }

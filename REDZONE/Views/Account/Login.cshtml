@@ -35,6 +35,14 @@
                         <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
                     </div>
                     <div class="modal-body" style="padding:50px 40px;">
+                        <div class="row " id="browserWarning" style="display:none; text-align:center">
+                            <div class="alert-danger" style="font-size:medium; font-weight:bold">
+                                WARNING! <br />
+                                Your browser does not support some of the functions required to use this Application.<br />
+                                Please Contact the Service Desk to update your browser.
+                            </div>
+                            <br /><br />
+                        </div>
                         <form class="form-horizontal" method="post" role="form">
                             @Html.AntiForgeryToken()
 
@@ -82,6 +90,13 @@
             //$('#myModal').on('shown.bs.modal', function () {
             //    $('#UserName').select().focus();
             //})
+
+            //--------Notify User if the browser does not support Local Storage --------
+            if (!localStorage) {
+                $("#browserWarning").show();
+                $(".btn").prop("disabled", true);
+            }
+            //--------------------------------------------------------------------------
         });
     </script>
 </body>

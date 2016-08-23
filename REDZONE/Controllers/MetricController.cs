@@ -17,6 +17,7 @@ namespace REDZONE.Controllers
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         // GET: Metric
+
         public ActionResult EditView(int? id, string month, string year)
         {
             string returnURL = String.Format(@"/Metric/EditView/{0}?month={1}&year={2}", id, month, year);   // /Metric/EditView/6?month=June&year=2016
