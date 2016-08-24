@@ -107,8 +107,9 @@ namespace REDZONE.Controllers
                 //{
                 //    Session.Add("emp_id", (string)res["dsc_observer_emp_id"]);
                 //}
-                string xRoles = getUserRoles(loginModel.Username);
-                //setUserRoles(loginModel.Username, new string[] { Session["role"].ToString() });
+                
+                //string uRoles = getUserRoles(loginModel.Username);
+                setUserRoles(loginModel.Username, new string[] { Session["role"].ToString() });
                 FormsAuthentication.SetAuthCookie(loginModel.Username, true);
                 
                 //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
