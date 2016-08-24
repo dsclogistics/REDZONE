@@ -122,6 +122,7 @@ namespace REDZONE.Controllers
             string status = api.reloadMetricValues("volume", "Month", metricId, month, year);
             if (status.ToLower().Contains("success"))
             {
+
                 return "Success";
             }
             else { return status; }
