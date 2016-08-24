@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace REDZONE.Controllers
 {
-    public class ErrorController : Controller
+    public class AppErrorController : Controller
     {
         //// GET: Error
         //public ActionResult Index()
@@ -17,24 +17,18 @@ namespace REDZONE.Controllers
         //    return View("ErrorMsg");
         //}
 
-        // GET: Error
-        public ActionResult Index(string ErrorMsg)
-        {
-            Exception ex = new Exception(ErrorMsg);
-            return View("Error", ex);
-        }
         // POST: Error
         [HttpPost]
-        public ActionResult IndexPost(string ErrorMsg)
+        public ActionResult Message(string ErrorMsg)
         {
             Exception ex = new Exception(ErrorMsg);
-            return View("Error", ex);
+            return View("AppError", ex);
         }
 
         // GET: Error
-        public ActionResult Index(Exception catchedException)
+        public ActionResult Exception(Exception catchedException)
         {
-            return View("Error", catchedException);
+            return View("AppError", catchedException);
         }
 
         // GET: Error
@@ -50,28 +44,28 @@ namespace REDZONE.Controllers
             }
 
             Exception ex = new Exception(errorMessage);
-            return View("Error", ex);
+            return View("AppError", ex);
         }
 
         // GET: Error
         public ActionResult NotFound()
         {
             Exception ex = new Exception("Page not found or invalid URL Entry point used");
-            return View("Error", ex);
+            return View("AppError", ex);
         }
 
         // GET: Error
         public ActionResult BadRequest()
         {
             Exception ex = new Exception("Bad Request. Please verify your submission and try again.");
-            return View("Error", ex);
+            return View("AppError", ex);
         }
 
         // GET: Error
         public ActionResult NotAuthorized()
         {
             Exception ex = new UnauthorizedAccessException();
-            return View("Error", ex);
+            return View("AppError", ex);
         }
 
     }

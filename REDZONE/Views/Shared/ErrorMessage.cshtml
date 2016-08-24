@@ -1,0 +1,24 @@
+﻿@model Exception
+@{
+    ViewBag.Title = "Application Error";
+}
+
+<br /><br />
+<div class="panel panel-primary">
+    <div class="panel-heading" style="text-align:center; padding: 1px; background-color:black">
+        <h3>The Red-Zone Application cannot handle your request</h3>
+    </div>
+    <div class="panel-body" style="text-align:center">
+        <div class="row">
+            <div class="col-sm-3" style="text-align:left">
+                <img src="~/Images/confused-emoticon.jpg" />
+            </div>
+            <div class="col-sm-9" style="text-align:left; font-size:x-large">
+                <br />
+                <strong>ERROR: </strong> <sapn style="color:red">@Model.Message</sapn>
+                <br /><br />
+                Please review your input or Submission and try again
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,106 +1,26 @@
 ﻿@model REDZONE.Models.RZ_Metric
+@{
+    ViewBag.Title = "Model Metric";
+    string titleClass = "alert-standard";
+    if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
 
-@{ ViewBag.Title = "Model Metric";
- string titleClass = "alert-standard";
- if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
+    var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
+    var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1);
+    string tblCaption = "";
 
-
- var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
- var curYear = @Model.displayPeriodName.Substring(@Model.displayPeriodName.IndexOf(" ") + 1);
- string tblCaption = "";
-
- if (Model.metricPeriodStatus != null && Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
- if (Model.isAuto) tblCaption = "Warning, the values for this metric are generated automatically. They cannot be modified.";
+    if (Model.metricPeriodStatus != null && Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
+    if (Model.isAuto) tblCaption = "Warning, the values for this metric are generated automatically. They cannot be modified.";
 }
-<style>
-    .table-fixed thead {
-        width: 97%;
-    }
-
-    .table-fixed tbody {
-        height: 230px;
-        overflow-y: auto;
-        width: 100%;
-    }
-
-    .pnlScrollable {
-        height: 520px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        width: 100%;
-        margin:0; 
-    }
-
-    .txtInput {
-        text-align:center;
-        width:70%; 
-        min-width:60px;
-    }
-
-    .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
-        display: block;
-        text-align: center;
-    }
-
-    .table-fixed tbody td, .table-fixed thead > tr > th {
-        float: left;
-        border-bottom-width: 0;
-    }
-    .group-label {
-        color: #555;
-        background-color: #eee;
-        border: 1px solid #ccc;
-        border-bottom-left-radius:4px;
-        border-top-left-radius:4px;
-        float:right;        
-        display: table-cell;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        padding: 6px 12px;
-        font-size: 14px;
-        font-weight: bold;
-        /*line-height: 1;*/
-        /*height: 30px;*/
-        line-height: 1.5;
-        width: auto;
-        /*width: 1%;*/
-    }
-    .group-value {
-        border: 1px solid #ccc;
-        border-bottom-right-radius: 6px;
-        border-top-right-radius: 6px;
-        float:left;
-        display: table-cell;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        padding: 6px 12px;
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 1.5;
-        width: auto;
-        padding-top:7px;
-        padding-bottom:10px;
-        min-width:100px;
-    }
-    .hdrLabel {
-        padding: 4px 20px;
-        white-space: nowrap;
-        display: table-cell;
-        /*background-color: #caf0f4;*/
-    }
-
-</style>
-
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+<link href="~/Content/EditView.css" rel="stylesheet" />
+
 <div class="row">
     <input type="hidden" id="frmModified" value="N" />
     <input type="hidden" id="frmErrors" value="0" />
 </div>
 
 <div class="row" style="font-family:Arial; margin-top: 5px; width:100%;">
-    <div class="panel panel-default" style="margin: 0px 0px 0px 0px;" title="@tblCaption">
+   <div class="panel panel-default" style="margin: 0px 0px 0px 0px;" title="@tblCaption">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px;">
             <div class="row">
                 <div class="col-sm-11">
@@ -127,14 +47,14 @@
                     <div class="row" style="text-align:center">
                         @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
                         {
-                        <img src="~/Images/locked.gif" width="35" style="margin-top:10px; margin-bottom:9px" /> <br />
-                        <span style="font-size:xx-small; color:blue; ">Period is Closed</span>
+                            <img src="~/Images/locked.gif" width="35" style="margin-top:10px; margin-bottom:9px" /> <br />
+                            <span style="font-size:xx-small; color:blue; ">Period is Closed</span>
                         }
                         else
                         {
-                        <span style="font-size:xx-small; color:blue; ">STATUS:</span>
-                        <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
-                        <a href="javascript:saveMetricData(true)"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
+                            <span style="font-size:xx-small; color:blue; ">STATUS:</span>
+                            <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
+                            <a href="javascript:saveMetricData(true)"><span style="text-decoration: underline; font-size:x-small">[ Close Period ]</span></a>
                         }
                     </div>
                 </div>
@@ -146,50 +66,51 @@
                 </div>*@
         </div>
 
-        @if (Model.isModelValid)   //Valid Data was Retrieved
-        {
-            <div class="panel-body" style="padding: 8px; width:100%; text-align:center">
-            @{
-                string fontColor = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "darkgray" : "black";
-                //string editStatus = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "readonly" : "";
-            }
+   @if (Model.isModelValid)   //Valid Data was Retrieved
+   {
+        <div class="panel-body" style="padding: 8px; width:100%; text-align:center">
+          @{
+              string fontColor = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "darkgray" : "black";
+              //string editStatus = Model.metricPeriodStatus.ToUpper().Equals("CLOSED") ? "readonly" : "";
+           }
 
-              <div class="row" id="sectionWait" style="padding:20px; display:none">
-                  <div style="margin-top:10%; width:60%; margin:0 auto; margin-bottom:10%; border:1px solid #eeeeee">
-                      <div class="alert-info" style="font-size:large; ">Please wait while information is updated...</div>
-                      <br /><br /><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
-                  </div>
-              </div>
-              <div class="row" id="sectionBuildings" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; ">
-                <div class="row " style="margin:0; font-weight:bold; background-color: #e3f3f6; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
-                    <table style="width:100%">
-                        <tr>
-                            <td class="" style="">
-                                <div class="row " style="margin:0">
-                                    <div class=" row " style="width:70%; min-width:300px; margin:0 auto;">
-                                        <div class="col-xs-5" style="text-align:right;  padding:0">
-                                            <span class="hdrLabel" style="float:right; border-right: 1px solid lightgray">
-                                                Building Name
-                                            </span>
-                                        </div>
-                                        <div class="col-xs-7 " style="text-align:left; padding: 0">
-                                            <span class="hdrLabel" style="float:left; border-left: 1px solid lightgray">
-                                                @Model.periodName
-                                            </span>
-                                        </div>
+           <div class="row" id="sectionWait" style="padding:20px; display:none">
+             <div style="margin-top:10%; width:60%; margin:0 auto; margin-bottom:10%; border:1px solid #eeeeee">
+                <div class="alert-info" style="font-size:large; ">Please wait while information is updated...</div>
+                <br /><br /><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                <div >Elapsed Time is <span id="divCounter" style="font-weight:bold">0</span> Seconds</div>
+             </div>
+            </div>
+            <div class="row" id="sectionBuildings" style="border:1px solid lightgray; border-radius: 5px; margin: 0 auto; ">
+            <div class="row " style="margin:0; font-weight:bold; background-color: #e3f3f6; font-size: medium; text-align:center; border-bottom: 1px solid lightgrey;">
+                <table style="width:100%">
+                    <tr>
+                        <td class="" style="">
+                            <div class="row " style="margin:0">
+                                <div class=" row " style="width:70%; min-width:300px; margin:0 auto;">
+                                    <div class="col-xs-5" style="text-align:right;  padding:0">
+                                        <span class="hdrLabel" style="float:right; border-right: 1px solid lightgray">
+                                            Building Name
+                                        </span>
+                                    </div>
+                                    <div class="col-xs-7 " style="text-align:left; padding: 0">
+                                        <span class="hdrLabel" style="float:left; border-left: 1px solid lightgray">
+                                            @Model.periodName
+                                        </span>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="" style="width:18px"><br /></td>
-                        </tr>
-                    </table>
-                    @*<div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
+                            </div>
+                        </td>
+                        <td class="" style="width:18px"><br /></td>
+                    </tr>
+                </table>
+                @*<div class="col-sm-3 col-sm-offset-1 col-xs-6" style="padding-left:110px">Building Name</div>
                     <div class="col-sm-6 col-xs-6" style="text-align:left; padding-left:50px">@Model.periodName</div>*@
-                </div>
+            </div>
 
-                <div class="pnlScrollable " >
-                  @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
-                  {
+            <div class="pnlScrollable ">
+                @foreach (REDZONE.Models.Building dscBldng in Model.buildingList)
+                {
                     <div class="row bldngRow " style="margin:0; padding-bottom:1px; padding-top:3px; color:@fontColor">
                         <div class="row">
                             <div class=" row " style="width:70%; min-width:250px; margin:0 auto; ">
@@ -197,10 +118,10 @@
                                     <span class="group-label" style="min-width:50px; width:155px; ">@dscBldng.buildingName</span>
                                 </div>
                                 <div class="col-xs-7 " style="text-align:left; padding:0">
-                                    @if (Model.isAuto || Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
+                                    @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
                                     {//Value cannot be editable if the Metric is Automatic, closed or if the building level Value is not Editable
                                         <input type="text" class="group-value txtInput ROField" id="newMetricVal" value="@dscBldng.metricPeriodValue"
-                                               readonly="readonly" title="This Value Cannot be Edited" />
+                                               readonly="readonly" disabled title="This Value Cannot be Edited" />
                                         if (!dscBldng.isEditable)
                                         { <text><span style="color:blue; font-weight:bold; font-size:small; float:left">+</span></text> }
                                     }
@@ -218,13 +139,13 @@
                             </div>
 
                             @*<div class="col-sm-1">
-                                @if (!dscBldng.isEditable) { <text><span style="color:blue; font-weight:bold; float:left">+</span></text> }
-                            </div>*@
+                                    @if (!dscBldng.isEditable) { <text><span style="color:blue; font-weight:bold; float:left">+</span></text> }
+                                </div>*@
 
                         </div>
                         <div class="row" style="text-align:center;">
                             <div class="col-sm-8 col-sm-offset-2">
-                                <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>                                
+                                <span class="valValidationMsg" style="color:red; font-style:italic; display:none; text-align:center">*Validation Message</span>
                             </div>
                         </div>
                         <input type="hidden" id="saveFlag" value="@dscBldng.saveFlag" />
@@ -236,87 +157,85 @@
                         <input type="hidden" id="isNAallowed" value="@dscBldng.naAllowed.ToString()" />
                         <input type="hidden" id="isNA" value="" />
                     </div>
-                  }
-                    <br />                    
-                </div>
-                  <br />
-                <div class="row">
-                    <div class="col-xs-11" >
-                        <div class="row " style="max-width:400px; margin:0 auto">
-                            <span style="color:red"> * Value is Required</span>
-                            <span style="color:blue; margin-left:45px"> + Authomated Value</span>
-                        </div>
-                    </div>
-                </div>
-              </div>
-
+                }
+                <br />
             </div>
-
-            if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
-            {
-                <div class="row" style="margin:0; ">
-                    <div class="col-sm-10 ">
-                        <span style="font-size:large; color:red">THIS METRIC PERIOD CANNOT BE EDITED</span>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="row" id="sectionButtons" style="margin:0">
-                    @*--------- Form Buttons Sections --------------*@
-                    <div class="col-sm-2 col-sm-offset-1">
-                        @if (Model.isImportable)
-                        {
-                            @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
-                        }
-                        
-                        @if (Model.isAuto)
-                        {                          @*@if (Model.metricName.Equals("Volume"))*@
-                            <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
-                        }
-                    </div>
-                    <div class="col-sm-2 col-sm-offset-2"><input type="button" id="btnSave" class="btn btn-primary" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>          } style="width:80px" /></div>
-                    <div class="col-sm-2 ">               <input type="button" id="btnCancel" class="btn btn-primary" value="CANCEL" style="width:80px" /></div>
-                 @if (Model.isImportable)
-                 {// Dsisplay the Download Template Button (To be used for importing/uploading the metric data)
-                    <div class="col-sm-1 col-sm-offset-2">
-                        @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
-                            </button>*@
-
-                        <form id="exportToExcel" action="/Metric/downloadTemplate" target="_blank" method="post">
-                            <input type="hidden" name="metricName" value="@Model.metricName" />
-                            <input type="hidden" name="year" value="@curYear" />
-                            <input type="hidden" name="month" value="@curMonth" />
-                            <input type="hidden" name="allBuildings" value="@Model.allBuildings" />
-                            <button id="btnDwnldTemplate1" type="submit" class="btn btn-default" style="float:right">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
-                            </button>
-                        </form>
-                    </div>
-                 }
-                </div>
-            }
             <br />
-        } // End of the Area that is rendered when a valid Model/Data is retrieved
-        else
-        { // No valid Data was Found. Display an error message
+            <div class="row">
+                <div class="col-xs-11">
+                    <div class="row " style="max-width:400px; margin:0 auto">
+                        <span style="color:red"> * Value is Required</span>
+                        <span style="color:blue; margin-left:45px"> + Authomated Value</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+       if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
+       {
+        <div class="row" style="margin:0; ">
+            <div class="col-sm-10 ">
+                <span style="font-size:large; color:red">THIS METRIC PERIOD CANNOT BE EDITED</span>
+            </div>
+        </div>
+      }
+      else
+      {
+        <div class="row" id="sectionButtons" style="margin:0">
+            @*--------- Form Buttons Sections --------------*@
+            <div class="col-sm-2 col-sm-offset-1">
+                @if (Model.isImportable)
+                {
+                    @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+                }
+                @if (Model.isAuto)
+                {                          @*@if (Model.metricName.Equals("Volume"))*@
+                    <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
+                }
+            </div>
+            <div class="col-sm-2 col-sm-offset-2"><input type="button" id="btnSave" class="btn btn-primary" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>             } style="width:80px" /></div>
+            <div class="col-sm-2 ">               <input type="button" id="btnCancel" class="btn btn-primary" value="CANCEL" style="width:80px" /></div>
+          @if (Model.isImportable)
+          {// Dsisplay the Download Template Button (To be used for importing/uploading the metric data)
+            <div class="col-sm-1 col-sm-offset-2">
+                 @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
+                 </button>*@
+
+                <form id="exportToExcel" action="/Metric/downloadTemplate" target="_blank" method="post">
+                    <input type="hidden" name="metricName" value="@Model.metricName" />
+                    <input type="hidden" name="year" value="@curYear" />
+                    <input type="hidden" name="month" value="@curMonth" />
+                    <input type="hidden" name="allBuildings" value="@Model.allBuildings" />
+                    <button id="btnDwnldTemplate1" type="submit" class="btn btn-default" style="float:right">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
+                    </button>
+                </form>
+            </div>
+          }
+        </div>
+      }
+      <br />
+   } // End of the Area that is rendered when a valid Model/Data is retrieved
+   else
+   { // No valid Data was Found. Display an error message
             <br />
             <div class="row" style="color:red; font-size:large; border:4px double black; margin:5px 15px; padding:40px; background-color: lightgray; border-radius:8px">
                 <span style="font-weight:bold; ">THERE IS NO DATA AVAILABLE FOR THE SELECTED METRIC PERIOD</span>
                 <br /><span style="text-align:center"></span>
             </div>
             <br />
-        }
-
-    </div>
+   }
+   </div>
 </div>
 
 <div id="messageLine" class="row" style="display:none; width:100%; font-weight:bold; color:red; text-align:center;">
 </div>
 <br />
 @*<iframe id="fileFrame"></iframe>
-<br /><br /><br /><br />*@
+    <br /><br /><br /><br />*@
 <div id="output"></div>
 
 @* //=============================================== MODAL CONTAINER FOR POP UP WINDOWS ==================================\\
@@ -427,6 +346,7 @@
             var metricDateInfo =  "@Model.displayPeriodName".split(" ");
             var metricMonth = metricDateInfo[0];
             var metricYear = metricDateInfo[1];
+            var secCounter = 0;
             //alert("Reloading metric Id: "+ metricId + "\nFor Month: "+ metricMonth + "\nFor Year: "+ metricYear);
 
             //show the "loading" animation until ajax call completes
@@ -435,6 +355,11 @@
             $("#sectionWait").show();
 
             // We need parameters: "metricId", "month", "year"
+            var myInterval = setInterval(function(){ 
+                secCounter = secCounter + 1;
+                $("#divCounter").html(secCounter)
+            }, 1000);
+
             $.ajax({
                 url: '/Metric/reloadMetric',   //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
                 method: "POST",
@@ -442,22 +367,26 @@
                 //type: "POST",
                 //data: payload,
                 data: {metricId:metricId, month: metricMonth, year: metricYear},
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to Reload Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-                    hideAnimation();
-                }
-            }).done(function (d) {
+                timeout: 25000 // sets timeout to 25 seconds
+            })
+            .done(function (d) {
                 if (d == "Success") {
-                    alert("Data Reloaded Successfully!");
+                    //alert("Data Reloaded Successfully!");
                     location.reload();
                 } else {
                     alert("Error performing Data Reload: \n" + JSON.stringify(d));
                 }
                 hideAnimation();
                 //$("#output").html(JSON.stringify(d));
-            }); //----- End of Ajax Call
-
-
+            })
+            .fail(function(jqXHR, textStatus, errorThrown){
+                alert("Failed to Reload Data.\nError:" + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                hideAnimation();
+            })
+            .always(function(){
+                clearInterval(myInterval);
+            })
+            ; //----- End of Ajax Call
         });
 
         //-------------------------- MODAL EVENTS --------------------------------
@@ -577,7 +506,7 @@
             if ($txtControl.val() == "" ){ //No values can be left blank
                 //alert("Value null was found.");
                 if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
-                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -606,7 +535,7 @@
                 //alert("Value null was found.");
                 //valMessage = "Value is required";
                 if(isNAallowed=="True"){ valMessage = "Value or 'N/A' is required";  }
-                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }                
+                else {  valMessage = "Valid value required ('N/A' not allowed) ";  }
             }
             else {
                 valMessage = validateTxtField($(this));
@@ -639,6 +568,7 @@
     function buildJSON() {
         @*var periodId = @Model.metricPeriodID*@
         var userName = "";
+        alert("@Session["username"]");
         try { userName = "@Session["username"].ToString()"; }   //Verify that session did not expire.
         catch(err) {
             alert("Session Expired!\nPlease logon again.");

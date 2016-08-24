@@ -32,10 +32,10 @@ namespace REDZONE.Models
         public virtual DbSet<MTRC_METRIC> MTRC_METRIC { get; set; }
         public virtual DbSet<MTRC_METRIC_HIERARCHY> MTRC_METRIC_HIERARCHY { get; set; }
         public virtual DbSet<MTRC_METRIC_PRODUCTS> MTRC_METRIC_PRODUCTS { get; set; }
-        public virtual DbSet<MTRC_METRIC_VALUE> MTRC_METRIC_VALUE { get; set; }
         public virtual DbSet<MTRC_PRODUCT> MTRC_PRODUCT { get; set; }
         public virtual DbSet<MTRC_TIME_PERIOD_TYPE> MTRC_TIME_PERIOD_TYPE { get; set; }
         public virtual DbSet<DSC_MTRC_LC_BLDG> DSC_MTRC_LC_BLDG { get; set; }
         public virtual DbSet<MTRC_METRIC_PERIOD> MTRC_METRIC_PERIOD { get; set; }
+        public virtual DbSet<MTRC_MGMT_AUTH> MTRC_MGMT_AUTH { get; set; }
     }
 }

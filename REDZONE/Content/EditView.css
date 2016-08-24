@@ -1,0 +1,80 @@
+﻿.table-fixed thead {
+    width: 97%;
+}
+
+.table-fixed tbody {
+    height: 230px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.pnlScrollable {
+    height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+}
+
+.txtInput {
+    text-align: center;
+    width: 70%;
+    min-width: 60px;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+    display: block;
+    text-align: center;
+}
+
+    .table-fixed tbody td, .table-fixed thead > tr > th {
+        float: left;
+        border-bottom-width: 0;
+    }
+
+.group-label {
+    color: #555;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    float: right;
+    display: table-cell;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    /*line-height: 1;*/
+    /*height: 30px;*/
+    line-height: 1.5;
+    width: auto;
+    /*width: 1%;*/
+}
+
+.group-value {
+    border: 1px solid #ccc;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+    float: left;
+    display: table-cell;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.5;
+    width: auto;
+    padding-top: 7px;
+    padding-bottom: 10px;
+    min-width: 100px;
+}
+
+.hdrLabel {
+    padding: 4px 20px;
+    white-space: nowrap;
+    display: table-cell;
+    /*background-color: #caf0f4;*/
+}

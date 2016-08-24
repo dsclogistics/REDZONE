@@ -18,15 +18,40 @@ namespace REDZONE.Controllers
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         // GET: Metric
 
+
         public ActionResult EditView(int? id, string month, string year)
         {
             string returnURL = String.Format(@"/Metric/EditView/{0}?month={1}&year={2}", id, month, year);   // /Metric/EditView/6?month=June&year=2016
             int metricId = id ?? 0;
             if (metricId == 0) { returnURL = ""; }
-            if (Session["username"] == null) { return RedirectToAction("LogOff", "Account", new { backUrl = returnURL }); }
+
+            //if (Session["username"] == null) { return RedirectToAction("LogOff", "Account", new { backUrl = returnURL }); }
             if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
-            RZ_Metric rz_metric = parcer.getRZ_Metric(metricId, month, year);
-            return View(rz_metric);
+
+            // If the Authenticated User does not exist or has no Role Authorization the the requetsed metric, kick the user out to the "Not authorized Screen"
+
+            try {
+                APIDataParcer dp = new APIDataParcer();
+                string uName = User.Identity.Name;
+                //uName = "dempsey_christina";
+                List<int> rol = dp.getUserMetrics(uName);
+                if (rol.Contains(metricId) ) {
+                    //The User Requested Metric Id is in it's list of Authorized Metrics
+                    RZ_Metric rz_metric = parcer.getRZ_Metric(metricId, month, year);
+                    return View(rz_metric);
+                }
+                else { 
+                //Reject Request. User not Authorized to display the Requested Metric Id
+                    Exception ex = new Exception("You do not have authorization to access the requested Metric.");
+                    return View("ErrorMessage", ex);
+                }
+            }
+            catch(Exception ex) {
+                return View("ErrorMessage", ex);
+            }
+            
+           
+
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]

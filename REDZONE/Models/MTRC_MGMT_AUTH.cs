@@ -12,15 +12,14 @@ namespace REDZONE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DSC_MTRC_LC_BLDG
+    public partial class MTRC_MGMT_AUTH
     {
-        public short dsc_mtrc_lc_bldg_id { get; set; }
-        public int dsc_lc_id { get; set; }
-        public string dsc_mtrc_lc_bldg_name { get; set; }
-        public string dsc_mtrc_lc_bldg_code { get; set; }
-        public System.DateTime dsc_mtrc_lc_bldg_eff_start_dt { get; set; }
-        public System.DateTime dsc_mtrc_lc_bldg_eff_end_dt { get; set; }
+        public short mma_id { get; set; }
+        public int mtrc_prod_id { get; set; }
+        public string mma_dsc_ad_username { get; set; }
+        public System.DateTime mma_eff_start_date { get; set; }
+        public System.DateTime mma_eff_end_date { get; set; }
     
-        public virtual DSC_LC DSC_LC { get; set; }
+        public virtual MTRC_METRIC_PRODUCTS MTRC_METRIC_PRODUCTS { get; set; }
     }
 }

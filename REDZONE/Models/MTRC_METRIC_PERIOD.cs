@@ -19,7 +19,6 @@ namespace REDZONE.Models
         {
             this.MTRC_METRIC_HIERARCHY = new HashSet<MTRC_METRIC_HIERARCHY>();
             this.MTRC_METRIC_HIERARCHY1 = new HashSet<MTRC_METRIC_HIERARCHY>();
-            this.MTRC_METRIC_VALUE = new HashSet<MTRC_METRIC_VALUE>();
             this.MTRC_METRIC_PRODUCTS = new HashSet<MTRC_METRIC_PRODUCTS>();
         }
     
@@ -35,14 +34,14 @@ namespace REDZONE.Models
         public Nullable<short> mtrc_period_max_dec_places { get; set; }
         public Nullable<short> mtrc_period_max_str_size { get; set; }
         public string mtrc_period_na_allow_yn { get; set; }
+        public string mtrc_period_can_import_yn { get; set; }
+        public string mtrc_period_is_auto_yn { get; set; }
     
         public virtual MTRC_METRIC MTRC_METRIC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MTRC_METRIC_HIERARCHY> MTRC_METRIC_HIERARCHY { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MTRC_METRIC_HIERARCHY> MTRC_METRIC_HIERARCHY1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MTRC_METRIC_VALUE> MTRC_METRIC_VALUE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MTRC_METRIC_PRODUCTS> MTRC_METRIC_PRODUCTS { get; set; }
         public virtual MTRC_TIME_PERIOD_TYPE MTRC_TIME_PERIOD_TYPE { get; set; }

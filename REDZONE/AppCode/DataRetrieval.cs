@@ -1,4 +1,5 @@
-﻿using System;
+﻿using REDZONE.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace REDZONE.AppCode
 {
     public class DataRetrieval
     {
+        //private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
         private string api_url = AppCode.Util.getAPIurl();
 
         public string getMetricname( string productName, string tptName)

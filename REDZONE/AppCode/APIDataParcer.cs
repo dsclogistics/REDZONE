@@ -844,7 +844,7 @@ namespace REDZONE.AppCode
             return mColor;
         }
 
-        //This method returns the list of all metrics user is authorized to edit. 
+        //This method returns the list of all metrics Product Ids that the user is authorized to edit. 
         public List<int> getEditableMetrics(string userName)
         {
             List<int> accessibleMetrics = new List<int>();
@@ -852,7 +852,7 @@ namespace REDZONE.AppCode
             try {
                 foreach (var res in parsed_result["authorizationdetails"])
                 {
-                    int mtrc_period_id = (int)res["mtrc_period_id"];
+                    int mtrc_period_id = (int)res["mtrc_prod_id"];
                     accessibleMetrics.Add(mtrc_period_id);
                 }
             }
@@ -860,6 +860,22 @@ namespace REDZONE.AppCode
             return accessibleMetrics;
         }
 
+        //This method returns the list of all metrics Ids that user is authorized to edit. 
+        public List<int> getUserMetrics(string userName)
+        {
+            List<int> authMetrics = new List<int>();
+            JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
+            try
+            {
+                foreach (var res in parsed_result["authorizationdetails"])
+                {
+                    int mtrc_id = (int)res["mtrc_id"];
+                    authMetrics.Add(mtrc_id);
+                }
+            }
+            catch { }
+            return authMetrics;
+        }
 
         //This is a HELPER method that should determine what the next and prev url for metric summary.
         //It returns an array of 2 records. [0]=prev url, [1]=next url

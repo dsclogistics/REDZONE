@@ -12,8 +12,10 @@ namespace REDZONE.Models
 
     public class RZ_Metric
     {
-        [Display(Name = "Metric ID")]                       // numeric, pk for mtrc_metric table
+        [Display(Name = "Metric Period ID")]                       // numeric, pk for mtrc_metric table
         public int id { set; get; }
+        [Display(Name = "Metric ID")]                       // numeric, pk for mtrc_metric table
+        public int metricId { set; get; }
         [Display(Name = "Metric Name")]                     //i.e. Net FTE (mtrc_metric.mtrc_name)
         public string metricName { set; get; }
 

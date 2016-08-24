@@ -177,7 +177,7 @@
     <Compile Include="Controllers\DSC_CUST_ACCTController.cs" />
     <Compile Include="Controllers\DSC_LCController.cs" />
     <Compile Include="Controllers\DSC_MTRC_LC_BLDGController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\AppErrorController.cs" />
     <Compile Include="Controllers\ExecutiveSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
@@ -241,7 +241,7 @@
     <Compile Include="Models\MTRC_METRIC_PRODUCTS.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MTRC_METRIC_VALUE.cs">
+    <Compile Include="Models\MTRC_MGMT_AUTH.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MTRC_PRODUCT.cs">
@@ -264,6 +264,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\EditView.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\RedZoneApp.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -397,7 +398,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Error\Error.cshtml" />
+    <Content Include="Views\AppError\AppError.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Create.cshtml" />
     <Content Include="Views\DSC_CUST_ACCT\Delete.cshtml" />
@@ -432,6 +433,7 @@
     <Content Include="Views\ExecutiveSummary\MonthlySummary.cshtml" />
     <Content Include="Views\Home\BuildingSummary.cshtml" />
     <Content Include="Views\Home\MetricSummary.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
