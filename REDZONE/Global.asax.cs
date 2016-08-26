@@ -57,13 +57,13 @@ namespace REDZONE
                 return;
             }
 
-            // retrieve roles from UserData
-            string[] roles = authTicket.UserData.Split(';');
-            if (roles.Length == 0 || roles[0] == ""){ roles = new string[] {"User"};}
+            //// retrieve roles from UserData
+            //string[] roles = authTicket.UserData.Split(';');
+            //if (roles.Length == 0 || roles[0] == ""){ roles = new string[] {"User"};}
 
-            if (Context.User != null)
-                Context.User = new GenericPrincipal(Context.User.Identity, roles);
-            //Valid Roles are: "Admin", "Super User", "Editor", "Viewer"
+            //if (Context.User != null)
+            //    Context.User = new GenericPrincipal(Context.User.Identity, roles);
+            ////Valid Roles are: "Admin", "Super User", "Editor", "Viewer"
         }
 
         protected void Application_Error(Object sender, EventArgs e)
@@ -104,7 +104,7 @@ namespace REDZONE
             // For other kinds of errors give the user some information but stay on the default page
             Response.Write("<h2>Global Page Error</h2>\n");
             Response.Write("<p>" + exc.Message + "</p>\n");
-            Response.Write(@"Return to the <a href='Home\Index\'>Default Page</a>\n");
+            Response.Write(@"Return to the <a href='\Home\Index\'>Default Page</a>\n");
 
             //// Log the exception and notify system operators
             //ExceptionUtility.LogException(exc, "DefaultPage");
@@ -117,10 +117,10 @@ namespace REDZONE
             //// Possible that a partially rendered page has already been written to response buffer before encountering error, so clear it.
             //Response.Clear();
 
-            //// Finally redirect, transfer, or render a error view if Unhandled
-            Session["ErrorMessage"] = errorMessage;
-            
-            Server.Transfer("~/Error/ErrorMsg");
+            //// Finally redirect, transfer, or render an error view if Unhandled
+
+            //Session["ErrorMessage"] = errorMessage;            
+            //Server.Transfer("~/Error/ErrorMsg");
             //Server.Transfer("~/Account/Login");
             //Response.Redirect("~/Error/ErrorMsg");
         }
@@ -135,64 +135,69 @@ namespace REDZONE
 
         }
 
+
         // To push our user's Role details in this principle object we override the .NET "Application_PostAuthenticateRequest" method
         // For MVC 4 or later versions
-        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
-        {
-            if (FormsAuthentication.CookiesSupported == true)
-            {
-                if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
-                {
-                    try
-                    {
-                        //let us take out the username now                
-                        string username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
-                        string roles = string.Empty;
-                        //retrieve roles from DB or some other way
-                        roles = getUserRoles(username);
-                        //using (userDbEntities entities = new userDbEntities())
-                        //{
-                        //    User user = entities.Users.SingleOrDefault(u => u.username == username);
+        //protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        //{
+        //    if (FormsAuthentication.CookiesSupported == true)
+        //    {
+        //        if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+        //        {
+        //            try
+        //            {
+        //                //let us take out the username now                
+        //                string username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+        //                string roles = string.Empty;
+        //                //retrieve roles from DB or some other way
 
-                        //    roles = user.Roles;
-                        //}
+        //                //using (userDbEntities entities = new userDbEntities())
+        //                //{
+        //                //    User user = entities.Users.SingleOrDefault(u => u.username == username);
 
-                        //let us extract the roles from our own custom cookie
+        //                //    roles = user.Roles;
+        //                //}
 
-                        //Let us set the Pricipal with our user specific details
-                        HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(
-                          new System.Security.Principal.GenericIdentity(username, "Forms"), roles.Split(';'));
-                    }
-                    catch (Exception)
-                    {
-                        //somehting went wrong
-                    }
-                }
-            }
-        }
+        //                //let us extract the roles from our own custom cookie or by any other method we chose
 
-        private string getUserRoles(string username)
-        {
-            //Get User Role from DB or from 
-            string appUserRoles = String.Empty;
-            appUserRoles = "1;2;3;4;5;6;7;8";          //Temp Hardcoding
-            //switch (username.ToUpper())
-            //{
-            //    // Set ADMIN Group Level
-            //    case "DELGADO_FELICIANO":    
-            //        appUserRoles = "ADMIN;AUTO;MANUAL";
-            //        break;
-            //    case "RASUL ABDUGUEV":
-            //    case "KEVIN POGANI":
-            //        appUserRoles = "AUTO";
-            //        break;
-            //    default:
-            //        appUserRoles = "MANUAL";
-            //        break;
-            //}
+        //                ////Lets disable User.Identity Role Management for now as Role validation will be peformed at the EditView Control Action Level
+        //                ////-----------------------------------------------
+        //                //      roles = getUserRoles(username);
+        //                //      //Let us set the Pricipal with our user specific details
+        //                //      HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(
+        //                //           new System.Security.Principal.GenericIdentity(username, "Forms"), roles.Split(';'));
+        //                ////-----------------------------------------------------
+        //            }
+        //            catch (Exception)
+        //            {
+        //                //somehting went wrong
+        //            }
+        //        }
+        //    }
+        //}
 
-            return appUserRoles;
-        } 
+        //private string getUserRoles(string username)
+        //{
+        //    //Get User Role from DB or from 
+        //    string appUserRoles = String.Empty;
+        //    appUserRoles = "1;2;3;4;5;6;7;8";          //Temp Hardcoding
+        //    //switch (username.ToUpper())
+        //    //{
+        //    //    // Set ADMIN Group Level
+        //    //    case "DELGADO_FELICIANO":    
+        //    //        appUserRoles = "ADMIN;AUTO;MANUAL";
+        //    //        break;
+        //    //    case "RASUL ABDUGUEV":
+        //    //    case "KEVIN POGANI":
+        //    //        appUserRoles = "AUTO";
+        //    //        break;
+        //    //    default:
+        //    //        appUserRoles = "MANUAL";
+        //    //        break;
+        //    //}
+
+        //    return appUserRoles;
+        //} 
 
     }
 }

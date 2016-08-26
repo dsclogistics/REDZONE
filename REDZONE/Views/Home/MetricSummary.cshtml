@@ -2,26 +2,29 @@
 
 @{
     ViewBag.Title = "Building Summary";
-    int colCounter = 0;    
+    int colCounter = 0;
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <style>
     .monthCol {
         width: 120px;
     }
+
     .valueCell {
-        font-weight:bold;
+        font-weight: bold;
         /*font-size:medium;*/
     }
 </style>
-@if (String.IsNullOrEmpty(Model.metricID)) { 
-<div style="margin-top:250px; color:red">
-    <img src="~/Images/confused-emoticon.jpg" />
-    <h2>Please Select a valid Metric </h2>
-</div>
+@if (String.IsNullOrEmpty(Model.metricID))
+{
+    <div style="margin-top:250px; color:red">
+        <img src="~/Images/confused-emoticon.jpg" />
+        <h2>Please Select a valid Metric </h2>
+    </div>
 }
-else { 
-<div class="row" style="font-family:Arial; margin-top: 5px">
+else
+{
+    <div class="row" style="font-family:Arial; margin-top: 5px">
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
@@ -58,13 +61,14 @@ else {
                 <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                     <!-- Table -->
                     <!-- ROWS -->
-                    <div class="row headerRow row-eq-height">  <!-- Column Header Titles Row -->
-                    @{
-                        string sortIcon = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "glyphicon-sort" : Model.rowHeadings.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
-                        //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
-                        string btnClass = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "btn-default" : "btn-primary";
-                    }
-                        <div class="col-sm-2 buildingCol" >
+                    <div class="row headerRow row-eq-height">
+                        <!-- Column Header Titles Row -->
+                        @{
+    string sortIcon = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "glyphicon-sort" : Model.rowHeadings.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
+    //string sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon glyphicon-triangle-bottom" : "glyphicon glyphicon-triangle-top";
+    string btnClass = String.IsNullOrEmpty(Model.rowHeadings.displayClass) ? "btn-default" : "btn-primary";
+                        }
+                        <div class="col-sm-2 buildingCol">
                             <div class="row" style="margin:0; ">
                                 <input type="hidden" id="sortMonth" value="Building" />
                                 <input type="hidden" id="sortOrder" value=@Model.rowHeadings.displayClass />
@@ -73,7 +77,7 @@ else {
                                     <span class="glyphicon @sortIcon" aria-hidden="true"></span>
                                 </button>
                             </div>
-                        </div>  <!-- Metric Name Column -->                        
+                        </div>  <!-- Metric Name Column -->
                         <div class="col-sm-9">
                             <div class="row">
                                 <table style="width:100%">
@@ -102,13 +106,13 @@ else {
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-1 scoreCol" >
+                        <div class="col-sm-1 scoreCol">
                             Goals Missed
                         </div>
                     </div><!-- TITLES ROW -->
 
                     <div class="row buildingRowX" style="background-color: #bbedff; ">
-                        <div class="col-sm-2 buildingCol" >
+                        <div class="col-sm-2 buildingCol">
                             @Model.rowGoal.rowName
                         </div>
                         <div class="col-sm-9">
@@ -116,7 +120,7 @@ else {
                                 <table style="width:100%">
                                     @{colCounter = 0;}
                                     <tr class="valueRow">
-                                        
+
                                         @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
                                         {
                                             bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
@@ -136,18 +140,17 @@ else {
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-1 buildingCol scoreCol" >
+                        <div class="col-sm-1 buildingCol scoreCol">
                             ---
                         </div>
 
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-                            @if (String.IsNullOrEmpty(@Model.goal.score))
-                            { <br /> }
-                            else
-                            { @Model.goal.score }
-                        </div>*@
+                                @if (String.IsNullOrEmpty(@Model.goal.score))
+                                { <br /> }
+                                else
+                                { @Model.goal.score }
+                            </div>*@
                     </div><!-- ------------ GOALS ROW ---------------- -->
-
                     @*Begin Displaying All Rows for Metric*@
                     @foreach (var buildingRow in Model.metricRows)
                     {
@@ -157,7 +160,7 @@ else {
                             <div class="col-sm-2 buildingCol">
                                 <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                             </div>  <!-- Metric Name Column -->
-                         
+
                             <div class="col-sm-9">
                                 <div class="row ">
                                     <table style="width:100%">
@@ -172,8 +175,8 @@ else {
                                                         { <br /> }
                                                         else
                                                         {
-                                                            if (!buildingCell.metricValue.Equals("N/A")) { allNAs = false; }                                                            
-                                                            @buildingCell.metricValue 
+                                                            if (!buildingCell.metricValue.Equals("N/A")) { allNAs = false; }
+                                                            @buildingCell.metricValue
                                                         }
                                                     </td>
                                                 }
@@ -184,13 +187,15 @@ else {
                                 </div>
                             </div>  <!-- End of block with 12 Month Value Columns -->
                             <div class="col-sm-1 buildingCol scoreCol">
-                                @if (allNAs) { <text>---</text>}
-                                else { @buildingRow.redTotals }                                
+                                @if (allNAs)
+                                { <text>---</text>}
+                                else
+                                { @buildingRow.redTotals }
                             </div>
                         </div>
                     } <!-- DISPLAY OF DATA ROWS LOOP END -->
 
-                    <div class="row buildingRowX totalsRow" >
+                    <div class="row buildingRowX totalsRow">
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
                             @Model.missedGoals.rowName
                         </div>
@@ -223,18 +228,18 @@ else {
                             @*@Model.missedGoals.redTotals*@
                         </div>
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
-              @if (String.IsNullOrEmpty(@Model.goal.score))
-              { <br /> }
-              else
-              { @Model.goal.score }
-            </div>
+                              @if (String.IsNullOrEmpty(@Model.goal.score))
+                              { <br /> }
+                              else
+                              { @Model.goal.score }
+                            </div>
                         *@
                     </div><!-- MISSED GOALS TOTAL ROW -->
 
                 </div> <!-- End of DIV Table Table -->
             </div>
         </div>
-</div>
+    </div>
 }
 <br /><br />
 
@@ -253,7 +258,7 @@ else {
             if (sort_Dir == "" || sort_Dir == "DESC") { sort_Dir = "ASC"; } else { sort_Dir = "DESC"; };
             var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID&sortMonth=" + sort_Month + "&sortDir=" + sort_Dir;
             //alert(gotoURL);
-            location.href=gotoURL;
+            location.href = gotoURL;
         });
         $("#sortBuilding").click(function () {
             var gotoURL = "/Home/MetricSummary/?year=@Model.year&metricID=@Model.metricID";

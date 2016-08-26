@@ -1,7 +1,8 @@
 ﻿@model REDZONE.Models.RZ_Metric
-@{
+@{    
     ViewBag.Title = "Model Metric";
     string titleClass = "alert-standard";
+    string userName = User.Identity.Name;
     if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
 
     var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));
@@ -116,7 +117,7 @@
                         <div class="row">
                             <div class=" row " style="width:70%; min-width:250px; margin:0 auto; ">
                                 <div class="col-xs-5 " style="text-align:right; padding: 0">
-                                    <span class="group-label" style="min-width:50px; width:155px; ">@dscBldng.buildingName</span>
+                                    <span class="group-label" style="min-width:50px; width:155px;">@dscBldng.buildingName</span>
                                 </div>
                                 <div class="col-xs-7 " style="text-align:left; padding:0">
                                     @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED") || !dscBldng.isEditable)
@@ -131,7 +132,7 @@
                                         string valueTitle = "";
                                         if (!dscBldng.naAllowed) { valueTitle = "Value is required ('N/A' not allowed)"; }
                                         else { valueTitle = "Enter value or N/A"; }
-                                        <input type="text" class="group-value txtInput updateField" id="newMetricVal"
+                                        <input type="text" class="group-value txtInput updateField" id="newMetricVal" 
                                                value="@dscBldng.metricPeriodValue" title="@valueTitle" />
                                         if (!dscBldng.naAllowed)
                                         { <text><span style="color:red; font-weight:bold; font-size:medium; float:left">*</span></text> }
@@ -166,7 +167,7 @@
                 <div class="col-xs-11">
                     <div class="row " style="max-width:400px; margin:0 auto">
                         <span style="color:red"> * Value is Required</span>
-                        <span style="color:blue; margin-left:45px"> + Authomated Value</span>
+                        <span style="color:blue; margin-left:45px"> + Automated Value</span>
                     </div>
                 </div>
             </div>
@@ -189,11 +190,11 @@
             <div class="col-sm-2 col-sm-offset-1">
                 @if (Model.isImportable)
                 {
-                    @Html.ActionLink("Import Excel Data File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
+                    @Html.ActionLink("Import Excel File", "UploadPreview", "Metric", Model, new { @class = "modal-link btn btn-primary" })
                 }
                 @if (Model.isAuto)
                 {                          @*@if (Model.metricName.Equals("Volume"))*@
-                    <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Recalculate Data" />
+                    <input type="button" id="btnRecalcMetric" class="btn btn-primary" value="Refresh Automated Values" />
                 }
             </div>
             <div class="col-sm-2 col-sm-offset-2"><input type="button" id="btnSave" class="btn btn-primary" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>             } style="width:80px" /></div>
@@ -201,10 +202,6 @@
           @if (Model.isImportable)
           {// Dsisplay the Download Template Button (To be used for importing/uploading the metric data)
             <div class="col-sm-1 col-sm-offset-2">
-                 @*<button id="btnDwnldTemplate" class="btn btn-default" style="float:right">
-                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><span style="margin-left:11px">Excel Template</span>
-                 </button>*@
-
                 <form id="exportToExcel" action="/Metric/downloadTemplate" target="_blank" method="post">
                     <input type="hidden" name="metricName" value="@Model.metricName" />
                     <input type="hidden" name="year" value="@curYear" />
@@ -216,7 +213,10 @@
                 </form>
             </div>
           }
-        </div>
+        </div>  <!-- ------ Form Buttons ROW End Section--------- -->
+       <div class="row alert-success" id="divMsg" style="padding: 7px; font-weight:bold; font-size:large; text-align:center; display:none">
+           Data Saved Successfully
+       </div>
       }
       <br />
    } // End of the Area that is rendered when a valid Model/Data is retrieved
@@ -262,6 +262,10 @@
         $("#btnCancel").click(function () {
             //location.href('/Home');
             location.reload();
+        });
+
+        $(".updateField").on('keypress', function () {
+            $("#btnSave").prop('disabled', false);
         });
 
         $(".updateField").on('change', function () {
@@ -323,23 +327,23 @@
 
         });
 
-        $("#btnDwnldTemplate").click(function(){
-            alert("Template Download Function Not implemented yet.");
-            //$.ajax({
-            //    type: 'POST',
-            //    url: '/Reports/ExportMyData',
-            //    data: '{ "dataprop1": "test", "dataprop2" : "test2" }',
-            //    contentType: 'application/json; charset=utf-8',
-            //    dataType: 'json',
-            //    success: function (returnValue) {
-            //        window.location = '/Reports/Download?file=' + returnValue;
-            //    }
-            //});
+        //$("#btnDwnldTemplate").click(function(){
+        //    alert("Template Download Function Not implemented yet.");
+        //    //$.ajax({
+        //    //    type: 'POST',
+        //    //    url: '/Reports/ExportMyData',
+        //    //    data: '{ "dataprop1": "test", "dataprop2" : "test2" }',
+        //    //    contentType: 'application/json; charset=utf-8',
+        //    //    dataType: 'json',
+        //    //    success: function (returnValue) {
+        //    //        window.location = '/Reports/Download?file=' + returnValue;
+        //    //    }
+        //    //});
 
-            //document.getElementById('calendar').src = loc;
-            //$("#fileFrame").prop("src", "http://www.msn.com");
-            //$("#fileFrame").prop("src", "/metric/downloadTemplate");
-        });
+        //    //document.getElementById('calendar').src = loc;
+        //    //$("#fileFrame").prop("src", "http://www.msn.com");
+        //    //$("#fileFrame").prop("src", "/metric/downloadTemplate");
+        //});
 
         $("#btnRecalcMetric").click(function(){
 
@@ -455,10 +459,17 @@
                 if (d == "Success") {
                     var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
                     //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                    if (doClose){ closePeriod(); }
+                    if (doClose){ 
+                        closePeriod();
+                        alert("Metric Period Saved and Closed Successfully!");
+                        location.reload();
+                    }
                     else{
-                        alert("Data Saved Successfully!");
-                        location.href = "/Metric/EditView/" + urlSufixx;
+                        $("#frmModified").val("N");
+                        $("#btnSave").prop('disabled', true);
+                        $("#divMsg").show().fadeOut(3000);
+                        //alert("Data Saved Successfully!");
+                        //location.href = "/Metric/EditView/" + urlSufixx;
                     }
                     //location.reload();
                 } else {
@@ -568,13 +579,6 @@
     //------------------------------------------------------------------------------------------------
     function buildJSON() {
         @*var periodId = @Model.metricPeriodID*@
-        var userName = "";
-        alert("@Session["username"]");
-        try { userName = "@Session["username"].ToString()"; }   //Verify that session did not expire.
-        catch(err) {
-            alert("Session Expired!\nPlease logon again.");
-            location.href ="/Account/Logoff";
-        }
 
         var jsonPayloadHeader = '{"metricdetail":{"mtrc_period_id":"@Model.metricPeriodID","mtrc_name":"@Model.metricName","mtrc_id":"@Model.id","mtrc_period_name":"@Model.periodName.Replace("Metric Information", "")","tpt_name":"@Model.period_Type","tm_per_start_dtm":"@Model.metric_period_start_date.ToString("yyyy-MM-dd HH:mm:ss")","tm_per_end_dtm":"@Model.metric_period_end_date.ToString("yyyy-MM-dd HH:mm:ss")","prod_name":"Red Zone","data_type_token":"@Model.metricDataType","data_type_num_yn":"Y"},';
         var jsonPayloadDetail = '"locationdetails":[';
@@ -588,7 +592,7 @@
             else {canUseNA = "N"}
             if ($(this).find("#saveFlag").first().val() == "Y") {//If this Building Value was Edited add it to the payload
                 if (recordsChanged > 0) { jsonPayloadDetail = jsonPayloadDetail + ","; }
-                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","UserId": "@Session["username"].ToString()","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","bmp_na_allow_yn": "' + canUseNA + '", "mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '","mtrc_period_val_is_na_yn": "' + $(this).find("#isNA").first().val()  + '"}';
+                jsonPayloadDetail = jsonPayloadDetail + '{ "dsc_mtrc_lc_bldg_name": "' + $(this).find("#buildingName").first().val() + '","dsc_mtrc_lc_bldg_id": "' + $(this).find("#buildingId").first().val() + '","UserId": "@userName","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","bmp_na_allow_yn": "' + canUseNA + '", "mtrc_period_val_id": "' + $(this).find("#periodValId").first().val() + '","mtrc_period_val_value": "' + $(this).find("#newMetricVal").first().val() + '","mtrc_period_val_is_na_yn": "' + $(this).find("#isNA").first().val()  + '"}';
 
                 recordsChanged = recordsChanged + 1;
             }

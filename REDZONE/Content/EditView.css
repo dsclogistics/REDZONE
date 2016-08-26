@@ -43,7 +43,8 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    padding: 6px 12px;
+    /*padding-top: 6px;
+    padding-bottom: 7px;*/
     font-size: 14px;
     font-weight: bold;
     /*line-height: 1;*/
@@ -51,6 +52,8 @@
     line-height: 1.5;
     width: auto;
     /*width: 1%;*/
+    padding:7px 12px; 
+    height:32px
 }
 
 .group-value {
@@ -62,14 +65,15 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    padding: 6px 12px;
     font-size: 14px;
     font-weight: normal;
     line-height: 1.5;
     width: auto;
-    padding-top: 7px;
-    padding-bottom: 10px;
+    /*padding-top: 6px;
+    padding-bottom: 7px;*/
     min-width: 100px;
+    padding:7px 12px; 
+    height:32px;
 }
 
 .hdrLabel {

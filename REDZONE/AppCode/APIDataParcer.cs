@@ -346,7 +346,7 @@ namespace REDZONE.AppCode
             eSummary.goal.rowScore = 0;
             eSummary.total = 0;
             eSummary.goal.BuildingName = "Goal";
-            eSummary.goalsMissedRow.BuildingName = "Goals not Met";
+            eSummary.goalsMissedRow.BuildingName = "Goals Missed";
             eSummary.goalsMissedRow.scoreColor = "";
             try
             {
@@ -716,7 +716,7 @@ namespace REDZONE.AppCode
                 mSummary.urlPrevMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[0];
                 mSummary.urlNextMetric = getPrevNextMetricsUrl(year, mSummary.metricID)[1];
                 MeasuredRowEntity header = new MeasuredRowEntity();
-                mSummary.missedGoals.rowName = "Missed Goals"; 
+                mSummary.missedGoals.rowName = "Goals Missed"; 
                 header.rowName = "Buildings";
                 MeasuredRowEntity goal = new MeasuredRowEntity();
                 goal.rowName = "Goal";

@@ -30,6 +30,13 @@ namespace REDZONE.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            //Reset all authentication cookies and session variables (To prevent orphan authentication cookie and users getting locked out in some rare instance where new version of the app is deployed and an usser is signon)
+            FormsAuthentication.SignOut();
+            Session.Remove("emp_id");    //Session["emp_id"] = null;
+            Session.Remove("first_name");
+            Session.Remove("last_name");
+            Session.Remove("email");
+            Session.Remove("roles");    //Session["role"] = null;
             return View();
         }
         #region UnusedCode        
@@ -96,33 +103,51 @@ namespace REDZONE.Controllers
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
             if (!ModelState.IsValid) { return View(loginModel); }
-            
-            //Model State is Valid. Check Password
-            if (isLogonValid(loginModel))
-            {  // Is password is Valid, set the Authorization cookie and redirect
-                // the user to the link it came from (Or the Home page is no return URL was specified)
 
-                //JObject parsed_result = JObject.Parse(data_retrieval.getObserver(Session["first_name"].ToString(), Session["last_name"].ToString(), Session["email"].ToString()));
-                //foreach (var res in parsed_result["resource"])
-                //{
-                //    Session.Add("emp_id", (string)res["dsc_observer_emp_id"]);
-                //}
-                
-                //string uRoles = getUserRoles(loginModel.Username);
-                setUserRoles(loginModel.Username, new string[] { Session["role"].ToString() });
-                FormsAuthentication.SetAuthCookie(loginModel.Username, true);
-                
-                //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
+            FormsAuthentication.SignOut();
+            Session.Remove("emp_id");    //Session["emp_id"] = null;
+            Session.Remove("role");      //Session["role"] = null;
+            Session.Remove("first_name");
+            Session.Remove("last_name");
+            Session.Remove("email");
 
-                if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
-                    && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
-                { return Redirect(ReturnUrl); }
-                else { return RedirectToAction("Index", "Home"); }
+            try {
+                //Model State is Valid. Check Password
+                if (isLogonValid(loginModel))
+                {  // Is password is Valid, set the Authorization cookie and redirect
+                    // the user to the link it came from (Or the Home page is no return URL was specified)
+
+                    //JObject parsed_result = JObject.Parse(data_retrieval.getObserver(Session["first_name"].ToString(), Session["last_name"].ToString(), Session["email"].ToString()));
+                    //foreach (var res in parsed_result["resource"])
+                    //{
+                    //    Session.Add("emp_id", (string)res["dsc_observer_emp_id"]);
+                    //}
+
+                    
+                    ///---------------- SKIP Authorization Roles at the Loging part for Now ------------
+                    ////string uRoles = getUserRoles(loginModel.Username);
+                    //setUserRoles(loginModel.Username, new string[] { Session["roles"].ToString() });
+                    ///----------------------------------------------------------------------------------
+
+                    // Set the Authentication Encrypted Cookie
+                    FormsAuthentication.SetAuthCookie(loginModel.Username, true);                   
+
+                    //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
+
+                    if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
+                        && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
+                    { return Redirect(ReturnUrl); }
+                    else { return RedirectToAction("Index", "Home"); }
+                }
+                else
+                {
+                    ViewBag.ReturnUrl = ReturnUrl;
+                    ModelState.AddModelError("", "Failed to Logon User");
+                    return View(loginModel);
+                }
             }
-            else
-            {
-                ViewBag.ReturnUrl = ReturnUrl;
-                ModelState.AddModelError("", "Failed to Logon User");
+            catch(Exception ex) {
+                ViewBag.errorMessage = ex.Message + "\nContact the Service Desk for assistance.";
                 return View(loginModel);
             }
 
@@ -142,6 +167,29 @@ namespace REDZONE.Controllers
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             //Session["ReturnURL"] = "";
             return RedirectToAction("Login", new { returnUrl = backUrl });
+        }
+
+        //--------------------------------------------------------------------------------------------------------------\\
+        // GET: /Account/LogOff
+        [HttpPost]
+        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, bool turnOff)
+        {
+            //This function will be trigger via Ajax from the client to reset all the User Info Session Variables if lost 
+            try {
+                if (!turnOff)
+                {   //Only reset the Session Variables if the TurnOff flag is set to "False"
+                    Session["first_name"] = uFName;
+                    Session["last_name"] = uLName;
+                    Session["username"] = uLoginName;
+                    Session["email"] = email;
+                }
+
+                Session["firstLoad"] = "False";    //Reset it always
+                return "True";
+            }
+            catch {
+                return "False";
+            }
         }
         //--------------------------------------------------------------------------------------------------------------\\
 
@@ -383,9 +431,8 @@ namespace REDZONE.Controllers
                     Session.Add("username", loginModel.Username);
                     Session.Add("email", "rasul.abduguev@dsc-logistics.com");
                 }
-                Session.Add("role", "Admin");
-                Session["emp_id"] = "12345";   //Temporarily to avoid auto-signoff
-
+                Session["emp_id"] = "12345";    //Temporarily to avoid auto-signoff
+                Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
                 return true;
             }
 
@@ -419,6 +466,7 @@ namespace REDZONE.Controllers
                     Session.Add("last_name", JsonObject["DSCAuthenticationSrv"]["last_name"]);
                     Session.Add("username", loginModel.Username);
                     Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
+                    Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
                     //string role = (from r in db.OBS_ROLE
                     //               join ur in db.OBS_USER_ROLE
                     //               on r.obs_role_id equals ur.obs_role_id
@@ -427,28 +475,17 @@ namespace REDZONE.Controllers
                     //               where ua.obs_user_auth_dsc_ad_name == loginModel.Username && r.obs_role_active_yn == "Y"
                     //               && ua.obs_user_auth_active_yn == "Y" && ur.obs_user_role_eff_start_dt <= DateTime.Now && ur.obs_user_role_eff_end_dt > DateTime.Now
                     //               select r.obs_role_name).FirstOrDefault();
-                    string role = "user";
-                    if (!String.IsNullOrEmpty(role))
-                    {
-                        Session.Add("role", role);
-                    }
-                    else
-                    {
-                        Session.Add("role", "Not Authorized");
-                    }
                     return true;  /// Authenticasion was sucessful!!
                 }
                 else
                 {
                     ViewBag.errorMessage = JsonObject["message"];
-                    ModelState.AddModelError("", JsonObject["message"]);
                     return false;
                 }
             }//end of try
             catch (Exception ex)
             {
                 ViewBag.errorMessage = ex.Message;
-                ModelState.AddModelError("", ex.Message);
                 return false;  // Failed to authenticate the User
             }//end of catch
         }

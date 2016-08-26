@@ -4,6 +4,9 @@
 
 //================ USER AUTHENTICATION RELATED FUNCTIONS =============================
 var SESSION_EXP = 60;   // Define The Maximum Session Inactivity Timeout (In Minutes)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function getUsrAutToken() {
     $.ajax({
         //url: '@Url.Action("getNewCAMid", "cognosUtils")',

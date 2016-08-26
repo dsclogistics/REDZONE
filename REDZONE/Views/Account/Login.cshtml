@@ -1,5 +1,5 @@
 ﻿@model REDZONE.Models.LoginViewModel
-@{   Layout = null;  }
+@{   Layout = null; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,7 +69,7 @@
                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div style="color:#ff0000">
+                            <div style="color:#ff0000; text-align:center;">
                                 @ViewBag.errorMessage
                             </div>
                             <br />
@@ -96,6 +96,14 @@
             if (!localStorage) {
                 $("#browserWarning").show();
                 $(".btn").prop("disabled", true);
+            }
+            else {
+                // If Local Storage is Supported by the Browser
+                // Whenever the Login Page is Displayed we assume the user is logged-off
+                // Remove all the User Profile from Local Storage just in case. It will be reset after logging back on
+                // The Login Action should have already taken care of removing Authentication Cookie and Session Variables
+                // The Front end should clear the client browser local storage   
+                localStorage.clear();
             }
             //--------------------------------------------------------------------------
         });

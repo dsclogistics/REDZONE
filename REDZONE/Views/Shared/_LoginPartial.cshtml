@@ -15,7 +15,7 @@
             {
                 userName = Session["first_name"].ToString() + " " + Session["last_name"].ToString();
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding:0px; ">
-                    <span class="glyphicon glyphicon-user" style="font-size: large; font-family:Arial">&nbsp;@userName</span>
+                    <span class="glyphicon glyphicon-user" style="font-size:large; "><span id="userAvatar" style="font-family:Arial">&nbsp;@userName</span></span>
                 </a>
                 <ul class="dropdown-menu user-menu">
                     <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
@@ -28,8 +28,8 @@
             {
                 @*<span>@ex.Message</span>
                     Server.Transfer("~\\Account\\Logoff");*@
-                <a href="/Account/Login">
-                    <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
+                <a href="/Account/Login" style="padding:0">
+                    <span class="glyphicon glyphicon-user" style="font-size:large; "> <span id="userAvatar" style="font-family:Arial">&nbsp;Login</span></span>
                 </a>
             }
         }

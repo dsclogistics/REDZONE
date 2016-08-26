@@ -1,25 +1,23 @@
 ﻿@{
-    bool sessionEnded = false;
-    if (Request.IsAuthenticated)
+    // If this is the first time that this page is displayed (After Login)
+    // Save all the User Profile Info to Local Storage
+    
+    string pageFirstLoad = (Session["firstLoad"] == null) ? "" : Session["firstLoad"].ToString();  //This ensure we have a value and avoid page errors even is Session Variable is lost 
+    string userFName = "";
+    string userLName = "";
+    string userFullName = "";
+    string userEmail = "";
+    try
     {
-        if (Session["last_name"] == null)
-        {
-            string tempName = Request.LogonUserIdentity.Name;
-            tempName = tempName.Substring(tempName.IndexOf("\\") + 1);
-            string userName = tempName.Substring(0, tempName.IndexOf("_"));
-            Session["last_name"] = userName;
-            userName = tempName.Substring(tempName.IndexOf("_") + 1);
-            Session["first_name"] = userName;
-        }
-        else {
-            // For debug purposes only
-            string tempName = Session["last_name"].ToString();
-        }
+        userFName = Session["first_name"].ToString();
+        userLName = Session["last_name"].ToString();
+        userFullName = Session["username"].ToString();
+        userEmail = Session["email"].ToString();
     }
-    else {
-        sessionEnded = true; 
-        @Html.Action("Login", "Account", new { returnUrl = "\\Home\\Index"})
-    }    
+    catch
+    {
+        //Response.Redirect("~/Account/Login?returnUrl=\\Home\\Index");
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -32,10 +30,6 @@
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @* ---------------------- Load Jquery Libraries (Must be Before Bootstraps is Loaded) -----------------*@
-    @Scripts.Render("~/bundles/jquery")
-    <script src="~/Scripts/RedzoneGlobal.js"></script>
-
     <style>
         #foot {
             position: fixed !important;
@@ -46,12 +40,13 @@
             background: #f0f0f0;
             border-top: 1px solid #666;
         }
+
         .container-fluid {
             max-width: 90%;
             padding: 10px; /*Whitespace or outside gutter*/
-            margin-top:12px;
-            margin-left:10%;
-            text-align:center;
+            margin-top: 12px;
+            margin-left: 10%;
+            text-align: center;
         }
 
         .nopadding {
@@ -59,11 +54,62 @@
             margin: 0 !important;
         }
     </style>
+    @* ------- Load Jquery Libraries (Must be Before Bootstraps is Loaded) and other scripts ----------------*@
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/RedzoneGlobal.js"></script>
+    <script>
+        //If this is the first page display after Login, set the localStorage variables accordingly
+        function setServerPostback() {
+            resetUserInfo("", "", "", "", true);
+        }
+
+        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pTurnOff) {
+            $.ajax({
+                //url: '@Url.Action("getNewCAMid", "cognosUtils")',
+                url: '/Account/resetUserInfo',
+                method: "POST",
+                cache: false,
+                dataType: "text",
+                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, turnOff: pTurnOff },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Ajax Failed: " + errorThrown);
+                    localStorage.clear();
+                }
+            }).done(function (d) {
+                //DO Something (Nothing for now)
+            });
+
+            //return localStorage.getItem("CAMid");
+        }
+
+        try {
+            if ("@pageFirstLoad" == "True") {
+                localStorage.setItem("first_name", "@userFName");
+                localStorage.setItem("last_name", "@userLName");
+                localStorage.setItem("username", "@userFullName");
+                localStorage.setItem("email", "@userEmail");
+                localStorage.setItem("firstLoad", "False");
+                setServerPostback();
+            }
+            else {
+                if ("@pageFirstLoad" == "") {
+                    //Somehow the Session Variables were lost. reset Them!
+                    //alert("Session Variables were somehow lost. Resetting...");
+                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), false);
+                    $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
+                }
+            }
+        }
+        catch(err) {
+            alert("An unhandled error exist: \n" + err);
+        }
+
+    </script>    
 </head>
 
 <body>
     @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
-    @if (!Request.IsAuthenticated || sessionEnded)
+    @if (!Request.IsAuthenticated )
     {
         @RenderBody()
         Html.Action("LogOff", "Account");
@@ -116,3 +162,4 @@
 
 </body>
 </html>
+
