@@ -32,3 +32,38 @@ textarea {
 .bordered-b {
     border:1px solid blue;
 }
+.Open-NA {
+    font-weight: bold;
+    color: black;
+    background-color: lightgray;
+    background-image: url('../Images/stripeNA.png');
+    background-repeat:repeat;
+}
+.Closed-NA {
+    font-weight:bold;
+    color:black;
+    background-color:lightgray;
+    background-image: url('../Images/stripeNA.png');
+    background-repeat: repeat-x;
+}
+.Open-metGoal{
+    font-weight:bold;
+    color:black;
+    background-color:#efeeee;
+}
+.Open-Missed {
+    font-weight:bold;
+    color:#ed5903;
+    /*color:#ffbb8b;*/   /*Light Red*/
+    background-color:#efeeee;
+}
+.Closed-metGoal {
+    font-weight:bold;
+    color:black;
+    background-color:#b3ff99;   /*Light Green*/
+}
+.Closed-Missed {
+    font-weight:bold;
+    color:black;
+    background-color:#ffbb8b;   /*Light Red*/
+}

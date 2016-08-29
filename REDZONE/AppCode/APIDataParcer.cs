@@ -455,7 +455,7 @@ namespace REDZONE.AppCode
                                                b.rowScore++;
                                             }
                                             tmp.metricColor = getMetricColor( tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);
-                                          
+                                            tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)mtrc["mpg_mtrc_passyn"], (string)mtrc["rz_mps_status"]);                                          
                                         }
                                         //if (tmp.metricColor.Equals(COLOR_RED)) { bldngReds++; }
 
@@ -579,6 +579,7 @@ namespace REDZONE.AppCode
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                            tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                             if(tmp.isGoalMet=="N")
                                             {
                                                 totalsRow.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
@@ -737,7 +738,8 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity missedGoalCell= new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
-                                
+                                temp.displayClass = "NoValue";
+
                                 temp.metricDoubleValue = sortDir=="ASC"?99999:-99999;
                                 temp.isViewable = false;                                
                                 row.entityMetricCells.Add(temp);                                
@@ -790,6 +792,7 @@ namespace REDZONE.AppCode
                                                 tmp.metricValue = tmp.metricValue + "%";
                                             }
                                             tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                            tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                             if (tmp.isGoalMet == "N")
                                             {
                                                 mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
@@ -824,6 +827,26 @@ namespace REDZONE.AppCode
             return mSummary;
         }
 
+        //========= This Function "getMetricDisplayClass" returns the html class to use for Color Display for metric value cell based on the value, isGoalMet flag and metric status =========
+        private string getMetricDisplayClass(string mValue, string isGoalMet, string status)
+        {
+            //Possible Display Classes to use are:
+            //Open-metGoal       Open-Missed      
+            //Closed-metGoal     Closed-Missed
+            //Empty String     (No Display Class)
+            if (String.IsNullOrEmpty(mValue)) return "";
+            if (status == "Open")
+            {
+                if (mValue == "N/A") return "Open-NA";
+                if (isGoalMet == "Y") return "Open-metGoal";
+                if (isGoalMet == "N") return "Open-Missed";
+            }
+            if (mValue == "N/A") return "Closed-NA";
+            if (isGoalMet == "Y") return "Closed-metGoal";
+            if (isGoalMet == "N") return "Closed-Missed";
+
+            return "Undefined";
+        }
 
 
         //========= This Function "getMetricColor" returns the color the metric value cell should have based on the value, isGoalMet flag and metric status =========

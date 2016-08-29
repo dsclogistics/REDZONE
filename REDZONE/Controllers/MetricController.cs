@@ -25,8 +25,7 @@ namespace REDZONE.Controllers
             int metricId = id ?? 0;
             if (metricId == 0) { returnURL = ""; }
 
-            //if (Session["username"] == null) { return RedirectToAction("LogOff", "Account", new { backUrl = returnURL }); }
-            if (metricId == 0) { return RedirectToAction("NotFound", "Error"); }
+            if (metricId == 0) { return RedirectToAction("NotFound", "AppError"); }
 
             // If the Authenticated User does not exist or has no Role Authorization the the requetsed metric, kick the user out to the "Not authorized Screen"
 

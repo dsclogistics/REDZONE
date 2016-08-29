@@ -36,9 +36,9 @@ namespace REDZONE.Models
 
     public class BuildingMetricEntity
     {// This represents a single Row in the Executive Summary Spreadsheet
-        private const string BLUECOLOR = "lightblue";
-        private const string GREENCOLOR = "lightgreen";
-        private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
+        //private const string BLUECOLOR = "lightblue";
+        //private const string GREENCOLOR = "lightgreen";
+        //private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string BuildingName { get; set; }
         public int rowScore { get; set; }
         public string scoreColor { get; set; }
@@ -58,7 +58,7 @@ namespace REDZONE.Models
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public double metricDoubleValue { get; set; }
-        public string metricColor { get; set; }
+        public string metricColor { get; set; }             //We will not hardcode Color int he model
         public string mtrc_period_id { get; set; }
         public string metricMonth { get; set; }
         public string mtrc_id { get; set; }
