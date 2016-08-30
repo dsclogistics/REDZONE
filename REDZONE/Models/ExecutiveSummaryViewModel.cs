@@ -7,6 +7,8 @@ namespace REDZONE.Models
 {
     public class ExecutiveSummaryViewModel
     {
+        public bool isModelValid { get; set; }         // If the model cannot be retrieved or parsed this flag is "false"
+        public string modelMessage { get; set; }       // For reporting any error or give activity message while parsing data
         public string month { get; set; }
         public string year { get; set; }
         public int total { get; set; }
@@ -20,7 +22,7 @@ namespace REDZONE.Models
         public List<string> allBuildings = new List<string>();
         public List<MetricHeader> allMetrics = new List<MetricHeader>();
         public List<string> allMonths = new List<string>();
-
+        
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
         //\-------- End of Constructor ----------/
@@ -41,9 +43,9 @@ namespace REDZONE.Models
         //private const string REDCOLOR = "#ffbb8b";   //or #ffbb8b or "orangered"
         public string BuildingName { get; set; }
         public int rowScore { get; set; }
-        public string scoreColor { get; set; }
+        //public string scoreColor { get; set; }       //We will not need this anymore
+        public string scoreDisplayClass { get; set; }
         public string buildingId { get; set; }
-
         public string url { get; set; }
         public List<MeasuredCellEntity> entityMetrics = new List<MeasuredCellEntity>();
 
@@ -58,7 +60,6 @@ namespace REDZONE.Models
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public double metricDoubleValue { get; set; }
-        public string metricColor { get; set; }             //We will not hardcode Color int he model
         public string mtrc_period_id { get; set; }
         public string metricMonth { get; set; }
         public string mtrc_id { get; set; }
@@ -76,10 +77,9 @@ namespace REDZONE.Models
         public MeasuredCellEntity(string name)
         { metricName = name; }
         //-------- Instantiated Constructor -----------\
-        public MeasuredCellEntity(string mName, string mValue, string mColor) {
+        public MeasuredCellEntity(string mName, string mValue) {
             metricName = mName;
             metricValue = mValue;
-            metricColor = mColor;
         }
         //-------- End of Constructor ----------
     }

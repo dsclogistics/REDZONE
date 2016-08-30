@@ -1,5 +1,4 @@
 ﻿@model REDZONE.Models.BuildingSummaryViewModel
-
 @{
     ViewBag.Title = "Building Summary";
     int colCounter = 0;
@@ -7,24 +6,21 @@
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 
 <style>
-    .valueCell {
-        font-weight: bold;
-        /*font-size:medium;*/
-        padding-top:5px;
-        padding-bottom:5px;
-    }
-    .bordered   { border: 1px solid black; }
-    .bordered-r { border: 1px solid red; }
-    .bordered-b { border: 1px solid blue; }
-    .bordered-2r { border: 4px solid black; border-radius: 5px; }
-    .actions-th {
-        border:2px solid black;
-        border-radius: 5px;
-        font-weight:bold;
-        font-size:large;
-        margin: 0px 10px;
-        padding:5px;
-    }
+  .valueCell {
+      font-weight: bold;
+      /*font-size:medium;*/
+      padding-top:5px;
+      padding-bottom:5px;
+  }
+  .bordered-2r { border: 4px solid black; border-radius: 5px; }
+  .actions-th {
+      border:2px solid black;
+      border-radius: 5px;
+      font-weight:bold;
+      font-size:large;
+      margin: 0px 10px;
+      padding:5px;
+  }
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px">
     <div class="panel panel-default" style="margin-bottom:0px; ">
@@ -76,8 +72,8 @@
                 </div>
             </div>
         </div> <!-- END OF PANEL HEADER -->
-        <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
-            <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
+    <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
+        <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                 <table class="" style="width:100%;">
                     <tr class="rowHeader">
                         <td class="buildingCol" style="width:16.66%">
@@ -92,6 +88,10 @@
                             {
                                 <td class="buildingCol" style="width:@Model.metricColWidth">
                                     @dscBldngHdr.metricName
+                                    @if (@dscBldngHdr.metricName.Equals("July"))
+                                    { 
+                                        <span style="color:red">*</span>                                    
+                                    }
                                 </td>
                             }
                         }
@@ -107,7 +107,7 @@
                             <td class="buildingCol" style="width:16.66%">
                                 <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                             </td> <!-- Metric Name Column -->
-                            <td class="buildingCol" style="width:8.33%; background-color: #bbedff">
+                            <td class="buildingCol" style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold;">
                                 @buildingRow.scoreGoal
                             </td> <!-- Goal Column -->
                             @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
@@ -115,7 +115,7 @@
                                 bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
                                 if (cellIsViewable)
                                 {
-                                    <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                    <td class="buildingCol valueCell @buildingCell.displayClass" style="width:@Model.metricColWidth">
                                         @*@Model.metricColWidth*@
                                         @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                         { <br /> }
@@ -125,7 +125,7 @@
                                 }
                                 colCounter++;
                             }
-                            <td class="buildingCol scoreCol" style="width:8.33%;">
+                            <td class="buildingCol scoreCol @buildingRow.displayClass" style="width:8.33%; color:black; font-weight:bold">
                                 @buildingRow.redTotals
                             </td>
                         </tr>
@@ -143,7 +143,7 @@
                         {
                             if (buildingCell.isViewable)
                             {
-                                <td class="buildingCol" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                <td class="buildingCol @buildingCell.displayClass" style="width:@Model.metricColWidth">
                                     @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                     { <br /> }
                                     else
@@ -156,43 +156,51 @@
                         </td>
                     </tr> <!-- End of Total Goals Missed Data Section -->
 
-
-
-                    <tr class="buildingRow totalsRow">
-                        <!-- ACTIONS ROW   -->
-                        <td class="buildingCol " style="width:16.66%">
-                            <br />
-                        </td>
-                        <td class="buildingCol " style="width:8.33%; ">
-                            <br />
-                        </td><!-- Goal Column -->
-                        @{colCounter = 0;}
-                        @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
-                        {
-                            bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
-                            if (cellIsViewable)
-                            {
-                                <td class="buildingCol valueCell" style="background-color:@actionCell.metricColor; width:@Model.metricColWidth">
-                                    @if (String.IsNullOrEmpty(@actionCell.metricValue) || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
-                                    { <br /> }
-                                    else
-                                    {
-                                        @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
-                                        <a href="@actionCell.cellValueURL" style="color:red; ">Action Required<br />[ Click Here ]</a>
-                                    }
-                                </td>
-                            }
-                            colCounter++;
-                        }
-                        <td class="buildingCol scoreCol" style="width:8.33%;">
-                            <br />
-                        </td>
-                    </tr> <!-- End of Actions Row -->
-
-
                 </table>
-            </div> <!-- End of DIV Table Table -->
+        </div> <!-- End of DIV Table Table -->
+        <div class="row" style="border:none; margin: 0; padding:0; ">
+            <table class="" style="border:none; width:100%;">
+                <tr class="" style="border:none">
+                    <!-- ACTIONS ROW   -->
+                    <td class=" " style="width:16.66%; border:none">
+                        <br />
+                    </td>
+                    <td class="" style="width:8.33%; border:none">
+                        <br />
+                    </td><!-- Goal Column -->
+                    @{colCounter = 0;}
+                    @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
+                    {
+                        bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                        if (cellIsViewable)
+                        {
+                            <td class="" style="border:none; width:@Model.metricColWidth">
+                                @*@if (String.IsNullOrEmpty(@actionCell.metricValue) || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3 )*@
+                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || actionCell.score < 3)
+                                { <br /> }
+                                else
+                                {
+                                    @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
+                                    <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
+                                    <br />
+                                    <text>Total Closed: @actionCell.score</text>
+                                }
+                            </td>
+                        }
+                        colCounter++;
+                    }
+                    <td class="" style="width:8.33%; border:none">
+                        <br />
+                    </td>
+                </tr>
+            </table>
+        </div> <!-- End of Actions Row -->
+        <div class="row" style="border:none; margin: 0; padding:0; text-align:left">
+            <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span> 
+            <br /><br />
+        </div>
 
+            <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
             <div class="row" style="margin:10px 0px;">
                 <div class="col-sm-5 ">
                     <div class="row actions-th" style="background-color:#f5f5f5">
@@ -213,7 +221,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="background-color:#ffbb8b; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">5+ Red</td>
+                                <td style="background-color:#f75643; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">5+ Red</td>
                                 <td style="text-align: left; padding-left:15px;">
                                     <span style="">Above Plus, LC Review at Supply Chain Council</span>
                                 </td>
@@ -239,38 +247,38 @@
                                 <tr style="padding:0">
                                     <td style="width:20%">POP/Net FTE</td>
                                     <td style="width:20%">Christina Dempsey</td>
-                                    <td style="width:20%">08/15/2016</td>
-                                    <td style="width:40%">10:00 AM</td>
+                                    <td style="width:20%">@*08/15/2016*@</td>
+                                    <td style="width:40%">@*10:00 AM*@</td>
                                 </tr>
                                 <tr class="bordered-r">
                                     <td>Turnover</td>
                                     <td>Mona Mounts</td>
-                                    <td>08/14/2016</td>
-                                    <td>10:00 AM</td>
+                                    <td>@*08/14/2016*@</td>
+                                    <td>@*10:00 AM*@</td>
                                 </tr>
                                 <tr>
                                     <td>OT</td>
                                     <td>Christina Dempsey</td>
-                                    <td>08/12/2016</td>
-                                    <td>10:00 AM</td>
+                                    <td>@*08/12/2016*@</td>
+                                    <td>@*10:00 AM*@</td>
                                 </tr>
                                 <tr>
                                     <td>Trainees</td>
                                     <td>Mona Mounts</td>
-                                    <td>08/14/2016</td>
-                                    <td>10:00 AM</td>
+                                    <td>@*08/14/2016*@</td>
+                                    <td>@*10:00 AM*@</td>
                                 </tr>
                                 <tr>
                                     <td>Safety</td>
                                     <td>Joe Smiesko</td>
-                                    <td>08/19/2016</td>
-                                    <td>10:00 AM</td>
+                                    <td>@*08/19/2016*@</td>
+                                    <td>@*10:00 AM*@</td>
                                 </tr>
                                 <tr>
                                     <td>IT Tickets</td>
                                     <td>Pete Kuranchie</td>
-                                    <td>08/18/2016</td>
-                                    <td>10:00 AM</td>
+                                    <td>@*08/18/2016*@</td>
+                                    <td>@*10:00 AM*@</td>
                                 </tr>
                                 <tr>
                                     <td>Financial</td>
@@ -287,10 +295,10 @@
     </div><!-- END OF PANEL -->
 </div> <!-- ROW END -->
 
-
 <script>
     $(document).ready(function () {
         $(".menuItem").removeClass("menuSelected");
         $("#mDashboard").addClass("menuSelected");
     });
 </script>
+

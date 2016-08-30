@@ -30,13 +30,13 @@ else
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row ">
-                            <div class="col-sm-1"></div>
+                            <div class="col-sm-1">
+                                <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" /></a>
+                            </div>
                             <div class="col-sm-10">
                                 <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Summary</span>
                             </div>
-                            <div class="col-sm-1">
-                                <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" /></a>
-                                @*<input if="backToDashboard" type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">*@
+                            <div class="col-sm-1">                                
                             </div>
                         </div>
                         <div class="row" style="margin-bottom:10px">
@@ -109,7 +109,7 @@ else
                         <div class="col-sm-1 scoreCol">
                             Goals Missed
                         </div>
-                    </div><!-- TITLES ROW -->
+                    </div><!-- ---------------- TITLES ROW END ------------ -->
 
                     <div class="row buildingRowX" style="background-color: #bbedff; ">
                         <div class="col-sm-2 buildingCol">
@@ -127,7 +127,7 @@ else
                                             //if (bldngMV.isViewable)
                                             if (cellIsViewable)
                                             {
-                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth; background-color:@bldngMV.metricColor">
+                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth; color:blue; font-weight:bold;">
                                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                                     { <br /> }
                                                     else
@@ -141,7 +141,7 @@ else
                             </div>
                         </div>
                         <div class="col-sm-1 buildingCol scoreCol">
-                            ---
+                            <br />
                         </div>
 
                         @*<div class="@colClass buildingCol scoreCol" style="background-color:@Model.goal.scoreColor">
@@ -150,13 +150,13 @@ else
                                 else
                                 { @Model.goal.score }
                             </div>*@
-                    </div><!-- ------------ GOALS ROW ---------------- -->
+                    </div><!-- ------------------------ GOALS ROW END ---------------- -->
                     @*Begin Displaying All Rows for Metric*@
                     @foreach (var buildingRow in Model.metricRows)
                     {
                         colCounter = 0;
                         bool allNAs = true;
-                        <div class="row buildingRowX">
+                        <div class="row buildingRowX rHover">
                             <div class="col-sm-2 buildingCol">
                                 <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                             </div>  <!-- Metric Name Column -->
@@ -170,7 +170,7 @@ else
                                                 bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
                                                 if (cellIsViewable)
                                                 {
-                                                    <td class="buildingCol valueCell" style="background-color:@buildingCell.metricColor; width:@Model.metricColWidth">
+                                                    <td class="buildingCol valueCell @buildingCell.displayClass" style="width:@Model.metricColWidth">
                                                         @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                                         { <br /> }
                                                         else
@@ -193,7 +193,7 @@ else
                                 { @buildingRow.redTotals }
                             </div>
                         </div>
-                    } <!-- DISPLAY OF DATA ROWS LOOP END -->
+                    } <!-- --------------------------- DISPLAY OF DATA ROWS LOOP END --------------- -->
 
                     <div class="row buildingRowX totalsRow">
                         <div class="col-sm-2 buildingCol" style="text-align:center; ">
@@ -208,7 +208,7 @@ else
                                         {
                                             if (Model.rowHeadings.entityMetricCells[colCounter].isViewable)
                                             {
-                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth; background-color:@bldngMV.metricColor">
+                                                <td class="buildingCol monthCol" style="width:@Model.metricColWidth;">
                                                     @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                                     { <br /> }
                                                     else

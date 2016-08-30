@@ -7,6 +7,8 @@ namespace REDZONE.Models
 {
     public class BuildingSummaryViewModel
     {
+        public bool isModelValid { get; set; }
+        public string modelValidationMsg { get; set; }
         public string bName { get; set; }
         public string bId { get; set; }
         public string year { get; set; }

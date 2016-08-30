@@ -32,23 +32,26 @@ textarea {
 .bordered-b {
     border:1px solid blue;
 }
+.cell-NoValue {
+    background-color:#efeeee;
+}
 .Open-NA {
     font-weight: bold;
-    color: black;
-    background-color: lightgray;
-    background-image: url('../Images/stripeNA.png');
-    background-repeat:repeat;
+    color: gray;
+    background-color: #efeeee;
+    /*background-image: url('../Images/stripeNA.png');
+    background-repeat:repeat;*/
 }
 .Closed-NA {
     font-weight:bold;
     color:black;
-    background-color:lightgray;
-    background-image: url('../Images/stripeNA.png');
-    background-repeat: repeat-x;
+    background-color:#efeeee;
+    /*background-image: url('../Images/stripeNA.png');
+    background-repeat: repeat;*/
 }
 .Open-metGoal{
     font-weight:bold;
-    color:black;
+    color:#32b000;      /*green*/
     background-color:#efeeee;
 }
 .Open-Missed {
@@ -67,3 +70,24 @@ textarea {
     color:black;
     background-color:#ffbb8b;   /*Light Red*/
 }
+.Score-Met {
+    background-color:#b3ff99;   /*Light Green Color*/
+}
+.Score-Red3 {
+    background-color:#f9f97f;   /*Yellow Color*/
+}
+.Score-Red4 {
+    background-color:#fcb55a;   /*Orange*/
+}
+.Score-Red5 {
+    background-color:#f75643;   /*Red Color: old:#ffbb8b   I:#ee7e7e   team:f75643*/        
+}
+
+        /*
+        const string COLOR_YELLOW = "yellow";
+        const string COLOR_GREEN = "#33cc00";
+        const string COLOR_LIGHT_GREEN = "#b3ff99";      
+        const string COLOR_RED = "#ff3300";
+        const string COLOR_LIGHT_RED ="#ffbb8b";
+        const string COLOR_ORANGE = "orange";
+        */

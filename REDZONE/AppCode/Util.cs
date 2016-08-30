@@ -231,7 +231,7 @@ namespace REDZONE.AppCode
                     applicationAPIurl = ReadSetting("apiBaseURLLocal");
                     break;
                 case "L-9L28F12":
-                    applicationAPIurl = ReadSetting("apiBaseURL");
+                    applicationAPIurl = ReadSetting("apiBaseURLLocal");
                     break;
                 default:
                     //Default to the Development Server   192.168.43.43
