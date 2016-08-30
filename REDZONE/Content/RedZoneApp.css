@@ -71,13 +71,13 @@ td.center {
 }
 
 .rHover:hover {
-    border-top: 1px solid #4a6b7f;
-    border-bottom: 1px solid #4a6b7f;
+    border-top: 1px solid #4a6b7f !important;
+    border-bottom: 1px solid #4a6b7f !important;
     background-color: #f1f1f1 !important;
 }
 .rHover:hover td{
-    border-top: 1px solid #4a6b7f;
-    border-bottom: 1px solid #4a6b7f;
+    border-top: 1px solid #4a6b7f !important;
+    border-bottom: 1px solid #4a6b7f !important;
 }
 
 

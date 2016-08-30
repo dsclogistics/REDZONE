@@ -39,7 +39,9 @@ namespace REDZONE.Controllers
 
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
+            if (String.IsNullOrEmpty(sortDir)) { sortDir = "ASC"; }
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
+
             if (!String.IsNullOrEmpty(sortMonth)) {
                 if (sortMonth.Equals("Building"))
                 {
@@ -50,6 +52,7 @@ namespace REDZONE.Controllers
                 else {
                     if (sortDir.Equals("ASC")) { dashBoard.metricRows = dashBoard.metricRows.OrderBy(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
                     else { dashBoard.metricRows = dashBoard.metricRows.OrderByDescending(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
+
                     var sortedHdrCol = dashBoard.rowHeadings.entityMetricCells.Find(p => p.metricName == sortMonth);
                     sortedHdrCol.displayClass = sortDir;  // To let the view know which column was sorted (if any) and in what way ('ASC' or 'DESC')                
                 } 

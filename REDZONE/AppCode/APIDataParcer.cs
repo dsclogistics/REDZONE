@@ -833,8 +833,6 @@ namespace REDZONE.AppCode
                     mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;
                 }
-
-
             }
             catch(Exception e)
             { string error = e.Message; }

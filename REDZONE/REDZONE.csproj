@@ -330,6 +330,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DSCREDZONE_ENTITY.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Images\Unlock-icon.png" />
     <Content Include="Models\DSCREDZONE_ENTITY.edmx.diagram">
       <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
     </Content>

@@ -27,14 +27,16 @@
                     <div class="row" style="text-align:center">
                         @if (Model.metricPeriodStatus.ToUpper().Equals("CLOSED"))
                         {
-                            <img src="~/Images/locked.gif" width="35" style="margin-top:10px; margin-bottom:9px" /> <br />
-                            <span style="font-size:xx-small; color:blue; ">Period is Closed</span>
+                            <img src="~/Images/locked.gif" width="50" style="margin-top:5px; margin-bottom:0px; padding:0;" /> <br />
+                            <span style="font-size:small; font-weight:bold; color:blue; ">PUBLISHED</span>
                         }
                         else
                         {
-                            <span style="font-size:xx-small; color:blue; ">STATUS:</span>
+                            @*<span style="font-size:xx-small; color:blue; ">STATUS:</span>
                             <span style="background-color:lightgreen; color:blue; font-weight:bold; font-size:x-large; padding:5px 8px; border-radius: 7px">@Model.metricPeriodStatus.ToUpper()</span><br />
-                            <br />                            
+                            <br />*@
+                            <img src="~/Images/Unlock-icon.png" width="50" style="margin-top:5px; margin-bottom:0px; padding:0;" /> <br />
+                            <span style="font-size:small; font-weight:bold; color:blue; ">UNPUBLISHED</span>
                         }
                     </div>
                 </div>
