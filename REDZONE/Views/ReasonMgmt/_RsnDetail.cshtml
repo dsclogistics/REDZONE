@@ -1,0 +1,130 @@
+﻿
+    <div class="row">
+
+    </div>
+    <span font-size:large; font-weight:bold"> </span>
+    <span id="saveMessage" class="alert-success" style="display:none; font-size:large; font-weight:bold"> </span>
+    <br />
+    <div class="row" style="margin-top:5px">
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Reason ID</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Created On</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Created By</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:5px">
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Reason</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Order</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Metric Values Used On</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+    </div>
+    <div>
+
+    </div>
+
+    <div class="row" style="margin-top:5px">
+        <div class="col-md-12 col-sm-9">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Description</span>
+                <textarea class="form-control" style="min-width:100%" disabled="disabled" placeholder=""></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:5px">
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Standardized</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Standardized On</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon" style="font-weight:bold">Standardized By</span>
+                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+
+    </div>
+
+    <div class="row" style="margin-top:5px">
+        <div class="col-md-3 col-sm-6">
+            <div class="input-group">
+
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="input-group">
+
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            @*<div class="input-group">
+                    @Html.LabelFor(model => model.mtrc_period_na_allow_yn, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                    @Html.EditorFor(model => model.mtrc_period_na_allow_yn, new { htmlAttributes = new { @class = "form-control", placeholder = "___" } })
+                </div>*@
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            @*<div class="input-group">
+                    @Html.LabelFor(model => model.mtrc_period_max_str_size, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                        @Html.EditorFor(model => model.mtrc_period_max_str_size, new { htmlAttributes = new { @class = "form-control", placeholder = "__" } })
+                </div>*@
+        </div>
+    </div>
+    <div>
+        @*@Html.ValidationMessageFor(model => model.mtrc_period_na_allow_yn, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.mtrc_period_can_import_yn, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.mtrc_period_is_auto_yn, "", new { @class = "text-danger" })*@
+    </div>
+
+    <hr class="save-metric-period" />
+    <div class="row save-metric-period" style="text-align:left; margin-left:5px">
+        <input type="button" class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
+        <input type="button" class="btn btn-primary" id="btnSaveReasonDetail" value="Save" />
+        <input type="button" class="btn btn-primary" id="btnRemoveReason" value="Remove" />
+        <input type="button" class="btn btn-primary" id="btnCancelReasonEdit" value="Cancel" />
+    </div>
+
+    <br />
+    <div>
+
+    </div>
