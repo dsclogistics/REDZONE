@@ -5,7 +5,7 @@
 
 <br />
 
-<div class="row" style="margin:0 auto">
+<div class="row" style="margin:0 auto; min-height:200px; max-height:200px; overflow-y:scroll; overflow-x:hidden">
     <table class="table table-bordered table-condensed table-hover table-striped">
         <tr>
             <th>
@@ -26,56 +26,54 @@
         </tr>
 
         @*@foreach (var item in Model)
-        {*@
-            <tr class="reasonListRow">
-                <td>
-                    Row 1
-                </td>
-                <td>
-                    Row 1
-                </td>
-                <td>
-                    Row 1
-                </td>
-                <td>
-                    Row 1
-                </td>
-                <td>
-                    Row 1
-                </td>
-                <td type="hidden" class="hidden">
-                    <input type="hidden" id="MPId" value="1" />
-                </td>
-            </tr>
+            {*@
+        <tr class="reasonListRow">
+            <td>
+                Row 1
+            </td>
+            <td>
+                Row 1
+            </td>
+            <td>
+                Row 1
+            </td>
+            <td>
+                Row 1
+            </td>
+            <td>
+                Row 1
+            </td>
+            <td type="hidden" class="hidden">
+                <input type="hidden" id="MPId" value="1" />
+            </td>
+        </tr>
 
-            <tr class="reasonListRow">
-                <td>
-                    Row 2
-                </td>
-                <td>
-                    Row 2
-                </td>
-                <td>
-                    Row 2
-                </td>
-                <td>
-                    Row 2
-                </td>
-                <td>
-                    Row 2
-                </td>
-                <td type="hidden" class="hidden">
-                    <input type="hidden" id="MPId" value="2" />
-                </td>
-            </tr>
+        <tr class="reasonListRow">
+            <td>
+                Row 2
+            </td>
+            <td>
+                Row 2
+            </td>
+            <td>
+                Row 2
+            </td>
+            <td>
+                Row 2
+            </td>
+            <td>
+                Row 2
+            </td>
+            <td type="hidden" class="hidden">
+                <input type="hidden" id="MPId" value="2" />
+            </td>
+        </tr>
         @*}*@
 
     </table>
-
+</div>
     <hr />
     <div class="row" style="text-align:left; margin-left: 5px">
         <input type="button" class="btn btn-primary" id="btnAddReason" value="Add New Reason" />
         <input type="button" class="btn btn-primary" id="btnReorderReasons" value="Reorder" />
     </div>
-    <br />
-</div>
