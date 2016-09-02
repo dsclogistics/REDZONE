@@ -1,7 +1,7 @@
 ﻿/*@import url('http://getbootstrap.com/dist/css/bootstrap.css');*/
 
 @media screen and (min-width: 768px) {
-    #sectionBuildings {
+#sectionBuildings {
         width: 70%;
     }
 .modal-custom {
@@ -44,9 +44,10 @@ td.center {
     margin-left: 1px;
     border-bottom: 1px solid black;
     min-width: 100%;
+    /*border-top-left-radius: 5px;
+    border-top-right-radius:5px;*/
     background-color: #f0eaea;
     font-weight: bold;
-
     display: flex;
     flex-wrap: wrap;
 }

@@ -3,8 +3,41 @@
 @{
     ViewBag.Title = "Executive Monthly Summary";
 }
-<link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+<!-- Calculate the actual width of each column (72% / Number of metrics in the View) -->
+@{
+    double colWidth = .72 / Model.allMetrics.Count;
+    string strColWidth = colWidth.ToString("00.00%");
+}
 
+
+<link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+<style>
+    .scroll-Table {
+        font-weight: bold;
+        font-size: small;
+        text-align: center;
+        width: 99%;
+    }
+
+    .scroll-Head {
+        padding: 0px;
+        background-color: #f0eaea;
+    }
+
+    .scroll-Body {
+        padding: 0px;
+        height: 560px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .IEScroll{
+        width:17px;
+    }
+    .notIEScroll{
+        width:22px;
+    }
+
+</style>
 <div class="row" style="font-family:Arial; margin-top: 5px; ">
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
@@ -42,80 +75,229 @@
             else
             {
             <!-- Table -->
-                <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
-                    <!-- ROWS -->
-                    <div class="row headerRow row-eq-height">
-                        <!-- COLUMNS -->
-                        <div class="col-sm-2 buildingCol headerCol">
-                            <span style="font-weight:bold"> @Model.month @Model.year</span>
-                        </div>
-                        @foreach (var m in Model.allMetrics)
-                        {
-                            <div class="col-sm-1 buildingCol headerCol" title="@m.metricDescription">
-                                <a href="@m.url">@m.metricName</a>
-                            </div>
-                        }
-                        @{
-                        int colsLeft = 10 - Model.allMetrics.Count;
-                        string colClass = "col-sm-1";
-                        if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
-                        }
-                        <div class="@colClass buildingCol headerCol scoreCol">
-                            Building Score
-                        </div>
-                    </div><!-- ---------------- TITLES ROW -----------------------    -->
+                <div class="panel panel-default scroll-Table hidden-xs">
+                    <div class="panel-heading scroll-Head ">
+                        <table style="margin:0; width:100%;">
+                            <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
+                                <td>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
+                                                <span style="font-weight:bold"> @Model.month @Model.year</span>
+                                            </td>
+                                            @foreach (var m in Model.allMetrics)
+                                        {
+                                            <td class="buildingCol" title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
+                                                @*class="col-sm-1 buildingCol headerCol"*@
+                                                <a href="@m.url">@m.metricName</a>
+                                            </td>
+                                        }
+                                            <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                                @*class="buildingCol headerCol scoreCol"*@
+                                                Building Score
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="scroll-Offset" ></td>
+                            </tr> <!-- ---------- END OF HEADER TITLES ROW -----------------    -->
+                            <tr class="" style="border-bottom: 1px solid black; background-color: #bbedff">
+                                <td>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
+                                                <span style="font-weight:bold"> @Model.goalsRow.BuildingName</span>
+                                            </td>
+                                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
+                                            {
+                                        <td class="buildingCol" style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
+                                            @*class="col-sm-1 buildingCol headerCol"*@
+                                            @bldngMV.metricValue
+                                        </td>
+                                            }
+                                            <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                                @*class="buildingCol scoreCol"*@
+                                                <br />
+                                            </td>
+                                        </tr>  <!-- ---------------- TITLES ROW -----------------------    -->
+                                    </table>
+                                </td>
+                                <td class="scroll-Offset" ></td>
+                            </tr> <!-- ------------------- METRIC GOALS ROW END ----------------- -->
+                        </table>
+                    </div>
+                    <div class="panel-body scroll-Body">
+                        <div class="row " style="margin:0">
+                            <table style="width:100%">
+                                @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                                {
+                                    <tr class="rHover" style="border-bottom: 1px solid #c6c4c4;">
+                                        <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
+                                            @*class="col-sm-2 buildingCol"*@
+                                            <a href="@dscBldng.url">@dscBldng.BuildingName</a>
+                                        </td>
+                                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                                        {
+                                            <td class="buildingCol @bldngMV.displayClass" style="vertical-align:middle; width: @strColWidth ">
+                                                @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                                { <br /> }
+                                                else
+                                                { @bldngMV.metricValue }
+                                            </td>
+                                        }
+                                        <td class="buildingCol scoreCol  @dscBldng.scoreDisplayClass" style=" vertical-align:middle; width:11%;">
+                                            @dscBldng.rowScore
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>  <!-- ---------- END OF BUILDING ROW ------------------- -->
+                    </div>
+                    <div class="panel-footer" style="padding:0; background-color: #fbfbfb">
+                        <table style="margin:0; width:100%;">
+                            <tr>
+                                <td>
+                                    <table style="width:100%">
+                                        <tr class="totalsRow">
+                                            <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
+                                                <span>@Model.goalsMissedRow.BuildingName</span>
+                                            </td>
+                                            @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
+                                            {
+                                                <td class="buildingCol" style="vertical-align:middle; width: @strColWidth ">
+                                                    @*class="col-sm-1 buildingCol headerCol"*@
+                                                    @metricTotalCell.score.ToString("0")
+                                                </td>
+                                            }
+                                            <td class="buildingCol @Model.goalsMissedRow.scoreDisplayClass" style="vertical-align:middle; width:11%;">
+                                                @Model.total
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="scroll-Offset"></td>
+                            </tr> <!-- ------------------- METRIC GOALS NOT MET TOTAL ROW END ----------------- -->
+                        </table>
+                    </div>  <!-- ----------- END OF FOOTER ROW (ROW TOTALS) -----------------  -->
+                </div>
 
-                    <div class="row buildingRowX" style="background-color: #bbedff">
-                        <div class="col-sm-2 buildingCol" style="font-weight:bold ">
-                            @Model.goal.BuildingName
-                        </div>
-                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goal.entityMetrics)
-                        {
-                            <div class="col-sm-1 buildingCol" style="color:blue; font-weight:bold;">
-                                @bldngMV.metricValue
+
+                @*<div class="row hidden-xs" style=" border-radius: 5px; margin: 0; padding:0; ">
+                        <!-- ROWS -->
+                        <div class="row">
+                            <!-- COLUMNS -->
+                            <div class="col-sm-2 buildingCol headerCol">
+                                <span style="font-weight:bold"> @Model.month @Model.year</span>
                             </div>
-                        }
-                        <div class="@colClass buildingCol scoreCol" style="">
-                            @*@Model.goal.rowScore*@
-                            <br />
-                        </div>
-                    </div><!-- ------------------- GOAL ROWS END ----------------- -->
-                    @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                    {
-                        <div class="row buildingRowX rHover">
-                            <div class="col-sm-2 buildingCol" style="text-align:center">
-                                <a href="@dscBldng.url">@dscBldng.BuildingName</a>
-                            </div>
-                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                            @foreach (var m in Model.allMetrics)
                             {
-                                <div class="col-sm-1 buildingCol @bldngMV.displayClass" style="">
-                                    @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                    { <br /> }
-                                    else
-                                    { @bldngMV.metricValue }
+                                <div class="col-sm-1 buildingCol headerCol" title="@m.metricDescription">
+                                    <a href="@m.url">@m.metricName</a>
                                 </div>
                             }
-                            <div class="@colClass buildingCol scoreCol @dscBldng.scoreDisplayClass" style="">
-                                @dscBldng.rowScore
+                            @{
+                            int colsLeft = 10 - Model.allMetrics.Count;
+                            string colClass = "col-sm-1";
+                            if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
+                            }
+                            <div class="@colClass buildingCol headerCol scoreCol">
+                                Building Score
                             </div>
-                        </div><!-- --------------- building ROWS ----------- -->
-                    }
-                    <div class="row buildingRowX totalsRow rHover">
-                        <div class="col-sm-2 buildingCol" style="font-weight:bold">
-                            <span>@Model.goalsMissedRow.BuildingName</span>
-                        </div>
-                        @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
+                        </div><!-- ---------------- TITLES ROW -----------------------    -->
+                        <div class="row buildingRowX" style="background-color: #bbedff">
+                            <div class="col-sm-2 buildingCol" style="font-weight:bold ">
+                                @Model.goalsRow.BuildingName
+                            </div>
+                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
+                            {
+                                <div class="col-sm-1 buildingCol" style="color:blue; font-weight:bold;">
+                                    @bldngMV.metricValue
+                                </div>
+                            }
+                            <div class="@colClass buildingCol scoreCol" style="">
+                                <br />
+                            </div>
+                        </div><!-- ------------------- GOAL ROWS END ----------------- -->
+
+
+                        @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
                         {
-                            <div class="col-sm-1 buildingCol" style="">
-                                @metricTotalCell.score.ToString("0")
-                            </div>
+                            <div class="row buildingRowX rHover">
+                                <div class="col-sm-2 buildingCol" style="text-align:center">
+                                    <a href="@dscBldng.url">@dscBldng.BuildingName</a>
+                                </div>
+                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                                {
+                                    <div class="col-sm-1 buildingCol @bldngMV.displayClass" style="">
+                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                        { <br /> }
+                                        else
+                                        { @bldngMV.metricValue }
+                                    </div>
+                                }
+                                <div class="@colClass buildingCol scoreCol @dscBldng.scoreDisplayClass" style="">
+                                    @dscBldng.rowScore
+                                </div>
+                            </div><!-- --------------- building ROWS ----------- -->
                         }
-                        <div class="@colClass buildingCol @Model.goalsMissedRow.scoreDisplayClass" style="">
-                            @Model.total
-                            @*@Model.goalsMissedRow.rowScore*@
+
+                        <div class="row buildingRowX totalsRow rHover">
+                            <div class="col-sm-2 buildingCol" style="font-weight:bold">
+                                <span>@Model.goalsMissedRow.BuildingName</span>
+                            </div>
+                            @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
+                            {
+                                <div class="col-sm-1 buildingCol" style="">
+                                    @metricTotalCell.score.ToString("0")
+                                </div>
+                            }
+                            <div class="@colClass buildingCol @Model.goalsMissedRow.scoreDisplayClass" style="">
+                                @Model.total
+                            </div>
+                        </div><!-- Goals Not Met Totals -->
+                    </div> <!-- End of DIV Table Table -->*@
+        <!-- **************************** EXTRA SMALL DISPLAY ********************************** -->
+                foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                {
+                    <div class="panel panel-default visible-xs" style="margin-right:12px; width:100%">
+                        <div class="panel-heading" style="padding:3px; background-color:black; font-weight:bold">
+                            <a href="@dscBldng.url" style="color:white">@dscBldng.BuildingName</a>
                         </div>
-                    </div><!-- Goals Not Met Totals -->
-                </div> <!-- End of DIV Table Table -->
+                        <div class="panel-body" style="padding:3px;">
+                            @{int indexCounter = 0;}
+                            @foreach (REDZONE.Models.MeasuredCellEntity metricCell in dscBldng.entityMetrics)
+                            {
+                                <div class="row " style="margin:0; padding:0; border-bottom:1px solid lightgray">
+                                    <div class="col-xs-4 " style="text-align:left;">
+                                        <a href="@Model.allMetrics[indexCounter].url">@Model.allMetrics[indexCounter].metricName</a>
+                                    </div>
+                                    <div class="col-xs-3 @metricCell.displayClass">
+                                        @if (String.IsNullOrEmpty(@metricCell.metricValue))
+                                        { <br /> }
+                                        else
+                                        { @metricCell.metricValue }
+                                    </div>
+                                    <div class="col-xs-2 " style="text-align:right; font-weight:bold; background-color: #bbedff">Goal:</div>
+                                    <div class="col-xs-3" style="background-color: #bbedff;">@Model.goalsRow.entityMetrics[indexCounter].metricValue</div>
+                                </div>
+                                indexCounter++;
+                            }
+                            <div class="" style="">
+                                <div class="col-xs-4 @dscBldng.scoreDisplayClass" style="text-align:left;">
+                                    <span style="font-weight:bold">Building Score</span>
+                                </div>
+                                <div class="col-xs-3 @dscBldng.scoreDisplayClass">
+                                    @dscBldng.rowScore
+                                </div>
+                                <div class="col-xs-2 @dscBldng.scoreDisplayClass" style="text-align:right; font-weight:bold;"><br /></div>
+                                <div class="col-xs-3 @dscBldng.scoreDisplayClass" style=""><br /></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                }
+        <!-- ********************** END OF EXTRA SMALL DISPLAY VIEW **************************** -->
             }
         </div>
     </div>
@@ -126,5 +308,12 @@
     $(document).ready(function () {
         $(".menuItem").removeClass("menuSelected");
         $("#mDashboard").addClass("menuSelected");
+
+        if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) {
+            $(".scroll-Offset").addClass('IEScroll');
+        }
+        else {
+            $(".scroll-Offset").addClass('notIEScroll');
+        }
     });
 </script>

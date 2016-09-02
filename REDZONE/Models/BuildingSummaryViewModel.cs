@@ -20,6 +20,7 @@ namespace REDZONE.Models
         public string statusPrevPeriod { get; set; }
         public string statusNextBuilding { get; set; }
         public string statusPrevBuilding { get; set; }
+        public int viewableColumns { get; set; }
         public MeasuredRowEntity buildingHeadings = new MeasuredRowEntity();
         public List<MeasuredRowEntity> metricRows = new List<MeasuredRowEntity>();
         public MeasuredRowEntity buildingScoreRow = new MeasuredRowEntity();
@@ -27,8 +28,7 @@ namespace REDZONE.Models
         //public List<string> allBuildings = new List<string>();
         //public List<string> allMetrics = new List<string>();
         //public List<string> allMonths = new List<string>();
-
-        public int viewableColumns { get; set; }
+        
         public string metricColWidth
         {
             get
