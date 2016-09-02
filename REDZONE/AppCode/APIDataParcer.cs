@@ -342,9 +342,9 @@ namespace REDZONE.AppCode
             List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
             eSummary.month = month;
             eSummary.year = year;
-            eSummary.goal.rowScore = 0;
+            eSummary.goalsRow.rowScore = 0;
             eSummary.total = 0;
-            eSummary.goal.BuildingName = "Goal";
+            eSummary.goalsRow.BuildingName = "Goal";
             eSummary.goalsMissedRow.BuildingName = "Goals Missed";
             eSummary.goalsMissedRow.scoreDisplayClass = "";
 
@@ -389,7 +389,7 @@ namespace REDZONE.AppCode
                         goalMetric.metricName = metricName.metricName;
                         goalMetric.metricValue = (string)mtrValue["mpg_display_text"];
                         totalColMetric.metricName = metricName.metricName;
-                        eSummary.goal.entityMetrics.Add(goalMetric);
+                        eSummary.goalsRow.entityMetrics.Add(goalMetric);
                         totalColMetric.score = 0;
                         //totalColMetric.metricColor = "lightgray";
                         eSummary.goalsMissedRow.entityMetrics.Add(totalColMetric);
@@ -487,6 +487,8 @@ namespace REDZONE.AppCode
 
         public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID)
         {
+            const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
+
             //Define and Initializa Model Object Components
             BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();   // Main Metric Model Object. Returned back to calling method
             MeasuredRowEntity rowHeader = new MeasuredRowEntity();                //Model Contains one Header Row
@@ -498,10 +500,9 @@ namespace REDZONE.AppCode
             rowHeader.rowName = bSummary.bName;
             rowTotals.rowName = "Goals Missed";
             rowActions.rowName = "ACTIONS PLAN";
-
             string raw_data = String.Empty;
             try
-            {
+            {               
                 //------- Initialize the System Current Date/Time Deppendent Values -----------
                 int intYear = 0;
                 if (!(Int32.TryParse(year, out intYear))) { intYear = 9999; }
@@ -542,7 +543,7 @@ namespace REDZONE.AppCode
                                 MeasuredCellEntity totalCol = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
-                                temp.isViewable = false;
+                                temp.isViewable = showAllMonths?true:false;
                                 row.entityMetricCells.Add(temp);
                                 if(rowHeader.entityMetricCells.Count< months.Count)
                                 {
@@ -551,7 +552,7 @@ namespace REDZONE.AppCode
                                     totalCol.metricName = (string)m["Month"];
                                     totalCol.metricValue = "0";
                                     totalCol.score = 0;
-                                    totalCol.isViewable = false;
+                                    totalCol.isViewable = showAllMonths ? true : false;
                                     rowTotals.entityMetricCells.Add(totalCol);
                                     //Set the Cell Value and URL to use for the Actions Row.
                                     totalCol = getActionDataforMonth( (string)m["Month"], bSummary.year );
@@ -566,7 +567,7 @@ namespace REDZONE.AppCode
                                 if (row.rowMeasuredId == (string)apiCellValue["mtrc_id"])
                                 {
                                     foreach(var tmp in row.entityMetricCells)
-                                    {
+                                    {                                        
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             string cellStatus = (string)apiCellValue["rz_mps_status"];
@@ -598,6 +599,9 @@ namespace REDZONE.AppCode
                                             // <--- Finished increasing th Missed Goal Counter
                                             tmp.isViewable = true;
                                         }
+                                        if (String.IsNullOrEmpty(tmp.displayClass)) {
+                                            tmp.displayClass = "cell-NoValue";  //Default the display class to the "No value" color schema if none is defined
+                                        }
                                     }
                                 }
                                 //Set the correponding month column Goal as viewable, since there is data for that column
@@ -618,7 +622,7 @@ namespace REDZONE.AppCode
                     }                  
                     bSummary.buildingHeadings = rowHeader;
                     bSummary.buildingScoreRow = rowTotals;
-                    bSummary.viewableColumns = bSummary.buildingScoreRow.entityMetricCells.Where(x => (x.isViewable == true)).Count();
+                    bSummary.viewableColumns = bSummary.buildingHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = metricsRowList;//at this point we should have all rows with metric ids and months in the model
                     bSummary.buildingActionsRow = rowActions;
                 }
