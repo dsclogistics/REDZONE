@@ -23,6 +23,9 @@
             <th>
                 Column 5
             </th>
+            <th>
+                
+            </th>
         </tr>
 
         @*@foreach (var item in Model)
@@ -44,7 +47,12 @@
                 Row 1
             </td>
             <td type="hidden" class="hidden">
-                <input type="hidden" id="MPId" value="1" />
+                <input type="hidden" id="HiddenField" value="1" />
+            </td>
+            <td>
+                <input type="hidden" id="RsnID" value="1" />
+                <input type="button" class="btnReasonDetails" value="Details" />
+                @*@Html.ActionLink("Details", "_metricPeriodDetails", new { id=item.mtrc_period_id })*@
             </td>
         </tr>
 
@@ -65,7 +73,12 @@
                 Row 2
             </td>
             <td type="hidden" class="hidden">
-                <input type="hidden" id="MPId" value="2" />
+                <input type="hidden" id="hiddenField" value="2" />
+            </td>
+            <td>
+                <input type="hidden" id="RsnId" value="1" />
+                <input type="button" class="btnReasonDetails" value="Details" />
+                @*@Html.ActionLink("Details", "_metricPeriodDetails", new { id=item.mtrc_period_id })*@
             </td>
         </tr>
         @*}*@
