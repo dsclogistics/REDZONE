@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Reason Management";
+}
+
+<h2>Reason Management</h2>
+
+<div class="panel panel-default">
+    
+    <div class="panel-heading">
+        <div class="row" style="margin:0; margin-bottom:20px">
+            <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; background-color: lightgray; border-top-right-radius:0px; border-bottom-right-radius:0px">Select a Metric Period: </span></div>
+            <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
+        </div>
+
+        @if (ViewBag.id != 0)
+        {
+            //REASON LIST
+            <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
+            <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
+                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left "><h3><span style="font-weight:normal">Metric Period Reasons</span></h3></div>
+                <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
+                    @Html.Action("_RsnList")
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="panel-body ">
+        @if (ViewBag.id != 0)
+        {
+            //REASON DETAIL
+            <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
+                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
+                @*<div type="hidden" id="msgLoading">
+                    <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                </div>*@
+                <div id="reasonDetailsView">
+                    @Html.Action("_RsnDetail")
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="color: red">
+                There are no Details to Display. Select a value from the dropdown.
+            </div>
+        }
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div id="reasonReorderForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Reorder Reasons</h4>
+            </div>
+            <div class="modal-body" id="reasonReorderBody">
+                asdfkj
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReorderPopup">Done</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        //Metric Period Dropdown
+        $("#metric_period_sel_list").on("change", function () {
+            var selId = $(this).val();
+            location.href = "/ReasonMgmt/Index/" + selId;
+        });
+
+        //Reorder Button -> Reorder Popup
+        $("#divReasonList").on('click', '#btnReorderReasons', function () {
+            //var mtrcIdToDisplay = $("#MtrcId").val();
+
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '/ReasonMgmt/_RsnReorder',     // the url where we want to direct our Ajax Call
+                method: "GET",
+                cache: false,
+                data: { },     //<---- Data Parameters (if not already passed in the Url)
+                //--- On error, execute this function ------
+                error: function (xhr, status, error) {
+                    //var err = eval("(" + xhr.responseText + ")");
+                    $("#reasonDetailsView").html(xhr.responseText);
+                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //Insert the partial view retrieved into the output 'newMetricPeriodBody' panel
+                $('#reasonReorderBody').html(d);
+                $('#reasonReorderForm').modal('show');
+            });
+        });
+
+    });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

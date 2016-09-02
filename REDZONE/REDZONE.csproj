@@ -183,6 +183,7 @@
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
+    <Compile Include="Controllers\ReasonMgmtController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -436,6 +437,10 @@
     <Content Include="Views\Home\BuildingSummary.cshtml" />
     <Content Include="Views\Home\MetricSummary.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\ReasonMgmt\Index.cshtml" />
+    <Content Include="Views\ReasonMgmt\_RsnList.cshtml" />
+    <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
+    <Content Include="Views\ReasonMgmt\_RsnReorder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

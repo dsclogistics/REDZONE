@@ -1,0 +1,72 @@
+﻿
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+
+<br />
+
+<div class="row" style="margin:0 auto">
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <tr>
+            <th>
+                Column 1
+            </th>
+            <th>
+                Column 2
+            </th>
+            <th>
+                Column 3
+            </th>
+            <th>
+                Column 4
+            </th>
+        </tr>
+
+        @*@foreach (var item in Model)
+        {*@
+            <tr>
+                <td>
+                    Row 1
+                </td>
+                <td>
+                    Row 1
+                </td>
+                <td>
+                    Row 1
+                </td>
+                <td>
+                    Row 1
+                </td>
+                <td type="hidden" class="hidden">
+                    <input type="hidden" id="MPId" value="1" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Row 2
+                </td>
+                <td>
+                    Row 2
+                </td>
+                <td>
+                    Row 2
+                </td>
+                <td>
+                    Row 2
+                </td>
+                <td type="hidden" class="hidden">
+                    <input type="hidden" id="MPId" value="2" />
+                </td>
+            </tr>
+        @*}*@
+
+    </table>
+
+    <hr />
+    <div class="row" style="text-align:left; margin-left: 5px">
+        <input type="button" class="btn btn-primary" id="btnAddReason" value="Add New Reason" />
+        <input type="button" class="btn btn-primary" id="btnReorderReasons" value="Reorder" />
+    </div>
+    <br />
+</div>
