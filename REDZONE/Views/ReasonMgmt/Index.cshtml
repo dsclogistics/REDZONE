@@ -8,7 +8,7 @@
 <div class="panel panel-default">
     
     <div class="panel-heading">
-        <div class="row" style="margin:0; margin-bottom:20px">
+        <div class="row" style="margin:0; margin-bottom:0px">
             <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; background-color: lightgray; border-top-right-radius:0px; border-bottom-right-radius:0px">Select a Metric Period: </span></div>
             <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
         </div>
@@ -35,7 +35,7 @@
                 @*<div type="hidden" id="msgLoading">
                     <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
                 </div>*@
-                <div id="reasonDetailsView">
+                <div id="divReasonDetailsView">
                     @Html.Action("_RsnDetail")
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 asdfkj
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnReorderPopup">Done</button>
+                <button type="button" class="btn btn-primary" id="btnReorderPopupDone">Done</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -82,8 +82,50 @@
             location.href = "/ReasonMgmt/Index/" + selId;
         });
 
+        //------------------------------------
+        //On Reason List row click
+        //$("#divReasonList").on('click', '.reasonListRow', function () {
+        $("#divReasonList").on('click', '.btnReasonDetails', function(){
+            //If have made changes in the editor to another reason, prompt user.
+
+            //ajax GET specified model
+
+            $(".editable-rsn-attr").prop("disabled", true);
+
+            //Sets detail buttons
+            $("#btnSaveReasonDetail").show();
+            $("#btnAddReasonDetail").hide();
+            $("#btnEditReasonDetail").prop("disabled", false);
+            $("#btnSaveReasonDetail").prop("disabled", true);
+            $("#btnRemoveReason").prop("disabled", true);
+            $("#btnCancelReasonEdit").prop("disabled", true);
+        });
+
+        //------------------------------------
+        //Add New Reason button
+        $("#divReasonList").on('click', '#btnAddReason', function () {
+
+            //If have made changes in the editor to another reason, prompt user.
+
+            //ajax GET null model
+
+            $(".editable-rsn-attr").prop("disabled", false);
+
+            //Sets detail buttons
+            $("#btnAddReasonDetail").show();
+            $("#btnSaveReasonDetail").hide();
+            $("#btnAddReasonDetail").prop("disabled", false);
+            $("#btnEditReasonDetail").prop("disabled", true);
+            $("#btnRemoveReason").prop("disabled", true);
+            $("#btnCancelReasonEdit").prop("disabled", false);
+        });
+
+        //------------------------------------
         //Reorder Button -> Reorder Popup
         $("#divReasonList").on('click', '#btnReorderReasons', function () {
+
+            //If have made changes in the editor to another reason, prompt user.
+
             //var mtrcIdToDisplay = $("#MtrcId").val();
 
             // ------------ Make the Ajax Call ---------------------------------------------
@@ -95,7 +137,7 @@
                 //--- On error, execute this function ------
                 error: function (xhr, status, error) {
                     //var err = eval("(" + xhr.responseText + ")");
-                    $("#reasonDetailsView").html(xhr.responseText);
+                    $("#divReasonDetailsView").html(xhr.responseText);
                     //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
@@ -106,6 +148,87 @@
             });
         });
 
+        //------------------------------------
+        //Edit Button
+        $("#divEditor").on('click', '#btnEditReasonDetail', function () {
+
+            $(".editable-rsn-attr").prop("disabled", false);
+
+            //Sets detail buttons
+            $("#btnSaveReasonDetail").show();
+            $("#btnAddReasonDetail").hide();
+            $("#btnEditReasonDetail").prop("disabled", true);
+            $("#btnSaveReasonDetail").prop("disabled", false);
+            var metricValueUsedOn = 0;
+            if (metricValueUsedOn == 0) {
+                $("#btnRemoveReason").prop("disabled", false);
+            }
+            else {
+                $("#btnRemoveReason").prop("disabled", true);
+            }
+            $("#btnSaveReasonDetail").prop("disabled", false);
+            $("#btnCancelReasonEdit").prop("disabled", false);
+        });
+
+        //------------------------------------
+        //Add Button
+        $("#divEditor").on('click', '#btnAddReasonDetail', function () {
+            //Prompt User
+
+            //ajax POST
+
+            alert('Add')
+        });
+
+        //------------------------------------
+        //Save Button
+        $("#divEditor").on('click', '#btnSaveReasonDetail', function () {
+            //Prompt User
+
+            //ajax POST
+
+            alert('Save')
+        });
+
+        //------------------------------------
+        //Remove Button
+        $("#divEditor").on('click', '#btnRemoveReason', function () {
+            //Prompt User
+
+            //DELETE
+
+            alert('Remove')
+        });
+
+        //------------------------------------
+        //Cancel Button
+        $("#divEditor").on('click', '#btnCancelReasonEdit', function () {
+            //Reload either the original data or null data
+            //Make editor readonly
+
+            //Revert buttons back and disable them
+            $(".editable-rsn-attr").prop("disabled", true);
+
+            $("#btnSaveReasonDetail").show();
+            $("#btnAddReasonDetail").hide();
+
+            //If reloading original data, set edit button disabled = false
+            //of reloading null data, set edit button disabled = true
+
+            $("#btnEditReasonDetail").prop("disabled", true);
+            $("#btnSaveReasonDetail").prop("disabled", true);
+            $("#btnRemoveReason").prop("disabled", true);
+            $("#btnCancelReasonEdit").prop("disabled", true);
+        });
+
+        //------------------------------------
+        //Reorder Popup Done Button
+        $("#reasonReorderForm").on('click', '#btnReorderPopupDone', function () {
+            //Prompt are you sure?
+            //Refresh page
+            alert('Done')
+            location.reload(true);
+        });
     });
 </script>
 

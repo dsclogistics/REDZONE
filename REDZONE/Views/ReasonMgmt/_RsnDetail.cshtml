@@ -5,6 +5,7 @@
     <span font-size:large; font-weight:bold"> </span>
     <span id="saveMessage" class="alert-success" style="display:none; font-size:large; font-weight:bold"> </span>
     <br />
+
     <div class="row" style="margin-top:5px">
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
@@ -30,7 +31,7 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 <span class="input-group-addon" style="font-weight:bold">Reason</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                <input type="text" class="form-control editable-rsn-attr" disabled="disabled" placeholder="" />
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
@@ -54,7 +55,7 @@
         <div class="col-md-12 col-sm-9">
             <div class="input-group">
                 <span class="input-group-addon" style="font-weight:bold">Description</span>
-                <textarea class="form-control" style="min-width:100%" disabled="disabled" placeholder=""></textarea>
+                <textarea class="form-control editable-rsn-attr" style="min-width:100%" disabled="disabled" placeholder=""></textarea>
             </div>
         </div>
     </div>
@@ -63,7 +64,7 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 <span class="input-group-addon" style="font-weight:bold">Standardized</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                <input type="text" class="form-control editable-rsn-attr" disabled="disabled" placeholder="" />
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
@@ -118,10 +119,11 @@
 
     <hr class="save-metric-period" />
     <div class="row save-metric-period" style="text-align:left; margin-left:5px">
-        <input type="button" class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
-        <input type="button" class="btn btn-primary" id="btnSaveReasonDetail" value="Save" />
-        <input type="button" class="btn btn-primary" id="btnRemoveReason" value="Remove" />
-        <input type="button" class="btn btn-primary" id="btnCancelReasonEdit" value="Cancel" />
+        <input type="button" disabled class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
+        <input type="button" disabled class="btn btn-primary" id="btnSaveReasonDetail" value="Save" />
+        <input type="button" disabled class="btn btn-primary" style ="display:none" id="btnAddReasonDetail" value="Add" />
+        <input type="button" disabled class="btn btn-primary" id="btnRemoveReason" value="Remove" />
+        <input type="button" disabled class="btn btn-primary" id="btnCancelReasonEdit" value="Cancel" />
     </div>
 
     <br />
