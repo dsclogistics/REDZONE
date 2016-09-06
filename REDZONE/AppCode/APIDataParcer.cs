@@ -833,6 +833,10 @@ namespace REDZONE.AppCode
                         rowMetrics.Add(row);
                     }
                     mSummary.rowGoal = goal;
+                    //Before Assigning the Header Information to the model, switch the month display names to Short Names
+                    foreach(MeasuredCellEntity hdrMonth in header.entityMetricCells){
+                        hdrMonth.metricName = getMonthShortName(hdrMonth.metricName);
+                    }
                     mSummary.rowHeadings = header;
                     mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;
@@ -842,6 +846,36 @@ namespace REDZONE.AppCode
             { string error = e.Message; }
 
             return mSummary;
+        }
+
+        private string getMonthShortName(string monthLong)
+        {
+            string monthShort = String.Empty;
+            switch (monthLong) {
+                case "January":  monthShort = "Jan";
+                    break;
+                case "February": monthShort = "Feb";
+                    break;
+                //case "March":    monthShort = "March"; break;
+                //case "April":    monthShort = "April"; break;
+                //case "May":      monthShort = "May";   break;
+                //case "June":     monthShort = "June";  break;
+                //case "July":     monthShort = "July";  break;
+                case "August":   monthShort = "Aug";
+                    break;
+                case "September": monthShort = "Sept";
+                    break;
+                case "October":  monthShort = "Oct";
+                    break;
+                case "November": monthShort = "Nov";
+                    break;
+                case "December": monthShort = "Dec";
+                    break;
+                default:         monthShort = monthLong;
+                    break;
+            }
+
+            return monthShort;
         }
 
         //========= This Function "getMetricDisplayClass" returns the html class to use for Color Display for metric value cell based on the value, isGoalMet flag and metric status =========

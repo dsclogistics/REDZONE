@@ -38,7 +38,7 @@
     }
 
 </style>
-<div class="row" style="font-family:Arial; margin-top: 5px; ">
+<div class="row" style="font-family:Arial; margin-top: 5px; ">  <!-- MAIN SCREEN PANEL -->
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
             <div class="row">
@@ -75,7 +75,7 @@
             else
             {
             <!-- Table -->
-                <div class="panel panel-default scroll-Table hidden-xs">
+                <div class="panel panel-default scroll-Table hidden-xs">         <!-- INNER PANEL WITH METRIC BUILDING INFORMATION -->
                     <div class="panel-heading scroll-Head ">
                         <table style="margin:0; width:100%;">
                             <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
@@ -179,9 +179,9 @@
                             </tr> <!-- ------------------- METRIC GOALS NOT MET TOTAL ROW END ----------------- -->
                         </table>
                     </div>  <!-- ----------- END OF FOOTER ROW (ROW TOTALS) -----------------  -->
-                </div>
-
-
+                </div> <!-- ------- END of Metric Data Table -------- -->
+                
+                
                 @*<div class="row hidden-xs" style=" border-radius: 5px; margin: 0; padding:0; ">
                         <!-- ROWS -->
                         <div class="row">
@@ -283,10 +283,10 @@
                                 indexCounter++;
                             }
                             <div class="" style="">
-                                <div class="col-xs-4 @dscBldng.scoreDisplayClass" style="text-align:left;">
-                                    <span style="font-weight:bold">Building Score</span>
+                                <div class="col-xs-4 @dscBldng.scoreDisplayClass" style="text-align:right;">
+                                    <span style="font-weight:bold">Building Score:</span>
                                 </div>
-                                <div class="col-xs-3 @dscBldng.scoreDisplayClass">
+                                <div class="col-xs-3 @dscBldng.scoreDisplayClass" style="height:100%; font-weight:bold; ">
                                     @dscBldng.rowScore
                                 </div>
                                 <div class="col-xs-2 @dscBldng.scoreDisplayClass" style="text-align:right; font-weight:bold;"><br /></div>
