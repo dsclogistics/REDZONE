@@ -63,7 +63,7 @@ textarea {
 .Closed-metGoal {
     font-weight:bold;
     color:black;
-    background-color:#b3ff99;   /*Light Green*/
+    background-color:#C5E0B3;   /*Light Green*/
 }
 .Closed-Missed {
     font-weight:bold;
@@ -71,7 +71,7 @@ textarea {
     background-color:#ffbb8b;   /*Light Red*/
 }
 .Score-Met {
-    background-color:#b3ff99;   /*Light Green Color*/
+    background-color: #C5E0B3;   /* #b3ff99 Light Green Color*/
 }
 .Score-Red3 {
     background-color:#f9f97f;   /*Yellow Color*/

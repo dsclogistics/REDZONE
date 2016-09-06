@@ -460,10 +460,18 @@ namespace REDZONE.AppCode
                                         tmpIndex++;
                                     }
                                     // Set the Building Row Display Class based on the score it has
-                                    if (b.rowScore < 3)
-                                    {
-                                        b.scoreDisplayClass = "Score-Met";
+                                    if (b.rowScore == 0)
+                                    {//Verify that the building has actual values (not only empty strings)
+                                        foreach (var x in b.entityMetrics)
+                                        {
+                                            if (!String.IsNullOrEmpty(x.metricValue))
+                                            {
+                                                b.scoreDisplayClass = "Score-Met";
+                                                break;
+                                            }
+                                        }
                                     }
+                                    else if (b.rowScore < 3)  { b.scoreDisplayClass = "Score-Met"; }
                                     else if (b.rowScore == 3) { b.scoreDisplayClass = "Score-Red3"; }
                                     else if (b.rowScore == 4) { b.scoreDisplayClass = "Score-Red4"; }
                                     else { b.scoreDisplayClass = "Score-Red5"; }
@@ -611,11 +619,25 @@ namespace REDZONE.AppCode
                                 //goalRow.isViewable = true;                                
                             }
                             //After all Metric Values have been processed, loop thorugh the (Metrics) Row and set the appropiate Score Color Display Class
+                            int totalIndex = 0;
                             foreach (var temp in rowTotals.entityMetricCells) {
-                                if (temp.score < 3) { temp.displayClass = "Score-Met"; }
+                                if (temp.score == 0) {
+                                    temp.displayClass = "";  //Default to "Empty Class Display"
+                                    //Loop through all the buildings at the current Index. If a value if found for any building, set it as score met
+                                    foreach (var x in metricsRowList)
+                                    {
+                                        if (!String.IsNullOrEmpty(x.entityMetricCells[totalIndex].metricValue)) { 
+                                             //Current Column contains at least one value. Set Dispay class and exit the loop
+                                            temp.displayClass = "Score-Met";
+                                            break;  
+                                        }
+                                    }
+                                }
+                                else if (temp.score < 3) { temp.displayClass = "Score-Met"; }
                                 else if (temp.score == 3) { temp.displayClass = "Score-Red3"; }
                                 else if (temp.score == 4) { temp.displayClass = "Score-Red4"; }
                                 else { temp.displayClass = "Score-Red5"; }
+                                totalIndex++;
                             }
                         }
                         metricsRowList.Add(row);

@@ -134,6 +134,7 @@ namespace REDZONE.Controllers
             string status = api.saveRZMetric(raw_json);
             if (status.ToLower().Contains("success"))
             {
+                Session["metricSaveMsg"] = "Data Saved Successfully.";
                 return "Success";
             }
             else { return status; }

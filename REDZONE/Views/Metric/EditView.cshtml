@@ -10,6 +10,8 @@
 
     if (Model.metricPeriodStatus != null && Model.metricPeriodStatus.ToUpper().Equals("CLOSED")) tblCaption = "Warning, the current metric period has been closed and it cannot longer be modified.";
     if (Model.isAuto) tblCaption = "Warning, the values for this metric are generated automatically. They cannot be modified.";
+    string errorMessage = (Session["metricSaveMsg"] == null)?"":Session["metricSaveMsg"].ToString();
+    Session["metricSaveMsg"] = ""; // Reset the error Message always
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <link href="~/Content/EditView.css" rel="stylesheet" />
@@ -221,7 +223,7 @@
                     }
                 </div>  <!-- ------ Form Buttons ROW End Section--------- -->
                 <div class="row alert-success" id="divMsg" style="padding: 7px; font-weight:bold; font-size:large; text-align:center; display:none">
-                    Data Saved Successfully
+                    @errorMessage
                 </div>
             }
             <br />
@@ -265,6 +267,10 @@
 
 <script>
     $(document).ready(function () {
+        if ("@errorMessage" != ""){
+            $("#divMsg").show().fadeOut(3000);
+        }
+
         $("#btnCancel").click(function () {
             //location.href('/Home');
             location.reload();
@@ -466,7 +472,7 @@
                 }
             }).done(function (d) {
                 if (d == "Success") {
-                    var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
+                    @*var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";*@
                     //alert("Navigating to: /Metric/EditView/" + urlSufixx);
                     if (doClose){
                         closePeriod();
@@ -474,16 +480,16 @@
                         location.reload();
                     }
                     else{
-                        $("#frmModified").val("N");
-                        $("#btnSave").prop('disabled', true);
-                        $("#divMsg").show().fadeOut(3000);
+                        //$("#frmModified").val("N");
+                        //$("#btnSave").prop('disabled', true);
+                        //$("#divMsg").show().fadeOut(3000);
+                        
                         //alert("Data Saved Successfully!");
                         //location.href = "/Metric/EditView/" + urlSufixx;
-                    }
-                    //location.reload();
+                        location.reload();  //If we are not doing a close, just reload the page
+                    }                    
                 } else {
                     alert("Error Saving the data!\n" + JSON.stringify(d));
-
                 }
                 //$("#output").html(JSON.stringify(d));
             });
@@ -609,7 +615,7 @@
 
         //alert( recordsChanged + " building were Updated.");
         jsonPayloadDetail = jsonPayloadDetail + ']}';
-
+        //alert("Jason submitted:\n" + jsonPayloadDetail);
         return jsonPayloadHeader + jsonPayloadDetail
     }
     //------------------------------------------------------------------------------------------------
