@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<REDZONE.Models.MPReason>
+
 @{
     ViewBag.Title = "Reason Management";
 }
@@ -13,33 +14,102 @@
             <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
         </div>
 
-        @if (ViewBag.id != 0)
-        {
-            //REASON LIST
-            <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
-            <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
-                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left "><h3><span style="font-weight:normal">Metric Period Reasons</span></h3></div>
-                <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
-                    @Html.Action("_RsnList")
-                </div>
-            </div>
-        }
     </div>
 
     <div class="panel-body ">
-        @if (ViewBag.id != 0)
+        @*@if (ViewBag.id != 0)
         {
             //REASON DETAIL
+
             <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
                 <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
-                @*<div type="hidden" id="msgLoading">
+                <div type="hidden" id="msgLoading">
                     <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
-                </div>*@
+                </div>
                 <div id="divReasonDetailsView">
                     @Html.Action("_RsnDetail")
                 </div>
             </div>
+        }*@
+
+        @if (ViewBag.id != 0)
+        {
+            <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
+            <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
+                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left "><h3><span style="font-weight:normal">Metric Period Reasons</span></h3></div>
+                <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
+                    <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden">
+
+                        @*REASON LIST*@
+                        <table class="table table-bordered table-condensed table-hover table-striped">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.reason_id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.reason_text)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.reason_order)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.reason_std_yn)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.times_used)
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                            @if (Model.Count() > 0)
+                            {
+
+                                foreach (REDZONE.Models.MPReason item in Model)
+                                {
+                                    <tr class="reasonListRow">
+                                        <td>
+                                            <span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
+                                        </td>
+                                        <td style="display:none">
+                                            <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
+                                        </td>
+                                        <td>
+                                            <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
+                                        </td>
+                                        <td>
+                                            <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
+                                        </td>
+                                        <td style="display:none">
+                                            <span id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
+                                        </td>
+                                        <td>
+                                            <span id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
+                                        </td>
+                                        <td>
+                                            <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
+                                        </td>
+
+                                        <td>
+                                            <input type="button" class="btnReasonDetails" value="Details" />
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        </table>
+
+                    </div>
+                    <hr />
+                    <div class="row" style="text-align:left; margin-left: 5px">
+                        <input type="button" class="btn btn-primary" id="btnAddReason" value="Add New Reason" />
+                        <input type="button" class="btn btn-primary" id="btnReorderReasons" value="Reorder" />
+                    </div>
+
+                </div>
+            </div>
         }
+
         else
         {
             <div style="color: red">
@@ -73,55 +143,165 @@
     </div>
 </div>
 
+<div id="reasonEditForm" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:80%">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Reason Details</h4>
+            </div>
+            <div class="modal-body" id="reasonEditBody">
+                
+            </div>
+            <div class="modal-footer" id="reasonEditFooter">
+                <input type="button" disabled class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
+                <input type="button" disabled class="btn btn-primary" id="btnSaveReasonDetail" value="Save" />
+                <input type="button" disabled class="btn btn-primary" style="display:none" id="btnAddReasonDetail" value="Add" />
+                <input type="button" disabled class="btn btn-primary" id="btnRemoveReason" value="Remove" />
+                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 
 <script>
     $(document).ready(function () {
         //Metric Period Dropdown
+        //------------------------------------------------------------------------
         $("#metric_period_sel_list").on("change", function () {
             var selId = $(this).val();
             location.href = "/ReasonMgmt/Index/" + selId;
         });
 
-        //------------------------------------
-        //On Reason List row click
-        //$("#divReasonList").on('click', '.reasonListRow', function () {
+        //On Reason List details button click
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '.btnReasonDetails', function(){
+
             //If have made changes in the editor to another reason, prompt user.
 
-            //ajax GET specified model
+            var tempScrollTop = $(window).scrollTop();
 
-            $(".editable-rsn-attr").prop("disabled", true);
+            //Get data for MPReason model from specified row.
+            var reason_id = $(this).parent().siblings().find("#reason_id").text();
+            var metric_period_id = $(this).parent().siblings().find("#metric_period_id").text();
+            var reason_text = $(this).parent().siblings().find("#reason_text").text();
+            var reason_order = $(this).parent().siblings().find("#reason_order").text();
+            var reason_description = $(this).parent().siblings().find("#reason_description").text();
+            var reason_std_yn = $(this).parent().siblings().find("#reason_std_yn").text();
+            var times_used = $(this).parent().siblings().find("#times_used").text();
 
-            //Sets detail buttons
-            $("#btnSaveReasonDetail").show();
-            $("#btnAddReasonDetail").hide();
-            $("#btnEditReasonDetail").prop("disabled", false);
-            $("#btnSaveReasonDetail").prop("disabled", true);
-            $("#btnRemoveReason").prop("disabled", true);
-            $("#btnCancelReasonEdit").prop("disabled", true);
+            // Put data into a single object.
+            var formData = {
+                reason_id             : reason_id,      
+                metric_period_id      : metric_period_id,
+                reason_text           : reason_text,
+                reason_order          : reason_order,
+                reason_description    : reason_description,
+                reason_std_yn         : reason_std_yn,
+                times_used            : times_used
+            };
+
+            // Make the Ajax Call to Return _ReasonDetail Partial View
+            $.ajax({
+                type      : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                //method    : 'POST',
+                @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
+                url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
+                //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
+                data      : formData, // our data object created earlier
+                //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
+                //encode    : true,
+                cache: false,
+                //--- On error, execute this function ------
+                error: function (xhr, status, error) {
+                    //var err = eval("(" + xhr.responseText + ")");
+                    $("#reasonEditBody").html(xhr.responseText);
+                    //$("#msgLoading").hide();
+                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //This code Executes After the Ajax call completes successfully
+                //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
+                $("#reasonEditBody").html(d);
+                //$("#msgLoading").hide();
+                $("#btnReasonDetails").prop("disabled", false);
+                $(".editable-rsn-attr").prop("disabled", true);
+
+                //Sets detail buttons
+                $("#btnSaveReasonDetail").show();
+                $("#btnAddReasonDetail").hide();
+                $("#btnEditReasonDetail").prop("disabled", false);
+                $("#btnSaveReasonDetail").prop("disabled", true);
+                $("#btnRemoveReason").prop("disabled", true);
+                $("#btnCancelReasonEdit").prop("disabled", false);
+
+                $(window).scrollTop(tempScrollTop);
+
+                $('#reasonEditForm').modal('show');
+            });
         });
 
-        //------------------------------------
         //Add New Reason button
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnAddReason', function () {
 
             //If have made changes in the editor to another reason, prompt user.
 
-            //ajax GET null model
+            var tempScrollTop = $(window).scrollTop();
 
-            $(".editable-rsn-attr").prop("disabled", false);
+            //Get data for MPReason model from specified row.
+            var metric_period_id = $(MtrcPeriodId).val();
 
-            //Sets detail buttons
-            $("#btnAddReasonDetail").show();
-            $("#btnSaveReasonDetail").hide();
-            $("#btnAddReasonDetail").prop("disabled", false);
-            $("#btnEditReasonDetail").prop("disabled", true);
-            $("#btnRemoveReason").prop("disabled", true);
-            $("#btnCancelReasonEdit").prop("disabled", false);
+            // Put data into a single object.
+            var formData = {    
+                metric_period_id      : metric_period_id
+            };
+
+            // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
+            $.ajax({
+                type      : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                //method    : 'POST',
+                @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
+                url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
+                //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
+                data      : formData, // our data object created earlier
+                //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
+                //encode    : true,
+                cache: false,
+                //--- On error, execute this function ------
+                error: function (xhr, status, error) {
+                    //var err = eval("(" + xhr.responseText + ")");
+                    $("#reasonEditBody").html(xhr.responseText);
+                    //$("#msgLoading").hide();
+                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //This code Executes After the Ajax call completes successfully
+                //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
+                $("#reasonEditBody").html(d);
+                //$("#msgLoading").hide();
+                $(".editable-rsn-attr").prop("disabled", false);
+
+                //Sets detail buttons
+                $("#btnAddReasonDetail").show();
+                $("#btnSaveReasonDetail").hide();
+                $("#btnAddReasonDetail").prop("disabled", false);
+                $("#btnEditReasonDetail").prop("disabled", true);
+                $("#btnRemoveReason").prop("disabled", true);
+                $("#btnCancelReasonEdit").prop("disabled", false);
+
+                $(window).scrollTop(tempScrollTop);
+
+                $('#reasonEditForm').modal('show');
+            });
         });
 
-        //------------------------------------
         //Reorder Button -> Reorder Popup
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderReasons', function () {
 
             //If have made changes in the editor to another reason, prompt user.
@@ -148,9 +328,9 @@
             });
         });
 
-        //------------------------------------
         //Edit Button
-        $("#divEditor").on('click', '#btnEditReasonDetail', function () {
+        //------------------------------------------------------------------------
+        $("#reasonEditFooter").on('click', '#btnEditReasonDetail', function () {
 
             $(".editable-rsn-attr").prop("disabled", false);
 
@@ -159,7 +339,7 @@
             $("#btnAddReasonDetail").hide();
             $("#btnEditReasonDetail").prop("disabled", true);
             $("#btnSaveReasonDetail").prop("disabled", false);
-            var metricValueUsedOn = 0;
+            var metricValueUsedOn = $("#timesUsed").val();
             if (metricValueUsedOn == 0) {
                 $("#btnRemoveReason").prop("disabled", false);
             }
@@ -170,8 +350,8 @@
             $("#btnCancelReasonEdit").prop("disabled", false);
         });
 
-        //------------------------------------
         //Add Button
+        //------------------------------------------------------------------------
         $("#divEditor").on('click', '#btnAddReasonDetail', function () {
             //Prompt User
 
@@ -180,8 +360,8 @@
             alert('Add')
         });
 
-        //------------------------------------
         //Save Button
+        //------------------------------------------------------------------------
         $("#divEditor").on('click', '#btnSaveReasonDetail', function () {
             //Prompt User
 
@@ -190,8 +370,8 @@
             alert('Save')
         });
 
-        //------------------------------------
         //Remove Button
+        //------------------------------------------------------------------------
         $("#divEditor").on('click', '#btnRemoveReason', function () {
             //Prompt User
 
@@ -200,9 +380,10 @@
             alert('Remove')
         });
 
-        //------------------------------------
         //Cancel Button
+        //------------------------------------------------------------------------
         $("#divEditor").on('click', '#btnCancelReasonEdit', function () {
+
             //Reload either the original data or null data
             //Make editor readonly
 
@@ -221,7 +402,7 @@
             $("#btnCancelReasonEdit").prop("disabled", true);
         });
 
-        //------------------------------------
+        //------------------------------------------------------------------------
         //Reorder Popup Done Button
         $("#reasonReorderForm").on('click', '#btnReorderPopupDone', function () {
             //Prompt are you sure?

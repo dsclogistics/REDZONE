@@ -1116,5 +1116,38 @@ namespace REDZONE.AppCode
             
             return prevNext;
         }
+        public List<MPReason> getMPReasonList(string metricPeriodId)
+        {
+            List<MPReason> MPReasonList = new List<MPReason>();
+            MPReason tempMPReason;
+
+            string raw_data = api.getMetricPeriodReasons(metricPeriodId);
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jReasonList = (JArray)parsed_result["reasons"];
+                foreach (var res in jReasonList)
+                {
+                    tempMPReason = new Models.MPReason();
+                    tempMPReason.reason_id = (string)res["mpr_id"];
+                    tempMPReason.metric_period_id = (string)res["mtrc_period_id"];
+                    tempMPReason.reason_text = (string)res["mpr_display_text"];
+                    tempMPReason.reason_order = (string)res["mpr_display_order"];
+                    tempMPReason.reason_description = (string)res["mpr_desc"];
+                    tempMPReason.reason_std_yn = (string)res["mpr_std_yn"];
+                    tempMPReason.times_used = (string)res["usedby"];
+
+                    MPReasonList.Add(tempMPReason);
+                }
+
+            }
+            catch
+            {
+
+            }
+            return MPReasonList;
+        }
     }
 }
