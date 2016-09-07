@@ -70,6 +70,7 @@ namespace REDZONE.Models
         public string isGoalMet { get; set; }
         public int score { get; set; }    
         public string displayClass { get; set; }
+        public string cellStatus { get; set; }
 
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }

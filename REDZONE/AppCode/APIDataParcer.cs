@@ -538,7 +538,7 @@ namespace REDZONE.AppCode
                     foreach (var mtr in apiMetrics)
                     {
                         MeasuredRowEntity row = new MeasuredRowEntity();
-                        row.rowName = (string)mtr["mtrc_prod_display_text"];
+                        row.rowName = (string)mtr["mtrc_prod_display_text"];                       
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = (string)mtr["mpg_display_text"];                              
@@ -548,6 +548,7 @@ namespace REDZONE.AppCode
                             foreach (var m in months)
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity headerCol = new MeasuredCellEntity();
                                 MeasuredCellEntity totalCol = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
@@ -555,8 +556,12 @@ namespace REDZONE.AppCode
                                 row.entityMetricCells.Add(temp);
                                 if(rowHeader.entityMetricCells.Count< months.Count)
                                 {
-                                    //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row
-                                    rowHeader.entityMetricCells.Add(temp);                                    
+                                    //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row                                    
+                                    headerCol.metricName = (string)m["Month"];
+                                    headerCol.metricValue = String.Empty;
+                                    headerCol.isViewable = showAllMonths ? true : false;
+                                    rowHeader.entityMetricCells.Add(headerCol);
+
                                     totalCol.metricName = (string)m["Month"];
                                     totalCol.metricValue = "0";
                                     totalCol.score = 0;
@@ -579,6 +584,7 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             string cellStatus = (string)apiCellValue["rz_mps_status"];
+                                            tmp.cellStatus = cellStatus;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
 
                                             //..... Get the value in a formatted way
@@ -641,7 +647,45 @@ namespace REDZONE.AppCode
                             }
                         }
                         metricsRowList.Add(row);
-                    }                  
+                    }
+
+                    ////Update the Column Month Header Row Status based on the Individual Building Cell Status
+                    int headerIndex = 0;
+                    foreach (MeasuredCellEntity headerColumn in rowHeader.entityMetricCells)
+                    {  //Loop through all header metric cells 
+                        headerColumn.metricMonth = headerColumn.metricName;
+                        headerColumn.metricName = getMonthShortName(headerColumn.metricName);
+                        string columStatus = "Inactive";
+                        foreach (MeasuredRowEntity bMetricRow in metricsRowList) {
+                            //Loop thrugh all Metric rows to inspect each cell at the given index
+
+
+                            string cellStatus = (bMetricRow.entityMetricCells[headerIndex].cellStatus == null)?"Inactive":bMetricRow.entityMetricCells[headerIndex].cellStatus;
+                            if (columStatus != "Mixed") {
+
+                                if (cellStatus.Equals("Open"))
+                                {
+                                    if (columStatus.Equals("Closed")) { columStatus = "Mixed"; }
+                                    else { columStatus = "Open"; }
+                                }
+                                else if (cellStatus.Equals("Closed"))
+                                {
+                                    if (columStatus.Equals("Open")) { columStatus = "Mixed"; }
+                                    else { columStatus = "Closed"; }
+                                }
+                            }
+
+                        }
+                        headerColumn.cellStatus = columStatus;
+                        if (columStatus.Equals("Inactive")) { 
+                          //Set the corresponding values on the TotalsRow Column 
+                            rowTotals.entityMetricCells[headerIndex].cellStatus = "Inactive";
+                            rowTotals.entityMetricCells[headerIndex].metricValue = "";
+                            rowTotals.entityMetricCells[headerIndex].displayClass = "cell-NoValue";
+                        }
+                        headerIndex++;
+                    }
+
                     bSummary.buildingHeadings = rowHeader;
                     bSummary.buildingScoreRow = rowTotals;
                     bSummary.viewableColumns = bSummary.buildingHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
@@ -775,22 +819,29 @@ namespace REDZONE.AppCode
                         {
                             foreach (var m in months)
                             {
-                                MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity hdrCell = new MeasuredCellEntity();
                                 MeasuredCellEntity goalCell = new MeasuredCellEntity();
+                                MeasuredCellEntity buildingValCell = new MeasuredCellEntity();
                                 MeasuredCellEntity missedGoalCell= new MeasuredCellEntity();
-                                temp.metricName = (string)m["Month"];
-                                temp.metricValue = String.Empty;
-                                temp.displayClass = "cell-NoValue";
-                                temp.metricDoubleValue = sortDir=="ASC"?99999:-99999;
-                                temp.isViewable = false;                                
-                                row.entityMetricCells.Add(temp);                                
+                                buildingValCell.metricName = (string)m["Month"];
+                                buildingValCell.metricValue = String.Empty;
+                                buildingValCell.displayClass = "cell-NoValue";
+                                buildingValCell.metricDoubleValue = (sortDir=="ASC")?99999:-99999;
+                                buildingValCell.isViewable = false;
+                                row.entityMetricCells.Add(buildingValCell); 
+                                
+                                hdrCell.metricName = (string)m["Month"];
+                                hdrCell.metricValue = String.Empty;
+                                hdrCell.displayClass = "cell-NoValue";
+                                hdrCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
+                                hdrCell.isViewable = false;
                                 goalCell.metricMonth = (string)m["Month"];
                                 goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
                                 missedGoalCell.metricName = (string)m["Month"];
                                 missedGoalCell.score = 0;
                                 missedGoalCell.metricValue = "0";
                                 if (header.entityMetricCells.Count < months.Count)
-                                { header.entityMetricCells.Add(temp); }
+                                { header.entityMetricCells.Add(hdrCell); }
                                 if (goal.entityMetricCells.Count < months.Count)
                                 { goal.entityMetricCells.Add(goalCell); }
                                 if (mSummary.missedGoals.entityMetricCells.Count < months.Count)
@@ -856,9 +907,20 @@ namespace REDZONE.AppCode
                     }
                     mSummary.rowGoal = goal;
                     //Before Assigning the Header Information to the model, switch the month display names to Short Names
+                    int columnIndex = 0;
                     foreach(MeasuredCellEntity hdrMonth in header.entityMetricCells){
-                        hdrMonth.metricName = getMonthShortName(hdrMonth.metricName);
+                        hdrMonth.metricMonth = getMonthShortName(hdrMonth.metricName);
+                        //hdrMonth.score      //Use score field to store number of buildings that have values
+                        int valuesFound = 0;
+                        foreach (var x in rowMetrics) {
+                            if (!String.IsNullOrEmpty(x.entityMetricCells[columnIndex].metricValue)) {
+                                valuesFound++;
+                            }
+                        }
+                        hdrMonth.score = valuesFound;
+                        columnIndex++;
                     }
+                    //---- Finished populating nuber of values per column
                     mSummary.rowHeadings = header;
                     mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;

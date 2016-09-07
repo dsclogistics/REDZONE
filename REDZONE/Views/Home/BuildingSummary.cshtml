@@ -73,9 +73,9 @@
             </div>
         </div> <!-- END OF PANEL HEADER -->
     <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
-        <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
+        <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; "> 
                 <table class="" style="width:100%;">
-                    <tr class="rowHeader">
+                    <tr class="rowHeader">  <!-- HEADERS/TITLES ROW -->
                         <td class="buildingCol" style="width:16.66%">
                             <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
                         </td>
@@ -88,7 +88,7 @@
                             {
                                 <td class="buildingCol" style="width:@Model.metricColWidth">
                                     @dscBldngHdr.metricName
-                                    @if (@dscBldngHdr.metricName.Equals("July"))
+                                    @if (@dscBldngHdr.cellStatus.Equals("Mixed") || @dscBldngHdr.cellStatus.Equals("Open"))
                                     { 
                                         <span style="color:red">*</span>                                    
                                     }
@@ -98,7 +98,7 @@
                         <td class="buildingCol" style="width:8.33%;">
                             Goals Missed
                         </td>
-                    </tr>
+                    </tr>  <!-- END OF HEADERS/TITLES ROW -->
 
                     @foreach (var buildingRow in Model.metricRows)
                     {
