@@ -271,6 +271,29 @@ namespace REDZONE.AppCode
 
             return longName;
         }
+
+        public static string getUserRoles(string username)
+        {
+            //Get User Role from DB or from harcoded List
+            string appUserRoles = String.Empty;
+            //appUserRoles = "1;2;3;4;5;6;7;8";          //Temp Hardcoding
+            switch (username.ToUpper())
+            {
+                // Set ADMIN Group Level
+                case "DELGADO_FELICIANO":
+                case "ABDUGUEV_RASUL":
+                case "POGANI_KEVIN":
+                    appUserRoles = "ADMIN;";
+                    break;
+                case "GOPAL_GIRI":
+                    appUserRoles = "SUPER";
+                    break;
+                default:
+                    appUserRoles = "USER";
+                    break;
+            }
+            return appUserRoles;
+        }
     }
 
 

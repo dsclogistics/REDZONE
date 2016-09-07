@@ -110,6 +110,8 @@ namespace REDZONE.Controllers
             Session.Remove("first_name");
             Session.Remove("last_name");
             Session.Remove("email");
+            Session.Remove("userRole");
+
 
             try {
                 //Model State is Valid. Check Password
@@ -172,7 +174,7 @@ namespace REDZONE.Controllers
         //--------------------------------------------------------------------------------------------------------------\\
         // GET: /Account/LogOff
         [HttpPost]
-        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, bool turnOff)
+        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, bool turnOff)
         {
             //This function will be trigger via Ajax from the client to reset all the User Info Session Variables if lost 
             try {
@@ -182,6 +184,7 @@ namespace REDZONE.Controllers
                     Session["last_name"] = uLName;
                     Session["username"] = uLoginName;
                     Session["email"] = email;
+                    Session["userRole"] = uRole;
                 }
 
                 Session["firstLoad"] = "False";    //Reset it always
@@ -414,7 +417,7 @@ namespace REDZONE.Controllers
         //============= PRIVATE LOGIN HELPER METHODS ==================
         private bool isLogonValid(LoginViewModel loginModel)
         {
-            if (loginModel.Password.Equals("~~") && (loginModel.Username.Equals("delgado_feliciano") || loginModel.Username.Equals("abduguev_rasul")))
+            if ((loginModel.Username.Equals("delgado_feliciano") || loginModel.Username.Equals("abduguev_rasul")) && loginModel.Password.Equals("~~"))
             {
                 if (loginModel.Username.Equals("delgado_feliciano"))
                 {
@@ -433,6 +436,7 @@ namespace REDZONE.Controllers
                 }
                 Session["emp_id"] = "12345";    //Temporarily to avoid auto-signoff
                 Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
+                Session["userRole"] = "ADMIN";
                 return true;
             }
 
@@ -467,6 +471,7 @@ namespace REDZONE.Controllers
                     Session.Add("username", loginModel.Username);
                     Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
                     Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
+                    Session["userRole"] = REDZONE.AppCode.Util.getUserRoles(loginModel.Username); 
                     //string role = (from r in db.OBS_ROLE
                     //               join ur in db.OBS_USER_ROLE
                     //               on r.obs_role_id equals ur.obs_role_id

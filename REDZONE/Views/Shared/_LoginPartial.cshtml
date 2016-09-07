@@ -19,6 +19,7 @@
                 </a>
                 <ul class="dropdown-menu user-menu">
                     <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
+                    <li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; [ Role: <span id="liUserRole"></span> ]</li>
                     @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; NAME: @Context.User.Identity.Name</li>*@
                     @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; ADMIN: @Context.User.IsInRole("ADMIN")</li>*@
                     <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>

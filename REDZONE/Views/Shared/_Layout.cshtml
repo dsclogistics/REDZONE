@@ -7,12 +7,14 @@
     string userLName = "";
     string userFullName = "";
     string userEmail = "";
+    string userRole = "";
     try
     {
         userFName = Session["first_name"].ToString();
         userLName = Session["last_name"].ToString();
         userFullName = Session["username"].ToString();
         userEmail = Session["email"].ToString();
+        userRole = Session["userRole"].ToString();
     }
     catch
     {
@@ -63,14 +65,14 @@
             resetUserInfo("", "", "", "", true);
         }
 
-        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pTurnOff) {
+        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
             $.ajax({
-                //url: '@Url.Action("getNewCAMid", "cognosUtils")',
+                @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
                 url: '/Account/resetUserInfo',
                 method: "POST",
                 cache: false,
                 dataType: "text",
-                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, turnOff: pTurnOff },
+                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert("Ajax Failed: " + errorThrown);
                     localStorage.clear();
@@ -89,21 +91,33 @@
                 localStorage.setItem("username", "@userFullName");
                 localStorage.setItem("email", "@userEmail");
                 localStorage.setItem("firstLoad", "False");
-                setServerPostback();
+                localStorage.setItem("userRole", "@userRole");
+                resetUserInfo("", "", "", "", "", true);
+                //setServerPostback();
+                alert("This is a first Page load");
             }
             else {
                 if ("@pageFirstLoad" == "") {
                     //Somehow the Session Variables were lost. reset Them!
                     //alert("Session Variables were somehow lost. Resetting...");
-                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), false);
+                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
                     $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
                 }
+                //alert("This is not the fist application page load.");
             }
         }
         catch(err) {
             alert("An unhandled error exist: \n" + err);
         }
 
+        $(document).ready(function () {
+            var userRole = localStorage.getItem("userRole");
+            $("#liUserRole").html("@userRole");
+            //$("#liUserRole").click(function () {
+            //    alert("Your Role is '" + $(this).html() + "'");
+            //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
+            //});
+        });
     </script>    
 </head>
 

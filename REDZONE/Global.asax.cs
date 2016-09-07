@@ -178,26 +178,26 @@ namespace REDZONE
 
         //private string getUserRoles(string username)
         //{
-        //    //Get User Role from DB or from 
+        //    //Get User Role from DB or from harcoded List
         //    string appUserRoles = String.Empty;
-        //    appUserRoles = "1;2;3;4;5;6;7;8";          //Temp Hardcoding
-        //    //switch (username.ToUpper())
-        //    //{
-        //    //    // Set ADMIN Group Level
-        //    //    case "DELGADO_FELICIANO":    
-        //    //        appUserRoles = "ADMIN;AUTO;MANUAL";
-        //    //        break;
-        //    //    case "RASUL ABDUGUEV":
-        //    //    case "KEVIN POGANI":
-        //    //        appUserRoles = "AUTO";
-        //    //        break;
-        //    //    default:
-        //    //        appUserRoles = "MANUAL";
-        //    //        break;
-        //    //}
-
+        //    //appUserRoles = "1;2;3;4;5;6;7;8";          //Temp Hardcoding
+        //    switch (username.ToUpper())
+        //    {
+        //        // Set ADMIN Group Level
+        //        case "DELGADO FELICIANO":
+        //        case "RASUL ABDUGUEV":
+        //        case "KEVIN POGANI":
+        //            appUserRoles = "ADMIN;AUTO;MANUAL";
+        //            break;
+        //        case "GIRI GOPAL":
+        //            appUserRoles = "AUTO";
+        //            break;
+        //        default:
+        //            appUserRoles = "MANUAL";
+        //            break;
+        //    }
         //    return appUserRoles;
-        //} 
+        //}
 
     }
 }

@@ -48,9 +48,6 @@ namespace REDZONE.Controllers
             catch(Exception ex) {
                 return View("ErrorMessage", ex);
             }
-            
-           
-
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         [HttpPost]
