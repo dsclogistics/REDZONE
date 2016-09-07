@@ -568,8 +568,7 @@ namespace REDZONE.AppCode
                                     totalCol.isViewable = showAllMonths ? true : false;
                                     rowTotals.entityMetricCells.Add(totalCol);
                                     //Set the Cell Value and URL to use for the Actions Row.
-                                    totalCol = getActionDataforMonth( (string)m["Month"], bSummary.year );
-                                    rowActions.entityMetricCells.Add(totalCol);
+                                    rowActions.entityMetricCells.Add(getActionDataforMonth( (string)m["Month"], bSummary.year ));
                                 }
                             }
                         }
@@ -598,6 +597,7 @@ namespace REDZONE.AppCode
 
                                             if (!cellStatus.Equals("Open"))
                                             {
+                                                //The "score" field on the Action Row holds the number of metrics that are closed for that specific month
                                                 try { rowActions.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]).score++; }
                                                 catch { }                                                
                                             }
@@ -732,8 +732,9 @@ namespace REDZONE.AppCode
             DateTime todayDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1);
 
             //The Action Cell is visible only if it's the last month or the currnet month as long as they are closed
-            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate == todayDate)) ? true : false;
+            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate.AddMonths(2) == todayDate) || (metricDate == todayDate)) ? true : false;
             actionCell.metricMonth = actionMonth;
+            actionCell.metricName = getMonthShortName(actionMonth);
             actionCell.metricValue = actionCell.isViewable ? "Action Required [ Click Here ]" : "";
 
             switch (actionMonth.ToUpper()) { 

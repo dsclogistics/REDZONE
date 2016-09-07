@@ -161,14 +161,13 @@
 
         <div class="row" style="border:none; margin: 0; padding:0; ">
             <table class="" style="border:none; width:100%;">
-                <tr class="" style="border:none">
-                    <!-- ACTIONS ROW   -->
+                <tr class="" style="border:none">   <!-- ACTIONS ROW   -->
                     <td class=" " style="width:16.66%; border:none">
                         <br />
                     </td>
                     <td class="" style="width:8.33%; border:none">
                         <br />
-                    </td><!-- Goal Column -->
+                    </td>
                     @{colCounter = 0;}
                     @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
                     {
@@ -177,14 +176,14 @@
                         {
                             <td class="" style="border:none; width:@Model.metricColWidth">
                                 @*@if (String.IsNullOrEmpty(@actionCell.metricValue) || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3 )*@
-                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || actionCell.score < 3)
+                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
                                 { <br /> }
                                 else
                                 {
                                     @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
                                     <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
                                     <br />
-                                    <text>Total Closed: @actionCell.score</text>
+                                    @*<text>Total Closed: @actionCell.score</text>*@
                                 }
                             </td>
                         }
