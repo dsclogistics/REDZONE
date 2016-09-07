@@ -111,6 +111,8 @@ td.center {
 .totalsRow {
     border-top: 1px solid gray !important;
     font-weight:bold;
+    padding:0; 
+    background-color: #fbfbfb
 }
 /*.valueRow:hover td  {
     background-color: #f1f1f1 !important;

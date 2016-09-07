@@ -39,6 +39,8 @@ namespace REDZONE.Controllers
 
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
+           // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
+
             if (String.IsNullOrEmpty(sortDir)) { sortDir = "ASC"; }
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
 

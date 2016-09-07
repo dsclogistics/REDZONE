@@ -460,10 +460,18 @@ namespace REDZONE.AppCode
                                         tmpIndex++;
                                     }
                                     // Set the Building Row Display Class based on the score it has
-                                    if (b.rowScore < 3)
-                                    {
-                                        b.scoreDisplayClass = "Score-Met";
+                                    if (b.rowScore == 0)
+                                    {//Verify that the building has actual values (not only empty strings)
+                                        foreach (var x in b.entityMetrics)
+                                        {
+                                            if (!String.IsNullOrEmpty(x.metricValue))
+                                            {
+                                                b.scoreDisplayClass = "Score-Met";
+                                                break;
+                                            }
+                                        }
                                     }
+                                    else if (b.rowScore < 3)  { b.scoreDisplayClass = "Score-Met"; }
                                     else if (b.rowScore == 3) { b.scoreDisplayClass = "Score-Red3"; }
                                     else if (b.rowScore == 4) { b.scoreDisplayClass = "Score-Red4"; }
                                     else { b.scoreDisplayClass = "Score-Red5"; }
@@ -530,7 +538,7 @@ namespace REDZONE.AppCode
                     foreach (var mtr in apiMetrics)
                     {
                         MeasuredRowEntity row = new MeasuredRowEntity();
-                        row.rowName = (string)mtr["mtrc_prod_display_text"];
+                        row.rowName = (string)mtr["mtrc_prod_display_text"];                       
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = (string)mtr["mpg_display_text"];                              
@@ -540,6 +548,7 @@ namespace REDZONE.AppCode
                             foreach (var m in months)
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity headerCol = new MeasuredCellEntity();
                                 MeasuredCellEntity totalCol = new MeasuredCellEntity();
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
@@ -547,16 +556,19 @@ namespace REDZONE.AppCode
                                 row.entityMetricCells.Add(temp);
                                 if(rowHeader.entityMetricCells.Count< months.Count)
                                 {
-                                    //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row
-                                    rowHeader.entityMetricCells.Add(temp);                                    
+                                    //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row                                    
+                                    headerCol.metricName = (string)m["Month"];
+                                    headerCol.metricValue = String.Empty;
+                                    headerCol.isViewable = showAllMonths ? true : false;
+                                    rowHeader.entityMetricCells.Add(headerCol);
+
                                     totalCol.metricName = (string)m["Month"];
                                     totalCol.metricValue = "0";
                                     totalCol.score = 0;
                                     totalCol.isViewable = showAllMonths ? true : false;
                                     rowTotals.entityMetricCells.Add(totalCol);
                                     //Set the Cell Value and URL to use for the Actions Row.
-                                    totalCol = getActionDataforMonth( (string)m["Month"], bSummary.year );
-                                    rowActions.entityMetricCells.Add(totalCol);
+                                    rowActions.entityMetricCells.Add(getActionDataforMonth( (string)m["Month"], bSummary.year ));
                                 }
                             }
                         }
@@ -571,6 +583,7 @@ namespace REDZONE.AppCode
                                         if(tmp.metricName.ToUpper()== ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             string cellStatus = (string)apiCellValue["rz_mps_status"];
+                                            tmp.cellStatus = cellStatus;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
 
                                             //..... Get the value in a formatted way
@@ -584,6 +597,7 @@ namespace REDZONE.AppCode
 
                                             if (!cellStatus.Equals("Open"))
                                             {
+                                                //The "score" field on the Action Row holds the number of metrics that are closed for that specific month
                                                 try { rowActions.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]).score++; }
                                                 catch { }                                                
                                             }
@@ -611,15 +625,67 @@ namespace REDZONE.AppCode
                                 //goalRow.isViewable = true;                                
                             }
                             //After all Metric Values have been processed, loop thorugh the (Metrics) Row and set the appropiate Score Color Display Class
+                            int totalIndex = 0;
                             foreach (var temp in rowTotals.entityMetricCells) {
-                                if (temp.score < 3) { temp.displayClass = "Score-Met"; }
+                                if (temp.score == 0) {
+                                    temp.displayClass = "";  //Default to "Empty Class Display"
+                                    //Loop through all the buildings at the current Index. If a value if found for any building, set it as score met
+                                    foreach (var x in metricsRowList)
+                                    {
+                                        if (!String.IsNullOrEmpty(x.entityMetricCells[totalIndex].metricValue)) { 
+                                             //Current Column contains at least one value. Set Dispay class and exit the loop
+                                            temp.displayClass = "Score-Met";
+                                            break;  
+                                        }
+                                    }
+                                }
+                                else if (temp.score < 3) { temp.displayClass = "Score-Met"; }
                                 else if (temp.score == 3) { temp.displayClass = "Score-Red3"; }
                                 else if (temp.score == 4) { temp.displayClass = "Score-Red4"; }
                                 else { temp.displayClass = "Score-Red5"; }
+                                totalIndex++;
                             }
                         }
                         metricsRowList.Add(row);
-                    }                  
+                    }
+
+                    ////Update the Column Month Header Row Status based on the Individual Building Cell Status
+                    int headerIndex = 0;
+                    foreach (MeasuredCellEntity headerColumn in rowHeader.entityMetricCells)
+                    {  //Loop through all header metric cells 
+                        headerColumn.metricMonth = headerColumn.metricName;
+                        headerColumn.metricName = getMonthShortName(headerColumn.metricName);
+                        string columStatus = "Inactive";
+                        foreach (MeasuredRowEntity bMetricRow in metricsRowList) {
+                            //Loop thrugh all Metric rows to inspect each cell at the given index
+
+
+                            string cellStatus = (bMetricRow.entityMetricCells[headerIndex].cellStatus == null)?"Inactive":bMetricRow.entityMetricCells[headerIndex].cellStatus;
+                            if (columStatus != "Mixed") {
+
+                                if (cellStatus.Equals("Open"))
+                                {
+                                    if (columStatus.Equals("Closed")) { columStatus = "Mixed"; }
+                                    else { columStatus = "Open"; }
+                                }
+                                else if (cellStatus.Equals("Closed"))
+                                {
+                                    if (columStatus.Equals("Open")) { columStatus = "Mixed"; }
+                                    else { columStatus = "Closed"; }
+                                }
+                            }
+
+                        }
+                        headerColumn.cellStatus = columStatus;
+                        if (columStatus.Equals("Inactive")) { 
+                          //Set the corresponding values on the TotalsRow Column 
+                            rowTotals.entityMetricCells[headerIndex].cellStatus = "Inactive";
+                            rowTotals.entityMetricCells[headerIndex].metricValue = "";
+                            rowTotals.entityMetricCells[headerIndex].displayClass = "cell-NoValue";
+                        }
+                        headerIndex++;
+                    }
+
                     bSummary.buildingHeadings = rowHeader;
                     bSummary.buildingScoreRow = rowTotals;
                     bSummary.viewableColumns = bSummary.buildingHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
@@ -666,8 +732,9 @@ namespace REDZONE.AppCode
             DateTime todayDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1);
 
             //The Action Cell is visible only if it's the last month or the currnet month as long as they are closed
-            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate == todayDate)) ? true : false;
+            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate.AddMonths(2) == todayDate) || (metricDate == todayDate)) ? true : false;
             actionCell.metricMonth = actionMonth;
+            actionCell.metricName = getMonthShortName(actionMonth);
             actionCell.metricValue = actionCell.isViewable ? "Action Required [ Click Here ]" : "";
 
             switch (actionMonth.ToUpper()) { 
@@ -753,22 +820,29 @@ namespace REDZONE.AppCode
                         {
                             foreach (var m in months)
                             {
-                                MeasuredCellEntity temp = new MeasuredCellEntity();
+                                MeasuredCellEntity hdrCell = new MeasuredCellEntity();
                                 MeasuredCellEntity goalCell = new MeasuredCellEntity();
+                                MeasuredCellEntity buildingValCell = new MeasuredCellEntity();
                                 MeasuredCellEntity missedGoalCell= new MeasuredCellEntity();
-                                temp.metricName = (string)m["Month"];
-                                temp.metricValue = String.Empty;
-                                temp.displayClass = "cell-NoValue";
-                                temp.metricDoubleValue = sortDir=="ASC"?99999:-99999;
-                                temp.isViewable = false;                                
-                                row.entityMetricCells.Add(temp);                                
+                                buildingValCell.metricName = (string)m["Month"];
+                                buildingValCell.metricValue = String.Empty;
+                                buildingValCell.displayClass = "cell-NoValue";
+                                buildingValCell.metricDoubleValue = (sortDir=="ASC")?99999:-99999;
+                                buildingValCell.isViewable = false;
+                                row.entityMetricCells.Add(buildingValCell); 
+                                
+                                hdrCell.metricName = (string)m["Month"];
+                                hdrCell.metricValue = String.Empty;
+                                hdrCell.displayClass = "cell-NoValue";
+                                hdrCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
+                                hdrCell.isViewable = false;
                                 goalCell.metricMonth = (string)m["Month"];
                                 goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
                                 missedGoalCell.metricName = (string)m["Month"];
                                 missedGoalCell.score = 0;
                                 missedGoalCell.metricValue = "0";
                                 if (header.entityMetricCells.Count < months.Count)
-                                { header.entityMetricCells.Add(temp); }
+                                { header.entityMetricCells.Add(hdrCell); }
                                 if (goal.entityMetricCells.Count < months.Count)
                                 { goal.entityMetricCells.Add(goalCell); }
                                 if (mSummary.missedGoals.entityMetricCells.Count < months.Count)
@@ -833,6 +907,21 @@ namespace REDZONE.AppCode
                         rowMetrics.Add(row);
                     }
                     mSummary.rowGoal = goal;
+                    //Before Assigning the Header Information to the model, switch the month display names to Short Names
+                    int columnIndex = 0;
+                    foreach(MeasuredCellEntity hdrMonth in header.entityMetricCells){
+                        hdrMonth.metricMonth = getMonthShortName(hdrMonth.metricName);
+                        //hdrMonth.score      //Use score field to store number of buildings that have values
+                        int valuesFound = 0;
+                        foreach (var x in rowMetrics) {
+                            if (!String.IsNullOrEmpty(x.entityMetricCells[columnIndex].metricValue)) {
+                                valuesFound++;
+                            }
+                        }
+                        hdrMonth.score = valuesFound;
+                        columnIndex++;
+                    }
+                    //---- Finished populating nuber of values per column
                     mSummary.rowHeadings = header;
                     mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;
@@ -842,6 +931,36 @@ namespace REDZONE.AppCode
             { string error = e.Message; }
 
             return mSummary;
+        }
+
+        private string getMonthShortName(string monthLong)
+        {
+            string monthShort = String.Empty;
+            switch (monthLong) {
+                case "January":  monthShort = "Jan";
+                    break;
+                case "February": monthShort = "Feb";
+                    break;
+                //case "March":    monthShort = "March"; break;
+                //case "April":    monthShort = "April"; break;
+                //case "May":      monthShort = "May";   break;
+                //case "June":     monthShort = "June";  break;
+                //case "July":     monthShort = "July";  break;
+                case "August":   monthShort = "Aug";
+                    break;
+                case "September": monthShort = "Sept";
+                    break;
+                case "October":  monthShort = "Oct";
+                    break;
+                case "November": monthShort = "Nov";
+                    break;
+                case "December": monthShort = "Dec";
+                    break;
+                default:         monthShort = monthLong;
+                    break;
+            }
+
+            return monthShort;
         }
 
         //========= This Function "getMetricDisplayClass" returns the html class to use for Color Display for metric value cell based on the value, isGoalMet flag and metric status =========

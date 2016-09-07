@@ -73,9 +73,9 @@
             </div>
         </div> <!-- END OF PANEL HEADER -->
     <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
-        <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
+        <div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; "> 
                 <table class="" style="width:100%;">
-                    <tr class="rowHeader">
+                    <tr class="rowHeader">  <!-- HEADERS/TITLES ROW -->
                         <td class="buildingCol" style="width:16.66%">
                             <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
                         </td>
@@ -88,7 +88,7 @@
                             {
                                 <td class="buildingCol" style="width:@Model.metricColWidth">
                                     @dscBldngHdr.metricName
-                                    @if (@dscBldngHdr.metricName.Equals("July"))
+                                    @if (@dscBldngHdr.cellStatus.Equals("Mixed") || @dscBldngHdr.cellStatus.Equals("Open"))
                                     { 
                                         <span style="color:red">*</span>                                    
                                     }
@@ -98,7 +98,7 @@
                         <td class="buildingCol" style="width:8.33%;">
                             Goals Missed
                         </td>
-                    </tr>
+                    </tr>  <!-- END OF HEADERS/TITLES ROW -->
 
                     @foreach (var buildingRow in Model.metricRows)
                     {
@@ -158,16 +158,16 @@
 
                 </table>
         </div> <!-- End of DIV Table Table -->
+
         <div class="row" style="border:none; margin: 0; padding:0; ">
             <table class="" style="border:none; width:100%;">
-                <tr class="" style="border:none">
-                    <!-- ACTIONS ROW   -->
+                <tr class="" style="border:none">   <!-- ACTIONS ROW   -->
                     <td class=" " style="width:16.66%; border:none">
                         <br />
                     </td>
                     <td class="" style="width:8.33%; border:none">
                         <br />
-                    </td><!-- Goal Column -->
+                    </td>
                     @{colCounter = 0;}
                     @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
                     {
@@ -176,14 +176,14 @@
                         {
                             <td class="" style="border:none; width:@Model.metricColWidth">
                                 @*@if (String.IsNullOrEmpty(@actionCell.metricValue) || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3 )*@
-                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || actionCell.score < 3)
+                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
                                 { <br /> }
                                 else
                                 {
                                     @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
                                     <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
                                     <br />
-                                    <text>Total Closed: @actionCell.score</text>
+                                    @*<text>Total Closed: @actionCell.score</text>*@
                                 }
                             </td>
                         }
@@ -209,7 +209,7 @@
                     <div class="row" style="margin: 8px 10px 0px 10px; ">
                         <table class="table-bordered" style="margin:0;">
                             <tr>
-                                <td style="background-color:yellow; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">3 Red</td>
+                                <td style="background-color:#f9f97f; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">3 Red</td>
                                 <td style="text-align: left; padding-left:15px;">
                                     <span style="">Action Plan form required on individual red metrics from the Building Lead (click actionable link)</span>
                                 </td>

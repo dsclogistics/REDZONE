@@ -241,6 +241,36 @@ namespace REDZONE.AppCode
             return applicationAPIurl;
         }
 
+        public static string getMonthLongName(string shortName)
+        {
+            string longName = String.Empty;
+            switch (shortName)
+            {
+                case "Jan": longName = "January";
+                    break;
+                case "Feb": longName = "February";
+                    break;
+                //case "March":    monthShort = "March"; break;
+                //case "April":    monthShort = "April"; break;
+                //case "May":      monthShort = "May";   break;
+                //case "June":     monthShort = "June";  break;
+                //case "July":     monthShort = "July";  break;
+                case "Aug": longName = "August";
+                    break;
+                case "Sept": longName = "September";
+                    break;
+                case "Oct": longName = "October";
+                    break;
+                case "Nov": longName = "November";
+                    break;
+                case "Dec": longName = "December";
+                    break;
+                default: longName = shortName;
+                    break;
+            }
+
+            return longName;
+        }
     }
 
 
