@@ -3,11 +3,15 @@
 @{
     ViewBag.Title = "Reason Management";
 }
-
+<style>
+  th{
+      text-align:center;
+  }
+</style>
 <h2>Reason Management</h2>
 
 <div class="panel panel-default">
-    
+
     <div class="panel-heading" style="padding:4px">
         <div class="row " style="margin:0; margin-bottom:0px;">
             <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; background-color: lightgray; border-top-right-radius:0px; border-bottom-right-radius:0px">Select a Metric Period: </span></div>
@@ -18,107 +22,110 @@
 
     <div class="panel-body ">
         @*@if (ViewBag.id != 0)
-        {
-            //REASON DETAIL
+            {
+                //REASON DETAIL
 
-            <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
-                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
-                <div type="hidden" id="msgLoading">
-                    <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
+                    <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
+                    <div type="hidden" id="msgLoading">
+                        <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
+                    </div>
+                    <div id="divReasonDetailsView">
+                        @Html.Action("_RsnDetail")
+                    </div>
                 </div>
-                <div id="divReasonDetailsView">
-                    @Html.Action("_RsnDetail")
-                </div>
-            </div>
-        }*@
+            }*@
 
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
-           if (Model.Count() > 0) { 
-              <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
-                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
-                    <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
-                  @*<h3><span style="font-weight:normal">'</span></h3>*@
-                </div>
-                <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
-                    <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden">
-
-                        @*REASON LIST*@
-                        <table class="table table-bordered table-condensed table-hover table-striped">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.reason_id)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.reason_text)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.reason_order)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.reason_std_yn)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.times_used)
-                                </th>
-                                <th>
-
-                                </th>
-                            </tr>
-                            @if (Model.Count() > 0)
-                            {
-
-                                foreach (REDZONE.Models.MPReason item in Model)
-                                {
-                                    <tr class="reasonListRow">
-                                        <td>
-                                            <span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
-                                        </td>
-                                        <td style="display:none">
-                                            <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
-                                        </td>
-                                        <td>
-                                            <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
-                                        </td>
-                                        <td>
-                                            <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
-                                        </td>
-                                        <td style="display:none">
-                                            <span id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
-                                        </td>
-                                        <td>
-                                            <span id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
-                                        </td>
-                                        <td>
-                                            <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
-                                        </td>
-
-                                        <td>
-                                            <input type="button" class="btnReasonDetails" value="Details" />
-                                        </td>
-                                    </tr>
-                                }
-
-                            }
-                        </table>
-
+            if (Model.Count() > 0)
+            {
+                <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
+                    <div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
+                        <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
+                        @*<h3><span style="font-weight:normal">'</span></h3>*@
                     </div>
-                    <hr />
-                    <div class="row" style="text-align:left; margin-left: 5px">
-                        <input type="button" class="btn btn-primary" id="btnAddReason" value="Add New Reason" />
-                        <input type="button" class="btn btn-primary" id="btnReorderReasons" value="Reorder" />
-                    </div>
+                    <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
+                        <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden">
 
+                            @*REASON LIST*@
+                            <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
+                                <tr >
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.reason_id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.reason_text)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.reason_order)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.reason_std_yn)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.times_used)
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </tr>
+                                <tbody>
+                                    @foreach (REDZONE.Models.MPReason item in Model)
+                                    {
+                                        <tr class="reasonListRow">
+                                            <td>
+                                                <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span><span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
+                                            </td>
+                                            <td style="display:none">
+                                                <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
+                                            </td>
+                                            <td>
+                                                <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
+                                            </td>
+                                            <td>
+                                                <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
+                                            </td>
+                                            <td style="display:none">
+                                                <span id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
+                                            </td>
+                                            <td>
+                                                <span id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
+                                            </td>
+                                            <td>
+                                                <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
+                                            </td>
+
+                                            <td>
+                                                <input type="button" class="btnReasonDetails" value="Details" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <hr />
+                        <div class="row" style="text-align:left; margin-left: 5px">
+                            <div class="col-sm-6" id="btnsReorder" style="float:left">
+                                <button type="button" class="btn btn-primary" id="btnAddReason">Add New Reason</button>
+                                <button type="button" class="btn btn-primary" id="btnReorderReasons" style="margin-left:15px">Reorder</button>
+                            </div>
+                            <div class="col-sm-6" id="btnsReordering" style="float:right; display:none">
+                                <button type="button" class="btn btn-primary" id="btnReorderSave">Save Order Sequence</button>
+                                <button type="button" class="btn btn-primary" id="btnReorderCancel" style="margin-left:15px">Cancel Reorder</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-           }
-           else
-           { 
-              <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
-                  <span style="color:red; font-weight:bold;">NO REASONS HAVE BEEN DEFINED FOR THE SELECTED METRIC PERIOD  </span>
-              </div>
-           }
+            }
+            else
+            {
+                <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
+                    <span style="color:red; font-weight:bold;">NO REASONS HAVE BEEN DEFINED FOR THE SELECTED METRIC PERIOD  </span>
+                </div>
+            }
         }
 
         else
@@ -146,8 +153,8 @@
                 asdfkj
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnReorderPopupDone">Done</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="btnReorderPopupDone">Done</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left:15px">Cancel</button>
             </div>
         </div>
 
@@ -164,7 +171,7 @@
                 <h4 class="modal-title">Reason Details</h4>
             </div>
             <div class="modal-body" id="reasonEditBody">
-                
+
             </div>
             <div class="modal-footer" id="reasonEditFooter">
                 <input type="button" disabled class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
@@ -190,10 +197,10 @@
         });
 
 
-        
+
         //On Reason List details button click
         //------------------------------------------------------------------------
-        $("#divReasonList").on('click', '.btnReasonDetails', function(){
+        $("#divReasonList").on('click', '.btnReasonDetails', function () {
 
             //If have made changes in the editor to another reason, prompt user.
 
@@ -210,23 +217,23 @@
 
             // Put data into a single object.
             var formData = {
-                reason_id             : reason_id,      
-                metric_period_id      : metric_period_id,
-                reason_text           : reason_text,
-                reason_order          : reason_order,
-                reason_description    : reason_description,
-                reason_std_yn         : reason_std_yn,
-                times_used            : times_used
+                reason_id: reason_id,
+                metric_period_id: metric_period_id,
+                reason_text: reason_text,
+                reason_order: reason_order,
+                reason_description: reason_description,
+                reason_std_yn: reason_std_yn,
+                times_used: times_used
             };
 
             // Make the Ajax Call to Return _ReasonDetail Partial View
             $.ajax({
-                type      : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
                 //method    : 'POST',
                 @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
                 url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
                 //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
-                data      : formData, // our data object created earlier
+                data: formData, // our data object created earlier
                 //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
                 //encode    : true,
                 cache: false,
@@ -271,18 +278,18 @@
             var metric_period_id = $(MtrcPeriodId).val();
 
             // Put data into a single object.
-            var formData = {    
-                metric_period_id      : metric_period_id
+            var formData = {
+                metric_period_id: metric_period_id
             };
 
             // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
             $.ajax({
-                type      : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
                 //method    : 'POST',
                 @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
                 url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
                 //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
-                data      : formData, // our data object created earlier
+                data: formData, // our data object created earlier
                 //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
                 //encode    : true,
                 cache: false,
@@ -317,30 +324,47 @@
         //Reorder Button -> Reorder Popup
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderReasons', function () {
-
+            //Enable the Table row sortability function
+            reasonSortEnable();
+            $('.sortIcon').show();
+            $('#btnsReorder').hide();
+            $('#btnsReordering').show();
             //If have made changes in the editor to another reason, prompt user.
 
             //var mtrcIdToDisplay = $("#MtrcId").val();
 
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '/ReasonMgmt/_RsnReorder',     // the url where we want to direct our Ajax Call
-                method: "GET",
-                cache: false,
-                data: { },     //<---- Data Parameters (if not already passed in the Url)
-                //--- On error, execute this function ------
-                error: function (xhr, status, error) {
-                    //var err = eval("(" + xhr.responseText + ")");
-                    $("#divReasonDetailsView").html(xhr.responseText);
-                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //Insert the partial view retrieved into the output 'newMetricPeriodBody' panel
-                $('#reasonReorderBody').html(d);
-                $('#reasonReorderForm').modal('show');
-            });
+            //// ------------ Make the Ajax Call ---------------------------------------------
+            //$.ajax({
+            //    url: '/ReasonMgmt/_RsnReorder',     // the url where we want to direct our Ajax Call
+            //    method: "GET",
+            //    cache: false,
+            //    data: {},     //<---- Data Parameters (if not already passed in the Url)
+            //    //--- On error, execute this function ------
+            //    error: function (xhr, status, error) {
+            //        //var err = eval("(" + xhr.responseText + ")");
+            //        $("#divReasonDetailsView").html(xhr.responseText);
+            //        //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+            //    }
+            //}).done(function (d) {
+            //    //Execute this code After the Ajax call completes successfully
+            //    //Insert the partial view retrieved into the output 'newMetricPeriodBody' panel
+            //    $('#reasonReorderBody').html(d);
+            //    $('#reasonReorderForm').modal('show');
+            //});
         });
+        $("#divReasonList").on('click', '#btnReorderSave', function () {
+            alert("Saving functionality is not enabled yet");
+            $('.sortIcon').hide();
+            reasonSortDisable();
+        });
+
+        $("#divReasonList").on('click', '#btnReorderCancel', function () {
+            $('#btnsReordering').hide();
+            $('#btnsReorder').show();
+            $('.sortIcon').hide();
+            reasonSortDisable();
+        });
+
 
         //Edit Button
         //------------------------------------------------------------------------
@@ -429,4 +453,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/ReasonMgmt_Index.js"></script>
 }
