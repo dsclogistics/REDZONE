@@ -15,19 +15,29 @@ function reasonSortEnable() {
         $("#sortTable tbody").sortable('enable');
     }
     $("#sortTable tbody").sortable({
-        placeholder: 'sort-state-highlight',
+        //placeholder: 'sort-state-highlight',
+        placeholder: {
+            element: function (currentItem) {
+                return $('<tr><td colspan="8"><div style="background-color:#deecff; text-align:center; font-weight:bold; padding: 10px">DROP ITEM HERE<br/></div></td></tr>')[0];
+            },
+            update: function (container, p) {
+                return;
+            }
+        },
+
         helper: fixHelper,            //used to prevent the columns from collapsing while dragging the row
         //items: "tr:not(.sort-state-disabled)"
-        update: function (event, ui) {
-            //Reset the look and feel of the dragged row
+        //update: function (event, ui) { },  //triggers when the "sort" drag/drop movement completes/updates successfully,
+        stop: function (event, ui) {
+            //When the "sort" drag/drop completes(even if not successfully), Reset the look and feel of the dragged row
             ui.item.css("color", "black");
             ui.item.css("font-weight", "normal");
-            //alert("Item was sorted.");
         }
     }).disableSelection();
 }
 
-//Disable the table sortability capabilities
+//Disable the table sortability capabilities 
+//(We might no longer need this function as we can just reload the page to reset/discard any changes)
 function reasonSortDisable() {
     $("#sortTable tbody").sortable('disable');
     //Perform the removal of the UI styling 
