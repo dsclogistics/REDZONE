@@ -282,7 +282,7 @@ namespace REDZONE.AppCode
                 // Set ADMIN Group Level
                 case "DELGADO_FELICIANO":
                 case "ABDUGUEV_RASUL":
-                case "POGANI_KEVIN":
+                case "CHEN_ALEX":
                     appUserRoles = "ADMIN;";
                     break;
                 case "GOPAL_GIRI":
