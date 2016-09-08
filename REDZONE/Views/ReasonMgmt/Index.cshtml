@@ -37,7 +37,10 @@
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
            if (Model.Count() > 0) { 
               <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
-                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left "><h3><span style="font-weight:normal">Metric Period Reasons</span></h3></div>
+                <div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
+                    <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
+                  @*<h3><span style="font-weight:normal">'</span></h3>*@
+                </div>
                 <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
                     <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden">
 
@@ -120,8 +123,8 @@
 
         else
         {
-            <div style="color: red">
-                There are no Details to Display. Select a value from the dropdown.
+            <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
+                <span style="color:blue; font-weight:bold;">SELECT A VALUE FROM THE DROPDOWN</span>
             </div>
         }
     </div>
@@ -178,6 +181,7 @@
 
 <script>
     $(document).ready(function () {
+        $("#mpName").html($("#metric_period_sel_list option:selected").text());
         //Metric Period Dropdown
         //------------------------------------------------------------------------
         $("#metric_period_sel_list").on("change", function () {
@@ -185,6 +189,8 @@
             location.href = "/ReasonMgmt/Index/" + selId;
         });
 
+
+        
         //On Reason List details button click
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '.btnReasonDetails', function(){
