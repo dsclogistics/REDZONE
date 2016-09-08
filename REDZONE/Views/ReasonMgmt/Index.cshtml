@@ -7,6 +7,9 @@
   th{
       text-align:center;
   }
+    .sortableRow {
+        background-color: #92c6cb !important;
+    }
 </style>
 <h2>Reason Management</h2>
 
@@ -47,11 +50,11 @@
                         @*<h3><span style="font-weight:normal">'</span></h3>*@
                     </div>
                     <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
-                        <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden">
+                        <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">
 
                             @*REASON LIST*@
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
-                                <tr >
+                                <tr style="background-color: rgb(51,122,183); color:white" >
                                     <th>
                                         @Html.DisplayNameFor(model => model.reason_id)
                                     </th>
@@ -74,9 +77,11 @@
                                 <tbody>
                                     @foreach (REDZONE.Models.MPReason item in Model)
                                     {
-                                        <tr class="reasonListRow">
-                                            <td>
-                                                <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span><span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
+                                        
+                                        <tr class="reasonListRow @if (item.reason_std_yn.Equals("N")) { <text> sort-state-disabled </text> } ">
+                                            <td class=" firstcol">
+                                            <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
+                                            <span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
                                             </td>
                                             <td style="display:none">
                                                 <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
@@ -97,7 +102,7 @@
                                                 <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
                                             </td>
 
-                                            <td>
+                                            <td class="lastCol">
                                                 <input type="button" class="btnReasonDetails" value="Details" />
                                             </td>
                                         </tr>
@@ -329,6 +334,12 @@
             $('.sortIcon').show();
             $('#btnsReorder').hide();
             $('#btnsReordering').show();
+            $('.reasonListRow').addClass('sortableRow');
+            $('.firstCol').css("border-top-left-radius", "4px");
+            $('.firstCol').css("border-bottom-left-radius", "4px");
+            $('.lastCol').css("border-top-right-radius", "4px");
+            $('.lastCol').css("border-bottom-right-radius", "4px");
+
             //If have made changes in the editor to another reason, prompt user.
 
             //var mtrcIdToDisplay = $("#MtrcId").val();
@@ -355,14 +366,17 @@
         $("#divReasonList").on('click', '#btnReorderSave', function () {
             alert("Saving functionality is not enabled yet");
             $('.sortIcon').hide();
+            $('#btnsReordering').hide();
+            $('#btnsReorder').show();
             reasonSortDisable();
         });
 
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
-            $('#btnsReordering').hide();
-            $('#btnsReorder').show();
-            $('.sortIcon').hide();
-            reasonSortDisable();
+            location.reload();
+            //$('.sortIcon').hide();
+            //$('#btnsReordering').hide();
+            //$('#btnsReorder').show();
+            //reasonSortDisable();
         });
 
 
