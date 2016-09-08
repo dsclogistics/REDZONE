@@ -77,11 +77,17 @@
                                 <tbody>
                                     @foreach (REDZONE.Models.MPReason item in Model)
                                     {
-                                        
-                                        <tr class="reasonListRow @if (item.reason_std_yn.Equals("N")) { <text> sort-state-disabled </text> } ">
-                                            <td class=" firstcol">
-                                            <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
-                                            <span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
+                                        if(item.reason_std_yn == "Y")
+                                        {
+                                            ViewBag.reasonRowClass = "";
+                                        }
+                                        else
+                                        {
+                                            ViewBag.reasonRowClass = "nonstdReasonRow";
+                                        }
+                                        <tr class="reasonListRow @ViewBag.reasonRowClass">
+                                            <td>
+                                                <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span><span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
                                             </td>
                                             <td style="display:none">
                                                 <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
@@ -340,6 +346,7 @@
             $('.lastCol').css("border-top-right-radius", "4px");
             $('.lastCol').css("border-bottom-right-radius", "4px");
 
+            $('.nonstdReasonRow').hide();
             //If have made changes in the editor to another reason, prompt user.
 
             //var mtrcIdToDisplay = $("#MtrcId").val();
@@ -365,10 +372,11 @@
         });
         $("#divReasonList").on('click', '#btnReorderSave', function () {
             alert("Saving functionality is not enabled yet");
-            $('.sortIcon').hide();
             $('#btnsReordering').hide();
             $('#btnsReorder').show();
+            $('.sortIcon').hide();
             reasonSortDisable();
+            $('.nonstdReasonRow').show();
         });
 
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
