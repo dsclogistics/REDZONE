@@ -57,6 +57,7 @@ namespace REDZONE.Models
 
     public class MeasuredCellEntity
     {// This represents a single Cell in the Executive Summary Spreadsheet
+        public string cellValueId { get; set; }
         public string metricName { get; set; }
         public string metricValue { get; set; }
         public double metricDoubleValue { get; set; }

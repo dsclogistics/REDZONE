@@ -585,7 +585,10 @@ namespace REDZONE.AppCode
                                             string cellStatus = (string)apiCellValue["rz_mps_status"];
                                             tmp.cellStatus = cellStatus;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
+                                            
+                                            tmp.cellValueId = (string)apiCellValue["mtrc_period_val_id"];
 
+                                            tmp.mtrc_period_id = (string)apiCellValue["mtrc_period_id"];
                                             //..... Get the value in a formatted way
                                             int valDecPlaces = 0;      //Harcoded value for now, not used
                                             //if (!(Int32.TryParse("2", out valDecPlaces))) { valDecPlaces = 0; }

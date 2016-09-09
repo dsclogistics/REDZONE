@@ -340,6 +340,38 @@ namespace REDZONE.AppCode
             }
         }
 
+        public string getMPVReasons(string mtrc_period_val_id)
+        {
+            //This function returns a jSon Object with an array of all the Reasons Assigned for the "Metric Period Value Id" passed as a parameter
+
+            string endPoint = "reasons";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            // {"productname":"Red Zone", "tptname":"Month","calyear":2016 , "mtrc_id":"3"  }
+            string parsedContent = "{\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return "ERROR: " + e.Message;
+            }
+        }
+
 
     }
 }

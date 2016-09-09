@@ -181,6 +181,7 @@
     <Compile Include="Controllers\ExecutiveSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
+    <Compile Include="Controllers\MPVreasonsController.cs" />
     <Compile Include="Controllers\MTRC_METRICController.cs" />
     <Compile Include="Controllers\MTRC_PRODUCTController.cs" />
     <Compile Include="Controllers\ReasonMgmtController.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
     <Compile Include="Models\MetricSummaryViewModel.cs" />
+    <Compile Include="Models\MetricValueReason.cs" />
     <Compile Include="Models\MPReason.cs" />
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
@@ -442,6 +444,7 @@
     <Content Include="Views\ReasonMgmt\Index.cshtml" />
     <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
     <Content Include="Views\ReasonMgmt\_RsnReorder.cshtml" />
+    <Content Include="Views\MPVreasons\Assigment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
