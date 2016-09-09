@@ -17,7 +17,7 @@
 
     <div class="panel-heading" style="padding:4px">
         <div class="row " style="margin:0; margin-bottom:0px;">
-            <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; background-color: lightgray; border-top-right-radius:0px; border-bottom-right-radius:0px">Select a Metric Period: </span></div>
+            <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; border-top-right-radius:0px; border-bottom-right-radius:0px; background-color: rgb(51,122,183); color:white; border-color:rgb(51,122,183)">Select a Metric Period: </span></div>
             <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
         </div>
     </div>
@@ -44,19 +44,20 @@
             if (Model.Count() > 0)
             {
                 <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
-                    <div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
+                    @*<div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
                         <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
-                        @*<h3><span style="font-weight:normal">'</span></h3>*@
-                    </div>
+                        <h3><span style="font-weight:normal">'</span></h3>
+                    </div>*@
                     <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
-                        <div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">
+                        <div class="row" style="margin:0 auto; ">
+                        @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
 
                             @*REASON LIST*@
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
                                 <tr style="background-color: rgb(51,122,183); color:white" >
-                                    <th>
+                                    @*<th>
                                         @Html.DisplayNameFor(model => model.reason_id)
-                                    </th>
+                                    </th>*@
                                     <th>
                                         @Html.DisplayNameFor(model => model.reason_text)
                                     </th>
@@ -86,14 +87,14 @@
                                         }
                                         <tr class="reasonListRow @ViewBag.reasonRowClass">
 
-                                            <td class="firstCol">
-                                                <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
+                                            <td style="display:none">
                                                 <span id="reason_id">@Html.DisplayFor(modelItem => item.reason_id)</span>
                                             </td>
                                             <td style="display:none">
                                                 <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
                                             </td>
-                                            <td>
+                                            <td class="firstCol">
+                                                <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
                                                 <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
                                             </td>
                                             <td>
@@ -180,16 +181,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Reason Details</h4>
+                <h4 class="modal-title reason-detail">Reason Details</h4>
+                <h4 class="modal-title add-reason">Add Reason</h4>
             </div>
             <div class="modal-body" id="reasonEditBody">
 
             </div>
             <div class="modal-footer" id="reasonEditFooter">
-                <input type="button" disabled class="btn btn-primary" id="btnEditReasonDetail" value="Edit" />
-                <input type="button" disabled class="btn btn-primary" id="btnSaveReasonDetail" value="Save" />
+                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnEditReasonDetail" value="Edit" />
+                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnSaveReasonDetail" value="Save" />
                 <input type="button" disabled class="btn btn-primary" style="display:none" id="btnAddReasonDetail" value="Add" />
-                <input type="button" disabled class="btn btn-primary" id="btnRemoveReason" value="Remove" />
+                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnRemoveReason" value="Remove" />
                 <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -263,6 +265,9 @@
                 //$("#msgLoading").hide();
                 $("#btnReasonDetails").prop("disabled", false);
                 $(".editable-rsn-attr").prop("disabled", true);
+                $(".add-reason").hide();
+                $(".reason-detail").show();
+                $(".add-reason-hide").show();
 
                 //Sets detail buttons
                 $("#btnSaveReasonDetail").show();
@@ -318,6 +323,9 @@
                 $("#reasonEditBody").html(d);
                 //$("#msgLoading").hide();
                 $(".editable-rsn-attr").prop("disabled", false);
+                $(".add-reason").show();
+                $(".reason-detail").hide();
+                $(".add-reason-hide").hide();
 
                 //Sets detail buttons
                 $("#btnAddReasonDetail").show();
@@ -348,6 +356,7 @@
             $('.lastCol').css("border-bottom-right-radius", "4px");
 
             $('.nonstdReasonRow').hide();
+            $('.btnReasonDetails').prop("disabled", true);
             //If have made changes in the editor to another reason, prompt user.
 
             //var mtrcIdToDisplay = $("#MtrcId").val();
