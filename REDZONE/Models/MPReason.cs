@@ -22,9 +22,19 @@ namespace REDZONE.Models
         public string reason_description { get; set; }
         [Display(Name = "Standardized (Y/N)")]
         public string reason_std_yn { get; set; }
-        //public string reason_added_on_dtm { get; set; }
-        //public string reason_added_by_uid { get; set; }
+        
+        [Display(Name = "Created On")]
+        public string reason_created_on_dtm { get; set; }
+        [Display(Name = "Created By")]
+        public string reason_created_by_uid { get; set; }
+
+        [Display(Name = "Standardized On")]
+        public string reason_stdized_on_dtm { get; set; }
+        [Display(Name = "Standardized By")]
+        public string reason_stdized_by_uid { get; set; }
+
         [Display(Name = "Metric Values Used On")]
         public string times_used { get; set; }
+
     }
 }
