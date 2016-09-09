@@ -493,6 +493,7 @@ namespace REDZONE.AppCode
             return eSummary;
         }
 
+
         public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID)
         {
             const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
@@ -936,6 +937,38 @@ namespace REDZONE.AppCode
             return mSummary;
         }
 
+        public List<MetricValueReason> getMetricPeriodReasons(string mpId)
+        {
+
+            //Define and Initializa Model Object Components
+            List<MetricValueReason> reasonList = new List<MetricValueReason>();
+            MetricValueReason mpReason = new MetricValueReason();
+
+            string raw_data = String.Empty;
+            try
+            {
+                raw_data = api.getMetricPeriodReasons(mpId);
+                JObject parsed_result = JObject.Parse(raw_data);
+                JArray apiMPReasons = (JArray)parsed_result["reasons"];
+
+                if (apiMPReasons.HasValues)
+                {
+                    foreach (var reason in apiMPReasons)
+                    {
+                        mpReason = new MetricValueReason((string)reason["mpr_display_text"], (string)reason["mpr_desc"], false);
+                        reasonList.Add(mpReason);
+                    }
+                }
+            }
+            catch{
+            
+            }
+
+            return reasonList;            
+        }
+
+
+        // ====================== HELPER FUNCTIONS ================================
         private string getMonthShortName(string monthLong)
         {
             string monthShort = String.Empty;

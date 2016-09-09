@@ -3,7 +3,12 @@
 @{
     ViewBag.Title = "Assigment";
 }
+<style>
+    th {
+        text-align:center;
+    }
 
+</style>
 <h2>Assigment</h2>
 
 <p>
@@ -12,32 +17,31 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.rText)
+
+        </th>
+
+        <th>
+            Reason
+            @*@Html.DisplayNameFor(model => model.rText)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.rComment)
+            Comment
+            @*@Html.DisplayNameFor(model => model.rComment)*@
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isAssigned)
-        </th>
-        <th></th>
+
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.rText)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rComment)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.isAssigned)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.DisplayFor(modelItem => item.rText)
+        </td>
+        <td>
+            @*@Html.EditorFor(modelItem => item.rComment)*@
+            @Html.DisplayFor(modelItem => item.rComment)
         </td>
     </tr>
 }
