@@ -1137,6 +1137,10 @@ namespace REDZONE.AppCode
                     tempMPReason.reason_order = (string)res["mpr_display_order"];
                     tempMPReason.reason_description = (string)res["mpr_desc"];
                     tempMPReason.reason_std_yn = (string)res["mpr_std_yn"];
+                    tempMPReason.reason_created_on_dtm = (string)res["mpr_added_on_dtm"];
+                    tempMPReason.reason_created_by_uid = (string)res["mpr_added_by_uid"];
+                    tempMPReason.reason_stdized_on_dtm = (string)res["mpr_stdized_on_dtm"];
+                    tempMPReason.reason_stdized_by_uid = (string)res["mpr_stdized_by_uid"];
                     tempMPReason.times_used = (string)res["usedby"];
 
                     MPReasonList.Add(tempMPReason);

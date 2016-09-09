@@ -17,14 +17,14 @@
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
-                <span class="input-group-addon" style="font-weight:bold">Created On</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                @Html.LabelFor(model => model.reason_created_on_dtm, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_created_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
-                <span class="input-group-addon" style="font-weight:bold">Created By</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                @Html.LabelFor(model => model.reason_created_by_uid, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_created_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
             </div>
         </div>
     </div>
@@ -72,14 +72,14 @@
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
-                <span class="input-group-addon" style="font-weight:bold">Standardized On</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                @Html.LabelFor(model => model.reason_stdized_on_dtm, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_stdized_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
-                <span class="input-group-addon" style="font-weight:bold">Standardized By</span>
-                <input type="text" class="form-control" disabled="disabled" placeholder="" />
+                @Html.LabelFor(model => model.reason_stdized_by_uid, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_stdized_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
             </div>
         </div>
     </div>

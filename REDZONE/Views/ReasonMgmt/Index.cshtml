@@ -93,6 +93,19 @@
                                             <td style="display:none">
                                                 <span id="metric_period_id">@Html.DisplayFor(modelItem => item.metric_period_id)</span>
                                             </td>
+                                            <td style="display:none">
+                                                <span id="reason_created_on_dtm">@Html.DisplayFor(modelItem => item.reason_created_on_dtm)</span>
+                                            </td>
+                                            <td style="display:none">
+                                                <span id="reason_created_by_uid">@Html.DisplayFor(modelItem => item.reason_created_by_uid)</span>
+                                            </td>
+                                            <td style="display:none">
+                                                <span id="reason_stdized_on_dtm">@Html.DisplayFor(modelItem => item.reason_stdized_on_dtm)</span>
+                                            </td>
+                                            <td style="display:none">
+                                                <span id="reason_stdized_by_uid">@Html.DisplayFor(modelItem => item.reason_stdized_by_uid)</span>
+                                            </td>
+
                                             <td class="firstCol">
                                                 <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
                                                 <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
@@ -227,6 +240,10 @@
             var reason_order = $(this).parent().siblings().find("#reason_order").text();
             var reason_description = $(this).parent().siblings().find("#reason_description").text();
             var reason_std_yn = $(this).parent().siblings().find("#reason_std_yn").text();
+            var reason_created_on_dtm = $(this).parent().siblings().find("#reason_created_on_dtm").text();
+            var reason_created_by_uid = $(this).parent().siblings().find("#reason_created_by_uid").text();
+            var reason_stdized_on_dtm = $(this).parent().siblings().find("#reason_stdized_on_dtm").text();
+            var reason_stdized_by_uid = $(this).parent().siblings().find("#reason_stdized_by_uid").text();
             var times_used = $(this).parent().siblings().find("#times_used").text();
 
             // Put data into a single object.
@@ -237,6 +254,10 @@
                 reason_order: reason_order,
                 reason_description: reason_description,
                 reason_std_yn: reason_std_yn,
+                reason_created_on_dtm: reason_created_on_dtm,
+                reason_created_by_uid: reason_created_by_uid,
+                reason_stdized_on_dtm: reason_stdized_on_dtm,
+                reason_stdized_by_uid: reason_stdized_by_uid,
                 times_used: times_used
             };
 
