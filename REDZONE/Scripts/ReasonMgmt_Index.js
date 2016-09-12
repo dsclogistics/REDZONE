@@ -32,6 +32,7 @@ function reasonSortEnable() {
             //When the "sort" drag/drop completes(even if not successfully), Reset the look and feel of the dragged row
             ui.item.css("color", "black");
             ui.item.css("font-weight", "normal");
+            updateOrderNumbers();
         }
     }).disableSelection();
 }
@@ -46,6 +47,12 @@ function reasonSortDisable() {
     $('.lastCol').css("border-radius", "0px");
 }
 
+//Update the number in the "Order" column to reflect the new order after a drag and drop action in the reorder table.
+function updateOrderNumbers() {
+    $('.stdReasonRow #reason_order').each(function (i, value) {
+        $(this).text(i + 1);
+    });
+}
 
 $(document).ready(function () {
 

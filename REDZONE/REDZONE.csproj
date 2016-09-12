@@ -224,6 +224,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
+    <Compile Include="Models\MetricPeriod.cs" />
     <Compile Include="Models\MetricSummaryViewModel.cs" />
     <Compile Include="Models\MetricValueReason.cs" />
     <Compile Include="Models\MPReason.cs" />

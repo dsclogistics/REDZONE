@@ -79,7 +79,7 @@
                                     {
                                         if(item.reason_std_yn == "Y")
                                         {
-                                            ViewBag.reasonRowClass = "";
+                                            ViewBag.reasonRowClass = "stdReasonRow";
                                         }
                                         else
                                         {
@@ -112,6 +112,7 @@
                                             </td>
                                             <td>
                                                 <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
+                                                <span id="prev_reason_order" style="display:none">@Html.DisplayFor(modelItem => item.reason_order)</span>
                                             </td>
                                             <td style="display:none">
                                                 <span id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
