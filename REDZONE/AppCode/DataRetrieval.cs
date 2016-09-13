@@ -406,6 +406,36 @@ namespace REDZONE.AppCode
             }
         }
 
+        //Reason Management API Update Reason
+        public string updateMPReason(string raw_json)
+        {
+            string endPoint = "updatereason";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = raw_json;
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
         public string getMPVReasons(string mtrc_period_val_id)
         {
             //This function returns a jSon Object with an array of all the Reasons Assigned for the "Metric Period Value Id" passed as a parameter

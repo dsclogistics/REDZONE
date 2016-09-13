@@ -41,26 +41,29 @@
                         @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
 
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
-                                <tr style="background-color: rgb(51,122,183); color:white" >
-                                    @*<th>
-                                        @Html.DisplayNameFor(model => model.reason_id)
-                                    </th>*@
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_text)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_order)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_std_yn)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.times_used)
-                                    </th>
-                                    <th>
+                                <thead>
+                                    <tr style="background-color: rgb(51,122,183); color:white">
+                                        @*<th>
+                                            @Html.DisplayNameFor(model => model.reason_id)
+                                        </th>*@
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_text)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_order)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_std_yn)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.times_used)
+                                        </th>
+                                        <th>
 
-                                    </th>
-                                </tr>
+                                        </th>
+                                    </tr>
+                                </thead>
+
                                 <tbody>
                                     @foreach (REDZONE.Models.MPReason item in Model)
                                     {
@@ -283,7 +286,7 @@
             popupAddMPReason()
         });
 
-        //Reorder Button -> Reorder Popup
+        //Reorder Button -> Reorder Mode
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderReasons', function () {
             //Enable the Table row sortability function
@@ -343,7 +346,7 @@
         });
 
 
-        //Edit Button
+        //Editor Edit Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnEditReasonDetail', function () {
 
@@ -365,24 +368,21 @@
             $("#btnCancelReasonEdit").prop("disabled", false);
         });
 
-        //Add Button
+        //Editor Add Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnAddReasonDetail', function () {
             //alert(buildAddMPReasonJSON());
             addMPReason();
         });
 
-        //Save Button
+        //Editor Save Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnSaveReasonDetail', function () {
-            //Prompt User
-
-            //ajax POST
-            alert(buildUpdateMPReasonJSON());
-            alert('Save');
+            //alert(buildUpdateMPReasonJSON());
+            updateMPReason();
         });
 
-        //Remove Button
+        //Editor Remove Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnRemoveReason', function () {
             //Prompt User
@@ -393,7 +393,7 @@
         });
 
         //------------------------------------------------------------------------
-        //Reorder Popup Done Button
+        //Reorder Done Button
         $("#reasonReorderForm").on('click', '#btnReorderPopupDone', function () {
             //Prompt are you sure?
             //Refresh page
@@ -510,21 +510,159 @@
     //------------------------------------------------------------------------------------------------
     function buildUpdateMPReasonJSON() {
 
-        var reason_id = $("#reasonEditBody").find("reason_id").val();
+        var reason_id = $("#reasonEditBody").find("#reason_id").val();
         var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
         var reason_text = $("#reasonEditBody").find("#reason_text").val();
         var reason_description = $("#reasonEditBody").find("#reason_description").val();
         var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
-        var reason_order = (reason_std_yn != "Y") ? "" : $("#reasonEditBody").find("#reason_order").val();
+        //var reason_order
+        if (reason_std_yn != "Y") {
+            reason_order = "";
+        }
+        else {
+            var temp_reason_order = $("#reasonEditBody").find("#reason_order").val();
+            if (temp_reason_order == "") {
+                reason_order = getNextOrder();
+            }
+            else {
+                reason_order = temp_reason_order;
+            }
+        }
         var user_id = "@User.Identity.Name";
 
-        var jsonPayload = '{"reasons":[{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}]}';
+        var jsonPayload = '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
 
         //alert("Json submitted:\n" + jsonPayloadDetail);
         return jsonPayload
     }
 
+    function updateMPReason() {
+        var payload = buildUpdateMPReasonJSON();
+        //alert(payload);
 
+        $.ajax({
+            url: '/ReasonMgmt/updateMPReason',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/updatereason',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Updated!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    //Validation
+    //------------------------------------------------------------------------------------------------
+    function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces) {
+        //// First Validation. If input values is null or empty. It passes
+        //if (txtControl.val() == "") return "PASS";
+
+        //var txtValue = txtControl.val();
+        //var validationMessage = "PASS";
+        //var inputIntValue = Number(txtValue);
+        //var minRange = Number(minVal);
+        //var maxRange = Number(maxVal);
+
+        ////Second Validation, make sure that the input value is a number.
+        //if (isNaN(inputIntValue)) {  // Value is not a number
+        //    return "Value must be numeric";
+        //}
+
+        //if (dataType == "int") {// Integer Value cannot have decimal values
+        //    if (txtValue.indexOf(".") >= 0) {
+        //        validationMessage = "Value must not contain decimals";
+        //    }
+        //} else
+        //    if (dataType == "dec") {
+        //        //There is no custom validation for now
+        //    } else
+        //        if (dataType == "cur") {
+        //            //There is no custom validation for now
+        //        } else
+        //            if (dataType == "pct") {
+        //                //There is no custom validation for now
+        //            }
+
+        ////Round value off to the requiered number of decimal places for all non integer values
+        //if (dataType != "int") {
+        //    //parseFloat(txtValue).toFixed(2);
+        //    txtControl.val(inputIntValue.toFixed(Number(decPlaces)));
+        //}
+
+        ////Check Min and Max for all data types
+        //if (inputIntValue < minRange || inputIntValue > maxRange) {
+        //    validationMessage = "Value must be between " + minVal + " and " + maxRange;
+        //}
+
+        //return validationMessage;
+    }
+    //------------------------------------------------------------------------------------------------
+    function validateStrEntry(txtValue, strLength) {
+        //var stringLength = Number(strLength);
+        //if (stringLength == 0 || isNaN(stringLength)) {
+        //    //alert("Length is not a number");
+        //    //The Length is undefined. We will assume that any lenght is valid
+        //    return "PASS"
+        //}
+        //if (txtValue.length < Number(strLength)) {
+        //    return "PASS";
+        //}
+        //return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
+    }
+    //------------------------------------------------------------------------------------------------
+    function validateTxtField($txtControl){
+        @*var oldValue = $txtControl.val();
+        var newValue = $txtControl.val().trim();
+        var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
+
+        //Validate the Entered Value
+        //$(this)
+
+        var valMessage = "";
+
+        //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
+        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && isNAallowed == "True") {
+            newValue = "N/A";
+            valMessage = "PASS";
+            $txtControl.parents(".bldngRow").find("#isNA").first().val("Y");
+        }
+        else {
+            //Perform either the Numeric or the String Validations
+            if ("@Model.isNumeric" == "True") {
+                //Validate the input as a number
+                valMessage = validateNumEntry($txtControl, "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
+                //alert("result: " + valMessage);
+            }
+            else {
+                //Perform the String Validation
+                valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
+            }
+            //Check the result of the validation
+            $txtControl.parents(".bldngRow").find("#isNA").first().val("N");
+        }
+
+        if (valMessage == "PASS" && !(oldValue == newValue)) {
+            //If the value was altered/changed in any way, update with new value and set appropiate flags
+            $txtControl.val(newValue);      //Update the text field with the new value if they are not equal.
+            $txtControl.parents(".bldngRow").find("#saveFlag").first().val("Y");
+            $("#frmModified").val("Y");
+            $("#btnSave").prop('disabled', false);
+        }
+
+        return valMessage;*@
+    }
 </script>
 
 @section Scripts {

@@ -82,8 +82,31 @@ namespace REDZONE.Controllers
                     return status;
                 }                
             }
-
         }
 
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/updateMPReason
+        [HttpPost]
+        public string updateMPReason(string raw_json)
+        {
+            string status = api.updateMPReason(raw_json);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else
+            {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }
+            }
+        }
     }
 }
