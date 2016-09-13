@@ -12,7 +12,9 @@ namespace REDZONE.Controllers
     public class ReasonMgmtController : Controller
     {
         //**********> Get rid of this eventually <**********
-        private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
+        //private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
+        private DataRetrieval api = new DataRetrieval();
+        private APIDataParcer dataParcer = new APIDataParcer();
 
         //============================================================================================================
         // GET: ReasonMgmt
@@ -20,17 +22,16 @@ namespace REDZONE.Controllers
         {
             id = (id == null) ? 0 : id;    //Assign a Zero value to Id if it's null
 
-            //Get 
+            //Get List of Metric Periods
             List<MetricPeriod> MetricPeriodList = new List<MetricPeriod>();
-            APIDataParcer dataParcer = new APIDataParcer();
 
             MetricPeriodList = dataParcer.getMetricPeriodList();
 
             ViewBag.metric_period_sel_list = new SelectList(MetricPeriodList, "mtrc_period_id", "mtrc_period_name", id);
             ViewBag.id = id;
 
+            //Get List of Metric Period Reasons
             List<MPReason> MPReasonList = new List<MPReason>();
-            dataParcer = new APIDataParcer();
 
             if (id > 0)
             {
@@ -60,12 +61,10 @@ namespace REDZONE.Controllers
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/saveMPReason
         [HttpPost]
         public string saveMPReason(string raw_json)
         {
-            DataRetrieval api = new DataRetrieval();
-            APIDataParcer parcer = new APIDataParcer();
-
             string status = api.saveMPReason(raw_json);
             if (status.ToLower().Contains("success"))
             {

@@ -23,26 +23,14 @@
     </div>
 
     <div class="panel-body ">
-        @*@if (ViewBag.id != 0)
-            {
-                //REASON DETAIL
 
-                <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
-                    <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
-                    <div type="hidden" id="msgLoading">
-                        <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
-                    </div>
-                    <div id="divReasonDetailsView">
-                        @Html.Action("_RsnDetail")
-                    </div>
-                </div>
-            }*@
 
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
             if (Model.Count() > 0)
             {
+                //Reason LIST
                 <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
                     @*<div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
                         <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
@@ -52,7 +40,6 @@
                         <div class="row" style="margin:0 auto; ">
                         @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
 
-                            @*REASON LIST*@
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
                                 <tr style="background-color: rgb(51,122,183); color:white" >
                                     @*<th>
@@ -151,6 +138,12 @@
             {
                 <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
                     <span style="color:red; font-weight:bold;">NO REASONS HAVE BEEN DEFINED FOR THE SELECTED METRIC PERIOD  </span>
+                    <hr />
+                    <div class="row" style="text-align:left; margin-left: 5px">
+                        <div class="col-sm-6" id="btnsReorder" style="float:left">
+                            <button type="button" class="btn btn-primary" id="btnAddReason">Add New Reason</button>
+                        </div>
+                    </div>
                 </div>
             }
         }
@@ -287,61 +280,8 @@
         //Add New Reason button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnAddReason', function () {
-
-            //If have made changes in the editor to another reason, prompt user.
-
-            var tempScrollTop = $(window).scrollTop();
-
-            //Get data for MPReason model from specified row.
-            var metric_period_id = $(MtrcPeriodId).val();
-
-            // Put data into a single object.
-            var formData = {
-                metric_period_id: metric_period_id
-            };
-
-            // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
-            $.ajax({
-                type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-                //method    : 'POST',
-                @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
-                url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
-                //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
-                data: formData, // our data object created earlier
-                //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
-                //encode    : true,
-                cache: false,
-                //--- On error, execute this function ------
-                error: function (xhr, status, error) {
-                    //var err = eval("(" + xhr.responseText + ")");
-                    $("#reasonEditBody").html(xhr.responseText);
-                    //$("#msgLoading").hide();
-                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                //This code Executes After the Ajax call completes successfully
-                //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
-                $("#reasonEditBody").html(d);
-                //$("#msgLoading").hide();
-                $(".editable-rsn-attr").prop("disabled", false);
-                $(".add-reason").show();
-                $(".reason-detail").hide();
-                $(".add-reason-hide").hide();
-
-                //Sets detail buttons
-                $("#btnAddReasonDetail").show();
-                $("#btnSaveReasonDetail").hide();
-                $("#btnAddReasonDetail").prop("disabled", false);
-                $("#btnEditReasonDetail").prop("disabled", true);
-                $("#btnRemoveReason").prop("disabled", true);
-                $("#btnCancelReasonEdit").prop("disabled", false);
-
-                $(window).scrollTop(tempScrollTop);
-
-                $('#reasonEditForm').modal('show');
-            });
+            popupAddMPReason()
         });
-
 
         //Reorder Button -> Reorder Popup
         //------------------------------------------------------------------------
@@ -382,6 +322,7 @@
             //    $('#reasonReorderForm').modal('show');
             //});
         });
+
         $("#divReasonList").on('click', '#btnReorderSave', function () {
             alert("Saving functionality is not enabled yet");
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
@@ -433,7 +374,7 @@
 
         //Save Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnSaveReasonDetail', function () {
+        $("#reasonEditFooter").on('click', '#btnSaveReasonDetail', function () {
             //Prompt User
 
             //ajax POST
@@ -443,34 +384,12 @@
 
         //Remove Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnRemoveReason', function () {
+        $("#reasonEditFooter").on('click', '#btnRemoveReason', function () {
             //Prompt User
 
             //DELETE
 
             alert('Remove')
-        });
-
-        //Cancel Button
-        //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnCancelReasonEdit', function () {
-
-            //Reload either the original data or null data
-            //Make editor readonly
-
-            //Revert buttons back and disable them
-            $(".editable-rsn-attr").prop("disabled", true);
-
-            $("#btnSaveReasonDetail").show();
-            $("#btnAddReasonDetail").hide();
-
-            //If reloading original data, set edit button disabled = false
-            //of reloading null data, set edit button disabled = true
-
-            $("#btnEditReasonDetail").prop("disabled", true);
-            $("#btnSaveReasonDetail").prop("disabled", true);
-            $("#btnRemoveReason").prop("disabled", true);
-            $("#btnCancelReasonEdit").prop("disabled", true);
         });
 
         //------------------------------------------------------------------------
@@ -490,14 +409,68 @@
 
     //Add Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
+    function popupAddMPReason() {
+        var tempScrollTop = $(window).scrollTop();
+
+        //Get data for MPReason model from specified row.
+        var metric_period_id = $(MtrcPeriodId).val();
+
+        // Put data into a single object.
+        var formData = {
+            metric_period_id: metric_period_id
+        };
+
+        // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
+        $.ajax({
+            type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            //method    : 'POST',
+            @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
+            url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
+            //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
+            data: formData, // our data object created earlier
+            //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
+            //encode    : true,
+            cache: false,
+            //--- On error, execute this function ------
+            error: function (xhr, status, error) {
+                //var err = eval("(" + xhr.responseText + ")");
+                $("#reasonEditBody").html(xhr.responseText);
+                //$("#msgLoading").hide();
+                //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            //This code Executes After the Ajax call completes successfully
+            //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
+            $("#reasonEditBody").html(d);
+            //$("#msgLoading").hide();
+            $(".editable-rsn-attr").prop("disabled", false);
+            $(".add-reason").show();
+            $(".reason-detail").hide();
+            $(".add-reason-hide").hide();
+
+            //Sets detail buttons
+            $("#btnAddReasonDetail").show();
+            $("#btnSaveReasonDetail").hide();
+            $("#btnAddReasonDetail").prop("disabled", false);
+            $("#btnEditReasonDetail").prop("disabled", true);
+            $("#btnRemoveReason").prop("disabled", true);
+            $("#btnCancelReasonEdit").prop("disabled", false);
+
+            $(window).scrollTop(tempScrollTop);
+
+            $('#reasonEditForm').modal('show');
+        });
+    }
+
     function buildAddMPReasonJSON() {
-        
+
         var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
         var reason_text = $("#reasonEditBody").find("#reason_text").val();
         var reason_description = $("#reasonEditBody").find("#reason_description").val();
         var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
-        //var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
-        var reason_order = 4;
+        var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
+
+        //var reason_order = 4;
         var user_id = "@User.Identity.Name";
 
         var jsonPayload = '{"reasons":[{"mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"'+user_id+'"}]}';
@@ -508,7 +481,7 @@
 
     function addMPReason() {
         var payload = buildAddMPReasonJSON();
-        alert(payload);
+        //alert(payload);
 
         $.ajax({
             url: '/ReasonMgmt/saveMPReason',
@@ -533,7 +506,7 @@
         });
     }
 
-    //Add Metric Period Reason functions
+    //Update Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function buildUpdateMPReasonJSON() {
 
@@ -542,7 +515,7 @@
         var reason_text = $("#reasonEditBody").find("#reason_text").val();
         var reason_description = $("#reasonEditBody").find("#reason_description").val();
         var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
-        var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
+        var reason_order = (reason_std_yn != "Y") ? "" : $("#reasonEditBody").find("#reason_order").val();
         var user_id = "@User.Identity.Name";
 
         var jsonPayload = '{"reasons":[{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}]}';

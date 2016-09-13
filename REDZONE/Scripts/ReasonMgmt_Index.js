@@ -62,6 +62,7 @@ function getNextOrder() {
         maxValue = (value > maxValue) ? value : maxValue;
     });
 
+    maxValue = (maxValue == null) ? 1 : maxValue + 1;
     return maxValue;
 }
 
