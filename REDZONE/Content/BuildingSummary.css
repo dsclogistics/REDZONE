@@ -1,0 +1,51 @@
+﻿  .valueCell {
+      font-weight: bold;
+      /*font-size:medium;*/
+      padding-top:5px;
+      padding-bottom:5px;
+  }
+  .bordered-2r { border: 4px solid black; border-radius: 5px; }
+  .actions-th {
+      border:2px solid black;
+      border-radius: 5px;
+      font-weight:bold;
+      font-size:large;
+      margin: 0px 10px;
+      padding:5px;
+  }
+
+.context-menu {
+    display:none;
+    position: absolute;
+    z-index: 10;
+    list-style-type:none;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: black;
+    border-radius: 8px;
+    margin:0;
+    padding: 0;
+}
+.context-menu--active {
+    display: block;
+}
+/* Each of the items in the list */
+.context-menu li {
+    padding: 4px;
+    cursor: pointer;
+    list-style-type: none;
+    transition: all .3s ease;
+    color:black;
+}
+
+.context-menu li:hover {
+    background-color: #DEF;
+}
+
+.context-menu__item {
+        color:black;
+        list-style-type: none;
+}

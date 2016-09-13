@@ -17,6 +17,8 @@ namespace REDZONE.Models
         public string reason_text { get; set; }
         [Display(Name = "Order")]
         public string reason_order { get; set; }
+        [Display(Name = "Order")]
+        public int reason_order_int { get; set; }
         [Display(Name = "Description")]
         [DataType(DataType.MultilineText)]
         public string reason_description { get; set; }
@@ -35,6 +37,6 @@ namespace REDZONE.Models
 
         [Display(Name = "Metric Values Used On")]
         public string times_used { get; set; }
-
+        public bool isAssigned { get; set; }
     }
 }

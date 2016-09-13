@@ -1,49 +1,233 @@
-﻿@model IEnumerable<REDZONE.Models.MetricValueReason>
+﻿@model IEnumerable<REDZONE.Models.MPReason>
 
 @{
     ViewBag.Title = "Assigment";
 }
 <style>
-    th {
-        text-align:center;
+    .headerCell {
+        border: 1px solid black;
+        padding:5px;
     }
 
-</style>
-<h2>Assigment</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-
-        </th>
-
-        <th>
-            Reason
-            @*@Html.DisplayNameFor(model => model.rText)*@
-        </th>
-        <th>
-            Comment
-            @*@Html.DisplayNameFor(model => model.rComment)*@
-        </th>
-
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.isAssigned)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rText)
-        </td>
-        <td>
-            @*@Html.EditorFor(modelItem => item.rComment)*@
-            @Html.DisplayFor(modelItem => item.rComment)
-        </td>
-    </tr>
+    th {
+        text-align: center;
+    }
+    /************* Check box control Styling**************/
+    /* Hiding the checkbox, but allowing it to be focused */
+.badgebox
+{
+    opacity: 0;
 }
 
-</table>
+.badgebox + .badge
+{
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+	width: 27px;
+}
+
+.badgebox:focus + .badge
+{
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+    
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+}
+
+.badgebox:checked + .badge
+{
+    /* Move the check mark back when checked */
+	text-indent: 0;
+}
+    .reasonCkBox {
+        background-color: #365f97;
+    }
+/************* End of Check box control Styling**************/
+
+</style>
+
+
+<div class="panel panel-info" style="margin-top:5px; font-family:Arial">
+    <div class="panel-heading">
+        <span style="font-weight:bold; font-size:20px">Red Zone Metric Reason Assignment</span><br />
+        <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
+        <span style="font-weight:bold; color: black" id="metricDate"></span>
+    </div>
+    <div class="panel-body">
+        <div style="margin:0 auto; text-align:center">
+            <!-- Metric Period Header Information  -->
+            <div class="row" style="margin:0; font-weight:bold">
+                <div class="col-xs-2 headerCell col-xs-offset-3" style="background-color:lightgray">Metric</div>
+                <div class="col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
+                <div class="col-xs-2 headerCell" style="background-color:lightgray"><span id="metricDate1"></span></div>
+            </div>
+            <div class="row" style="margin:0">
+                <div class="col-xs-2 col-xs-offset-3 headerCell" style="background-color:lightgray"><span id="mNameCell"></span></div>
+                <div class="col-xs-2 headerCell" style="background-color:#bbedff"><span id="mGoalCell"></span></div>
+                <div class="col-xs-2 headerCell" id="mValueCell"></div>
+            </div>
+        </div> <!-- END OF HEADER INFORMATION-->
+        <br />
+        <!-- **************** START OF THE ASSIGNED REASONS LIST ******************* -->
+        @if (Model.Count() == 0) { 
+        <div style="color:red; padding:20px; border: 4px double black; border-radius:7px; max-width:900px; margin:0 auto">THERE ARE NO ASSIGNED REASONS FOR THIS METRIC ENTRY</div>
+        }
+        else
+        {
+            <div>
+
+                <div class="row " style="text-align: center">
+                    @{ int ckBoxCounter = 0;}
+                    @foreach (var item in Model)
+                    {
+                        if (item.reason_std_yn.Equals("Y") || item.isAssigned)
+                        {
+                            // Only Show the reason code if it's a Standard Reason or it it is Assigned
+                            string ckStatus = "";
+                            if (item.isAssigned) { ckStatus = "checked"; }
+                            <div class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
+                                <label for="primary-@ckBoxCounter" class="btn btn-info reasonCkBox" style="width:350px; text-align:left" title="@item.reason_description"><input type="checkbox" id="primary-@ckBoxCounter" class="badgebox" @ckStatus><span class="badge">&check;</span><span style="margin-left: 8px">@item.reason_text</span></label>
+                            </div>
+                            ckBoxCounter++;
+                        }
+                    }
+                </div>
+                <div class="row " style="text-align: center">
+                    @*This Section Contains the dynamically added REason Codes from the Drop Down*@
+                    <div id="addedReasons" class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">                        
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="row " style="text-align: center">
+                    <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
+                        <select id="ddReason" class="form-control reasonCkBox" style="min-width:350px; color:white">
+                            <option value="none">[ Other Reason ... ]</option>
+                            @foreach (var item in Model)
+                            {
+                                if (!item.reason_std_yn.Equals("Y"))
+                                {
+                                    // Only Show the reason codes that are not Standard (Stdr Code are already Visible as check boxes)
+                                    <option value="@item.reason_id">@item.reason_text</option>
+                                }
+                            }
+                            <option value="new" style="font-weight:bold; margin-left:5px">[ - Add New Reason - ]</option>
+                        </select>
+                    </div>
+                </div>
+                <br /><br />
+                <div class="row " style="text-align:center">
+                    <button id="btnSaveProg" class="btn btn-primary" style="width:130px; ">Save Progres</button>
+                    <button id="btnBeginAction" class="btn btn-primary" style="width:130px; margin-left:20px">Begin Action Plan</button>
+                </div>
+
+
+
+
+
+                <br /><br /><br /><br /><br />
+                <table class="table">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.reason_id)</th>
+                        <th>@Html.DisplayNameFor(model => model.metric_period_id)</th>
+                        <th>@Html.DisplayNameFor(model => model.reason_text)</th>
+                        <th>@Html.DisplayNameFor(model => model.reason_order)</th>
+                        <th>@Html.DisplayNameFor(model => model.reason_description)</th>
+                        <th>@Html.DisplayNameFor(model => model.reason_std_yn)</th>
+                        <th>Metrics Using it</th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.reason_id)</td>
+                            <td>@Html.DisplayFor(modelItem => item.metric_period_id)</td>
+                            <td>@Html.DisplayFor(modelItem => item.reason_text)</td>
+                            <td>@Html.DisplayFor(modelItem => item.reason_order)</td>
+                            <td>@Html.DisplayFor(modelItem => item.reason_description)</td>
+                            <td>@Html.DisplayFor(modelItem => item.reason_std_yn)</td>
+                            <td>@Html.DisplayFor(modelItem => item.times_used)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+<script>
+    function getMPid() { return localStorage.getItem("mpId"); }
+    function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
+    function getMetricName() { return localStorage.getItem("mpName"); }
+    function getMetricGoal() { return localStorage.getItem("mpGoal"); }
+    function getMPvalueId() { return localStorage.getItem("mpValueId"); }
+    function getMPvalue() { return localStorage.getItem("mpValue"); }
+    function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
+    function getMetricDate() { return localStorage.getItem("mpValueDate"); }
+
+    function resetMetricValueVariables() {
+        localStorage.setItem("mpId", "");
+        localStorage.setItem("mpBuildingName", "");
+        localStorage.setItem("mpName", "");
+        localStorage.setItem("mpGoal", "");
+        localStorage.setItem("mpValueId", "");
+        localStorage.setItem("mpValue", "");
+        localStorage.setItem("mpValueDisplayClass", "");
+        localStorage.setItem("mpValueDate", "");
+    }
+
+    $(document).ready(function () {
+        var newReason = '<label for="primary-N1" class="btn btn-info reasonCkBox" style="width:350px; text-align:left; ">' +
+                '<input type="checkbox" id="primary-N1" class="badgebox" checked><span class="badge">&check;</span>' +
+                '<span style="margin-left: 8px">' + 'XYZ</span></label>';
+
+
+
+
+
+        $("#buildingName").html(getBuildingName());
+        $("#metricDate").html(getMetricDate());
+        $("#metricDate1").html(getMetricDate());
+        $("#mValueCell").addClass(getMPvalueDisplayClass());
+        $("#mNameCell").html(getMetricName());
+        $("#mGoalCell").html(getMetricGoal());
+        $("#mValueCell").html(getMPvalue());
+
+        //alert("Addign class: " + getMPvalueDisplayClass());
+        //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
+        $("#ddReason").on("change", function () {
+            var reasonId = $(this).val();
+            var reasonText = $(this).find('option:selected').text();
+            if (reasonId == "none") {
+                alert("You requested to do nothing.. :)");
+            }
+            else if (reasonId == "new") {
+                alert("Adding a new Reason Code Option is not Enabled yet");
+            }
+            else {
+                //Adds selected Option to the Check List
+                alert("Adding Item... ");                
+                $('#addedReasons').append(newReason.replace("XYZ", reasonText));
+            }
+            //alert("Drop Down Selection was changed:\nReason Id is: " + reasonId + "\nText: " + reasonText);
+        });
+        $('#btnSaveProg').click(function () {
+            alert("Saving functionality not enabled yet.");
+        });
+        $('#btnBeginAction').click(function () {
+            alert("New Action Plan Actions are not enabled yet");
+        });
+
+
+
+    });
+</script>

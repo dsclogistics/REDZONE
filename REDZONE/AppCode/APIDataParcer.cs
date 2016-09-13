@@ -256,86 +256,6 @@ namespace REDZONE.AppCode
             }
         }
 
-        public int monthToInt(string monthName) {
-            int monthNo = 0;
-            switch (monthName) {
-                case "January": monthNo = 1;
-                    break;
-                case "February": monthNo = 2;
-                    break;
-                case "March": monthNo = 3;
-                    break;
-                case "April": monthNo = 4;
-                    break;
-                case "May": monthNo = 5;
-                    break;
-                case "June": monthNo = 6;
-                    break;
-                case "July": monthNo = 7;
-                    break;
-                case "August": monthNo = 8;
-                    break;
-                case "September": monthNo = 9;
-                    break;
-                case "October": monthNo = 10;
-                    break;
-                case "November": monthNo = 11;
-                    break;
-                case "December": monthNo = 12;
-                    break;
-                default:
-                    break;
-            }
-            return monthNo;
-        }
-
-        public static string intToMonth(int monthNo)
-        {
-            string monthName = "";
-            switch (monthNo)
-            {
-                case 1:
-                    monthName = "January";
-                    break;
-                case 2:
-                    monthName = "February";
-                    break;
-                case 3:
-                    monthName = "March";
-                    break;
-                case 4:
-                    monthName = "April";
-                    break;
-                case 5:
-                    monthName = "May";
-                    break;
-                case 6:
-                    monthName = "June";
-                    break;
-                case 7:
-                    monthName = "July";
-                    break;
-                case 8:
-                    monthName = "August";
-                    break;
-                case 9:
-                    monthName = "September";
-                    break;
-                case 10:
-                    monthName = "October";
-                    break;
-                case 11:
-                    monthName = "November";
-                    break;
-                case 12:
-                    monthName = "December";
-                    break;
-                default:
-                    break;
-            }
-            return monthName;
-        }
-
         public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();
@@ -492,7 +412,6 @@ namespace REDZONE.AppCode
 
             return eSummary;
         }
-
 
         public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID)
         {
@@ -937,12 +856,11 @@ namespace REDZONE.AppCode
             return mSummary;
         }
 
-        public List<MetricValueReason> getMetricPeriodReasons(string mpId)
+        public List<MPReason> getMetricPeriodReasons(string mpId)
         {
-
             //Define and Initializa Model Object Components
-            List<MetricValueReason> reasonList = new List<MetricValueReason>();
-            MetricValueReason mpReason = new MetricValueReason();
+            List<MPReason> reasonList = new List<MPReason>();
+            MPReason mpReason = new MPReason();
 
             string raw_data = String.Empty;
             try
@@ -955,20 +873,112 @@ namespace REDZONE.AppCode
                 {
                     foreach (var reason in apiMPReasons)
                     {
-                        mpReason = new MetricValueReason((string)reason["mpr_display_text"], (string)reason["mpr_desc"], false);
+                        int order = 0;
+                        mpReason = new MPReason();
+                        mpReason.reason_id = (string)reason["mpr_id"];                //Primary Table Key Field
+                        mpReason.metric_period_id = (string)reason["mtrc_period_id"];
+                        mpReason.reason_text = (string)reason["mpr_display_text"];
+                        mpReason.reason_order = (string)reason["mpr_display_order"];
+                        mpReason.reason_description = (string)reason["mpr_desc"];
+                        mpReason.reason_std_yn = (string)reason["mpr_std_yn"];
+                        mpReason.times_used = (string)reason["usedby"];
+                        mpReason.reason_order_int = (Int32.TryParse(mpReason.reason_order, out order)) ? order : 99999;
+                        mpReason.isAssigned = false;
                         reasonList.Add(mpReason);
                     }
                 }
             }
             catch{
-            
             }
 
+            //Dictionary<String, MPReason> test = reasonList.ToDictionary(r => r.reason_id);
+            //reasonList.Sort((x,y)=> x.reason_std_yn.CompareTo(y.reason_std_yn));   //Sort by the 'std_yn' code
+            reasonList.Sort((x, y) => x.reason_order_int.CompareTo(y.reason_order_int));   //Sort by the Numeric Reason Order Value
             return reasonList;            
         }
 
 
         // ====================== HELPER FUNCTIONS ================================
+        public static string intToMonth(int monthNo)
+        {
+            string monthName = "";
+            switch (monthNo)
+            {
+                case 1:
+                    monthName = "January";
+                    break;
+                case 2:
+                    monthName = "February";
+                    break;
+                case 3:
+                    monthName = "March";
+                    break;
+                case 4:
+                    monthName = "April";
+                    break;
+                case 5:
+                    monthName = "May";
+                    break;
+                case 6:
+                    monthName = "June";
+                    break;
+                case 7:
+                    monthName = "July";
+                    break;
+                case 8:
+                    monthName = "August";
+                    break;
+                case 9:
+                    monthName = "September";
+                    break;
+                case 10:
+                    monthName = "October";
+                    break;
+                case 11:
+                    monthName = "November";
+                    break;
+                case 12:
+                    monthName = "December";
+                    break;
+                default:
+                    break;
+            }
+            return monthName;
+        }
+        public int monthToInt(string monthName)
+        {
+            int monthNo = 0;
+            switch (monthName)
+            {
+                case "January": monthNo = 1;
+                    break;
+                case "February": monthNo = 2;
+                    break;
+                case "March": monthNo = 3;
+                    break;
+                case "April": monthNo = 4;
+                    break;
+                case "May": monthNo = 5;
+                    break;
+                case "June": monthNo = 6;
+                    break;
+                case "July": monthNo = 7;
+                    break;
+                case "August": monthNo = 8;
+                    break;
+                case "September": monthNo = 9;
+                    break;
+                case "October": monthNo = 10;
+                    break;
+                case "November": monthNo = 11;
+                    break;
+                case "December": monthNo = 12;
+                    break;
+                default:
+                    break;
+            }
+            return monthNo;
+        }
         private string getMonthShortName(string monthLong)
         {
             string monthShort = String.Empty;

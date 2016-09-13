@@ -27,7 +27,7 @@ namespace REDZONE.Controllers
             //Merge both lists into a single list
 
             //Return the merged list to the view for display
-            List<MetricValueReason> MPReasons = new List<MetricValueReason>();
+            List<MPReason> MPReasons;
 
             //MetricValueReason reason1 = new MetricValueReason("First Reason", "This reason is hardcoded", false);
             //MPReasons.Add(reason1);
