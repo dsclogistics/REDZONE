@@ -1162,6 +1162,8 @@ namespace REDZONE.AppCode
             
             return prevNext;
         }
+
+
         public List<MPReason> getMPReasonList(string metricPeriodId)
         {
             List<MPReason> MPReasonList = new List<MPReason>();
@@ -1198,6 +1200,36 @@ namespace REDZONE.AppCode
 
             }
             return MPReasonList;
+        }
+
+        public List<MetricPeriod> getMetricPeriodList()
+        {
+            List<MetricPeriod> MetricPeriodList = new List<MetricPeriod>();
+            MetricPeriod tempMetricPeriod;
+
+            string raw_data = api.getMetricPeriods();
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jReasonList = (JArray)parsed_result["mmperiod"];
+                foreach (var res in jReasonList)
+                {
+                    tempMetricPeriod = new Models.MetricPeriod();
+                    tempMetricPeriod.mtrc_period_id = (string)res["mtrc_period_id"];
+                    tempMetricPeriod.mtrc_period_name = (string)res["mtrc_period_name"];
+                    tempMetricPeriod.mtrc_period_token = (string)res["mtrc_period_token"];
+
+                    MetricPeriodList.Add(tempMetricPeriod);
+                }
+
+            }
+            catch
+            {
+
+            }
+            return MetricPeriodList;
         }
     }
 }

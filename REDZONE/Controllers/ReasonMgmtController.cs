@@ -17,16 +17,21 @@ namespace REDZONE.Controllers
         // GET: ReasonMgmt
         public ActionResult Index(int? id)
         {
-            List<MPReason> MPReasonList = new List<MPReason>();
-            APIDataParcer dataParcer = new APIDataParcer();
-
             id = (id == null) ? 0 : id;    //Assign a Zero value to Id if it's null
 
-            //**********> Need API to get list of Metric Periods <**********
-            ViewBag.metric_period_sel_list = new SelectList(db.MTRC_METRIC_PERIOD, "mtrc_period_id", "mtrc_period_name", id);
+            //Get 
+            List<MetricPeriod> MetricPeriodList = new List<MetricPeriod>();
+            APIDataParcer dataParcer = new APIDataParcer();
+
+            MetricPeriodList = dataParcer.getMetricPeriodList();
+
+            ViewBag.metric_period_sel_list = new SelectList(MetricPeriodList, "mtrc_period_id", "mtrc_period_name", id);
             ViewBag.id = id;
 
-            if(id > 0)
+            List<MPReason> MPReasonList = new List<MPReason>();
+            dataParcer = new APIDataParcer();
+
+            if (id > 0)
             {
                 MPReasonList = dataParcer.getMPReasonList(id.ToString());
             }
