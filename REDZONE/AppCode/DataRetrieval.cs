@@ -311,6 +311,8 @@ namespace REDZONE.AppCode
                 return "ERROR: " + e.Message;
             }
         }
+
+        //Json Data Retrieval for Metric Period Reasons
         public string getMetricPeriodReasons(string metricPeriodId)
         {
             string endPoint = "reasons";

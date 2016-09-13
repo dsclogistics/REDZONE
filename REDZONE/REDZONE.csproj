@@ -225,7 +225,6 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metric.cs" />
     <Compile Include="Models\MetricSummaryViewModel.cs" />
-    <Compile Include="Models\MetricValueReason.cs" />
     <Compile Include="Models\MPReason.cs" />
     <Compile Include="Models\MTRC_DATA_SRC.cs">
       <DependentUpon>DSCREDZONE_ENTITY.tt</DependentUpon>
@@ -268,6 +267,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\BuildingSummary.css" />
     <Content Include="Content\EditView.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\RedZoneApp.css" />
@@ -361,6 +361,7 @@
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\BuildingSummary.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
     <Content Include="Scripts\jquery-3.1.0.min.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
