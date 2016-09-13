@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using REDZONE.Models;
 using REDZONE.AppCode;
+using Newtonsoft.Json.Linq;
 
 namespace REDZONE.Controllers
 {
@@ -56,6 +57,33 @@ namespace REDZONE.Controllers
         public ActionResult _RsnReorder()
         {
             return PartialView();
+        }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        [HttpPost]
+        public string saveMPReason(string raw_json)
+        {
+            DataRetrieval api = new DataRetrieval();
+            APIDataParcer parcer = new APIDataParcer();
+
+            string status = api.saveMPReason(raw_json);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }                
+            }
+
         }
 
     }

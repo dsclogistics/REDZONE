@@ -311,6 +311,7 @@ namespace REDZONE.AppCode
                 return "ERROR: " + e.Message;
             }
         }
+
         public string getMetricPeriodReasons(string metricPeriodId)
         {
             string endPoint = "reasons";
@@ -340,6 +341,11 @@ namespace REDZONE.AppCode
             }
         }
 
+        //------------------------------------------------------------------------------------------------
+        //Reason Management API Data Retrieval
+        //------------------------------------------------------------------------------------------------
+
+        //API Get List of Metric Periods
         public string getMetricPeriods()
         {
             string endPoint = "mmperiods";
@@ -355,6 +361,36 @@ namespace REDZONE.AppCode
                 //Stream newStream = request.GetRequestStream();
                 //newStream.Write(bytes, 0, bytes.Length);
                 //newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        //Reason Management API Add Reason
+        public string saveMPReason(string raw_json)
+        {
+            string endPoint = "savereason";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = raw_json;
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
                 WebResponse response = request.GetResponse();
                 using (Stream responseStream = response.GetResponseStream())
                 {

@@ -444,7 +444,6 @@
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
     <Content Include="Views\ReasonMgmt\Index.cshtml" />
     <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
-    <Content Include="Views\ReasonMgmt\_RsnReorder.cshtml" />
     <Content Include="Views\MPVreasons\Assigment.cshtml" />
   </ItemGroup>
   <ItemGroup>

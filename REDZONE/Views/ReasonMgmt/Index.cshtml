@@ -167,27 +167,6 @@
 
 
 <!-- Modal -->
-<div id="reasonReorderForm" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Reorder Reasons</h4>
-            </div>
-            <div class="modal-body" id="reasonReorderBody">
-                asdfkj
-            </div>
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnReorderPopupDone">Done</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left:15px">Cancel</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <div id="reasonEditForm" class="modal fade" role="dialog">
     <div class="modal-dialog" style="width:80%">
 
@@ -223,7 +202,6 @@
             var selId = $(this).val();
             location.href = "/ReasonMgmt/Index/" + selId;
         });
-
 
 
         //On Reason List details button click
@@ -305,6 +283,7 @@
             });
         });
 
+
         //Add New Reason button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnAddReason', function () {
@@ -362,6 +341,7 @@
                 $('#reasonEditForm').modal('show');
             });
         });
+
 
         //Reorder Button -> Reorder Popup
         //------------------------------------------------------------------------
@@ -446,12 +426,9 @@
 
         //Add Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnAddReasonDetail', function () {
-            //Prompt User
-
-            //ajax POST
-
-            alert('Add')
+        $("#reasonEditFooter").on('click', '#btnAddReasonDetail', function () {
+            //alert(buildAddMPReasonJSON());
+            addMPReason();
         });
 
         //Save Button
@@ -460,8 +437,8 @@
             //Prompt User
 
             //ajax POST
-
-            alert('Save')
+            alert(buildUpdateMPReasonJSON());
+            alert('Save');
         });
 
         //Remove Button
@@ -505,6 +482,76 @@
             location.reload(true);
         });
     });
+
+
+    //------------------------------------------------------------------------------------------------
+    //-------------------------------------------FUNCTIONS--------------------------------------------
+    //------------------------------------------------------------------------------------------------
+
+    //Add Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function buildAddMPReasonJSON() {
+        
+        var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
+        var reason_text = $("#reasonEditBody").find("#reason_text").val();
+        var reason_description = $("#reasonEditBody").find("#reason_description").val();
+        var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
+        //var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
+        var reason_order = 4;
+        var user_id = "@User.Identity.Name";
+
+        var jsonPayload = '{"reasons":[{"mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"'+user_id+'"}]}';
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+    function addMPReason() {
+        var payload = buildAddMPReasonJSON();
+        alert(payload);
+
+        $.ajax({
+            url: '/ReasonMgmt/saveMPReason',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/savereason',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Added!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    //Add Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function buildUpdateMPReasonJSON() {
+
+        var reason_id = $("#reasonEditBody").find("reason_id").val();
+        var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
+        var reason_text = $("#reasonEditBody").find("#reason_text").val();
+        var reason_description = $("#reasonEditBody").find("#reason_description").val();
+        var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
+        var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
+        var user_id = "@User.Identity.Name";
+
+        var jsonPayload = '{"reasons":[{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}]}';
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+
 </script>
 
 @section Scripts {

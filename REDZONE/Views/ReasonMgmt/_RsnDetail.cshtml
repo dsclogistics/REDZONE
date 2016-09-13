@@ -7,7 +7,7 @@
     <span id="saveMessage" class="alert-success" style="display:none; font-size:large; font-weight:bold"> </span>
     @*<br />*@
     
-    @Html.HiddenFor(model => model.metric_period_id, new { htmlAttributes = new { @id = "hdnMetricPeriodId" } })
+    @Html.Hidden("hdnMetricPeriodId", Model.metric_period_id, new { @id = "hdnMetricPeriodId" })
     <div class="row add-reason-hide" style="margin-top:5px">
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
@@ -34,7 +34,7 @@
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_text, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
                 @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Enter Reason" } })
-                @Html.HiddenFor(model => model.reason_text, new { htmlAttributes = new { @id = "hdnReasonText" } })
+                @Html.Hidden("hdnReasonText", Model.reason_text, new { @id = "hdnReasonText" } )
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
@@ -59,6 +59,7 @@
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_description, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
                 @Html.EditorFor(model => model.reason_description, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Enter Description", style = "min-width:100%" } })
+                @Html.Hidden("hdnReasonDesc", Model.reason_text, new { @id = "hdnReasonDesc" })
             </div>
         </div>
     </div>
@@ -68,6 +69,7 @@
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
                 @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Y/N?"} })
+                @Html.Hidden("hdnReasonStd", Model.reason_text, new { @id = "hdnReasonStd" })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
