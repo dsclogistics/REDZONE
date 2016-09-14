@@ -54,6 +54,18 @@ function updateOrderNumbers() {
     });
 }
 
+function getNextOrder() {
+    var maxValue = null;
+
+    $('.stdReasonRow #reason_order').each(function () {
+        var value = parseFloat($(this).text());
+        maxValue = (value > maxValue) ? value : maxValue;
+    });
+
+    maxValue = (maxValue == null) ? 1 : maxValue + 1;
+    return maxValue;
+}
+
 $(document).ready(function () {
 
     // This is the New Branch

@@ -23,26 +23,14 @@
     </div>
 
     <div class="panel-body ">
-        @*@if (ViewBag.id != 0)
-            {
-                //REASON DETAIL
 
-                <div class="row" id="divEditor" style="border:0px double black; text-align:center; margin: 0px 0px">
-                    <div class="row" style="border-bottom: 1px solid black; margin:0; text-align:left"><h3>Reason Details</h3></div>
-                    <div type="hidden" id="msgLoading">
-                        <br /><p>Please wait... Loading Info</p><img src="~/Images/ui-anim_basic_16x16.gif" /><br /><br />
-                    </div>
-                    <div id="divReasonDetailsView">
-                        @Html.Action("_RsnDetail")
-                    </div>
-                </div>
-            }*@
 
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
             if (Model.Count() > 0)
             {
+                //Reason LIST
                 <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
                     @*<div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
                         <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
@@ -52,28 +40,30 @@
                         <div class="row" style="margin:0 auto; ">
                         @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
 
-                            @*REASON LIST*@
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
-                                <tr style="background-color: rgb(51,122,183); color:white" >
-                                    @*<th>
-                                        @Html.DisplayNameFor(model => model.reason_id)
-                                    </th>*@
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_text)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_order)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.reason_std_yn)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.times_used)
-                                    </th>
-                                    <th>
+                                <thead>
+                                    <tr style="background-color: rgb(51,122,183); color:white">
+                                        @*<th>
+                                            @Html.DisplayNameFor(model => model.reason_id)
+                                        </th>*@
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_text)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_order)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.reason_std_yn)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.times_used)
+                                        </th>
+                                        <th>
 
-                                    </th>
-                                </tr>
+                                        </th>
+                                    </tr>
+                                </thead>
+
                                 <tbody>
                                     @foreach (REDZONE.Models.MPReason item in Model)
                                     {
@@ -151,6 +141,12 @@
             {
                 <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
                     <span style="color:red; font-weight:bold;">NO REASONS HAVE BEEN DEFINED FOR THE SELECTED METRIC PERIOD  </span>
+                    <hr />
+                    <div class="row" style="text-align:left; margin-left: 5px">
+                        <div class="col-sm-6" id="btnsReorder" style="float:left">
+                            <button type="button" class="btn btn-primary" id="btnAddReason">Add New Reason</button>
+                        </div>
+                    </div>
                 </div>
             }
         }
@@ -166,28 +162,7 @@
 </div>
 
 
-<!-- Modal -->
-<div id="reasonReorderForm" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Reorder Reasons</h4>
-            </div>
-            <div class="modal-body" id="reasonReorderBody">
-                asdfkj
-            </div>
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnReorderPopupDone">Done</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left:15px">Cancel</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
+<!-- Editor Modal -->
 <div id="reasonEditForm" class="modal fade" role="dialog">
     <div class="modal-dialog" style="width:80%">
 
@@ -223,7 +198,6 @@
             var selId = $(this).val();
             location.href = "/ReasonMgmt/Index/" + selId;
         });
-
 
 
         //On Reason List details button click
@@ -305,65 +279,14 @@
             });
         });
 
-        //Add New Reason button
+
+        //Add New Reason button -> Add Reason Popup
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnAddReason', function () {
-
-            //If have made changes in the editor to another reason, prompt user.
-
-            var tempScrollTop = $(window).scrollTop();
-
-            //Get data for MPReason model from specified row.
-            var metric_period_id = $(MtrcPeriodId).val();
-
-            // Put data into a single object.
-            var formData = {
-                metric_period_id: metric_period_id
-            };
-
-            // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
-            $.ajax({
-                type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-                //method    : 'POST',
-                @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
-                url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
-                //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
-                data: formData, // our data object created earlier
-                //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
-                //encode    : true,
-                cache: false,
-                //--- On error, execute this function ------
-                error: function (xhr, status, error) {
-                    //var err = eval("(" + xhr.responseText + ")");
-                    $("#reasonEditBody").html(xhr.responseText);
-                    //$("#msgLoading").hide();
-                    //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                //This code Executes After the Ajax call completes successfully
-                //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
-                $("#reasonEditBody").html(d);
-                //$("#msgLoading").hide();
-                $(".editable-rsn-attr").prop("disabled", false);
-                $(".add-reason").show();
-                $(".reason-detail").hide();
-                $(".add-reason-hide").hide();
-
-                //Sets detail buttons
-                $("#btnAddReasonDetail").show();
-                $("#btnSaveReasonDetail").hide();
-                $("#btnAddReasonDetail").prop("disabled", false);
-                $("#btnEditReasonDetail").prop("disabled", true);
-                $("#btnRemoveReason").prop("disabled", true);
-                $("#btnCancelReasonEdit").prop("disabled", false);
-
-                $(window).scrollTop(tempScrollTop);
-
-                $('#reasonEditForm').modal('show');
-            });
+            popupAddMPReason();
         });
 
-        //Reorder Button -> Reorder Popup
+        //Reorder Button -> Reorder Mode
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderReasons', function () {
             //Enable the Table row sortability function
@@ -402,9 +325,13 @@
             //    $('#reasonReorderForm').modal('show');
             //});
         });
+
+        //Reorder Save Button
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderSave', function () {
             alert("Saving functionality is not enabled yet");
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
+            buildReorderMPReasonJSON();
             location.reload();
             //$('#btnsReordering').hide();
             //$('#btnsReorder').show();
@@ -413,6 +340,8 @@
             //$('.nonstdReasonRow').show();
         });
 
+        //Reorder Cancel Button
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
             location.reload();
             //$('.sortIcon').hide();
@@ -422,7 +351,7 @@
         });
 
 
-        //Edit Button
+        //Editor Edit Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnEditReasonDetail', function () {
 
@@ -444,29 +373,25 @@
             $("#btnCancelReasonEdit").prop("disabled", false);
         });
 
-        //Add Button
+        //Editor Add Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnAddReasonDetail', function () {
-            //Prompt User
-
-            //ajax POST
-
-            alert('Add')
+        $("#reasonEditFooter").on('click', '#btnAddReasonDetail', function () {
+            //alert(buildAddMPReasonJSON());
+            var validated = validateReasonForm();
+            if (validated) addMPReason();
         });
 
-        //Save Button
+        //Editor Save Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnSaveReasonDetail', function () {
-            //Prompt User
-
-            //ajax POST
-
-            alert('Save')
+        $("#reasonEditFooter").on('click', '#btnSaveReasonDetail', function () {
+            //alert(buildUpdateMPReasonJSON());
+            var validated = validateReasonForm();
+            if (validated) updateMPReason();
         });
 
-        //Remove Button
+        //Editor Remove Button
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnRemoveReason', function () {
+        $("#reasonEditFooter").on('click', '#btnRemoveReason', function () {
             //Prompt User
 
             //DELETE
@@ -474,37 +399,350 @@
             alert('Remove')
         });
 
-        //Cancel Button
+        //Editor inline changes and validation
         //------------------------------------------------------------------------
-        $("#divEditor").on('click', '#btnCancelReasonEdit', function () {
+        //$(".editable-rsn-attr").on('change', '#reason_text',(function () {
+        //    $(this).css("background-color", "none");
+        //});
 
-            //Reload either the original data or null data
-            //Make editor readonly
-
-            //Revert buttons back and disable them
-            $(".editable-rsn-attr").prop("disabled", true);
-
-            $("#btnSaveReasonDetail").show();
-            $("#btnAddReasonDetail").hide();
-
-            //If reloading original data, set edit button disabled = false
-            //of reloading null data, set edit button disabled = true
-
-            $("#btnEditReasonDetail").prop("disabled", true);
-            $("#btnSaveReasonDetail").prop("disabled", true);
-            $("#btnRemoveReason").prop("disabled", true);
-            $("#btnCancelReasonEdit").prop("disabled", true);
+        $(document).on('change', '.editable-rsn-attr', function () {
+            $(this).css("background-color", "transparent");
         });
 
-        //------------------------------------------------------------------------
-        //Reorder Popup Done Button
-        $("#reasonReorderForm").on('click', '#btnReorderPopupDone', function () {
-            //Prompt are you sure?
-            //Refresh page
-            alert('Done')
-            location.reload(true);
-        });
     });
+
+
+    //------------------------------------------------------------------------------------------------
+    //-------------------------------------------FUNCTIONS--------------------------------------------
+    //------------------------------------------------------------------------------------------------
+
+    //Add Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function popupAddMPReason() {
+        var tempScrollTop = $(window).scrollTop();
+
+        //Get data for MPReason model from specified row.
+        var metric_period_id = $(MtrcPeriodId).val();
+
+        // Put data into a single object.
+        var formData = {
+            metric_period_id: metric_period_id
+        };
+
+        // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
+        $.ajax({
+            type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            //method    : 'POST',
+            @*url     : '@Url.Action("_metricPeriodDetails", "MetricPeriod")',*@
+            url: '/ReasonMgmt/_RsnDetail', // the url where we want to POST
+            //data    : { id: idToDisplay },     //<---- Data Parameters (if not already passed in the Url)
+            data: formData, // our data object created earlier
+            //dataType  : 'json', // what type of data do we expect back from the server (Remove line if expecting html [partial or full]view result)
+            //encode    : true,
+            cache: false,
+            //--- On error, execute this function ------
+            error: function (xhr, status, error) {
+                //var err = eval("(" + xhr.responseText + ")");
+                $("#reasonEditBody").html(xhr.responseText);
+                //$("#msgLoading").hide();
+                //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            //This code Executes After the Ajax call completes successfully
+            //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
+            $("#reasonEditBody").html(d);
+            //$("#msgLoading").hide();
+            $(".editable-rsn-attr").prop("disabled", false);
+            $(".add-reason").show();
+            $(".reason-detail").hide();
+            $(".add-reason-hide").hide();
+
+            //Sets detail buttons
+            $("#btnAddReasonDetail").show();
+            $("#btnSaveReasonDetail").hide();
+            $("#btnAddReasonDetail").prop("disabled", false);
+            $("#btnEditReasonDetail").prop("disabled", true);
+            $("#btnRemoveReason").prop("disabled", true);
+            $("#btnCancelReasonEdit").prop("disabled", false);
+
+            $(window).scrollTop(tempScrollTop);
+
+            $('#reasonEditForm').modal('show');
+        });
+    }
+
+    function buildAddMPReasonJSON() {
+
+        var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
+        var reason_text = $("#reasonEditBody").find("#reason_text").val();
+        var reason_description = $("#reasonEditBody").find("#reason_description").val();
+        var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
+        var reason_order = (reason_std_yn != "Y") ? "" : getNextOrder();
+
+        //var reason_order = 4;
+        var user_id = "@User.Identity.Name";
+
+        var jsonPayload = '{"reasons":[{"mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"'+user_id+'"}]}';
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+    function addMPReason() {
+        var payload = buildAddMPReasonJSON();
+        //alert(payload);
+
+        $.ajax({
+            url: '/ReasonMgmt/saveMPReason',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/savereason',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Added!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    //Update Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function buildUpdateMPReasonJSON() {
+
+        var reason_id = $("#reasonEditBody").find("#reason_id").val();
+        var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
+        var reason_text = $("#reasonEditBody").find("#reason_text").val();
+        var reason_description = $("#reasonEditBody").find("#reason_description").val();
+        var reason_std_yn = $("#reasonEditBody").find("#reason_std_yn").val().toString();
+        //var reason_order
+        if (reason_std_yn != "Y") {
+            reason_order = "";
+        }
+        else {
+            var temp_reason_order = $("#reasonEditBody").find("#reason_order").val();
+            if (temp_reason_order == "") {
+                reason_order = getNextOrder();
+            }
+            else {
+                reason_order = temp_reason_order;
+            }
+        }
+        var user_id = "@User.Identity.Name";
+
+        var jsonPayload = '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+    function updateMPReason() {
+        var payload = buildUpdateMPReasonJSON();
+        //alert(payload);
+
+        $.ajax({
+            url: '/ReasonMgmt/updateMPReason',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/updatereason',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Updated!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    //Reorder Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function buildReorderMPReasonJSON() {
+        var jsonPayload = '{"filler":['
+
+        $('.stdReasonRow').each(function () {
+            jsonPayload = (jsonPayload != '{"filler":[') ? jsonPayload + ',' : jsonPayload;
+
+            var reason_id = parseInt($(this).find("#reason_id").text());
+            var metric_period_id = $("#MtrcPeriodId").val();
+            var reason_order = parseInt($(this).find("#reason_order").text());
+            var user_id = "@User.Identity.Name";
+
+            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+            
+        });
+
+        jsonPayload = jsonPayload + ']}'
+
+        alert(jsonPayload);
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+
+
+    //Validation
+    //------------------------------------------------------------------------------------------------
+    function validateReasonForm() {
+        var passValidation = true;
+        var alertString = "";
+
+        $(".editable-rsn-attr").each(function () {
+            var thisVal = $(this).val();
+
+            //alert("Element id is: " + $(this).prop("id"));
+
+            switch ($(this).prop("id")) {
+                case "reason_text":
+                    if (thisVal == "") {
+                        alertString = alertString + 'Reason text is required.\n';
+                        passValidation = false;
+                        $(this).css("background-color", "red");
+                    }
+                    break;
+
+                case "reason_description":
+                    break;
+
+                case "reason_std_yn":
+                    thisVal = thisVal.toUpperCase();
+
+                    if (thisVal != "Y" && thisVal != "N") {
+                        alertString = alertString + 'Standardized (Y/N) must be Y or N.\n';
+                        passValidation = false;
+                        $(this).css("background-color", "red");
+                    }
+                    else {
+                        $(this).val(thisVal);
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        if (alertString != "") alert(alertString);
+        return passValidation;
+    }
+
+    function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces) {
+        //// First Validation. If input values is null or empty. It passes
+        //if (txtControl.val() == "") return "PASS";
+
+        //var txtValue = txtControl.val();
+        //var validationMessage = "PASS";
+        //var inputIntValue = Number(txtValue);
+        //var minRange = Number(minVal);
+        //var maxRange = Number(maxVal);
+
+        ////Second Validation, make sure that the input value is a number.
+        //if (isNaN(inputIntValue)) {  // Value is not a number
+        //    return "Value must be numeric";
+        //}
+
+        //if (dataType == "int") {// Integer Value cannot have decimal values
+        //    if (txtValue.indexOf(".") >= 0) {
+        //        validationMessage = "Value must not contain decimals";
+        //    }
+        //} else
+        //    if (dataType == "dec") {
+        //        //There is no custom validation for now
+        //    } else
+        //        if (dataType == "cur") {
+        //            //There is no custom validation for now
+        //        } else
+        //            if (dataType == "pct") {
+        //                //There is no custom validation for now
+        //            }
+
+        ////Round value off to the requiered number of decimal places for all non integer values
+        //if (dataType != "int") {
+        //    //parseFloat(txtValue).toFixed(2);
+        //    txtControl.val(inputIntValue.toFixed(Number(decPlaces)));
+        //}
+
+        ////Check Min and Max for all data types
+        //if (inputIntValue < minRange || inputIntValue > maxRange) {
+        //    validationMessage = "Value must be between " + minVal + " and " + maxRange;
+        //}
+
+        //return validationMessage;
+    }
+    //------------------------------------------------------------------------------------------------
+    function validateStrEntry(txtValue, strLength) {
+        //var stringLength = Number(strLength);
+        //if (stringLength == 0 || isNaN(stringLength)) {
+        //    //alert("Length is not a number");
+        //    //The Length is undefined. We will assume that any lenght is valid
+        //    return "PASS"
+        //}
+        //if (txtValue.length < Number(strLength)) {
+        //    return "PASS";
+        //}
+        //return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
+    }
+    //------------------------------------------------------------------------------------------------
+    function validateTxtField($txtControl){
+        @*var oldValue = $txtControl.val();
+        var newValue = $txtControl.val().trim();
+        var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
+
+        //Validate the Entered Value
+        //$(this)
+
+        var valMessage = "";
+
+        //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
+        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && isNAallowed == "True") {
+            newValue = "N/A";
+            valMessage = "PASS";
+            $txtControl.parents(".bldngRow").find("#isNA").first().val("Y");
+        }
+        else {
+            //Perform either the Numeric or the String Validations
+            if ("@Model.isNumeric" == "True") {
+                //Validate the input as a number
+                valMessage = validateNumEntry($txtControl, "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
+                //alert("result: " + valMessage);
+            }
+            else {
+                //Perform the String Validation
+                valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
+            }
+            //Check the result of the validation
+            $txtControl.parents(".bldngRow").find("#isNA").first().val("N");
+        }
+
+        if (valMessage == "PASS" && !(oldValue == newValue)) {
+            //If the value was altered/changed in any way, update with new value and set appropiate flags
+            $txtControl.val(newValue);      //Update the text field with the new value if they are not equal.
+            $txtControl.parents(".bldngRow").find("#saveFlag").first().val("Y");
+            $("#frmModified").val("Y");
+            $("#btnSave").prop('disabled', false);
+        }
+
+        return valMessage;*@
+    }
 </script>
 
 @section Scripts {
