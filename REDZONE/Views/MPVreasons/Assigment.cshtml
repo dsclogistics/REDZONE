@@ -163,6 +163,28 @@
                 <br />
                 <div class="row " style="text-align: center">
                     <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
+
+                        <!-- Non Standard Drop down button group -->
+                        <div class="btn-group" >
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:350px; font-size:14px">
+                                [ Other Reason ... ] <span class="caret" style="float:right"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="min-width:350px">
+                                @foreach (var item in Model)
+                                {
+                                    if (!item.reason_std_yn.Equals("Y"))
+                                    {
+                                        // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
+                                        <li><a class="ddlReasonItem" id="li_@item.reason_id" href="#">@item.reason_text</a></li>
+                                    }
+                                }
+                                <li role="separator" class="divider"></li>
+                                <li><a id="selNewReason" href="#">[ - Add New Reason - ]</a></li>
+                            </ul>
+                        </div>
+
+
+
                         <select id="ddlReason" class="form-control" style="min-width:350px; color:white; background-color:#006981">
                             <option value="none">[ Other Reason ... ]</option>
                             @foreach (var item in Model)
@@ -189,8 +211,8 @@
 </div>
 
 
-<div id="reasonEditForm" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="width:80%; min-width:400px">
+<div id="addReasonForm" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:30%; min-width:400px">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -199,8 +221,8 @@
             </div>
             <div class="modal-body" id="reasonEditBody">
 
-                <div class="row" style="margin-top:5px">
-                    <div class="col-xs-12">
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-xs-12" style="text-align: center">
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">Reason Text</span>
                             <input type="text" class="form-control" placeholder="[ Enter New Reason ]" aria-describedby="basic-addon1">
@@ -310,7 +332,7 @@
                 alert("You requested to do nothing.. :)");
             }
             else if (reasonId == "new") {
-                alert("Adding a new Reason Code Option is not Enabled yet");
+                $('#addReasonForm').modal('show');
             }
             else {
                 //Adds selected Option to the Check List
@@ -355,5 +377,24 @@
             $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');
         });
 
+        $('.ddlReasonItem').click(function () {
+            var reasonId = $(this).prop("id").replace("li_", "");
+            var reasonText = $(this).html();
+            var lastDynamicIndex = parseInt($('#newReasonCounter').val()) + 1;
+
+            //alert("Action Selected! Id: " + reasonId + "\nSelection Text: " + reasonText + "\nLast Dynamic element Index is: " + lastDynamicIndex);
+
+            //Adds selected Option to the Check List
+            dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex);
+            $('#addedReasons').append(dynamicReasonTag);
+            $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
+            //Reset the select list index
+            $('#addedReasons').focus();
+
+        });
+
+        $('#selNewReason').click(function () {
+            $('#addReasonForm').modal('show');
+        });
     });
 </script>
