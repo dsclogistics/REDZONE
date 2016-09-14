@@ -36,6 +36,12 @@ namespace REDZONE.Controllers
             if (id > 0)
             {
                 MPReasonList = dataParcer.getMPReasonList(id.ToString());
+
+                List<MPReason> list1 = MPReasonList.Where(x => x.reason_order != "").OrderBy(x => x.reason_order).ToList();
+
+                List<MPReason> list2 = MPReasonList.Where(x => x.reason_order == "").OrderBy(x => x.reason_text).ToList();
+
+                MPReasonList = list1.Concat(list2).ToList();
             }
 
             return View(MPReasonList);

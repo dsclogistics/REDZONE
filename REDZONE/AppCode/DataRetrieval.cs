@@ -376,7 +376,7 @@ namespace REDZONE.AppCode
             }
         }
 
-        //Reason Management API Add Reason
+        //Add Reason
         public string saveMPReason(string raw_json)
         {
             string endPoint = "savereason";
@@ -406,7 +406,7 @@ namespace REDZONE.AppCode
             }
         }
 
-        //Reason Management API Update Reason
+        //Update Reason
         public string updateMPReason(string raw_json)
         {
             string endPoint = "updatereason";
