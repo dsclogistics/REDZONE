@@ -855,12 +855,12 @@ namespace REDZONE.AppCode
 
             return mSummary;
         }
-
+        //=====================================================================================================================
         public List<MPReason> getMetricPeriodReasons(string mpId)
         {
             //Define and Initializa Model Object Components
             List<MPReason> reasonList = new List<MPReason>();
-            MPReason mpReason = new MPReason();
+            MPReason mpReason;
 
             string raw_data = String.Empty;
             try
@@ -875,6 +875,7 @@ namespace REDZONE.AppCode
                     {
                         int order = 0;
                         mpReason = new MPReason();
+                        mpReason.mpvr_Comment = "";
                         mpReason.reason_id = (string)reason["mpr_id"];                //Primary Table Key Field
                         mpReason.metric_period_id = (string)reason["mtrc_period_id"];
                         mpReason.reason_text = (string)reason["mpr_display_text"];
@@ -897,6 +898,44 @@ namespace REDZONE.AppCode
             return reasonList;            
         }
 
+        //=====================================================================================================================
+        public List<MPReason> getAssignedMetricPeriodReasons(string mtrc_period_val_id)
+        {
+            //Define and Initializa Model Object Components
+            List<MPReason> reasonList = new List<MPReason>();
+            MPReason mpReason;
+
+            string raw_data = String.Empty;
+            try
+            {
+                raw_data = api.getAssignedMetricPeriodReasons(mtrc_period_val_id);
+                JObject parsed_result = JObject.Parse(raw_data);
+                JArray apiMPReasons = (JArray)parsed_result["assignedreasons"];
+
+                if (apiMPReasons.HasValues)
+                {
+                    foreach (var reason in apiMPReasons)
+                    {
+                        mpReason = new MPReason();
+                        mpReason.val_reason_id = (string)reason["mpvr_id"];            //Primary Table Key Field
+                        mpReason.reason_id = (string)reason["mpr_id"];
+                        mpReason.metric_period_id = (string)reason["mtrc_period_id"];
+                        mpReason.reason_text = (string)reason["mpr_display_text"];
+                        mpReason.mpvr_Comment = (string)reason["mpvr_comment"];
+                        mpReason.reason_description = (string)reason["mpr_desc"];
+                        reasonList.Add(mpReason);
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            //Dictionary<String, MPReason> test = reasonList.ToDictionary(r => r.reason_id);
+            //reasonList.Sort((x,y)=> x.reason_std_yn.CompareTo(y.reason_std_yn));   //Sort by the 'std_yn' code
+            reasonList.Sort((x, y) => x.reason_order_int.CompareTo(y.reason_order_int));   //Sort by the Numeric Reason Order Value
+            return reasonList;          
+        }
 
         // ====================== HELPER FUNCTIONS ================================
         public static string intToMonth(int monthNo)
