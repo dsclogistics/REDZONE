@@ -11,7 +11,8 @@ namespace REDZONE.Models
         //Model for Metric Period Reasons
         [Display(Name = "Reason ID")]
         public string reason_id { get; set; }
-
+        [Display(Name = "Metric Value Reason ID")]
+        public string val_reason_id { get; set; }
         [Display(Name = "Metric Period")]
         public string metric_period_id { get; set; }
 
@@ -47,5 +48,8 @@ namespace REDZONE.Models
         public string times_used { get; set; }
 
         public bool isAssigned { get; set; }
+
+        [Display(Name = "Assigned Reason Comment")]
+        public string mpvr_Comment { get; set; }
     }
 }
