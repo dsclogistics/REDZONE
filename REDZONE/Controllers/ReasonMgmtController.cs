@@ -139,5 +139,13 @@ namespace REDZONE.Controllers
                 }
             }
         }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/isReasonCreatorAdmin
+        [HttpPost]
+        public string isReasonCreatorAdmin(string user_id)
+        {
+            return "true";
+        }
     }
 }

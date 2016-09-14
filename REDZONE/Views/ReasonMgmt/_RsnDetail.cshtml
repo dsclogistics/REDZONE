@@ -33,7 +33,7 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_text, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Enter Reason" } })
+                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr created-by-admin", disabled = "disabled", placeholder = "Enter Reason" } })
                 @Html.Hidden("hdnReasonText", Model.reason_text, new { @id = "hdnReasonText" } )
             </div>
         </div>

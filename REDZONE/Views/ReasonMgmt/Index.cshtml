@@ -265,6 +265,7 @@
                 $(".reason-detail").show();
                 $(".add-reason-hide").show();
 
+
                 //Sets detail buttons
                 $("#btnSaveReasonDetail").show();
                 $("#btnAddReasonDetail").hide();
@@ -356,6 +357,8 @@
         $("#reasonEditFooter").on('click', '#btnEditReasonDetail', function () {
 
             $(".editable-rsn-attr").prop("disabled", false);
+
+            disableReasonTextIfAdmin($(this).parent().siblings("#reasonEditBody").find("#reason_created_by_uid").val());
 
             //Sets detail buttons
             $("#btnSaveReasonDetail").show();
@@ -565,6 +568,30 @@
         });
     }
 
+    function disableReasonTextIfAdmin(user_id) {
+        $.ajax({
+            url: '/ReasonMgmt/isReasonCreatorAdmin',
+            //url: '',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { "user_id": user_id },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            alert('in ajax');
+            }
+        }).done(function (d) {
+            if (d == "true") {
+                $(".created-by-admin").prop("disabled", true);
+            } else {
+                alert("Error!\nOutput: " + JSON.stringify(d));
+            }
+        });
+    }
+
     //Remove Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function removeMPReason() {
@@ -624,10 +651,10 @@
     }
 
 
-
     //Validation
     //------------------------------------------------------------------------------------------------
     function validateReasonForm() {
+        //Makes sure editable reason inputs follow the required rules before going to the controller.
         var passValidation = true;
         var alertString = "";
 
@@ -672,6 +699,7 @@
     }
 
     function validateReasonDelete() {
+        //Makes sure a reason being removed has "times_used" = 0.
         var passValidation = true;
         var alertString = "";
 
