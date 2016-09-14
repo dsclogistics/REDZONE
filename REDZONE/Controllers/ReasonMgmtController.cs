@@ -114,5 +114,30 @@ namespace REDZONE.Controllers
                 }
             }
         }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/removeMPReason
+        [HttpPost]
+        public string removeMPReason(string mpr_id)
+        {
+            string status = api.removeMPReason(mpr_id);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else
+            {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }
+            }
+        }
     }
 }

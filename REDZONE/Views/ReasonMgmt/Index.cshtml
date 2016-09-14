@@ -361,7 +361,7 @@
             $("#btnSaveReasonDetail").show();
             $("#btnAddReasonDetail").hide();
             $("#btnEditReasonDetail").prop("disabled", true);
-            $("#btnSaveReasonDetail").prop("disabled", false);
+            $("#btnSaveReasonDetail").prop("disabled", true);
             var metricValueUsedOn = $("#timesUsed").val();
             if (metricValueUsedOn == 0) {
                 $("#btnRemoveReason").prop("disabled", false);
@@ -369,7 +369,6 @@
             else {
                 $("#btnRemoveReason").prop("disabled", true);
             }
-            $("#btnSaveReasonDetail").prop("disabled", false);
             $("#btnCancelReasonEdit").prop("disabled", false);
         });
 
@@ -392,21 +391,15 @@
         //Editor Remove Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnRemoveReason', function () {
-            //Prompt User
-
-            //DELETE
-
-            alert('Remove')
+            var validated = validateReasonDelete();
+            if (validated) removeMPReason();
         });
 
         //Editor inline changes and validation
         //------------------------------------------------------------------------
-        //$(".editable-rsn-attr").on('change', '#reason_text',(function () {
-        //    $(this).css("background-color", "none");
-        //});
-
         $(document).on('change', '.editable-rsn-attr', function () {
             $(this).css("background-color", "transparent");
+            $("#btnSaveReasonDetail").prop("disabled", false);
         });
 
     });
@@ -572,6 +565,39 @@
         });
     }
 
+    //Remove Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function removeMPReason() {
+        var reason_id = $("#reasonEditBody").find("#reason_id").val();
+        //alert(reason_id);
+
+        var confirmed = confirm("Are you sure you want to remove this reason permanently?");
+
+        if (confirmed) {
+            $.ajax({
+                url: '/ReasonMgmt/removeMPReason',
+                //url: 'http://dscapidev/dscmtrc/api/v1/metric/removereason',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: { "mpr_id": reason_id },
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                if (d == "Success") {
+                    alert("Reason Removed!");
+                    location.reload();
+                } else {
+                    alert("Error Saving the data!\n" + JSON.stringify(d));
+                }
+            });
+        }
+    }
+
     //Reorder Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function buildReorderMPReasonJSON() {
@@ -645,103 +671,19 @@
         return passValidation;
     }
 
-    function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces) {
-        //// First Validation. If input values is null or empty. It passes
-        //if (txtControl.val() == "") return "PASS";
+    function validateReasonDelete() {
+        var passValidation = true;
+        var alertString = "";
 
-        //var txtValue = txtControl.val();
-        //var validationMessage = "PASS";
-        //var inputIntValue = Number(txtValue);
-        //var minRange = Number(minVal);
-        //var maxRange = Number(maxVal);
+        var thisVal = $("#times_used").val();
 
-        ////Second Validation, make sure that the input value is a number.
-        //if (isNaN(inputIntValue)) {  // Value is not a number
-        //    return "Value must be numeric";
-        //}
-
-        //if (dataType == "int") {// Integer Value cannot have decimal values
-        //    if (txtValue.indexOf(".") >= 0) {
-        //        validationMessage = "Value must not contain decimals";
-        //    }
-        //} else
-        //    if (dataType == "dec") {
-        //        //There is no custom validation for now
-        //    } else
-        //        if (dataType == "cur") {
-        //            //There is no custom validation for now
-        //        } else
-        //            if (dataType == "pct") {
-        //                //There is no custom validation for now
-        //            }
-
-        ////Round value off to the requiered number of decimal places for all non integer values
-        //if (dataType != "int") {
-        //    //parseFloat(txtValue).toFixed(2);
-        //    txtControl.val(inputIntValue.toFixed(Number(decPlaces)));
-        //}
-
-        ////Check Min and Max for all data types
-        //if (inputIntValue < minRange || inputIntValue > maxRange) {
-        //    validationMessage = "Value must be between " + minVal + " and " + maxRange;
-        //}
-
-        //return validationMessage;
-    }
-    //------------------------------------------------------------------------------------------------
-    function validateStrEntry(txtValue, strLength) {
-        //var stringLength = Number(strLength);
-        //if (stringLength == 0 || isNaN(stringLength)) {
-        //    //alert("Length is not a number");
-        //    //The Length is undefined. We will assume that any lenght is valid
-        //    return "PASS"
-        //}
-        //if (txtValue.length < Number(strLength)) {
-        //    return "PASS";
-        //}
-        //return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
-    }
-    //------------------------------------------------------------------------------------------------
-    function validateTxtField($txtControl){
-        @*var oldValue = $txtControl.val();
-        var newValue = $txtControl.val().trim();
-        var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
-
-        //Validate the Entered Value
-        //$(this)
-
-        var valMessage = "";
-
-        //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
-        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && isNAallowed == "True") {
-            newValue = "N/A";
-            valMessage = "PASS";
-            $txtControl.parents(".bldngRow").find("#isNA").first().val("Y");
-        }
-        else {
-            //Perform either the Numeric or the String Validations
-            if ("@Model.isNumeric" == "True") {
-                //Validate the input as a number
-                valMessage = validateNumEntry($txtControl, "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
-                //alert("result: " + valMessage);
-            }
-            else {
-                //Perform the String Validation
-                valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
-            }
-            //Check the result of the validation
-            $txtControl.parents(".bldngRow").find("#isNA").first().val("N");
+        if (thisVal != 0) {
+            alertString = alertString + 'This reason is being used and cannot be removed.';
+            passValidation = false;
         }
 
-        if (valMessage == "PASS" && !(oldValue == newValue)) {
-            //If the value was altered/changed in any way, update with new value and set appropiate flags
-            $txtControl.val(newValue);      //Update the text field with the new value if they are not equal.
-            $txtControl.parents(".bldngRow").find("#saveFlag").first().val("Y");
-            $("#frmModified").val("Y");
-            $("#btnSave").prop('disabled', false);
-        }
-
-        return valMessage;*@
+        if (alertString != "") alert(alertString);
+        return passValidation;
     }
 </script>
 
