@@ -326,9 +326,12 @@
             //});
         });
 
+        //Reorder Save Button
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderSave', function () {
             alert("Saving functionality is not enabled yet");
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
+            buildReorderMPReasonJSON();
             location.reload();
             //$('#btnsReordering').hide();
             //$('#btnsReorder').show();
@@ -337,6 +340,8 @@
             //$('.nonstdReasonRow').show();
         });
 
+        //Reorder Cancel Button
+        //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
             location.reload();
             //$('.sortIcon').hide();
@@ -562,6 +567,33 @@
             }
         });
     }
+
+    //Reorder Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function buildReorderMPReasonJSON() {
+        var jsonPayload = '{"filler":['
+
+        $('.stdReasonRow').each(function () {
+            jsonPayload = (jsonPayload != '{"filler":[') ? jsonPayload + ',' : jsonPayload;
+
+            var reason_id = parseInt($(this).find("#reason_id").text());
+            var metric_period_id = $("#MtrcPeriodId").val();
+            var reason_order = parseInt($(this).find("#reason_order").text());
+            var user_id = "@User.Identity.Name";
+
+            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+            
+        });
+
+        jsonPayload = jsonPayload + ']}'
+
+        alert(jsonPayload);
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+
 
     //Validation
     //------------------------------------------------------------------------------------------------
