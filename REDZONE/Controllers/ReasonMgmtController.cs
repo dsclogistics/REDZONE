@@ -147,5 +147,30 @@ namespace REDZONE.Controllers
         {
             return "true";
         }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/reorderMPReasons
+        [HttpPost]
+        public string reorderMPReasons(string raw_json)
+        {
+            string status = api.reorderMPReasons(raw_json);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else
+            {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }
+            }
+        }
     }
 }

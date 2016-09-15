@@ -330,9 +330,10 @@
         //Reorder Save Button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderSave', function () {
-            alert("Saving functionality is not enabled yet");
+            //alert("Saving functionality is not enabled yet");
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
-            buildReorderMPReasonJSON();
+            //alert(buildReorderMPReasonJSON());
+            reorderMPReasons();
             location.reload();
             //$('#btnsReordering').hide();
             //$('#btnsReorder').show();
@@ -628,26 +629,52 @@
     //Reorder Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function buildReorderMPReasonJSON() {
-        var jsonPayload = '{"filler":['
+        var metric_period_id = $("#MtrcPeriodId").val();
+
+        var jsonPayload = '{"mtrc_period_id":"'+metric_period_id+'","reasons":['
 
         $('.stdReasonRow').each(function () {
-            jsonPayload = (jsonPayload != '{"filler":[') ? jsonPayload + ',' : jsonPayload;
+            jsonPayload = (jsonPayload != '{"mtrc_period_id":"' + metric_period_id + '","reasons":[') ? jsonPayload + ',' : jsonPayload;
 
             var reason_id = parseInt($(this).find("#reason_id").text());
-            var metric_period_id = $("#MtrcPeriodId").val();
             var reason_order = parseInt($(this).find("#reason_order").text());
             var user_id = "@User.Identity.Name";
 
-            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
             
         });
 
         jsonPayload = jsonPayload + ']}'
 
-        alert(jsonPayload);
-
         //alert("Json submitted:\n" + jsonPayloadDetail);
         return jsonPayload
+    }
+
+    function reorderMPReasons() {
+        var payload = buildReorderMPReasonJSON();
+        //alert(payload);
+
+        $.ajax({
+            url: '/ReasonMgmt/reorderMPReasons',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/reorderreasons',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Reordered!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
     }
 
 
