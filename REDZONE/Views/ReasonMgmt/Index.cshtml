@@ -24,7 +24,6 @@
 
     <div class="panel-body ">
 
-
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
@@ -258,13 +257,26 @@
                 //This code Executes After the Ajax call completes successfully
                 //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
                 $("#reasonEditBody").html(d);
-                //$("#msgLoading").hide();
                 $("#btnReasonDetails").prop("disabled", false);
                 $(".editable-rsn-attr").prop("disabled", true);
                 $(".add-reason").hide();
                 $(".reason-detail").show();
                 $(".add-reason-hide").show();
 
+                //Sets the asterisks
+                if (reason_text == "") {
+                    $("#reasonEditBody").find('#reason_text').siblings('.input-group-addon').addClass('asterisk');
+                }
+                else {
+                    $("#reasonEditBody").find('#reason_text').siblings('.input-group-addon').removeClass('asterisk');
+                }
+
+                if (reason_std_yn.toLowerCase() == "n" || reason_std_yn.toLowerCase() == "y") {
+                    $("#reasonEditBody").find('#reason_std_yn').siblings('.input-group-addon').removeClass('asterisk');
+                }
+                else {
+                    $("#reasonEditBody").find('#reason_std_yn').siblings('.input-group-addon').addClass('asterisk');
+                }
 
                 //Sets detail buttons
                 $("#btnSaveReasonDetail").show();
@@ -404,6 +416,30 @@
         $(document).on('change', '.editable-rsn-attr', function () {
             $(this).css("background-color", "transparent");
             $("#btnSaveReasonDetail").prop("disabled", false);
+        });
+
+        $(document).on('change', '.required', function () {
+            var val = $(this).val();
+            //alert(val);
+
+            if (val == "") {
+                $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
+            else {
+                $(this).siblings('.input-group-addon').removeClass('asterisk');
+            }
+        });
+
+        $(document).on('change', '.y-n-required', function () {
+            var val = $(this).val();
+            //alert(val);
+
+            if (val.toLowerCase() == "n" || val.toLowerCase() == "y") {
+                $(this).siblings('.input-group-addon').removeClass('asterisk');
+            }
+            else {
+                $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
         });
 
     });
@@ -683,7 +719,7 @@
     function validateReasonForm() {
         //Makes sure editable reason inputs follow the required rules before going to the controller.
         var passValidation = true;
-        var alertString = "";
+        var alertString = "*";
 
         $(".editable-rsn-attr").each(function () {
             var thisVal = $(this).val();
@@ -721,7 +757,7 @@
             }
         });
 
-        if (alertString != "") alert(alertString);
+        if (alertString != "*") $("#validationMessage").text(alertString);
         return passValidation;
     }
 
