@@ -199,10 +199,38 @@ function menuItemListener(link) {
         cacheMetricValueVariables($cellClicked);
 
         //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
-
-        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+        var buildingId = $('#buildingId').val();
+        var buildingYear = $('#buildingYear').val();
+        var backUrl = '/Home/BuildingSummary/?year=' + buildingYear + '&buildingID=' + buildingId;
+        //alert("Back URL is: " + backUrl);
+        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
-    else {
+    else if (contextMenuOption == "View") {
+        //Reset the Popup Details as to not display older Data
+        $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
+        // Populate via Ajax the partial View that will be displayed in the pop up Form
+        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id
+        //Parameters to pass:  "id" (Metric Period Value Id) 
+        $.ajax({
+            url: '/MPVReasons/viewReasons',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { id: mpvId },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to retrieve Reasons Data from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            $("#reasonsViewContainer").html(d);
+        });
+
+        //Display the popup Form After correctly populated by Ajax call
+        $('#popupViewReasons').modal('show');
+    }
+    else{
         alert("This menu option is not yet Enabled.");
     }
 }

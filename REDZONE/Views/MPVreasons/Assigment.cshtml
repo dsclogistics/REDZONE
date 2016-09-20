@@ -15,7 +15,7 @@
 
     .boxComment {
         margin:0 auto; 
-        margin-bottom:7px; 
+        margin-bottom:10px; 
         max-width:400px; 
     }
     .rCommentBox {
@@ -40,6 +40,17 @@
         text-align:left;
         margin-bottom: 1px;
     }
+
+    .modal-header {
+        background-color: #2052a3;
+        color: white;
+        font-weight:bold;
+    }
+    .hasError {
+        border-color:red;
+        background-color: #feb9b9;
+    }
+
 /************* Check box control Styling**************/
     /* Hiding the checkbox, but allowing it to be focused */
 .badgebox
@@ -80,20 +91,23 @@
  }
 /************* End of Check box control Styling**************/
 
+    .padding2 {
+        padding:2px;
+    }
 </style>
 
 <div>
     <input type="hidden" id="newReasonCounter" value="0"/>
 </div>
 
-<div class="panel panel-info" style="margin-top:5px; font-family:Arial">
-    <div class="panel-heading">
-        <span style="font-weight:bold; font-size:20px">Red Zone Metric Reason Assignment</span><br />
+<div class="panel panel-info" style="margin-top:5px; font-family:Arial; ">
+    <div class="panel-heading padding2">
+        <span style="font-weight:bold; font-size:20px" id="showTable">Red Zone Metric Reason Assignment</span><br />
         <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
         <span style="font-weight:bold; color: black" id="metricDate"></span>
     </div>
-    <div class="panel-body">
-        <div style="margin:0 auto; text-align:center">
+    <div class="panel-body padding2 ">
+        <div style="margin:0 auto; text-align:center; margin-bottom:8px">
             <!-- Metric Period Header Information  -->
             <div class="row" style="margin:0; font-weight:bold">
                 <div class="col-xs-2 headerCell col-xs-offset-3" style="background-color:lightgray">Metric</div>
@@ -106,49 +120,52 @@
                 <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal"></div>
             </div>
         </div> <!-- END OF HEADER INFORMATION-->
-        <br />
+
         <!-- **************** START OF THE ASSIGNED REASONS LIST ******************* -->
-        @if (Model.Count() == 0) { 
-        <div style="color:red; padding:20px; border: 4px double black; border-radius:7px; max-width:900px; margin:0 auto">THERE ARE NO ASSIGNED REASONS FOR THIS METRIC ENTRY</div>
+        @if (Model.Count() == 0)
+        {
+            <div style="color:red; padding:20px; border: 4px double black; border-radius:7px; max-width:900px; margin:0 auto">THERE ARE NO ASSIGNED REASONS FOR THIS METRIC ENTRY</div>
         }
         else
         {
             <div id="reasonListSection">
-                <div class="alert-success" style="font-size:18px; font-family:bold; margin-bottom:10px; padding:5px">Available Reasons for Metric</div>
+                <div class="alert-success" style="font-size:18px; font-family:bold; margin-bottom:10px; padding:3px">Available Reasons for Metric</div>
 
 
 
-                <div class="row " style="text-align: center">
-                 @{ int ckBoxCounter = 0;
-                    string commentStatus = "display: none";
-                 }
-                 @foreach (var item in Model)
-                 {
-                    if (item.reason_std_yn.Equals("Y") || item.isAssigned)
+                <div class="row " id="existingReasons" style="text-align: center">
+                    @{ int ckBoxCounter = 0;
+                     string commentStatus = "display: none";
+                    }
+                    @foreach (var item in Model)
                     {
-                       // Only Show the reason code if it's a Standard Reason or it it is Assigned
-                       string ckStatus = "";
-                       if (item.isAssigned) { ckStatus = "checked"; }
-                        <div class="reasonDiv" id="parent_@ckBoxCounter">
-                            <div class="row reasonLabel">
-                                <label for="primary-@ckBoxCounter" class="btn btn-info reasonCkBox" title="@item.reason_description">
-                                    <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox" @ckStatus>
-                                    <span class="badge">&check;</span><span style="margin-left: 8px">@item.reason_text</span>
-                                </label>
-                                <span style="font-size:8px; color:blue">*STD</span>
-                            </div>
-                            @*Comment box for each Reason displayed*@
-                            @if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
-                            else { commentStatus = "display: none"; }
-                            <div class="row boxComment" style="@commentStatus">
-                                <div class="rCommentBox" contenteditable="true">
-                                    <span class="cmLabel" style="color:darkgray;" >Comment: </span> @item.mpvr_Comment
+                        if (item.reason_std_yn.Equals("Y") || item.isAssigned)
+                        {
+                            // Only Show the reason code if it's a Standard Reason or it it is Assigned
+                            string ckStatus = "";
+                            if (item.isAssigned) { ckStatus = "checked"; }
+                            <div class="reasonDiv" id="parent_@ckBoxCounter">
+                                <input type="hidden" class="origSts" value="@ckStatus" />
+                                <input type="hidden" name="reasonId" value="@item.val_reason_id" />
+                                <div class="row reasonLabel">
+                                    <label for="primary-@ckBoxCounter" class="btn btn-info reasonCkBox" title="@item.reason_description">
+                                        <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox" @ckStatus>
+                                        <span class="badge">&check;</span><span style="margin-left: 8px">@item.reason_text</span>
+                                    </label>
+                                    <span style="font-size:8px; color:blue">*STD</span>
+                                </div>
+                                @*Comment box for each Reason displayed*@
+                                @if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
+                                else { commentStatus = "display: none"; }
+                                <div class="row boxComment" style="@commentStatus">
+                                    <div class="rCommentBox" contenteditable="true">
+                                        <span class="cmLabel" style="color:darkgray;">Comment: </span> @item.mpvr_Comment
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                       ckBoxCounter++;
+                                ckBoxCounter++;
+                        }
                     }
-                 }
                 </div>
 
 
@@ -157,52 +174,42 @@
 
                 <div class="row " style="text-align: center">
                     @*This Section Contains the dynamically added Reason Codes from the Drop Down*@
-                    <div id="addedReasons" class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">                        
+                    <div id="addedReasons" class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
                     </div>
                 </div>
                 <br />
+
+
+
                 <div class="row " style="text-align: center">
                     <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
 
                         <!-- Non Standard Drop down button group -->
-                        <div class="btn-group" >
-                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:350px; font-size:14px">
-                                [ Other Reason ... ] <span class="caret" style="float:right"></span>
+                        <div class="btn-group dropup" style="margin-left: 10px">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:360px; font-size:14px">
+                                [ Select Other Reason ... ] <span class="caret" style="float:right"></span>
                             </button>
-                            <ul class="dropdown-menu" style="min-width:350px">
+                            <ul class="dropdown-menu top" style="min-width:300px; border:4px double darkgray; margin-left:30px">
+                                <li role="separator" class="divider" style="padding:0px"></li>
                                 @foreach (var item in Model)
                                 {
                                     if (!item.reason_std_yn.Equals("Y"))
                                     {
                                         // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
-                                        <li><a class="ddlReasonItem" id="li_@item.reason_id" href="#">@item.reason_text</a></li>
+                                        <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
                                     }
                                 }
-                                <li role="separator" class="divider"></li>
-                                <li><a id="selNewReason" href="#">[ - Add New Reason - ]</a></li>
+                                <li role="separator" class="divider" style="padding:0px"></li>
+                                <li><a id="selNewReason" style="font-weight:bold" href="#">[ - Add New Reason - ]</a></li>
                             </ul>
                         </div>
-
-
-
-                        <select id="ddlReason" class="form-control" style="min-width:350px; color:white; background-color:#006981">
-                            <option value="none">[ Other Reason ... ]</option>
-                            @foreach (var item in Model)
-                            {
-                                if (!item.reason_std_yn.Equals("Y"))
-                                {
-                                    // Only Show the reason codes that are not Standard (Stdr Code are already Visible as check boxes)
-                                    <option value="@item.reason_id">@item.reason_text</option>
-                                }
-                            }
-                            <option value="new" style="font-weight:bold; margin-left:5px">[ - Add New Reason - ]</option>
-                        </select>
                     </div>
                 </div>
                 <br /><br />
                 <div class="row " style="text-align:center">
-                    <button id="btnSaveProg" class="btn btn-primary" style="width:140px; ">Save Progres</button>
-                    <button id="btnBeginAction" class="btn btn-primary" style="width:140px; margin-left:20px">Begin Action Plan</button>
+                    <button id="btnSaveProg" class="btn btn-primary" style="width:135px; ">Save Progres</button>
+                    <button id="btnBeginAction" class="btn btn-primary" style="width:135px; margin-left:20px">Begin Action Plan</button>
+                    <button id="btnCancelReasons" class="btn btn-warning" style="width:135px; margin-left:80px">Cancel</button>
                 </div>
             </div>
         }
@@ -221,19 +228,19 @@
             </div>
             <div class="modal-body" id="reasonEditBody">
 
-                <div class="row" style="margin-top:5px;">
-                    <div class="col-xs-12" style="text-align: center">
+                <div class="row" style="margin-top:70px; margin-bottom:70px; ">
+                    <div class="col-xs-10 col-xs-offset-1" style="text-align: center">
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1">Reason Text</span>
-                            <input type="text" class="form-control" placeholder="[ Enter New Reason ]" aria-describedby="basic-addon1">
+                            <span class="input-group-addon" id="basic-addon1" style="font-weight:bold">Reason Text</span>
+                            <input id="inputReasonText" type="text" class="form-control" placeholder="[ Enter New Reason ]" aria-describedby="basic-addon1">
                         </div>                        
                     </div>
                 </div>
 
             </div>
-            <div class="modal-footer" id="reasonEditFooter">
-                <input type="button" disabled class="btn btn-primary" id="btnAddReasonDetail" value="Add" />
-                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
+            <div class="modal-footer" id="reasonEditFooter" style="text-align:center">
+                <input type="button" disabled class="btn btn-primary" id="btnAddReasonDetail" value="Add" style="width:120px"/>
+                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal" style="width:120px">Cancel</button>
             </div>
         </div>
     </div>
@@ -241,15 +248,8 @@
 
 
 
-
-
-
-
-
-
-
 <br /><br /><br /><br /><br />
-<table class="table">
+<table class="table" id="listTable" style="display:none">
     <tr>
         <th>@Html.DisplayNameFor(model => model.reason_id)</th>
         <th>@Html.DisplayNameFor(model => model.metric_period_id)</th>
@@ -307,13 +307,11 @@
     }
 
     $(document).ready(function () {
-        var newReasonTag = '<div class="reasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkBox" >' +
+        var newReasonTag = '<div class="newReasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkBox" >' +
                 '<input type="checkbox" id="dynamic-ABC" class="badgebox" checked><span class="badge">&check;</span>' +
-                '<span style="margin-left: 8px">' + 'XYZ</span></label>' + 
+                '<span style="margin-left: 8px">' + 'XYZ</span></label>' +
                 '<div class="row boxComment"><div class="rCommentBox" contenteditable="true"><span class="cmLabel" style="color:darkgray;" >Comment: </span></div></div></div>' +
                 '</div>';
-
-
 
         $("#buildingName").html(getBuildingName());
         $("#metricDate").html(getMetricDate());
@@ -325,7 +323,7 @@
 
         //alert("Addign class: " + getMPvalueDisplayClass());
         //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
-        $("#ddlReason").on("change", function () {            
+        $("#ddlReason").on("change", function () {
             var reasonId = $(this).val();
             var reasonText = $(this).find('option:selected').text();
             if (reasonId == "none") {
@@ -347,7 +345,17 @@
             //alert("Drop Down Selection was changed:\nReason Id is: " + reasonId + "\nText: " + reasonText);
         });
         $('#btnSaveProg').click(function () {
-            alert("Progress Saved Successfully");
+            //$('#existingReasons')
+            var reasonsToAdd = "";
+            var counter = 0;
+            $('.newReasonDiv').each(function () {
+                counter++;
+            });
+
+            alert('Found ' + counter + ' New Reasons!');
+            //alert("Reasons to Add:\n" + reasonsToAdd);
+            
+            //alert("Progress Saved Successfully");
         });
         $('#btnBeginAction').click(function () {
             alert("New Action Plan Actions are not enabled yet");
@@ -388,6 +396,7 @@
             dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex);
             $('#addedReasons').append(dynamicReasonTag);
             $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
+            $('html, body').animate({ scrollTop: $(document).height() }, "slow");
             //Reset the select list index
             $('#addedReasons').focus();
 
@@ -395,6 +404,59 @@
 
         $('#selNewReason').click(function () {
             $('#addReasonForm').modal('show');
+        });
+
+        $('#inputReasonText').keydown(function (e) {
+            $('#btnAddReasonDetail').prop("disabled", false);
+            $(this).removeClass("hasError");
+        });
+
+        $('#btnCancelReasons').click(function () {
+            var returnUrl = "@ViewBag.ReturnUrl";
+            //alert("Returning back to URL: " + returnUrl);
+            window.location.href = returnUrl;
+        });
+
+        $('#btnAddReasonDetail').click(function () {
+            //Create the jason Payload topost to the server
+            var reasonText = $('#inputReasonText').val();
+            if (reasonText != "") {
+                var mpID = "@Model.First().metric_period_id";
+                var reasonText = $('#inputReasonText').val();
+                var userId = "@User.Identity.Name";
+                var jsonPayload = '{"reasons": [{"mtrc_period_id": "' + mpID + '", "mpr_display_text": "' + reasonText + '", "mpr_desc": "", "mpr_std_yn": "N", "mpr_display_order": "", "user_id": "' + userId + '" }]}';
+                //alert(jsonPayload);
+                //Make ajax call to save (Add) Data (New MP Reason)
+                $.ajax({
+                    url: '/ReasonMgmt/saveMPReason',
+                    //url: 'http://dscapidev/dscmtrc/api/v1/metric/savereason',
+                    method: "POST",
+                    cache: false,
+                    //type: "POST",
+                    //data: payload,
+                    data: { raw_json: jsonPayload },
+                    //contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Reason Added!");
+                        //location.reload();
+                    } else {
+                        alert("Error Saving the data!\n" + JSON.stringify(d));
+                    }
+                });
+            }
+            else {
+                $('#inputReasonText').addClass("hasError");
+                alert("Reason Text Canot be blank");
+            }
+        });
+
+        $("#showTable").dblclick(function () {
+            $('#listTable').show();
         });
     });
 </script>

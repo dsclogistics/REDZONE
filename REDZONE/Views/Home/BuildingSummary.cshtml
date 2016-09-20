@@ -11,6 +11,7 @@
     <div>
         <input type="hidden" id="buildingName" value="@Model.bName"/>
         <input type="hidden" id="buildingYear" value="@Model.year" />
+        <input type="hidden" id="buildingId" value="@Model.bId" />
     </div>
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
@@ -155,6 +156,7 @@
 
                 </table>
             </div> <!-- End of DIV Table Table -->
+            
             <div class="row" style="border:none; margin: 0; padding:0; ">
                 <table class="" style="border:none; width:100%;">
                     <tr class="" style="border:none">
@@ -303,21 +305,48 @@
 <nav id="context-menu" class="context-menu">
     <ul class="context-menu__items">
         <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Manage">
-                <i class="fa fa-eye"></i> Manage Reason
+            <a href="#" class="context-menu__link" data-action="View">
+                <i class="fa fa-eye"></i> View Reasons
             </a>
         </li>
-        <li class="context-menu__item">
-            <a href="#" class="context-menu__link" data-action="Menu2">
-                <i class="fa fa-edit"></i>  Menu Item 2
+        <li class="context-menu__item" >
+            <a href="#" class="context-menu__link" data-action="Manage" >
+                <i class="fa fa-edit"></i>  Manage Reasons
             </a>
         </li>
-        <li class="context-menu__item">
+        @*<li class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="Menu3">
                 <i class="fa fa-times"></i>  Menu Item 3
             </a>
-        </li>
+        </li>*@
     </ul>
 </nav>  <!-- END OF RIGHT CLICK CONTEXT MENU -->
 
 
+<!-- START OF RIGHT CLICK POPUP REASONS DISPLAY  -->
+<div id="popupViewReasons" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:40%; min-width:550px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title add-reason">Reasons for Selected Building Metric Value</h4>
+            </div>
+            <div class="modal-body" id="reasonEditBody">
+                <div class="row" id="reasonsViewContainer" style="width:70%; margin:0 auto; margin-top:10px; margin-bottom:10px; border: 4px double black; border-radius:6px; padding:20px">
+
+                    <div>
+                        <br />PLEASE WAIT WHILE DATA LOADS<br /><br />
+                        <img src="/Images/ui-anim_basic_16x16.gif" />
+                        <br /><br />
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer" id="reasonEditFooter" style="text-align:center">
+                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal" style="width:120px">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END OF RIGHT CLICK POPUP REASONS DISPLAY  -->

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<REDZONE.Models.MPReason>
+
+@foreach (var item in Model)
+{
+    <div class="row bordered-b" style="margin-bottom:7px; border-radius:5px; border-width:2px; position:relative; ">
+        <div class="row " style="text-align:left; margin:0; border-bottom: 1px solid darkgray; background-color: lightgray">
+            <span style="font-weight:bold; margin-left:5px">REASON: </span><span>@Html.DisplayFor(modelItem => item.reason_text)</span>
+        </div>
+
+        <div class="row" style="text-align:left; border-bottom:1px solid lightgray; margin:0">
+            <span style="margin-left:10px; font-weight:bold">Comments: </span> <br />
+            <span style="margin-left:10px">@Html.DisplayFor(modelItem => item.mpvr_Comment)</span>                
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-2" style="text-align:right">
+                <span style="font-weight:bold">Assigned By:</span>
+            </div>
+            <div class="col-xs-6" style="text-align:left">
+                @Html.DisplayFor(modelItem => item.reason_created_by_uid)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-2" style="text-align:right">
+                <span style="font-weight:bold">Assigned On:</span>
+            </div>
+            <div class="col-xs-6" style="text-align:left">
+                @Html.DisplayFor(modelItem => item.reason_created_on_dtm)
+            </div>
+        </div>
+    </div>
+}
+
+

@@ -72,7 +72,8 @@ namespace REDZONE.Models
         public int score { get; set; }    
         public string displayClass { get; set; }
         public string cellStatus { get; set; }
-
+        public string caption { get; set; }             //For Title Property (mouseover caption)
+        public bool hasReasons { get; set; }
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
         //-------- Metric Specific Constructor -----------\
@@ -98,7 +99,6 @@ namespace REDZONE.Models
         public int redTotals { get; set; }
         public string scoreGoalColor { get; set; }
         public string redTotalColor { get; set; }
-
         public List<MeasuredCellEntity> entityMetricCells = new List<MeasuredCellEntity>();
 
         //-------- Empty Constructor ------------\
