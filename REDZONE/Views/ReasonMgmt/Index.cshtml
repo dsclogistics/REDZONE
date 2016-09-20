@@ -24,7 +24,6 @@
 
     <div class="panel-body ">
 
-
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
@@ -258,12 +257,26 @@
                 //This code Executes After the Ajax call completes successfully
                 //Insert the partial view retrieved into the output 'ReasonDetailsView' panel
                 $("#reasonEditBody").html(d);
-                //$("#msgLoading").hide();
                 $("#btnReasonDetails").prop("disabled", false);
                 $(".editable-rsn-attr").prop("disabled", true);
                 $(".add-reason").hide();
                 $(".reason-detail").show();
                 $(".add-reason-hide").show();
+
+                //Sets the asterisks
+                if (reason_text == "") {
+                    $("#reasonEditBody").find('#reason_text').siblings('.input-group-addon').addClass('asterisk');
+                }
+                else {
+                    $("#reasonEditBody").find('#reason_text').siblings('.input-group-addon').removeClass('asterisk');
+                }
+
+                if (reason_std_yn.toLowerCase() == "n" || reason_std_yn.toLowerCase() == "y") {
+                    $("#reasonEditBody").find('#reason_std_yn').siblings('.input-group-addon').removeClass('asterisk');
+                }
+                else {
+                    $("#reasonEditBody").find('#reason_std_yn').siblings('.input-group-addon').addClass('asterisk');
+                }
 
                 //Sets detail buttons
                 $("#btnSaveReasonDetail").show();
@@ -329,9 +342,10 @@
         //Reorder Save Button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderSave', function () {
-            alert("Saving functionality is not enabled yet");
+            //alert("Saving functionality is not enabled yet");
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
-            buildReorderMPReasonJSON();
+            //alert(buildReorderMPReasonJSON());
+            reorderMPReasons();
             location.reload();
             //$('#btnsReordering').hide();
             //$('#btnsReorder').show();
@@ -357,11 +371,13 @@
 
             $(".editable-rsn-attr").prop("disabled", false);
 
+            disableReasonTextIfAdmin($(this).parent().siblings("#reasonEditBody").find("#reason_created_by_uid").val());
+
             //Sets detail buttons
             $("#btnSaveReasonDetail").show();
             $("#btnAddReasonDetail").hide();
             $("#btnEditReasonDetail").prop("disabled", true);
-            $("#btnSaveReasonDetail").prop("disabled", false);
+            $("#btnSaveReasonDetail").prop("disabled", true);
             var metricValueUsedOn = $("#timesUsed").val();
             if (metricValueUsedOn == 0) {
                 $("#btnRemoveReason").prop("disabled", false);
@@ -369,7 +385,6 @@
             else {
                 $("#btnRemoveReason").prop("disabled", true);
             }
-            $("#btnSaveReasonDetail").prop("disabled", false);
             $("#btnCancelReasonEdit").prop("disabled", false);
         });
 
@@ -392,21 +407,39 @@
         //Editor Remove Button
         //------------------------------------------------------------------------
         $("#reasonEditFooter").on('click', '#btnRemoveReason', function () {
-            //Prompt User
-
-            //DELETE
-
-            alert('Remove')
+            var validated = validateReasonDelete();
+            if (validated) removeMPReason();
         });
 
         //Editor inline changes and validation
         //------------------------------------------------------------------------
-        //$(".editable-rsn-attr").on('change', '#reason_text',(function () {
-        //    $(this).css("background-color", "none");
-        //});
-
         $(document).on('change', '.editable-rsn-attr', function () {
             $(this).css("background-color", "transparent");
+            $("#btnSaveReasonDetail").prop("disabled", false);
+        });
+
+        $(document).on('change', '.required', function () {
+            var val = $(this).val();
+            //alert(val);
+
+            if (val == "") {
+                $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
+            else {
+                $(this).siblings('.input-group-addon').removeClass('asterisk');
+            }
+        });
+
+        $(document).on('change', '.y-n-required', function () {
+            var val = $(this).val();
+            //alert(val);
+
+            if (val.toLowerCase() == "n" || val.toLowerCase() == "y") {
+                $(this).siblings('.input-group-addon').removeClass('asterisk');
+            }
+            else {
+                $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
         });
 
     });
@@ -572,38 +605,121 @@
         });
     }
 
+    function disableReasonTextIfAdmin(user_id) {
+        $.ajax({
+            url: '/ReasonMgmt/isReasonCreatorAdmin',
+            //url: '',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { "user_id": user_id },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            alert('in ajax');
+            }
+        }).done(function (d) {
+            if (d == "true") {
+                $(".created-by-admin").prop("disabled", true);
+            } else {
+                alert("Error!\nOutput: " + JSON.stringify(d));
+            }
+        });
+    }
+
+    //Remove Metric Period Reason functions
+    //------------------------------------------------------------------------------------------------
+    function removeMPReason() {
+        var reason_id = $("#reasonEditBody").find("#reason_id").val();
+        //alert(reason_id);
+
+        var confirmed = confirm("Are you sure you want to remove this reason permanently?");
+
+        if (confirmed) {
+            $.ajax({
+                url: '/ReasonMgmt/removeMPReason',
+                //url: 'http://dscapidev/dscmtrc/api/v1/metric/removereason',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: { "mpr_id": reason_id },
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                if (d == "Success") {
+                    alert("Reason Removed!");
+                    location.reload();
+                } else {
+                    alert("Error Saving the data!\n" + JSON.stringify(d));
+                }
+            });
+        }
+    }
+
     //Reorder Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function buildReorderMPReasonJSON() {
-        var jsonPayload = '{"filler":['
+        var metric_period_id = $("#MtrcPeriodId").val();
+
+        var jsonPayload = '{"mtrc_period_id":"'+metric_period_id+'","reasons":['
 
         $('.stdReasonRow').each(function () {
-            jsonPayload = (jsonPayload != '{"filler":[') ? jsonPayload + ',' : jsonPayload;
+            jsonPayload = (jsonPayload != '{"mtrc_period_id":"' + metric_period_id + '","reasons":[') ? jsonPayload + ',' : jsonPayload;
 
             var reason_id = parseInt($(this).find("#reason_id").text());
-            var metric_period_id = $("#MtrcPeriodId").val();
             var reason_order = parseInt($(this).find("#reason_order").text());
             var user_id = "@User.Identity.Name";
 
-            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+            jsonPayload = jsonPayload + '{"mpr_id":"' + reason_id + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
             
         });
 
         jsonPayload = jsonPayload + ']}'
 
-        alert(jsonPayload);
-
         //alert("Json submitted:\n" + jsonPayloadDetail);
         return jsonPayload
     }
 
+    function reorderMPReasons() {
+        var payload = buildReorderMPReasonJSON();
+        //alert(payload);
+
+        $.ajax({
+            url: '/ReasonMgmt/reorderMPReasons',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/reorderreasons',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Reason Reordered!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
 
 
     //Validation
     //------------------------------------------------------------------------------------------------
     function validateReasonForm() {
+        //Makes sure editable reason inputs follow the required rules before going to the controller.
         var passValidation = true;
-        var alertString = "";
+        var alertString = "*";
 
         $(".editable-rsn-attr").each(function () {
             var thisVal = $(this).val();
@@ -641,107 +757,24 @@
             }
         });
 
-        if (alertString != "") alert(alertString);
+        if (alertString != "*") $("#validationMessage").text(alertString);
         return passValidation;
     }
 
-    function validateNumEntry(txtControl, dataType, minVal, maxVal, decPlaces) {
-        //// First Validation. If input values is null or empty. It passes
-        //if (txtControl.val() == "") return "PASS";
+    function validateReasonDelete() {
+        //Makes sure a reason being removed has "times_used" = 0.
+        var passValidation = true;
+        var alertString = "";
 
-        //var txtValue = txtControl.val();
-        //var validationMessage = "PASS";
-        //var inputIntValue = Number(txtValue);
-        //var minRange = Number(minVal);
-        //var maxRange = Number(maxVal);
+        var thisVal = $("#times_used").val();
 
-        ////Second Validation, make sure that the input value is a number.
-        //if (isNaN(inputIntValue)) {  // Value is not a number
-        //    return "Value must be numeric";
-        //}
-
-        //if (dataType == "int") {// Integer Value cannot have decimal values
-        //    if (txtValue.indexOf(".") >= 0) {
-        //        validationMessage = "Value must not contain decimals";
-        //    }
-        //} else
-        //    if (dataType == "dec") {
-        //        //There is no custom validation for now
-        //    } else
-        //        if (dataType == "cur") {
-        //            //There is no custom validation for now
-        //        } else
-        //            if (dataType == "pct") {
-        //                //There is no custom validation for now
-        //            }
-
-        ////Round value off to the requiered number of decimal places for all non integer values
-        //if (dataType != "int") {
-        //    //parseFloat(txtValue).toFixed(2);
-        //    txtControl.val(inputIntValue.toFixed(Number(decPlaces)));
-        //}
-
-        ////Check Min and Max for all data types
-        //if (inputIntValue < minRange || inputIntValue > maxRange) {
-        //    validationMessage = "Value must be between " + minVal + " and " + maxRange;
-        //}
-
-        //return validationMessage;
-    }
-    //------------------------------------------------------------------------------------------------
-    function validateStrEntry(txtValue, strLength) {
-        //var stringLength = Number(strLength);
-        //if (stringLength == 0 || isNaN(stringLength)) {
-        //    //alert("Length is not a number");
-        //    //The Length is undefined. We will assume that any lenght is valid
-        //    return "PASS"
-        //}
-        //if (txtValue.length < Number(strLength)) {
-        //    return "PASS";
-        //}
-        //return "The Value '" + txtValue + "' Exceeds the maximum length of " + strLength;
-    }
-    //------------------------------------------------------------------------------------------------
-    function validateTxtField($txtControl){
-        @*var oldValue = $txtControl.val();
-        var newValue = $txtControl.val().trim();
-        var isNAallowed = $txtControl.parents(".bldngRow").find("#isNAallowed").first().val();
-
-        //Validate the Entered Value
-        //$(this)
-
-        var valMessage = "";
-
-        //First Check if the Value entered is N/A. If so and "N/A" is acceptable then the validation passed without further validation
-        if ((newValue.toLocaleUpperCase() == "NA" || newValue.toLocaleUpperCase() == "N/A") && isNAallowed == "True") {
-            newValue = "N/A";
-            valMessage = "PASS";
-            $txtControl.parents(".bldngRow").find("#isNA").first().val("Y");
-        }
-        else {
-            //Perform either the Numeric or the String Validations
-            if ("@Model.isNumeric" == "True") {
-                //Validate the input as a number
-                valMessage = validateNumEntry($txtControl, "@Model.metricDataType", "@Model.mtrcMinVal", "@Model.mtrcMaxVal", @Model.maxDecPlaces);
-                //alert("result: " + valMessage);
-            }
-            else {
-                //Perform the String Validation
-                valMessage = validateStrEntry(newValue, "@Model.maxStrSize" );
-            }
-            //Check the result of the validation
-            $txtControl.parents(".bldngRow").find("#isNA").first().val("N");
+        if (thisVal != 0) {
+            alertString = alertString + 'This reason is being used and cannot be removed.';
+            passValidation = false;
         }
 
-        if (valMessage == "PASS" && !(oldValue == newValue)) {
-            //If the value was altered/changed in any way, update with new value and set appropiate flags
-            $txtControl.val(newValue);      //Update the text field with the new value if they are not equal.
-            $txtControl.parents(".bldngRow").find("#saveFlag").first().val("Y");
-            $("#frmModified").val("Y");
-            $("#btnSave").prop('disabled', false);
-        }
-
-        return valMessage;*@
+        if (alertString != "") alert(alertString);
+        return passValidation;
     }
 </script>
 

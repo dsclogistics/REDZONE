@@ -1,5 +1,12 @@
 ﻿@model REDZONE.Models.MPReason
 
+<style>
+    .asterisk:after {
+        content: "*";
+        color:red;
+    }
+</style>
+
     <div class="row">
 
     </div>
@@ -32,8 +39,8 @@
     <div class="row" style="margin-top:5px">
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
-                @Html.LabelFor(model => model.reason_text, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Enter Reason" } })
+                @Html.LabelFor(model => model.reason_text, htmlAttributes: new { @class = "input-group-addon asterisk", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr created-by-admin required", disabled = "disabled", placeholder = "Enter Reason" } })
                 @Html.Hidden("hdnReasonText", Model.reason_text, new { @id = "hdnReasonText" } )
             </div>
         </div>
@@ -67,8 +74,8 @@
     <div class="row" style="margin-top:5px">
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
-                @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr", disabled = "disabled", placeholder = "Y/N?"} })
+                @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon asterisk", style = "font-weight:bold" })
+                @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr y-n-required", disabled = "disabled", placeholder = "Y/N?"} })
                 @Html.Hidden("hdnReasonStd", Model.reason_text, new { @id = "hdnReasonStd" })
             </div>
         </div>
@@ -116,10 +123,8 @@
                 </div>*@
         </div>
     </div>
-    <div>
-        @*@Html.ValidationMessageFor(model => model.mtrc_period_na_allow_yn, "", new { @class = "text-danger" })
-            @Html.ValidationMessageFor(model => model.mtrc_period_can_import_yn, "", new { @class = "text-danger" })
-            @Html.ValidationMessageFor(model => model.mtrc_period_is_auto_yn, "", new { @class = "text-danger" })*@
+    <div style="text-align:left;">
+        <span id="validationMessage" style="color:red; text-align:left;"> * Value is Required</span>
     </div>
 
     @*<hr class="save-metric-period" />

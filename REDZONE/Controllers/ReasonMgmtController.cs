@@ -114,5 +114,63 @@ namespace REDZONE.Controllers
                 }
             }
         }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/removeMPReason
+        [HttpPost]
+        public string removeMPReason(string mpr_id)
+        {
+            string status = api.removeMPReason(mpr_id);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else
+            {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }
+            }
+        }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/isReasonCreatorAdmin
+        [HttpPost]
+        public string isReasonCreatorAdmin(string user_id)
+        {
+            return "true";
+        }
+
+        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        //POST: /ReasonMgmt/reorderMPReasons
+        [HttpPost]
+        public string reorderMPReasons(string raw_json)
+        {
+            string status = api.reorderMPReasons(raw_json);
+            if (status.ToLower().Contains("success"))
+            {
+                //Session["metricSaveMsg"] = "Data Saved Successfully.";
+                return "Success";
+            }
+            else
+            {
+                JObject res = JObject.Parse(status);
+                try
+                {
+                    return res.GetValue("message").ToString();
+                }
+                catch
+                {
+                    return status;
+                }
+            }
+        }
     }
 }
