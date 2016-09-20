@@ -30,6 +30,7 @@ namespace REDZONE.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            ViewBag.errorMessage = "";
             //Reset all authentication cookies and session variables (To prevent orphan authentication cookie and users getting locked out in some rare instance where new version of the app is deployed and an usser is signon)
             FormsAuthentication.SignOut();
             Session.Remove("emp_id");    //Session["emp_id"] = null;
@@ -144,7 +145,7 @@ namespace REDZONE.Controllers
                 else
                 {
                     ViewBag.ReturnUrl = ReturnUrl;
-                    ModelState.AddModelError("", "Failed to Logon User");
+                    ModelState.AddModelError("", "Failed to Logon User: " + ViewBag.errorMessage);
                     return View(loginModel);
                 }
             }
@@ -448,9 +449,10 @@ namespace REDZONE.Controllers
             ASCIIEncoding encoding = new ASCIIEncoding();
             string JsonString;
             //string errorJsonString;
-            Byte[] bytes = encoding.GetBytes(parsedContent);
+            Byte[] bytes;
             try
             {
+                bytes = encoding.GetBytes(parsedContent);
                 Stream newStream = request.GetRequestStream();
                 newStream.Write(bytes, 0, bytes.Length);
                 newStream.Close();

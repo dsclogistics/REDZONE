@@ -446,6 +446,7 @@
     <Content Include="Views\ReasonMgmt\Index.cshtml" />
     <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
     <Content Include="Views\MPVreasons\Assigment.cshtml" />
+    <Content Include="Views\MPVreasons\viewReasons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
