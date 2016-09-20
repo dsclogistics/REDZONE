@@ -72,22 +72,8 @@ namespace REDZONE.Controllers
         public string saveMPReason(string raw_json)
         {
             string status = api.saveMPReason(raw_json);
-            if (status.ToLower().Contains("success"))
-            {
-                //Session["metricSaveMsg"] = "Data Saved Successfully.";
-                return "Success";
-            }
-            else {
-                JObject res = JObject.Parse(status);
-                try
-                {
-                    return res.GetValue("message").ToString();
-                }
-                catch
-                {
-                    return status;
-                }                
-            }
+
+            return returnResultMessage(status);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -96,23 +82,8 @@ namespace REDZONE.Controllers
         public string updateMPReason(string raw_json)
         {
             string status = api.updateMPReason(raw_json);
-            if (status.ToLower().Contains("success"))
-            {
-                //Session["metricSaveMsg"] = "Data Saved Successfully.";
-                return "Success";
-            }
-            else
-            {
-                JObject res = JObject.Parse(status);
-                try
-                {
-                    return res.GetValue("message").ToString();
-                }
-                catch
-                {
-                    return status;
-                }
-            }
+
+            return returnResultMessage(status);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -121,23 +92,8 @@ namespace REDZONE.Controllers
         public string removeMPReason(string mpr_id)
         {
             string status = api.removeMPReason(mpr_id);
-            if (status.ToLower().Contains("success"))
-            {
-                //Session["metricSaveMsg"] = "Data Saved Successfully.";
-                return "Success";
-            }
-            else
-            {
-                JObject res = JObject.Parse(status);
-                try
-                {
-                    return res.GetValue("message").ToString();
-                }
-                catch
-                {
-                    return status;
-                }
-            }
+
+            return returnResultMessage(status);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -154,6 +110,16 @@ namespace REDZONE.Controllers
         public string reorderMPReasons(string raw_json)
         {
             string status = api.reorderMPReasons(raw_json);
+
+            return returnResultMessage(status);
+        }
+
+
+        //*************************************************
+        //**************PRIVATE METHODS********************
+        //*************************************************
+        private string returnResultMessage(string status)
+        {
             if (status.ToLower().Contains("success"))
             {
                 //Session["metricSaveMsg"] = "Data Saved Successfully.";

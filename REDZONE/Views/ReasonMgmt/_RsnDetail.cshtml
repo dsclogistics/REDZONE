@@ -48,6 +48,7 @@
             <div class="input-group add-reason-hide">
                 @Html.LabelFor(model => model.reason_order, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
                 @Html.EditorFor(model => model.reason_order, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.Hidden("hdnReasonOrder", Model.reason_order, new { @id = "hdnReasonOrder" })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
