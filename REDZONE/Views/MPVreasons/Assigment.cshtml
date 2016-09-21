@@ -98,6 +98,7 @@
 
 <div>
     <input type="hidden" id="newReasonCounter" value="0"/>
+    <input type="hidden" id="reloadAfterPopup" value="N" />
 </div>
 
 <div class="panel panel-info" style="margin-top:5px; font-family:Arial; ">
@@ -153,8 +154,16 @@
                                     <label for="primary-@ckBoxCounter" class="btn btn-info reasonCkBox" title="@item.reason_description">
                                         <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox chkReason" @ckStatus>
                                         <span class="badge">&check;</span><span style="margin-left: 8px">@item.reason_text</span>
+                                        @if (item.reason_std_yn.Equals("Y"))
+                                        {
+                                            <span style="float: right; color: lightblue; font-size: 10px">[Standard]</span>
+                                        }
                                     </label>
-                                    <span style="font-size:8px; color:blue">*STD</span>
+                                    @*@if (item.reason_std_yn.Equals("Y"))
+                                    {
+                                        <span style="font-size:16px; color:blue">*</span>
+                                    }*@
+                                    
                                 </div>
                                 @*Comment box for each Reason displayed*@
                                 @if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
@@ -186,7 +195,7 @@
                 <div class="row " style="text-align: center">
                     <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
 
-                        <!-- Non Standard Drop down button group -->
+                        <!--Drop down button group for non-Standard and not already assigned Reasons -->
                         <div class="btn-group dropup" style="margin-left: 10px">
                             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:360px; font-size:14px">
                                 [ Select Other Reason ... ] <span class="caret" style="float:right"></span>
@@ -195,9 +204,10 @@
                                 <li role="separator" class="divider" style="padding:0px"></li>
                                 @foreach (var item in Model)
                                 {
-                                    if (!item.reason_std_yn.Equals("Y"))
+                                    if ((!item.reason_std_yn.Equals("Y")) && (!item.isAssigned))
                                     {
                                         // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
+                                        // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
                                         <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
                                     }
                                 }
@@ -209,7 +219,7 @@
                 </div>
                 <br /><br />
                 <div class="row " style="text-align:center">
-                    <button id="btnSaveProg" class="btn btn-primary" style="width:135px; ">Save Progres</button>
+                    <button id="btnSaveProg" class="btn btn-primary" style="width:135px; " disabled>Save Progres</button>
                     <button id="btnBeginAction" class="btn btn-primary" style="width:135px; margin-left:20px">Begin Action Plan</button>
                     <button id="btnCancelReasons" class="btn btn-warning" style="width:135px; margin-left:80px">Cancel</button>
                 </div>
@@ -247,6 +257,27 @@
         </div>
     </div>
 </div>
+
+<div id="msgForm" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:35%; min-width:400px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title msgFormTitle">Operation Results</h4>
+            </div>
+            <div class="modal-body" id="msgFormBody">
+                <div class="row" id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                </div>
+            </div>
+            <div class="modal-footer" id="msgFormFooter" style="text-align:center">
+                <button type="button" class="btn btn-primary" id="btnCancelMsgForm" data-dismiss="modal" style="width:120px">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="msgDiv"></div>
 
 
@@ -328,6 +359,7 @@
         //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
    //============================ SAVE PROGRESS ACTION ====================================================
         $('#btnSaveProg').click(function () {
+            $(this).prop("disabled", true);
             if (!getMPvalueId()) {
                 alert("Warning!! Your session has timed out. Changes will not be saved.\nPlease logon again.");
             }
@@ -411,7 +443,7 @@
             reasonsToUpdate_List = cleanString(reasonsToUpdate_List);
             reasonsToAdd_List = cleanString(reasonsToAdd_List);
 
-            alert("Posting Data to Server:\nADDING: [" + reasonsToAdd_List + "]\nDELETING: [" + reasonsToDelete_List + "]\nUPDATING: [" + reasonsToUpdate_List + "]" );
+            //alert("Posting Data to Server:\nADDING: [" + reasonsToAdd_List + "]\nDELETING: [" + reasonsToDelete_List + "]\nUPDATING: [" + reasonsToUpdate_List + "]" );
 
             if (reasonsToDelete_List == "" && reasonsToUpdate_List == "" && reasonsToAdd_List == "") {
                 //There is Nothing to post
@@ -433,7 +465,10 @@
                         alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    alert("Update Operation completed: \n" + d);
+                    //alert("Update Operation completed:\n\n=========== OPERATION RESULTS ===============\n" + d);
+                    $("#msgFormBodyData").html("Update Operation completed:<br /><br />=========== OPERATION RESULTS ===============<br />" + d.replaceAll("\n", "<br />"));
+                    $('#reloadAfterPopup').val("Y");  //To trigger a relaod when popup is Closed
+                    $('#msgForm').modal('show');
                 });
 
             }
@@ -460,10 +495,16 @@
 
             //alert("Progress Saved Successfully");
         });
+
+        $("#btnCancelMsgForm").click(function () {
+            if ($('#reloadAfterPopup').val() == "Y") { window.location.reload(); }            
+        });
   //============================ SAVE PROGRESS ACTION FUNCTION ENDS ============================================
 
         $('#btnBeginAction').click(function () {
-            alert("New Action Plan Actions are not enabled yet");
+            //alert("New Action Plan Actions are not enabled yet");
+            $("#msgFormBodyData").html("New Action Plan Actions are not enabled yet");
+            $('#msgForm').modal('show');
         });
 
         $('#reasonListSection').on('change', '.badgebox', function () {
@@ -487,6 +528,7 @@
         $(".chkReason").change(function () {
             // When a check box is changed, flag the reason Item as "modified"
             $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+            $('#btnSaveProg').prop("disabled", false);
         });
 
         //$('.reasonComment').change(function () {
@@ -506,6 +548,7 @@
             if (updatedComment != originalComment) {
                 //The comment text was changed. Update the 'updated' flag
                 $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+                $('#btnSaveProg').prop("disabled", false);
                 //alert("Comment was updated");
             }
             $(this).html(updatedComment);
@@ -526,11 +569,12 @@
             $('html, body').animate({ scrollTop: $(document).height() }, "slow");
             //Remove the current List Item from the drop down as items cannot be added twice
             $(this).parents('li').first().remove();
+            $('#btnSaveProg').prop("disabled", false);
             $('#addedReasons').find(".rCommentBox").last().focus();
         });
 
         $('#selNewReason').click(function () {
-            $('#addReasonForm').modal('show');
+            $('#addReasonForm').modal('show');            
         });
 
         $('#inputReasonText').keydown(function (e) {
@@ -570,6 +614,8 @@
                 }).done(function (d) {
                     if (d == "Success") {
                         alert("Reason Added!");
+                        // Add some logic to Add the newly added Reason to the Drop Down List
+                        $('#btnSaveProg').prop("disabled", false);
                         //location.reload();
                     } else {
                         alert("Error Saving the data!\n" + JSON.stringify(d));

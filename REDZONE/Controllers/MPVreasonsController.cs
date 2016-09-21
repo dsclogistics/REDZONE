@@ -111,14 +111,15 @@ namespace REDZONE.Controllers
             string addResults = "";
             string deleteResults = "";
             string updateResults = "";
-
             int counter = 0;
+
             // --------- Assign (ADD) New Metric Period Value Reason ------------------------------------------\
+            addResults = "ADD Operation:  --> ";
             if (!String.IsNullOrEmpty(addList))
             {
                 string[] addReasonList = addList.Split('~');
                 string jSonResponses = "";
-
+                
                 foreach (string item in addReasonList)
                 { //Process each new reason to add
                     string[] reasonData = item.Split(',');
@@ -139,16 +140,17 @@ namespace REDZONE.Controllers
                     counter++;
                     
                 }
-                addResults = counter + " Reasons to Add were found" + Environment.NewLine + jSonResponses;
+                addResults += "  [ " + counter + " Reasons to Add Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
-                addResults = "No New Reasons have been assigned";
+                addResults = "  [ No New Reasons to Add ]" + Environment.NewLine;
             }
-            addResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
+            addResults += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
             //================ END OF THE "ADD" FUNCTIONALITY =================================================
 
             //-------- Remove (DELETE) Currently Assigned Metric Period Value Reasons ------------------------\
+            deleteResults = "DELETE Operation:  --> ";
             if (!String.IsNullOrEmpty(deleteList))
             {
                 counter = 0;
@@ -178,17 +180,18 @@ namespace REDZONE.Controllers
                 string raw_data = api.removeAssignedReason(jPayload);
                 jSonResponses += raw_data;
 
-                deleteResults = counter + " Reasons to Delete were found" + Environment.NewLine + jSonResponses;
+                deleteResults += "  [ " + counter + " Reasons to Delete Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
-                deleteResults = "No Assigned reasons have been deleted";
+                deleteResults = "  [ No Assigned reasons were deleted ]" + Environment.NewLine;
             }
             deleteResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
             //================ END OF THE "DELETE" FUNCTIONALITY ==============================================
 
 
             //-------- Update (UPDATE) Currently Assigned Metric Period Value Reasons ------------------------\
+            updateResults = "UPDATE Operation:  --> ";
             if (!String.IsNullOrEmpty(updateList))
             {
                 counter = 0;
@@ -217,11 +220,11 @@ namespace REDZONE.Controllers
                     counter++;
 
                 }
-                updateResults = counter + " Assigned Reason to updated were found." + Environment.NewLine + jSonResponses;
+                updateResults += "  [ " + counter + " Assigned Reason to updated Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
-                updateResults = "No Assigned reasons have been Updated";
+                updateResults = "  [ No Assigned reasons need Updating ]" + Environment.NewLine;
             }
             updateResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
             //================ END OF THE "UPDATE" FUNCTIONALITY =================================================
