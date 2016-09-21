@@ -170,7 +170,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title reason-detail">Reason Details</h4>
-                <h4 class="modal-title add-reason">Add Reason</h4>
+                <h4 class="modal-title add-reason">Add New Reason</h4>
             </div>
             <div class="modal-body" id="reasonEditBody">
 
@@ -202,8 +202,6 @@
         //On Reason List details button click
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '.btnReasonDetails', function () {
-
-            //If have made changes in the editor to another reason, prompt user.
 
             var tempScrollTop = $(window).scrollTop();
 
@@ -279,6 +277,7 @@
                 }
 
                 //Sets detail buttons
+                $("#validationMessage").hide();
                 $("#btnSaveReasonDetail").show();
                 $("#btnAddReasonDetail").hide();
                 $("#btnEditReasonDetail").prop("disabled", false);
@@ -315,28 +314,7 @@
 
             $('.nonstdReasonRow').hide();
             $('.btnReasonDetails').prop("disabled", true);
-            //If have made changes in the editor to another reason, prompt user.
 
-            //var mtrcIdToDisplay = $("#MtrcId").val();
-
-            //// ------------ Make the Ajax Call ---------------------------------------------
-            //$.ajax({
-            //    url: '/ReasonMgmt/_RsnReorder',     // the url where we want to direct our Ajax Call
-            //    method: "GET",
-            //    cache: false,
-            //    data: {},     //<---- Data Parameters (if not already passed in the Url)
-            //    //--- On error, execute this function ------
-            //    error: function (xhr, status, error) {
-            //        //var err = eval("(" + xhr.responseText + ")");
-            //        $("#divReasonDetailsView").html(xhr.responseText);
-            //        //alert("An Error has Occurred.");  //<-- Trap and alert of any errors if they occurred
-            //    }
-            //}).done(function (d) {
-            //    //Execute this code After the Ajax call completes successfully
-            //    //Insert the partial view retrieved into the output 'newMetricPeriodBody' panel
-            //    $('#reasonReorderBody').html(d);
-            //    $('#reasonReorderForm').modal('show');
-            //});
         });
 
         //Reorder Save Button
@@ -357,6 +335,31 @@
         //Reorder Cancel Button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
+            //************************************
+            //Compare order values
+            //if (areOrderNumbersChanged() == true) {
+            //    //If different, prompt user
+            //    var confirmed = confirm("Changes have been made, are you sure you want to cancel?");
+
+            //    if (confirmed) PrevertOrderNumbersToOriginal();
+            //}
+            //else {
+            //    //Else go back to reason list
+            //    reasonSortDisable();
+            //    $('.sortIcon').hide();
+            //    $('#btnsReorder').show();
+            //    $('#btnsReordering').hide();
+            //    $('.reasonListRow').removeClass('sortableRow');
+            //    $('.firstCol').css("border-top-left-radius", "0px");
+            //    $('.firstCol').css("border-bottom-left-radius", "0px");
+            //    $('.lastCol').css("border-top-right-radius", "0px");
+            //    $('.lastCol').css("border-bottom-right-radius", "0px");
+
+            //    $('.nonstdReasonRow').show();
+            //    $('.btnReasonDetails').prop("disabled", false);
+            //}
+            //************************************
+
             location.reload();
             //$('.sortIcon').hide();
             //$('#btnsReordering').hide();
@@ -731,7 +734,7 @@
                     if (thisVal == "") {
                         alertString = alertString + 'Reason text is required.\n';
                         passValidation = false;
-                        $(this).css("background-color", "red");
+                        //$(this).css("background-color", "red");
                     }
                     break;
 
@@ -744,7 +747,7 @@
                     if (thisVal != "Y" && thisVal != "N") {
                         alertString = alertString + 'Standardized (Y/N) must be Y or N.\n';
                         passValidation = false;
-                        $(this).css("background-color", "red");
+                        //$(this).css("background-color", "red");
                     }
                     else {
                         $(this).val(thisVal);
@@ -758,6 +761,8 @@
         });
 
         if (alertString != "*") $("#validationMessage").text(alertString);
+        if (passValidation == false) $("#validationMessage").show();
+        
         return passValidation;
     }
 
