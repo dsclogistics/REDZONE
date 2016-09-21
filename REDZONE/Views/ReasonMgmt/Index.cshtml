@@ -170,7 +170,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title reason-detail">Reason Details</h4>
-                <h4 class="modal-title add-reason">Add Reason</h4>
+                <h4 class="modal-title add-reason">Add New Reason</h4>
             </div>
             <div class="modal-body" id="reasonEditBody">
 
@@ -277,6 +277,7 @@
                 }
 
                 //Sets detail buttons
+                $("#validationMessage").hide();
                 $("#btnSaveReasonDetail").show();
                 $("#btnAddReasonDetail").hide();
                 $("#btnEditReasonDetail").prop("disabled", false);
@@ -733,7 +734,7 @@
                     if (thisVal == "") {
                         alertString = alertString + 'Reason text is required.\n';
                         passValidation = false;
-                        $(this).css("background-color", "red");
+                        //$(this).css("background-color", "red");
                     }
                     break;
 
@@ -746,7 +747,7 @@
                     if (thisVal != "Y" && thisVal != "N") {
                         alertString = alertString + 'Standardized (Y/N) must be Y or N.\n';
                         passValidation = false;
-                        $(this).css("background-color", "red");
+                        //$(this).css("background-color", "red");
                     }
                     else {
                         $(this).val(thisVal);
@@ -760,6 +761,8 @@
         });
 
         if (alertString != "*") $("#validationMessage").text(alertString);
+        if (passValidation == false) $("#validationMessage").show();
+        
         return passValidation;
     }
 
