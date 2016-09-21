@@ -83,16 +83,165 @@ namespace REDZONE.Controllers
         {
             // If "mpvr_id" is null or blank, then we are adding else we are updating
             string user_id = User.Identity.Name;
-            string jPayload = "{\"assignedreasons\":[{\"mpvr_id\":\"" + mpvr_id + "\"," +
-                   "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
-                   "\"mpr_id\":\"" + mpr_id + "\"," +
-                   "\"user_id\":\"" + user_id + "\"," +
-                   "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+            string jPayload = "{\"assignedreasons\":[{";
+            if (!String.IsNullOrEmpty(mpvr_id)) {
+                jPayload = jPayload + "\"mpvr_id\":\"" + mpvr_id + "\",";
+            }
+            jPayload = jPayload + "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+                    "\"mpr_id\":\"" + mpr_id + "\"," +
+                    "\"user_id\":\"" + user_id + "\"," +
+                    "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
 
             string raw_data = api.addUpdateMPVReasons(jPayload);
 
             return raw_data;
         }
 
+
+        public string modifyMPVReasons(string addList, string deleteList, string updateList)
+        {//The order of the parameters on each list is ""
+            // UPDATE: rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
+            // ADD:                       rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
+            // DELETE:  rMPValueReasonId [,]
+            string user_id = User.Identity.Name;
+            string mtrc_period_val_id = "";
+            string mpr_id = "";
+            string mpvr_id = "";
+            string mpvr_comment = "";
+            string addResults = "";
+            string deleteResults = "";
+            string updateResults = "";
+
+            int counter = 0;
+            // --------- Assign (ADD) New Metric Period Value Reason ------------------------------------------\
+            if (!String.IsNullOrEmpty(addList))
+            {
+                string[] addReasonList = addList.Split('~');
+                string jSonResponses = "";
+
+                foreach (string item in addReasonList)
+                { //Process each new reason to add
+                    string[] reasonData = item.Split(',');
+                    //Array order is:  rMPValueId , rMPReasonId , rMPValueReasonComment
+                    mtrc_period_val_id = reasonData[0];
+                    mpr_id = reasonData[1];
+                    mpvr_comment = reasonData[2];
+
+                    string jPayload = "{\"assignedreasons\":[{" + 
+                            "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+                            "\"mpr_id\":\"" + mpr_id + "\"," +
+                            "\"user_id\":\"" + user_id + "\"," +
+                            "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+
+                    string raw_data = api.addUpdateMPVReasons(jPayload);
+                    jSonResponses += raw_data;
+
+                    counter++;
+                    
+                }
+                addResults = counter + " Reasons to Add were found" + Environment.NewLine + jSonResponses;
+            }
+            else
+            {  //Else bypass the process, there is nothing in the list.
+                addResults = "No New Reasons have been assigned";
+            }
+            addResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
+            //================ END OF THE "ADD" FUNCTIONALITY =================================================
+
+            //-------- Remove (DELETE) Currently Assigned Metric Period Value Reasons ------------------------\
+            if (!String.IsNullOrEmpty(deleteList))
+            {
+                counter = 0;
+                string[] deleteReasonList = deleteList.Split(',');
+                string jPayload = "";
+                string jSonResponses = "";
+
+                /// Json Payload to DELETE:
+                /// {"reasonstodelete":
+                ///   [
+                ///     {"mpvr_id":"01"}
+                ///     {"mpvr_id":"02"}
+                ///   ]
+                /// }
+                /// 
+
+                foreach (string item in deleteReasonList)
+                { //Process each new reason to add
+                    //Array order is:  rMPValueReasonId [,]
+                    mpvr_id = item;
+                    jPayload += "{\"mpvr_id\":\"" + mpvr_id + "\"},";
+                    counter++;
+                }
+                jPayload = jPayload.Substring(0, (jPayload.Length - 1));
+                jPayload = "{\"reasonstodelete\":[ " + jPayload + "]}";
+
+                string raw_data = api.removeAssignedReason(jPayload);
+                jSonResponses += raw_data;
+
+                deleteResults = counter + " Reasons to Delete were found" + Environment.NewLine + jSonResponses;
+            }
+            else
+            {  //Else bypass the process, there is nothing in the list.
+                deleteResults = "No Assigned reasons have been deleted";
+            }
+            deleteResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
+            //================ END OF THE "DELETE" FUNCTIONALITY ==============================================
+
+
+            //-------- Update (UPDATE) Currently Assigned Metric Period Value Reasons ------------------------\
+            if (!String.IsNullOrEmpty(updateList))
+            {
+                counter = 0;
+                string[] updateReasonList = updateList.Split('~');
+                string jSonResponses = "";
+
+                foreach (string item in updateReasonList)
+                { //Process each reason to Update
+                    string[] reasonData = item.Split(',');
+                    //Array order is:  rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment
+                    mpvr_id = reasonData[0];
+                    mtrc_period_val_id = reasonData[1];
+                    mpr_id = reasonData[2];
+                    mpvr_comment = reasonData[3];
+
+                    string jPayload = "{\"assignedreasons\":[{" +
+                            "\"mpvr_id\":\"" + mpvr_id + "\"," +
+                            "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+                            "\"mpr_id\":\"" + mpr_id + "\"," +
+                            "\"user_id\":\"" + user_id + "\"," +
+                            "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+
+                    string raw_data = api.addUpdateMPVReasons(jPayload);
+
+                    jSonResponses += raw_data;
+                    counter++;
+
+                }
+                updateResults = counter + " Assigned Reason to updated were found." + Environment.NewLine + jSonResponses;
+            }
+            else
+            {  //Else bypass the process, there is nothing in the list.
+                updateResults = "No Assigned reasons have been Updated";
+            }
+            updateResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
+            //================ END OF THE "UPDATE" FUNCTIONALITY =================================================
+
+            // If "mpvr_id" is null or blank, then we are adding else we are updating
+            //string jPayload = "{\"assignedreasons\":[{";
+            //if (!String.IsNullOrEmpty(mpvr_id))
+            //{
+            //    jPayload = jPayload + "\"mpvr_id\":\"" + mpvr_id + "\",";
+            //}
+            //jPayload = jPayload + "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+            //        "\"mpr_id\":\"" + mpr_id + "\"," +
+            //        "\"user_id\":\"" + user_id + "\"," +
+            //        "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+
+            //string raw_data = api.addUpdateMPVReasons(jPayload);
+
+            //return raw_data;
+
+            return addResults + Environment.NewLine + deleteResults + Environment.NewLine + updateResults;
+        }
     }
 }

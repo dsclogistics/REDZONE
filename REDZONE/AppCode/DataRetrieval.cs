@@ -608,5 +608,43 @@ namespace REDZONE.AppCode
             }
         }
 
+        public string removeAssignedReason(string jsonPayload)
+        {
+            // This function Deletes an Assigned Metric Period Value Reason (From json Array parameter ) from the Database
+            /// Payload to DELETE:
+            /// {"reasonstodelete":
+            ///   [
+            ///     {"mpvr_id":"01"}
+            ///     {"mpvr_id":"02"}
+            ///   ]
+            /// }
+            /// 
+            string endPoint = "removeassignedreason";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+
+            string parsedContent = jsonPayload;
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return "ERROR: " + e.Message;
+            }
+        }
     }
 }

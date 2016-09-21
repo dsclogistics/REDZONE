@@ -133,7 +133,7 @@
 
 
 
-                <div class="row " id="existingReasons" style="text-align: center">
+                <div class="row " id="displayableReasons" style="text-align: center">
                     @{ int ckBoxCounter = 0;
                      string commentStatus = "display: none";
                     }
@@ -145,11 +145,13 @@
                             string ckStatus = "";
                             if (item.isAssigned) { ckStatus = "checked"; }
                             <div class="reasonDiv" id="parent_@ckBoxCounter">
-                                <input type="hidden" class="origSts" value="@ckStatus" />
-                                <input type="hidden" name="reasonId" value="@item.val_reason_id" />
+                                <input type="hidden" id="wasUpdated" value="N" />
+                                <input type="hidden" id="origSts" value="@ckStatus" />
+                                <input type="hidden" id="reasonId" value="@item.reason_id" />
+                                <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
                                 <div class="row reasonLabel">
                                     <label for="primary-@ckBoxCounter" class="btn btn-info reasonCkBox" title="@item.reason_description">
-                                        <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox" @ckStatus>
+                                        <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox chkReason" @ckStatus>
                                         <span class="badge">&check;</span><span style="margin-left: 8px">@item.reason_text</span>
                                     </label>
                                     <span style="font-size:8px; color:blue">*STD</span>
@@ -158,7 +160,7 @@
                                 @if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
                                 else { commentStatus = "display: none"; }
                                 <div class="row boxComment" style="@commentStatus">
-                                    <div class="rCommentBox" contenteditable="true">
+                                    <div class="rCommentBox reasonComment" contenteditable="true">
                                         <span class="cmLabel" style="color:darkgray;">Comment: </span> @item.mpvr_Comment
                                     </div>
                                 </div>
@@ -245,7 +247,7 @@
         </div>
     </div>
 </div>
-
+<div id="msgDiv"></div>
 
 
 <br /><br /><br /><br /><br />
@@ -294,7 +296,6 @@
     function getMPvalue() { return localStorage.getItem("mpValue"); }
     function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
     function getMetricDate() { return localStorage.getItem("mpValueDate"); }
-
     function resetMetricValueVariables() {
         localStorage.setItem("mpId", "");
         localStorage.setItem("mpBuildingName", "");
@@ -307,11 +308,13 @@
     }
 
     $(document).ready(function () {
+        //Global Variables
+        var originalComment = "";
         var newReasonTag = '<div class="newReasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkBox" >' +
                 '<input type="checkbox" id="dynamic-ABC" class="badgebox" checked><span class="badge">&check;</span>' +
-                '<span style="margin-left: 8px">' + 'XYZ</span></label>' +
+                '<span style="margin-left: 8px" id="newReasonText">' + 'XYZ</span></label>' +
                 '<div class="row boxComment"><div class="rCommentBox" contenteditable="true"><span class="cmLabel" style="color:darkgray;" >Comment: </span></div></div></div>' +
-                '</div>';
+                '<input type="hidden" id="reasonId" value="ReasonIdValue" />  </div>';
 
         $("#buildingName").html(getBuildingName());
         $("#metricDate").html(getMetricDate());
@@ -323,40 +326,142 @@
 
         //alert("Addign class: " + getMPvalueDisplayClass());
         //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
-        $("#ddlReason").on("change", function () {
-            var reasonId = $(this).val();
-            var reasonText = $(this).find('option:selected').text();
-            if (reasonId == "none") {
-                alert("You requested to do nothing.. :)");
-            }
-            else if (reasonId == "new") {
-                $('#addReasonForm').modal('show');
+   //============================ SAVE PROGRESS ACTION ====================================================
+        $('#btnSaveProg').click(function () {
+            if (!getMPvalueId()) {
+                alert("Warning!! Your session has timed out. Changes will not be saved.\nPlease logon again.");
             }
             else {
-                //Adds selected Option to the Check List
-                var lastDynamicIndex = parseInt($('#newReasonCounter').val()) + 1;
-                dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex);
-                $('#addedReasons').append(dynamicReasonTag);
-                $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
-                //Reset the select list index
-                $(this).prop('selectedIndex', 0);
-                $('#addedReasons').focus();
+                // Do Saving procedure
+
             }
-            //alert("Drop Down Selection was changed:\nReason Id is: " + reasonId + "\nText: " + reasonText);
-        });
-        $('#btnSaveProg').click(function () {
-            //$('#existingReasons')
-            var reasonsToAdd = "";
-            var counter = 0;
-            $('.newReasonDiv').each(function () {
-                counter++;
+
+            //alert("Metric Period Value Id is: " + getMPvalueId() + " Vs " + getURLid());   //Both have the same values
+
+            // This process will compile three lists that weill be submitted to the server via ajax for processing:
+            // List 1: DELETE LIST - A list all reason codes currently assigned that need to be deleted
+            // List 2: UPDATE LIST - A list of reason codes already assigned that need to be updated (New comment for example)
+            // List 3: ASSIGN LIST - A list of reason codes that need to be assigned (Added)
+
+            // Parameters that will be used for all three actions and for both static and dynamic reason sections
+            var rMPValueId = getURLid();      //This is the Cell Value Id      //or  getMPvalueId() if we want to retrieve vlue from Local storage (Global value for all items); 
+            var rMPValueReasonId = "";       //For existing assigned Reasons (Delete/Update). New reasons do not have a Value Reason Id (Generated by DB after the insert)
+            var rMPReasonId = "";
+            var rMPValueReasonComment = "";
+            var reasonsToDelete_List = "";
+            var reasonsToUpdate_List = "";
+            var reasonsToAdd_List = "";
+            //var rMPValueReasonText = "";     (The reason text is not needed, API just needs the reason Id)
+
+            // --- Loop through each reason (In the 'displayableReasons' DIV section) to compile the DELETE/ADD/Update lists ---
+            //alert("Checking Existing Items");
+            $('.reasonDiv').each(function () {
+                var $curReason = $(this);
+                
+                //Check whether the item in question was changed. If not changed Skip it
+                if ($curReason.find('#wasUpdated').val() == "Y") {
+                    //Retrieve it's original status and variable values needed for add/update/delete
+                    var originalSTatus = $curReason.find('#origSts').first().val();        //Either "checked" or ""
+                    rMPValueReasonId = $curReason.find('#valueReasonId').first().val();                    
+                    rMPReasonId = $curReason.find('#reasonId').first().val();
+                    $curReason.find('.rCommentBox').first().find('span:first').remove();   //Remove the unneeded 'span' tag inside the comments.
+                    rMPValueReasonComment = $curReason.find('.rCommentBox').first().html().trim();
+
+                    //If the check Box Status was changed, then the item either needs to be added or deleted
+                    if ($curReason.find('.badgebox').first().prop("checked")) {//Item is checked.                         
+                        if (originalSTatus == "checked") {//If the item was originally checked then this is an update (The comment might have been changed)
+                            // ~~~~~~~~~ THIS IS AN UPDATE ~~~~~~~~~~~~
+                            // Add the current Item to the "UPDATE" list
+                            reasonsToUpdate_List = reasonsToUpdate_List + rMPValueReasonId + "," + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
+                        }
+                        else {
+                            //// ~~~~~~~~~ THIS IS AN ADD ~~~~~~~~~~~~
+                            // Add the current Item to the "ADD" list
+                            reasonsToAdd_List = reasonsToAdd_List + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
+                        }
+                    }
+                    else {//Box is not checked. 
+                        //If it was originally checked, then this is a delete, else skip it (no need to save anything for this reason)
+                        if (originalSTatus == "checked") {//If the item was originally checked then this is an update (The comment might have been changed)
+                            // ~~~~~~~~~ THIS IS A DELETE ~~~~~~~~~~~~
+                            // Add the current Item to the "DELETE" list
+                            reasonsToDelete_List = reasonsToDelete_List + rMPValueReasonId + ",";
+                        }
+                    }
+                }
             });
 
-            alert('Found ' + counter + ' New Reasons!');
-            //alert("Reasons to Add:\n" + reasonsToAdd);
+            // --- Loop through all newly assigned reasons (In the 'addedReasons' DIV section) to compile a list of items to insert ------
+            $('.newReasonDiv').each(function () {
+                //Verify the current reason that was added is checked. If not skip it.
+                if ($(this).find('.badgebox').first().prop("checked") == true) {
+                    //Retrieve all the fields required by server to add a new Reason for posting
+                    //rMPValueReasonText = $(this).find('#newReasonText').first().html();        //Not needed anymore
+                    rMPReasonId = $(this).find('#reasonId').first().val();
+                    $(this).find('.rCommentBox').first().find('span:first').remove();   //Remove the unneeded 'span' tag inside the comments.
+                    rMPValueReasonComment = $(this).find('.rCommentBox').first().html().trim();
+
+                    //// ~~~~~~~~~ THIS IS AN ADD [Add the current Item to the "ADD" list] ~~~~~~~~~~~~
+                    reasonsToAdd_List = reasonsToAdd_List + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
+                }
+            });
+
+            //Finally, clean the input string from non valid characters and ending separator character
+            reasonsToDelete_List = cleanString(reasonsToDelete_List);
+            reasonsToUpdate_List = cleanString(reasonsToUpdate_List);
+            reasonsToAdd_List = cleanString(reasonsToAdd_List);
+
+            alert("Posting Data to Server:\nADDING: [" + reasonsToAdd_List + "]\nDELETING: [" + reasonsToDelete_List + "]\nUPDATING: [" + reasonsToUpdate_List + "]" );
+
+            if (reasonsToDelete_List == "" && reasonsToUpdate_List == "" && reasonsToAdd_List == "") {
+                //There is Nothing to post
+                alert("There are no changes to Save");
+            }
+            else {
+                //Perform Ajax Call to post/save changes: Parameters to Post= string addList, string deleteList, string updateList
+                $.ajax({
+                    url: '/MPVreasons/modifyMPVReasons',
+                    method: "POST",
+                    cache: false,
+                    //type: "POST",
+                    //data: payload,
+                    //string mpvr_id, string mtrc_period_val_id, string mpr_id, string mpvr_comment
+                    data: { addList: reasonsToAdd_List, deleteList: reasonsToDelete_List, updateList: reasonsToUpdate_List },
+                    //contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    alert("Update Operation completed: \n" + d);
+                });
+
+            }
             
+
+            ////Make ajax call to save (Add) Data (New MP Value Assigned Reason)
+            //$.ajax({
+            //    url: '/MPVreasons/addUpdateMPVReasons',
+            //    method: "POST",
+            //    cache: false,
+            //    //type: "POST",
+            //    //data: payload,
+            //    //string mpvr_id, string mtrc_period_val_id, string mpr_id, string mpvr_comment
+            //    data: { mtrc_period_val_id: rMPValueId, mpr_id: rMPReasonId, mpvr_comment: rMPValueReasonComment },
+            //    //contentType: "application/json; charset=utf-8",
+            //    //dataType: "json",
+            //    error: function (jqXHR, textStatus, errorThrown) {
+            //        alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            //    }
+            //}).done(function (d) {
+            //    alert("Ajax Call result string: " + d);
+            //});
+
+
             //alert("Progress Saved Successfully");
         });
+  //============================ SAVE PROGRESS ACTION FUNCTION ENDS ============================================
+
         $('#btnBeginAction').click(function () {
             alert("New Action Plan Actions are not enabled yet");
         });
@@ -378,11 +483,33 @@
             //   alert("Checked is: " + $(this).prop("checked"));
 
         });
-        $('#reasonListSection').on('focus', '.rCommentBox', function () {
-            $(this).find(".cmLabel").remove();
+
+        $(".chkReason").change(function () {
+            // When a check box is changed, flag the reason Item as "modified"
+            $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
         });
+
+        //$('.reasonComment').change(function () {
+        //    // When a Comment box is changed, flag the reason Item as "modified"
+        //    alert("Comment chnaged");
+        //    $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+        //});
+
+        $('#reasonListSection').on('focus', '.rCommentBox', function () {
+            $(this).find(".cmLabel").remove();      //Remove the Label since it's not part of the comment
+            originalComment = $(this).html().replace("&nbsp;", "").trim();   //Save the Original comment text to determine if it was modified
+            $(this).html(originalComment);
+        });
+
         $('#reasonListSection').on('focusout', '.rCommentBox', function () {
-            $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');
+            var updatedComment = $(this).html().replace("&nbsp;", "").trim();
+            if (updatedComment != originalComment) {
+                //The comment text was changed. Update the 'updated' flag
+                $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+                //alert("Comment was updated");
+            }
+            $(this).html(updatedComment);
+            $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');  //Put the Comment label back after leaving the comment field
         });
 
         $('.ddlReasonItem').click(function () {
@@ -393,13 +520,13 @@
             //alert("Action Selected! Id: " + reasonId + "\nSelection Text: " + reasonText + "\nLast Dynamic element Index is: " + lastDynamicIndex);
 
             //Adds selected Option to the Check List
-            dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex);
+            dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex).replace("ReasonIdValue", reasonId);
             $('#addedReasons').append(dynamicReasonTag);
             $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
             $('html, body').animate({ scrollTop: $(document).height() }, "slow");
-            //Reset the select list index
-            $('#addedReasons').focus();
-
+            //Remove the current List Item from the drop down as items cannot be added twice
+            $(this).parents('li').first().remove();
+            $('#addedReasons').find(".rCommentBox").last().focus();
         });
 
         $('#selNewReason').click(function () {
@@ -458,5 +585,31 @@
         $("#showTable").dblclick(function () {
             $('#listTable').show();
         });
+
+        function getURLid() {
+            var sPageURL = window.location.href;
+            sPageURL = sPageURL.substring(0, sPageURL.indexOf("?"));         //Remove all the params from the URL
+            var indexOfLastSlash = sPageURL.lastIndexOf("/");
+            var urlId = sPageURL.substring(indexOfLastSlash + 1);
+
+            return urlId;
+            //return sPageURL.match(/\d+\.?\d*/g);                
+        }
+
+        function cleanString(inputString) {
+            //alert("Input String: " + inputString);
+            var outputString = inputString;
+            //Remove the ending Character Separator
+            if (outputString != "") { outputString = outputString.slice(0, -1); }
+            //Remove unneeded html tags
+            outputString = outputString.replaceAll("<br>", "").replaceAll("<p>", "").replaceAll("</p>", "");
+            //alert("Output String: " + outputString);
+            return outputString;
+        }
+
+        String.prototype.replaceAll = function (search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
     });
 </script>
