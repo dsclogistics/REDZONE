@@ -19,19 +19,19 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_id, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_id, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_id, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_created_on_dtm, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_created_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_created_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_created_by_uid, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_created_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_created_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
     </div>
@@ -40,21 +40,21 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_text, htmlAttributes: new { @class = "input-group-addon asterisk", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr created-by-admin required", disabled = "disabled", placeholder = "Enter Reason" } })
+                @Html.EditorFor(model => model.reason_text, new { htmlAttributes = new { @class = "form-control editable-rsn-attr created-by-admin required", disabled = "disabled", placeholder = "Enter Reason", style = "min-width:100%" } })
                 @Html.Hidden("hdnReasonText", Model.reason_text, new { @id = "hdnReasonText" } )
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
                 @Html.LabelFor(model => model.reason_order, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_order, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_order, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
                 @Html.Hidden("hdnReasonOrder", Model.reason_order, new { @id = "hdnReasonOrder" })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
                 @Html.LabelFor(model => model.times_used, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.times_used, new { htmlAttributes = new { @class = "form-control", id = "timesUsed", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.times_used, new { htmlAttributes = new { @class = "form-control", id = "timesUsed", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
     </div>
@@ -76,20 +76,20 @@
         <div class="col-md-4 col-sm-3">
             <div class="input-group">
                 @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon asterisk", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr y-n-required", disabled = "disabled", placeholder = "Y/N?"} })
+                @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr y-n-required", disabled = "disabled", placeholder = "Y/N?", style = "min-width:100%" } })
                 @Html.Hidden("hdnReasonStd", Model.reason_text, new { @id = "hdnReasonStd" })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
                 @Html.LabelFor(model => model.reason_stdized_on_dtm, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_stdized_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_stdized_on_dtm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
         <div class="col-md-4 col-sm-3">
             <div class="input-group add-reason-hide">
                 @Html.LabelFor(model => model.reason_stdized_by_uid, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_stdized_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "" } })
+                @Html.EditorFor(model => model.reason_stdized_by_uid, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", placeholder = "", style = "min-width:100%" } })
             </div>
         </div>
     </div>
