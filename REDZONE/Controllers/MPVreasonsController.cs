@@ -42,7 +42,7 @@ namespace REDZONE.Controllers
         // GET: /MPVreasons/Assigment
         public ActionResult Assigment(int? id, string mpId, string returnUrl, string buildingID)
         {
-            ViewBag.ReturnUrl = returnUrl + "&buildingID=" + buildingID;
+            ViewBag.ReturnUrl = returnUrl + @"&buildingID=" + buildingID;
             int mtrc_period_val_id = id ?? 0;
             List<MPReason> MPReasons;
             List<MPReason> MPAssignedReasons;
