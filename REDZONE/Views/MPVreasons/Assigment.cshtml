@@ -205,17 +205,17 @@
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:360px; font-size:14px">
                             [ Select Other Reason ... ] <span class="caret" style="float:right"></span>
                         </button>
-                        <ul class="dropdown-menu top" style="min-width:300px; border:4px double darkgray; margin-left:30px">
+                        <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:300px; border:4px double darkgray; margin-left:30px">
                             <li role="separator" class="divider" style="padding:0px"></li>
-                            @foreach (var item in Model)
-                                {
-                                    if ((!item.reason_std_yn.Equals("Y")) && (!item.isAssigned))
-                                    {
-                                        // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
-                                        // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
-                                <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
-                                    }
-                                }
+                          @foreach (var item in Model)
+                          {
+                             if ((!item.reason_std_yn.Equals("Y")) && (!item.isAssigned))
+                             {
+                                // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
+                                // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
+                               <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
+                             }
+                          }
                             <li role="separator" class="divider" style="padding:0px"></li>
                             <li><a id="selNewReason" style="font-weight:bold" href="#">[ - Add New Reason - ]</a></li>
                         </ul>
@@ -359,7 +359,7 @@
         $("#mNameCell").html(getMetricName());
         $("#mGoalCell").html(getMetricGoal());
         $("#mValueCell").html(getMPvalue());
-        if ("@Model.Count()" == "0") { $('.noData').show();  }
+        if ("@Model.Count()" == "0") { $('.noData').show(); }
 
         //alert("Addign class: " + getMPvalueDisplayClass());
         //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
@@ -561,7 +561,7 @@
             $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');  //Put the Comment label back after leaving the comment field
         });
 
-        $('.ddlReasonItem').click(function () {
+        $('#reasonDropdown').on('click', '.ddlReasonItem', function () {
             var reasonId = $(this).prop("id").replace("li_", "");
             var reasonText = $(this).html();
             var lastDynamicIndex = parseInt($('#newReasonCounter').val()) + 1;
@@ -580,7 +580,28 @@
             $('#addedReasons').find(".rCommentBox").last().focus();
         });
 
+        //$('.ddlReasonItem').click(function () {
+        //    var reasonId = $(this).prop("id").replace("li_", "");
+        //    var reasonText = $(this).html();
+        //    var lastDynamicIndex = parseInt($('#newReasonCounter').val()) + 1;
+
+        //    //alert("Action Selected! Id: " + reasonId + "\nSelection Text: " + reasonText + "\nLast Dynamic element Index is: " + lastDynamicIndex);
+
+        //    $('.noData').hide();
+        //    //Adds selected Option to the Check List
+        //    dynamicReasonTag = newReasonTag.replace("XYZ", reasonText).replace("ABC", lastDynamicIndex).replace("ABC", lastDynamicIndex).replace("ReasonIdValue", reasonId);
+        //    $('#addedReasons').append(dynamicReasonTag);
+        //    $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
+        //    $('html, body').animate({ scrollTop: $(document).height() }, "slow");
+        //    //Remove the current List Item from the drop down as items cannot be added twice
+        //    $(this).parents('li').first().remove();
+        //    $('#btnSaveProg').prop("disabled", false);
+        //    $('#addedReasons').find(".rCommentBox").last().focus();
+        //});
+
         $('#selNewReason').click(function () {
+            //Reset the New Reason text box and show the dialog form
+            $('#inputReasonText').val("");
             $('#addReasonForm').modal('show');
         });
 
@@ -598,6 +619,12 @@
         $('#btnAddReasonDetail').click(function () {
             //Create the jason Payload topost to the server
             var reasonText = $('#inputReasonText').val();
+            //verify that user did not enter invalid characters
+            if ((reasonText.indexOf("<") != -1) || (reasonText.indexOf("/") != -1) || (reasonText.indexOf("'") != -1) )
+            {
+                alert("Reason Text has invalid characters.\nPlease correct and try again.");
+                return false;
+            }
             if (reasonText != "") {
                 var mpID = getURL_mpid();
                 var reasonText = $('#inputReasonText').val();
@@ -619,19 +646,23 @@
                         alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    if (d == "Success") {
+                    if (d != "0") {
+                        //alert("Reason Addedd Successfully\nJason result mpr_Id: " + d);
                         $('.noData').hide();        //Hide the "No Data" Message (If it happened to be visible)
                         $('#puSuccessMsg').show().fadeOut(2000, function () { $('#addReasonForm').modal('hide'); });   //Show Success Message and after 2 secods autoclose the popup
-                        // Add some logic to Add the newly added Reason to the Drop Down List
 
-                        //////////////////////////////////// TO DO ////////////////////////////////////////
-                        //////////////////////////////////// TO DO ////////////////////////////////////////
-                        //////////////////////////////////// TO DO ////////////////////////////////////////
+                        //Add the newly added Reason to the Drop Down List
+                        var newReasonId = d;
+                        var insertionIndex = ($('#reasonDropdown li').length) - 3;
+                        var reasonListItem = '<li style="padding:0px; "><a class="ddlReasonItem " id="li_' + newReasonId + '" style="padding:0px; margin-left:15px;" href="#">' + reasonText + '</a></li>';
+
+                        $("#reasonDropdown li:eq(" + insertionIndex + ")").after($(reasonListItem));
 
                         $('#btnSaveProg').prop("disabled", false);    //Reenable the Save progress button
                         //location.reload();
                     } else {
-                        alert("Error Saving the data!\n" + JSON.stringify(d));
+                        alert("Error Saving the data: " + d);
+                        //alert("Error Saving the data!\n" + JSON.stringify(d));
                     }
                 });
             }

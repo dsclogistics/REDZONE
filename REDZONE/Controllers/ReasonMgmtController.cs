@@ -82,9 +82,29 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string addMPReason(string raw_json)
         {
-            string status = api.saveMPReason(raw_json);
+            string status;
+            string mpr_Id = "0";     //Default Value is zero (Will be returned if any error is found)
+            try {
+                status = api.saveMPReason(raw_json);
+                //Parse the results and return either a zero or the Id Number of the newly added Reason
+                //(A Zero result  means that the Add action failed- Reason not added to the database or the parsing of data failed)
+                JObject parsed_API_result = JObject.Parse(status);
 
-            return returnResultMessage(status);
+                if (parsed_API_result.GetValue("result").ToString().Equals("Success"))
+                {//The API Call to Add the Reason was successful
+                    JArray apiNewReason = (JArray)parsed_API_result["savedData"];   //Technicaly the array should contain a single item
+                    if (apiNewReason.HasValues)
+                    {
+                        var reasonAdded = apiNewReason[0];
+                        mpr_Id = (string)reasonAdded["mpr_id"];
+                        if (String.IsNullOrEmpty(mpr_Id)) { mpr_Id = "0"; } // If the mpr_Id could not be determined, default back to "0"
+                    }
+                    else { return "0"; }
+                }  //Else the API Failed return default value
+            }
+            catch {//Return Default Value
+            }
+            return mpr_Id;
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
