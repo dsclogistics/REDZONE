@@ -437,11 +437,22 @@
             var val = $(this).val();
             //alert(val);
 
+            this.value = this.value.toUpperCase();
+
             if (val.toLowerCase() == "n" || val.toLowerCase() == "y") {
                 $(this).siblings('.input-group-addon').removeClass('asterisk');
             }
             else {
                 $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
+        });
+
+        $(document).on('keypress', '.y-n-required', function () {
+            var val = $(this).val();
+            //alert(val.length);
+
+            if (val.length > 0) {
+                this.value = this.value.substring(0, 0);
             }
         });
 
