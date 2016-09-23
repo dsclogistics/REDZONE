@@ -306,7 +306,19 @@
 <br /><br />
 
 <script>
+    function getURLParameter(name) {
+        var parameterValue = decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+        //if (parameterValue == null) { parameterValue = "" };
+        return parameterValue;
+    }
+
     $(document).ready(function () {
+        var metricMonth = getURLParameter("month");
+        var metricYear = getURLParameter("year");
+        var metricSortOrder = getURLParameter("sortOder");
+
+        alert("URL parameters are:\nMonth: " + metricMonth + "\nYear: " + metricYear + "\nSort Order: " + metricSortOrder );
+
         $(".menuItem").removeClass("menuSelected");
         $("#mDashboard").addClass("menuSelected");
 
