@@ -84,7 +84,11 @@
                                     <table style="width:100%">
                                         <tr>
                                             <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
+                                                <input class="sortOrder" type="hidden" id="bSortOrder" value="@ViewData["bOrder"]" />
                                                 <span style="font-weight:bold"> @Model.month @Model.year</span>
+                                                <button type="button" class="btn btn-sm sortButton" aria-label="Sort by" style="padding:0px 2px; float:right; margin-right:8px">
+                                                    <span class="glyphicon @ViewData["bIcon"]" aria-hidden="true"></span>
+                                                </button>
                                             </td>
                                             @foreach (var m in Model.allMetrics)
                                         {
@@ -95,7 +99,11 @@
                                         }
                                             <td class="buildingCol " style="vertical-align:middle; width:11%;">
                                                 @*class="buildingCol headerCol scoreCol"*@
+                                                <input class="sortOrder" type="hidden" id="sSortOrder" value="@ViewData["sOrder"]" />
                                                 Building Score
+                                                <button type="button" class="btn btn-sm sortButton" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                                    <span class="glyphicon @ViewData["sIcon"]" aria-hidden="true"></span>
+                                                </button>
                                             </td>
                                         </tr>
                                     </table>
@@ -316,5 +324,32 @@
         else {
             $(".scroll-Offset").addClass('notIEScroll');
         }
+
+        $(".sortButton").click(function () {
+            var sort_param = $(this).parent().find(".sortOrder").first().val();
+            //var current_params = window.location.search;
+            var current_year = getURLParameter("year");
+            var current_month = getURLParameter("month");
+            var url_parameters = "";
+            //alert("Sort parameter is: " + sort_param);
+
+            if (current_year != "") {
+                url_parameters = "?month=" + current_month + "&year=" + current_year + "&";
+            }
+            else {
+                url_parameters = "?"
+            }
+
+            var gotoURL = "/Home/Index/" + url_parameters + "sortOrder=" + sort_param;
+            //alert(gotoURL);
+            location.href = gotoURL;
+        });
+
+        function getURLParameter(name) {
+            var parameterValue = decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+            if (parameterValue == null) { parameterValue = "" };
+            return parameterValue;
+        }
+
     });
 </script>
