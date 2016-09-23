@@ -18,7 +18,7 @@ namespace REDZONE.Controllers
         APIDataParcer parcer = new APIDataParcer();
         //=================================================================
 
-        public ActionResult Index(string month, string year)
+        public ActionResult Index(string month, string year, string sortOrder)
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             DateTime defaultDate = DateTime.Today.AddMonths(-1);
@@ -27,6 +27,40 @@ namespace REDZONE.Controllers
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
             ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null);
+
+            switch (sortOrder)
+            {
+                case "BD":
+                    dashBoard.buildings = dashBoard.buildings.OrderByDescending(row => row.BuildingName).ToList();
+                    //On click, specify the expected state of the building and score icons.
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort-by-attributes-alt";
+                    ViewData["sIcon"] = "glyphicon-sort";
+                    break;
+                case "SA":
+                    dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.rowScore).ToList();
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SD";
+                    ViewData["bIcon"] = "glyphicon-sort";
+                    ViewData["sIcon"] = "glyphicon-sort-by-attributes";
+                    break;
+                case "SD":
+                    dashBoard.buildings = dashBoard.buildings.OrderByDescending(row => row.rowScore).ToList();
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort";
+                    ViewData["sIcon"] = "glyphicon-sort-by-attributes-alt";
+                    break;
+                default:
+                    dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.BuildingName).ToList();
+                    ViewData["bOrder"] = "BD";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort-by-attributes";
+                    ViewData["sIcon"] = "glyphicon-sort";
+                    break;
+            }
+
             return View(dashBoard);
         }
 
