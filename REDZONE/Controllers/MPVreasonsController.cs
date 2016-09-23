@@ -47,6 +47,13 @@ namespace REDZONE.Controllers
             List<MPReason> MPReasons;
             List<MPReason> MPAssignedReasons;
 
+            //Perform Basic Validation
+            //Metric Period Id is mandatory. Yhrow an Exception if it is mising or invalid
+            int intMPid = 0;
+            if (!Int32.TryParse(mpId, out intMPid)) {
+                throw new Exception("The provided Metric Id '" + mpId + "' is not valid." + Environment.NewLine + "Review your input and try again.");
+            }
+
             // Get (From API call) the list of Existing Reasons for this metric period id (param: mpId)
             MPReasons = parcer.getMetricPeriodReasons(mpId);
             // Get  (From API call) the list of Reason assigned to metric period Value id (param: id)

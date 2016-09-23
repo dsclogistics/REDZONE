@@ -49,3 +49,30 @@
         color:black;
         list-style-type: none;
 }
+.puViewBody {
+    width:90%; 
+    margin:0 auto; 
+    margin-top:10px; 
+    margin-bottom:10px; 
+    border: 4px double black; 
+    border-radius:6px; 
+    /*border-color: #a50404;*/
+    border-color: #011b47;
+    background-color:#f5fdff;
+    padding:10px;
+}
+.note {
+    position: relative;
+}
+.note:after { /* Magic Happens Here to Add Comment Indicator Excell like style to a cell! */
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0; 
+    height: 0; 
+    display: block;
+    border-left: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-top: 11px solid #f00;
+} /* </magic> */

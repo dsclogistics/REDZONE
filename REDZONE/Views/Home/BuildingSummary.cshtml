@@ -94,6 +94,7 @@
                             Goals Missed
                         </td>
                     </tr>  <!-- END OF HEADERS/TITLES ROW -->
+
                     <!-- ======== Begin loop sections of Building Metric Rows======== -->
                     @foreach (var buildingRow in Model.metricRows)
                     {
@@ -110,15 +111,18 @@
                                 bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
                                 if (cellIsViewable)
                                 {
-                                    <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="width:@Model.metricColWidth" title="MPid=@buildingCell.mtrc_period_id MPvalId=@buildingCell.cellValueId">
-                                        <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
-                                        <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
-                                        <input type="hidden" id="colIndex" value="month-@colCounter.ToString("00")" />
-                                        @*@Model.metricColWidth*@
-                                        @if (String.IsNullOrEmpty(@buildingCell.metricValue))
-                                        { <br /> }
-                                        else
-                                        { <span id="mValue">@buildingCell.metricValue</span> }
+                                    string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
+                                    <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="MPid=@buildingCell.mtrc_period_id MPvalId=@buildingCell.cellValueId">
+                                        <div class="@hasReasonsClass" style="margin:0; padding:4px">
+                                            <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
+                                            <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
+                                            <input type="hidden" id="colIndex" value="month-@colCounter.ToString("00")" />
+                                            @*@Model.metricColWidth*@
+                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                            { <br /> }
+                                            else
+                                            { <span id="mValue">@buildingCell.metricValue</span> }
+                                        </div>
                                     </td>
                                 }
                                 colCounter++;
@@ -333,7 +337,7 @@
                 <h4 class="modal-title add-reason">Reasons for Selected Building Metric Value</h4>
             </div>
             <div class="modal-body" id="reasonEditBody">
-                <div class="row" id="reasonsViewContainer" style="width:90%; margin:0 auto; margin-top:10px; margin-bottom:10px; border: 4px double black; border-radius:6px; padding:10px">
+                <div class="row puViewBody" id="reasonsViewContainer" >
 
                     <div>
                         <br />PLEASE WAIT WHILE DATA LOADS<br /><br />
@@ -350,3 +354,4 @@
     </div>
 </div>
 <!-- END OF RIGHT CLICK POPUP REASONS DISPLAY  -->
+

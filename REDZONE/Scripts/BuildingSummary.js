@@ -237,7 +237,8 @@ function menuItemListener(link) {
     //======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
 
 function cacheMetricValueVariables($cellClicked) {
-    var mpId = $cellClicked.children("#mpId").first().val();
+    //alert("Inside caching method for Cell Id: " + $cellClicked.prop("id"));
+    var mpId = $cellClicked.find("#mpId").first().val();
     var mpValueId = $cellClicked.prop("id");
     if (!mpValueId) {
         mpId = "0";

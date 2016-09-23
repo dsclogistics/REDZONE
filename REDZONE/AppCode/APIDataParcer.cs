@@ -508,6 +508,9 @@ namespace REDZONE.AppCode
                                         if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
                                         {
                                             string cellStatus = (string)apiCellValue["rz_mps_status"];
+                                            int reasonCount;
+                                            if (!Int32.TryParse((string)apiCellValue["reason_count"], out reasonCount)) { reasonCount = 0; };
+                                            tmp.hasReasons = (reasonCount > 0);
                                             tmp.cellStatus = cellStatus;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
 

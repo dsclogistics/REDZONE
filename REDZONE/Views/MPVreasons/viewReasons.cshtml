@@ -7,9 +7,9 @@
 }
 @foreach (var item in Model)
 {
-    <div class="row bordered-b" style="margin-bottom:7px; border-radius:5px; border-width:2px; position:relative; ">
-        <div class="row " style="text-align:left; margin:0; border-bottom: 1px solid darkgray; background-color: lightgray">
-            <span style="font-weight:bold; margin-left:5px">REASON: </span><span>@Html.DisplayFor(modelItem => item.reason_text)</span>
+    <div class="row bordered" style="margin:0 auto; margin-bottom:7px; border-radius:5px; border-width:2px; position:relative; background-color:#f3f3f3">
+        <div class="row " style="text-align:left; margin:0; border-bottom: 1px solid darkgray; background-color: lightgray; padding-top:4px;">
+            <span style="font-weight:bold; margin-left:5px">REASON: </span><span style="margin-left:10px; font-size:16px; color:#0331a7; ">@Html.DisplayFor(modelItem => item.reason_text)</span>
         </div>
 
         <div class="row" style="text-align:left; border-bottom:1px solid lightgray; margin:0">
