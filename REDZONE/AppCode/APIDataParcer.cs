@@ -970,19 +970,15 @@ namespace REDZONE.AppCode
         }
 
         //This method returns the list of all metrics Product Ids that the user is authorized to edit. 
-        public List<int> getEditableMetrics(string userName)
+        public List<int> getUserEditableMetrics(string userName)
         {
             List<int> accessibleMetrics = new List<int>();
             JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
-            try
+            foreach (var res in parsed_result["authorizationdetails"])
             {
-                foreach (var res in parsed_result["authorizationdetails"])
-                {
-                    int mtrc_period_id = (int)res["mtrc_prod_id"];
-                    accessibleMetrics.Add(mtrc_period_id);
-                }
+                int mtrc_period_id = (int)res["mtrc_prod_id"];
+                accessibleMetrics.Add(mtrc_period_id);
             }
-            catch { }
             return accessibleMetrics;
         }
 

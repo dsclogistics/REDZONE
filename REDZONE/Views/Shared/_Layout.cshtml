@@ -171,9 +171,25 @@
             </table>
         </div>
 
+        <div style="color:red; text-align:center">
+        @{
+        if (Session["globalAppError"] != null)
+        {
+            string erroMessage = Session["globalAppError"].ToString();
+            if (!String.IsNullOrEmpty(erroMessage))
+            {
+                <text>@Session["globalAppError"]</text>
+                <br />
+                <span>Please try again later or contact the Service Desk if problem Persist</span>
+            }
+        }
+        }
+        </div>
+        
         @Scripts.Render("~/bundles/bootstrap")
         @Scripts.Render("~/bundles/jqueryUI")
         @RenderSection("scripts", required: false)
+        Session["globalAppError"] = "";
     }
 
 </body>

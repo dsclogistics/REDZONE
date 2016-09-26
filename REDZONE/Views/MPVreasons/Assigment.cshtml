@@ -16,7 +16,7 @@
     .rCommentBox {
         -moz-appearance: textfield-multiline;
         -webkit-appearance: textarea;
-        border: 1px solid gray;
+        border: 1px solid lightgray;
         font: medium -moz-fixed;
         font: -webkit-small-control;
         overflow: auto;
@@ -34,6 +34,7 @@
         margin-bottom: 0px;
         overflow-x: hidden;
         text-wrap: normal;
+        box-shadow: inset 0px 0px 3px;
     }
 
     .reasonLabel {
@@ -41,6 +42,7 @@
         max-width: 400px;
         text-align: left;
         margin-bottom: 1px;
+        padding:0;
     }
 
     .modal-header {
@@ -97,14 +99,14 @@
         background-color: #f9fff0;
     }
 
-    .reasonCkLabel {
+    .reasonCkControl {
         /*background-color: #365f97;*/
         background-color: #f9f9f9;
         color: black;
         font-weight: bold;
-        width: 375px;
+        width: 100%;
         text-align: left;
-        margin-bottom: 1px;
+        margin-bottom: 4px;
     }
     /************* End of Check box control Styling**************/
 
@@ -167,7 +169,7 @@
                             <input type="hidden" id="reasonId" value="@item.reason_id" />
                             <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
                             <div class="row reasonLabel">
-                                <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkLabel" title="@item.reason_description">
+                                <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkControl" title="@item.reason_description">
                                     <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox chkReason" @ckStatus>
                                     <span class="badge">&check;</span><span style="margin-left: 10px">@item.reason_text</span>
                                     @*@if (item.reason_std_yn.Equals("Y"))
@@ -180,11 +182,6 @@
                                         @item.mpvr_Comment
                                     </span>
                                 </label>
-                                @*@if (item.reason_std_yn.Equals("Y"))
-                                    {
-                                        <span style="font-size:16px; color:blue">*</span>
-                                    }*@
-
                             </div>
                             @*Comment box for each Reason displayed*@
                             @*<div class="row " style="@commentStatus">
@@ -210,10 +207,8 @@
             <br />
 
 
-
             <div class="row " style="text-align: center">
                 <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
-
                     <!--Drop down button group for non-Standard and not already assigned Reasons -->
                     @*<div class="btn-group dropup" style="margin-left: 10px">*@
                     <div class="btn-group " style="margin-left: 10px">
@@ -361,12 +356,7 @@
     $(document).ready(function () {
         //Global Variables
         var originalComment = "";
-        var newReasonTag = '<div class="newReasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkLabel" >' +
-                '<input type="checkbox" id="dynamic-ABC" class="badgebox" checked><span class="badge">&check;</span>' +
-                '<span style="margin-left: 8px" id="newReasonText">' + 'XYZ</span></label>' +
-                '<div class="row rComment????"><div class="rCommentBox" contenteditable="true"><span class="cmLabel" style="color:darkgray;" >Comment: </span></div></div></div>' +
-                '<input type="hidden" id="reasonId" value="ReasonIdValue" />  </div>';
-
+        
         $("#buildingName").html(getBuildingName());
         $("#metricDate").html(getMetricDate());
         $("#metricDate1").html(getMetricDate());
@@ -516,11 +506,10 @@
 
             //alert("Progress Saved Successfully");
         });
-
+        //============================ SAVE PROGRESS ACTION FUNCTION ENDS ============================================
         $("#btnCancelMsgForm").click(function () {
             if ($('#reloadAfterPopup').val() == "Y") { window.location.reload(); }
         });
-        //============================ SAVE PROGRESS ACTION FUNCTION ENDS ============================================
 
         $('#btnBeginAction').click(function () {
             //alert("New Action Plan Actions are not enabled yet");
@@ -576,7 +565,13 @@
             $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');  //Put the Comment label back after leaving the comment field
         });
 
+        //When an Item from the dropdown is selected
         $('#reasonDropdown').on('click', '.ddlReasonItem', function () {
+            var newReasonTag = '<div class="newReasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkControl" >' +
+                '<input type="checkbox" id="dynamic-ABC" class="badgebox" checked><span class="badge">&check;</span>' +
+                '<span style="margin-left: 8px" id="newReasonText">' + 'XYZ</span></label>' +
+                '<div class="row rComment????"><div class="rCommentBox" contenteditable="true"><span class="cmLabel" style="color:darkgray;" >Comment: </span></div></div></div>' +
+                '<input type="hidden" id="reasonId" value="ReasonIdValue" />  </div>';
             var reasonId = $(this).prop("id").replace("li_", "");
             var reasonText = $(this).html();
             var lastDynamicIndex = parseInt($('#newReasonCounter').val()) + 1;
