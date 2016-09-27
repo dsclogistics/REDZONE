@@ -68,8 +68,14 @@
         font-size: 18px;
     }
 
-    /************* Check box control Styling**************/
-    /* Hiding the checkbox, but allowing it to be focused */
+    .nonStdRsn{
+        margin:0 auto; 
+        max-width: 400px; 
+        text-align:left; 
+        margin-bottom:3px;
+    }
+/************* Check box control Styling**************/
+/* Hiding the checkbox, but allowing it to be focused */
     .badgebox {
         opacity: 0;
     }
@@ -208,7 +214,7 @@
 
 
             <div class="row " style="text-align: center">
-                <div class="row" style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
+                <div class="row nonStdRsn" >
                     <!--Drop down button group for non-Standard and not already assigned Reasons -->
                     @*<div class="btn-group dropup" style="margin-left: 10px">*@
                     <div class="btn-group " style="margin-left: 10px">
@@ -223,7 +229,7 @@
                                 {
                                     // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
                                     // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
-                                    <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
+                            <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
                                 }
                             }
                             <li role="separator" class="divider" style="padding:0px"></li>
@@ -232,6 +238,7 @@
                     </div>
                 </div>
             </div>
+
             <br /><br />
             <div class="row " style="text-align:center">
                 <button id="btnSaveProg" class="btn btn-primary" style="width:135px; " disabled>Save Progres</button>
@@ -481,7 +488,6 @@
                     $('#reloadAfterPopup').val("Y");  //To trigger a relaod when popup is Closed
                     $('#msgForm').modal('show');
                 });
-
             }
 
 
@@ -588,6 +594,38 @@
             $(this).parents('li').first().remove();
             $('#btnSaveProg').prop("disabled", false);
             $('#addedReasons').find(".rCommentBox").last().focus();
+
+
+
+
+            @*<div class="row nonStdRsn" >
+                    <div class="btn-group " style="margin-left: 10px">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:360px; font-size:14px">
+                            [ Select Other Reason ... ] <span class="caret" style="float:right"></span>
+                        </button>
+                        <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:300px; border:4px double darkgray; margin-left:30px">
+                            <li role="separator" class="divider" style="padding:0px"></li>
+                            @foreach (var item in Model)
+            {
+                if ((!item.reason_std_yn.Equals("Y")) && (!item.isAssigned))
+                {
+                    // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
+                    // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
+                    <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
+                    }
+            }
+            <li role="separator" class="divider" style="padding:0px"></li>
+            <li><a id="selNewReason" style="font-weight:bold" href="#">[ - Add New Reason - ]</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+            //loadDropDown("1,5~2,6")*@
+
+
+
         });
 
         //$('.ddlReasonItem').click(function () {
