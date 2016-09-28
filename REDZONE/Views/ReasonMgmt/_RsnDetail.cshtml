@@ -74,10 +74,19 @@
 
     <div class="row" style="margin-top:5px">
         <div class="col-md-4 col-sm-3">
-            <div class="input-group">
-                @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon asterisk", style = "font-weight:bold" })
-                @Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr y-n-required", disabled = "disabled", placeholder = "Y/N?", style = "min-width:100%" } })
-                @Html.Hidden("hdnReasonStd", Model.reason_text, new { @id = "hdnReasonStd" })
+            <div class="input-group popup-std-checkbox">
+                @Html.LabelFor(model => model.reason_std_yn, htmlAttributes: new { @class = "input-group-addon", style = "font-weight:bold" })
+                @Html.HiddenFor(model => model.reason_std_yn)
+                <div class="form-control">
+                    <label class="switch">
+                        <input class="switch-input" type="checkbox" @if (Model.reason_std_yn == "Y") { <text>checked</text> } />
+                        <span class="switch-label" data-on="Y" data-off="N"></span>
+                        <span class="switch-handle"></span>
+                    </label>
+                </div>
+                
+                @*@Html.EditorFor(model => model.reason_std_yn, new { htmlAttributes = new { @class = "form-control editable-rsn-attr y-n-required", disabled = "disabled", placeholder = "Y/N?", style = "min-width:100%" } })
+                @Html.Hidden("hdnReasonStd", Model.reason_text, new { @id = "hdnReasonStd" })*@
             </div>
         </div>
         <div class="col-md-4 col-sm-3">

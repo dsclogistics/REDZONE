@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Reason Management";
 }
+
+<link href="~/Content/ReasonMgmt.css" rel="stylesheet" />
+
 <style>
   th{
       text-align:center;
@@ -111,9 +114,13 @@
                                                 <span class="reason-list-display-field" id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
                                                 @Html.TextBoxFor(modelItem => item.reason_description, new { @class = "reason-list-edit-field", style = "display:none" })
                                             </td>
-                                            <td>
-                                                <span class="reason-list-display-field" id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
-                                                @Html.TextBoxFor(modelItem => item.reason_std_yn, new { @class = "reason-list-edit-field", style = "display:none" })
+                                            <td class="std-checkbox" align="center">
+                                                @Html.HiddenFor(modelItem => item.reason_std_yn, new { @class = "reason-list-edit-field" })
+                                                <label class="switch">
+                                                    <input class="switch-input" type="checkbox" @if (item.reason_std_yn == "Y") { <text>checked</text> } disabled/>
+                                                    <span class="switch-label" data-on="Y" data-off="N"></span>
+                                                    <span class="switch-handle"></span>
+                                                </label>
                                             </td>
                                             <td>
                                                 <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
@@ -313,6 +320,7 @@
             $('.btnReasonEdit').prop("disabled", true);
             $(this).parent().siblings().find('.reason-list-display-field').hide();
             $(this).parent().siblings().find('.reason-list-edit-field').show();
+            $(this).parent().siblings().find('.switch-input').prop("disabled", false);
 
             //If times used by metrics > 0, then don't allow removal.
             if (parseFloat($(this).parent().siblings().find('#times_used').text()) > 0) {
@@ -507,6 +515,25 @@
                 this.value = this.value.substring(0, 0);
             }
         });
+
+        //Sets hidden value of reason_std_yn field to what the switch specifies.
+        $('.switch-input').change(function () {
+            if ($(this).prop("checked")) {
+                $(this).parents(".std-checkbox").first().find("#item_reason_std_yn").first().val("Y");
+            }
+            else {
+                $(this).parents(".std-checkbox").first().find("#item_reason_std_yn").first().val("N");
+            }
+        });
+
+        $('#reasonEditBody').on('click', '.switch-input', function () {
+            if ($(this).prop("checked")) {
+                $(this).parents(".popup-std-checkbox").first().find("#reason_std_yn").first().val("Y");
+            }
+            else {
+                $(this).parents(".popup-std-checkbox").first().find("#reason_std_yn").first().val("N");
+            }
+        });
     });
 
 
@@ -524,7 +551,8 @@
 
         // Put data into a single object.
         var formData = {
-            metric_period_id: metric_period_id
+            metric_period_id: metric_period_id,
+            reason_std_yn: "N"
         };
 
         // Make the Ajax Call to Return _ReasonDetail Partial View with blank model
