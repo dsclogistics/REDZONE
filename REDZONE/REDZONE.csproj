@@ -173,6 +173,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActionPlanController.cs" />
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\AppErrorController.cs" />
     <Compile Include="Controllers\ExecutiveSummaryController.cs" />
@@ -422,6 +423,7 @@
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ActionPlan\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
