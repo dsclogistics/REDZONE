@@ -52,6 +52,9 @@
                                             @Html.DisplayNameFor(model => model.reason_order)
                                         </th>
                                         <th>
+                                            @Html.DisplayNameFor(model => model.reason_description)
+                                        </th>
+                                        <th>
                                             @Html.DisplayNameFor(model => model.reason_std_yn)
                                         </th>
                                         <th>
@@ -97,36 +100,47 @@
 
                                             <td class="firstCol">
                                                 <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
-                                                <span id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
+                                                <span class="reason-list-display-field" id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
+                                                @Html.TextBoxFor(modelItem => item.reason_text, new { @class = "reason-list-edit-field created-by-admin", style = "display:none" })
                                             </td>
                                             <td>
                                                 <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
                                                 <span id="prev_reason_order" style="display:none">@Html.DisplayFor(modelItem => item.reason_order)</span>
                                             </td>
-                                            <td style="display:none">
-                                                <span id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
+                                            <td>
+                                                <span class="reason-list-display-field" id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
+                                                @Html.TextBoxFor(modelItem => item.reason_description, new { @class = "reason-list-edit-field", style = "display:none" })
                                             </td>
                                             <td>
-                                                <span id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
+                                                <span class="reason-list-display-field" id="reason_std_yn">@Html.DisplayFor(modelItem => item.reason_std_yn)</span>
+                                                @Html.TextBoxFor(modelItem => item.reason_std_yn, new { @class = "reason-list-edit-field", style = "display:none" })
                                             </td>
                                             <td>
                                                 <span id="times_used">@Html.DisplayFor(modelItem => item.times_used)</span>
                                             </td>
 
                                             <td class="lastCol">
-                                                <input type="button" class="btnReasonDetails" value="Details" />
+                                                @*<input type="button" class="btnReasonDetails" value="Details" />*@
+                                                <input type="button" class="btnReasonEdit" value="Edit" />
                                             </td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
-
+                            <div style="text-align:left;">
+                                <span id="reasonListValMsg" style="color:red; text-align:left;"></span>
+                            </div>
                         </div>
                         <hr />
                         <div class="row" style="text-align:left; margin-left: 5px">
                             <div class="col-sm-6" id="btnsReorder" style="float:left">
                                 <button type="button" class="btn btn-primary" id="btnAddReason">Add New Reason</button>
                                 <button type="button" class="btn btn-primary" id="btnReorderReasons" style="margin-left:15px">Reorder</button>
+                            </div>
+                            <div class="col-sm-6" id="btnsEdit" style="float:left; display:none">
+                                <button type="button" class="btn btn-primary" id="btnReasonListSave">Save Reason</button>
+                                <button type="button" class="btn btn-primary" id="btnReasonListRemove" style="margin-left:15px">Remove Reason</button>
+                                <button type="button" class="btn btn-primary" id="btnReasonListCancel" style="margin-left:15px">Cancel</button>
                             </div>
                             <div class="col-sm-6" id="btnsReordering" style="float:right; display:none">
                                 <button type="button" class="btn btn-primary" id="btnReorderSave">Save Order Sequence</button>
@@ -176,11 +190,11 @@
 
             </div>
             <div class="modal-footer" id="reasonEditFooter">
-                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnEditReasonDetail" value="Edit" />
-                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnSaveReasonDetail" value="Save" />
+                @*<input type="button" disabled class="btn btn-primary add-reason-hide" id="btnEditReasonDetail" value="Edit" />*@
+                @*<input type="button" disabled class="btn btn-primary add-reason-hide" id="btnSaveReasonDetail" value="Save" />*@
                 <input type="button" disabled class="btn btn-primary" style="display:none" id="btnAddReasonDetail" value="Add" />
-                <input type="button" disabled class="btn btn-primary add-reason-hide" id="btnRemoveReason" value="Remove" />
-                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
+                @*<input type="button" disabled class="btn btn-primary add-reason-hide" id="btnRemoveReason" value="Remove" />*@
+               <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
             </div>
         </div>
 
@@ -292,6 +306,55 @@
         });
 
 
+        //On Reason List edit button click
+        //------------------------------------------------------------------------
+        $("#divReasonList").on('click', '.btnReasonEdit', function () {
+            //Switch out display fields with input fields for certain columns
+            $('.btnReasonEdit').prop("disabled", true);
+            $(this).parent().siblings().find('.reason-list-display-field').hide();
+            $(this).parent().siblings().find('.reason-list-edit-field').show();
+
+            //If times used by metrics > 0, then don't allow removal.
+            if (parseFloat($(this).parent().siblings().find('#times_used').text()) > 0) {
+                $('#btnReasonListRemove').prop("disabled", true);
+            }
+
+            //Disable ability to edit reason text if reason created bya dmin
+            //alert($(this).parent().siblings().find("#reason_created_by_uid").text())
+            disableReasonTextIfAdmin($(this).parent().siblings().find("#reason_created_by_uid").text());
+
+            //Hide normal buttons
+            $('#btnsReorder').hide();
+
+            //Show save, remove, cancel buttons
+            $('#btnsEdit').show();
+
+            //Toggle edit class
+            $(this).addClass('currently-being-edited');
+        });
+
+        //Reason List Save button
+        //------------------------------------------------------------------------
+        $('#btnsEdit').on('click', '#btnReasonListSave', function () {
+            var validated = validateReasonRow();
+            if (validated) updateMPReason();
+        });
+
+        //Reason List Remove button
+        //------------------------------------------------------------------------
+        $('#btnsEdit').on('click', '#btnReasonListRemove', function () {
+            var validated = validateReasonListDelete();
+            if (validated) removeMPReason();
+        });
+
+        //Reason List Cancel button
+        //------------------------------------------------------------------------
+        $('#btnsEdit').on('click', '#btnReasonListCancel', function () {
+            location.reload();
+        });
+
+
+
         //Add New Reason button -> Add Reason Popup
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnAddReason', function () {
@@ -313,8 +376,8 @@
             $('.lastCol').css("border-bottom-right-radius", "4px");
 
             $('.nonstdReasonRow').hide();
-            $('.btnReasonDetails').prop("disabled", true);
-
+            //$('.btnReasonDetails').prop("disabled", true);
+            $('.btnReasonEdit').prop("disabled", true);
         });
 
         //Reorder Save Button
@@ -335,31 +398,6 @@
         //Reorder Cancel Button
         //------------------------------------------------------------------------
         $("#divReasonList").on('click', '#btnReorderCancel', function () {
-            //************************************
-            //Compare order values
-            //if (areOrderNumbersChanged() == true) {
-            //    //If different, prompt user
-            //    var confirmed = confirm("Changes have been made, are you sure you want to cancel?");
-
-            //    if (confirmed) PrevertOrderNumbersToOriginal();
-            //}
-            //else {
-            //    //Else go back to reason list
-            //    reasonSortDisable();
-            //    $('.sortIcon').hide();
-            //    $('#btnsReorder').show();
-            //    $('#btnsReordering').hide();
-            //    $('.reasonListRow').removeClass('sortableRow');
-            //    $('.firstCol').css("border-top-left-radius", "0px");
-            //    $('.firstCol').css("border-bottom-left-radius", "0px");
-            //    $('.lastCol').css("border-top-right-radius", "0px");
-            //    $('.lastCol').css("border-bottom-right-radius", "0px");
-
-            //    $('.nonstdReasonRow').show();
-            //    $('.btnReasonDetails').prop("disabled", false);
-            //}
-            //************************************
-
             location.reload();
             //$('.sortIcon').hide();
             //$('#btnsReordering').hide();
@@ -421,7 +459,7 @@
             $("#btnSaveReasonDetail").prop("disabled", false);
         });
 
-        $(document).on('change', '.required', function () {
+        $(document).on('keyup', '.required', function () {
             var val = $(this).val();
             //alert(val);
 
@@ -431,19 +469,33 @@
             else {
                 $(this).siblings('.input-group-addon').removeClass('asterisk');
             }
+
+            if($('.input-group-addon').hasClass('asterisk')){
+                $('#validationMessage').show();
+            }
+            else{
+                $('#validationMessage').hide();
+            }
         });
 
-        $(document).on('change', '.y-n-required', function () {
+        $(document).on('keyup', '.y-n-required', function () {
+            this.value = this.value.toUpperCase();
+
             var val = $(this).val();
             //alert(val);
 
-            this.value = this.value.toUpperCase();
-
-            if (val.toLowerCase() == "n" || val.toLowerCase() == "y") {
+            if (val == "Y" || val == "N") {
                 $(this).siblings('.input-group-addon').removeClass('asterisk');
             }
             else {
                 $(this).siblings('.input-group-addon').addClass('asterisk');
+            }
+
+            if ($('.input-group-addon').hasClass('asterisk')) {
+                $('#validationMessage').show();
+            }
+            else {
+                $('#validationMessage').hide();
             }
         });
 
@@ -455,7 +507,6 @@
                 this.value = this.value.substring(0, 0);
             }
         });
-
     });
 
 
@@ -564,7 +615,7 @@
 
     //Update Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
-    function buildUpdateMPReasonJSON() {
+    @*function buildUpdateMPReasonJSON() {
 
         var reason_id = $("#reasonEditBody").find("#reason_id").val();
         var metric_period_id = $("#reasonEditBody").find("#hdnMetricPeriodId").val();
@@ -590,10 +641,38 @@
 
         //alert("Json submitted:\n" + jsonPayloadDetail);
         return jsonPayload
+    }*@
+
+    function buildUpdateMPReasonListJSON() {
+        var reason_id = $('.currently-being-edited').parent().siblings().find("#reason_id").text();
+        var metric_period_id = $('.currently-being-edited').parent().siblings().find("#metric_period_id").text();
+        var reason_text = $('.currently-being-edited').parent().siblings().find("#item_reason_text").val();
+        var reason_description = $('.currently-being-edited').parent().siblings().find("#item_reason_description").val();
+        var reason_std_yn = $('.currently-being-edited').parent().siblings().find("#item_reason_std_yn").val();
+        //var reason_order
+        if (reason_std_yn != "Y") {
+            reason_order = "";
+        }
+        else {
+            var temp_reason_order = $('.currently-being-edited').parent().siblings().find("#reason_order").text();
+            if (temp_reason_order == "") {
+                reason_order = getNextOrder();
+            }
+            else {
+                reason_order = parseFloat(temp_reason_order);
+            }
+        }
+        var user_id = "@User.Identity.Name";
+
+        var jsonPayload = '{"mpr_id":"' + reason_id + '","mtrc_period_id":"' + metric_period_id + '","mpr_display_text":"' + reason_text + '","mpr_desc":"' + reason_description + '","mpr_std_yn":"' + reason_std_yn + '","mpr_display_order":"' + reason_order + '","user_id":"' + user_id + '"}';
+
+        //alert("Json submitted:\n" + jsonPayload);
+        return jsonPayload
     }
 
     function updateMPReason() {
-        var payload = buildUpdateMPReasonJSON();
+        //var payload = buildUpdateMPReasonJSON();
+        payload = buildUpdateMPReasonListJSON();
         //alert(payload);
 
         $.ajax({
@@ -646,7 +725,8 @@
     //Remove Metric Period Reason functions
     //------------------------------------------------------------------------------------------------
     function removeMPReason() {
-        var reason_id = $("#reasonEditBody").find("#reason_id").val();
+        var reason_id = $('.currently-being-edited').parent().siblings().find("#reason_id").text();
+        //var reason_id = $("#reasonEditBody").find("#reason_id").val();
         //alert(reason_id);
 
         var confirmed = confirm("Are you sure you want to remove this reason permanently?");
@@ -777,12 +857,78 @@
         return passValidation;
     }
 
-    function validateReasonDelete() {
+    function validateReasonRow() {
+        //Makes sure editable reason inputs follow the required rules before going to the controller.
+        var passValidation = true;
+        var alertString = "*";
+
+        $('.currently-being-edited').parent().siblings().find('.reason-list-edit-field').each(function (){
+        //$(".reason-list-edit-field").each(function () {
+            var thisVal = $(this).val();
+
+            //alert("Element id is: " + $(this).prop("id"));
+
+            switch ($(this).prop("id")) {
+                case "item_reason_text":
+                    if (thisVal == "") {
+                        alertString = alertString + 'Reason text is required.\n';
+                        passValidation = false;
+                        //$(this).css("background-color", "red");
+                    }
+                    break;
+
+                case "item_reason_description":
+                    break;
+
+                case "item_reason_std_yn":
+                    thisVal = thisVal.toUpperCase();
+
+                    if (thisVal != "Y" && thisVal != "N") {
+                        alertString = alertString + 'Standardized (Y/N) must be Y or N.\n';
+                        passValidation = false;
+                        //$(this).css("background-color", "red");
+                    }
+                    else {
+                        $(this).val(thisVal);
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        if (alertString != "*") $("#reasonListValMsg").text(alertString);
+        if (passValidation == false) $("#reasonListValMsg").show();
+
+        return passValidation;
+    }
+
+    //function validateReasonDelete() {
+    //    //Makes sure a reason being removed has "times_used" = 0.
+    //    var passValidation = true;
+    //    var alertString = "";
+
+    //    var thisVal = $("#times_used").val();
+
+    //    if (thisVal != 0) {
+    //        alertString = alertString + 'This reason is being used and cannot be removed.';
+    //        passValidation = false;
+    //    }
+
+    //    if (alertString != "") alert(alertString);
+    //    return passValidation;
+    //}
+
+    function validateReasonListDelete() {
         //Makes sure a reason being removed has "times_used" = 0.
         var passValidation = true;
         var alertString = "";
 
-        var thisVal = $("#times_used").val();
+        var thisVal = $('.currently-being-edited').parent().siblings().find('#times_used').text();
+        //alert(thisVal);
+        //var thisVal = $("#times_used").val();
 
         if (thisVal != 0) {
             alertString = alertString + 'This reason is being used and cannot be removed.';

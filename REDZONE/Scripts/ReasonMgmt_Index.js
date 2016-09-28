@@ -54,6 +54,7 @@ function updateOrderNumbers() {
     });
 }
 
+//Determine the next order number to assign to a new standardized reason.
 function getNextOrder() {
     var maxValue = null;
 
@@ -65,35 +66,6 @@ function getNextOrder() {
     maxValue = (maxValue == null) ? 1 : maxValue + 1;
     return maxValue;
 }
-
-//************************************
-//function areOrderNumbersChanged() {
-//    //Determines whether any of the order numbers were changed from the original values
-//    //i.e. through reordering.
-//    var returnVal = false;
-    
-//    $('.stdReasonRow #reason_order').each(function (i, value) {
-//        dispOrder = $(this).text();
-//        origOrder = $(this).siblings("#hdnReasonOrder").val();
-
-//        if (disp != origOrder) {
-//            returnVal = true;
-//        }
-//    });
-//}
-
-//function revertOrderNumbersToOriginal() {
-//    //Reverts the order numbers to their original values.
-//    var returnVal = false;
-
-//    $('.stdReasonRow #reason_order').each(function (i, value) {
-//        origOrder = $(this).siblings("#hdnReasonOrder").val();
-
-//        $(this).text(origOrder);
-
-//    });
-//}
-//************************************
 
 $(document).ready(function () {
 
