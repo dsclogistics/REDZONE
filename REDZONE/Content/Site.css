@@ -32,6 +32,9 @@ textarea {
 .bordered-b {
     border:1px solid blue;
 }
+.bordered-g {
+    border:1px solid gray;
+}
 .cell-NoValue {
     background-color:#efeeee;
 }

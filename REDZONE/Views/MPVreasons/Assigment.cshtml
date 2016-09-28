@@ -42,7 +42,7 @@
         max-width: 400px;
         text-align: left;
         margin-bottom: 1px;
-        padding:0;
+        padding: 0;
     }
 
     .modal-header {
@@ -68,42 +68,46 @@
         font-size: 18px;
     }
 
-    .nonStdRsn{
-        margin:0 auto; 
-        max-width: 400px; 
-        text-align:left; 
-        margin-bottom:3px;
+    .nonStdRsn {
+        margin: 0 auto;
+        max-width: 400px;
+        text-align: left;
+        margin-bottom: 3px;
     }
-/************* Check box control Styling**************/
-/* Hiding the checkbox, but allowing it to be focused */
+        .padding2 {
+        padding: 2px;
+    }
+
+/***************** Check box control Styling ****************************/
+/********** Hiding the checkbox, but allowing it to be focused **********/
     .badgebox {
         opacity: 0;
     }
-    
+
     .badgebox + .badge {
-        text-indent: -999999px;  /* Move the check mark away when unchecked */
-        width: 27px;             /* Makes the badge's width stay the same checked and unchecked */
-        border-radius: 3px;      /*Make the badge Look like square checkbox*/
-        border: 1px solid darkgray;
-        height: 25px;
-        background-color: white;
-    }
+            text-indent: -999999px; /* Move the check mark away when unchecked */
+            width: 27px; /* Makes the badge's width stay the same checked and unchecked */
+            border-radius: 3px; /*Make the badge Look like square checkbox*/
+            border: 1px solid darkgray;
+            height: 25px;
+            background-color: white;
+        }
 
     .badgebox:focus + .badge {
-        /* Set something to make the badge looks focused */
-        /* This really depends on the application, in my case it was: */
-        /* Adding a light border */
-        box-shadow: inset 0px 0px 5px;
-        /* Taking the difference out of the padding */
-    }
+            /* Set something to make the badge looks focused */
+            /* This really depends on the application, in my case it was: */
+            /* Adding a light border */
+            box-shadow: inset 0px 0px 5px;
+            /* Taking the difference out of the padding */
+        }
 
     .badgebox:checked + .badge {
-        /* Move the check mark back when checked */
-        text-indent: 0;
-        color: darkblue;
-        font-size: 16px;
-        background-color: #f9fff0;
-    }
+            /* Move the check mark back when checked */
+            text-indent: 0;
+            color: darkblue;
+            font-size: 16px;
+            background-color: #f9fff0;
+        }
 
     .reasonCkControl {
         /*background-color: #365f97;*/
@@ -114,11 +118,28 @@
         text-align: left;
         margin-bottom: 4px;
     }
-    /************* End of Check box control Styling**************/
+/************* End of Check box control Styling*********************************/
 
-    .padding2 {
-        padding: 2px;
-    }
+/**************** Drop Down With Checkbox control Styling***************************/
+/******  Hiding the checkbox attached to DDL, but allowing it to be focused ********/
+
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label:first-child span {
+    width: 23px;
+    height:22px;
+    border: 1px solid lightgray;
+    border-radius:3px;
+    /*padding-left:10px;*/
+}
+.form-group input[type="checkbox"] + .btn-group > label:first-child {
+    height:34px;
+    padding:5px 10px;
+}
+
+/************* End of Check box control Styling*********************************/
 </style>
 
 <div>
@@ -160,9 +181,9 @@
                 }
                 @foreach (var item in Model)
                 {
-                    if (item.reason_std_yn.Equals("Y") || item.isAssigned)
+                    if (item.reason_std_yn.Equals("Y"))
                     {
-                        // Only Show the reason code if it's a Standard Reason or it it is Assigned
+                        // Only Show the reason code if it's a Standard Reason //or it it is Assigned
                         string ckStatus = "";
                         if (item.isAssigned) { ckStatus = "checked"; }
                         if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
@@ -185,7 +206,7 @@
                                     <br />
                                     <span class="rCommentBox" contenteditable="true" style="@commentStatus">
                                         <span class="cmLabel" style="color:darkgray;">Comment: </span>
-                                        @item.mpvr_Comment
+                                        <span style="color:slategray">@item.mpvr_Comment</span>
                                     </span>
                                 </label>
                             </div>
@@ -201,8 +222,72 @@
                 }
             </div>
 
+            @* ---------------- This section contains all the non STandard reasons that are currently selected in the model---------*@
+            <br />
+            @*This Section Contains the dynamically added Reason Codes from the Drop Down*@
+            <div id="nonStdrReasonsDiv" class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px; padding:0px">
+                @* -- Display all No Standard Reason that are currently assigned--*@
+                @{
+                    int nsChkCounter = 0;
+                    string nsChkName = "";
+                 }
+                @foreach (var nsItem in Model)
+                {                    
+                    if (!nsItem.reason_std_yn.Equals("Y") && nsItem.isAssigned)
+                    {
+                        nsChkCounter++;
+                        nsChkName = "fancy-checkbox-default-" + nsChkCounter.ToString();
+                        
+                        <div id="nsReason" class="" style="margin:0; padding:0px; width:100%; margin-bottom:10px">
+                            <input type="hidden" id="wasUpdated" value="N" />
+                            <input type="hidden" id="origSts" value="checked" />  <!-- "checked" or blank  -->
+                            <input type="hidden" id="reasonId" value="@nsItem.reason_id" />
+                            <input type="hidden" id="valueReasonId" value="@nsItem.val_reason_id" />
+
+                            <div id="deleteme" class="[ form-group ]" style="margin:0; padding:0px; width:100%">
+                                <input class="nsCheckBox" type="checkbox" name="@nsChkName" id="@nsChkName" autocomplete="off" checked />
+                                <div class="[ btn-group ]" style="width:100%">
+                                    <label for="@nsChkName" class="[ btn btn-default ]" style="width:12.5%; min-width:45px" >
+                                        <span class="[ glyphicon glyphicon-ok ]" @*style="padding:3px;"*@></span>
+                                        <span class="[ ghost ]" style="display:none; width: 23px;"> &nbsp;&nbsp;&nbsp;</span>
+                                    </label>
+                                    <label for="@nsChkName" class="[ btn btn-default dropdown-toggle active ]" style="width:87.5%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @nsItem.reason_text
+                                        @*<span class="caret" style="float:right; font-size:10px; color:red"></span>*@
+                                        <span class="glyphicon glyphicon-chevron-down" style="float:right;" ></span>
+                                    </label>
+                                    <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:350px; border:4px double darkgray; margin-left:48px" aria-labelledby="@nsChkName">
+                                        <li role="separator" class="divider" style="padding:0px"></li>
+                                        @foreach (var item in Model)
+                                        {
+                                            if ((!item.reason_std_yn.Equals("Y")))
+                                            {
+                                                string hiddenClass = item.isAssigned ? "display:none" : "";
+                                                // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
+                                                // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
+                                                <li style="padding:0px; @hiddenClass"><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
+                                            }
+                                        }
+                                        <li role="separator" class="divider" style="padding:0px"></li>
+                                        <li><a id="selNewReason" style="font-weight:bold" href="#">[ - Add New Reason - ]</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    }                    
+                }
+
+                @*@Html.Action("_RZDM_MenuItems", "Home")*@
+
+            </div>
 
 
+            <br />
+            <div id="ddlWait" class="bordered" style="margin:0 auto; max-width: 400px;  padding:0px; display:none">
+                <div style="margin-top:7px;">Please wait. Loading new element</div>
+                <div style="padding:10px"><img src="~/Images/ui-anim_basic_16x16.gif" /></div>
+            </div>
 
 
             <div class="row " style="text-align: center">
@@ -210,18 +295,18 @@
                 <div id="addedReasons" class="row " style="margin:0 auto; max-width: 400px; text-align:left; margin-bottom:3px">
                 </div>
             </div>
-            <br />
+
 
 
             <div class="row " style="text-align: center">
-                <div class="row nonStdRsn" >
+                <div class="row nonStdRsn">
                     <!--Drop down button group for non-Standard and not already assigned Reasons -->
                     @*<div class="btn-group dropup" style="margin-left: 10px">*@
-                    <div class="btn-group " style="margin-left: 10px">
+                    <div class="btn-group " style="margin-left: 37px">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width:360px; font-size:14px">
                             [ Select Other Reason ... ] <span class="caret" style="float:right"></span>
                         </button>
-                        <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:300px; border:4px double darkgray; margin-left:30px">
+                        <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:340px; border:4px double darkgray; margin-left:20px">
                             <li role="separator" class="divider" style="padding:0px"></li>
                             @foreach (var item in Model)
                             {
@@ -229,7 +314,7 @@
                                 {
                                     // Only Show the reason codes that are not Standard (Stdr Codes are already Visible as check boxes)
                                     // Only show the reason codes that are not assigned (Assigned Reason are already visible next to the Standard reason section)
-                            <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
+                                    <li style="padding:0px; "><a class="ddlReasonItem " id="li_@item.reason_id" style="padding:0px; margin-left:15px;" href="#">@item.reason_text</a></li>
                                 }
                             }
                             <li role="separator" class="divider" style="padding:0px"></li>
@@ -246,7 +331,7 @@
                 <button id="btnCancelReasons" class="btn btn-warning" style="width:135px; margin-left:80px">Cancel</button>
             </div>
         </div>
-
+        <br />
 
     </div>
 </div>
@@ -332,14 +417,6 @@
 </table>
 
 
-
-
-
-
-
-
-
-
 <script>
     function getMPid() { return localStorage.getItem("mpId"); }
     function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
@@ -361,9 +438,31 @@
     }
 
     $(document).ready(function () {
+
+        $('.nsCheckBox').change(function () {
+            $OKbox = $(this).parents('.form-group').first().find('.glyphicon-ok').first();
+            $ghostBox = $(this).parents('.form-group').first().find('.ghost').first();
+            if ($(this).prop("checked")) {
+                $OKbox.show();
+                $ghostBox.hide();
+            }
+            else {
+                $OKbox.hide();
+                $ghostBox.show();
+            }
+            
+        });
+
+        $('.testElement').click(function () {
+            $('.testElement').not(this).css("color", "blue");
+            $(this).css("color", "red");
+        });
+
+
+
         //Global Variables
         var originalComment = "";
-        
+
         $("#buildingName").html(getBuildingName());
         $("#metricDate").html(getMetricDate());
         $("#metricDate1").html(getMetricDate());
@@ -394,7 +493,7 @@
             // List 3: ASSIGN LIST - A list of reason codes that need to be assigned (Added)
 
             // Parameters that will be used for all three actions and for both static and dynamic reason sections
-            var rMPValueId = getURLid();      //This is the Cell Value Id      //or  getMPvalueId() if we want to retrieve vlue from Local storage (Global value for all items);
+            var rMPValueId = getURLid();      //This is the Cell Value Id      //or  getMPvalueId() if we want to retrieve value from Local storage (Global value for all items);
             var rMPValueReasonId = "";       //For existing assigned Reasons (Delete/Update). New reasons do not have a Value Reason Id (Generated by DB after the insert)
             var rMPReasonId = "";
             var rMPValueReasonComment = "";
@@ -571,7 +670,7 @@
             $(this).prepend('<span class="cmLabel" style="color:darkgray;" >Comment: </span>');  //Put the Comment label back after leaving the comment field
         });
 
-        //When an Item from the dropdown is selected
+        //----- When an Item from the dropdown is selected ----------
         $('#reasonDropdown').on('click', '.ddlReasonItem', function () {
             var newReasonTag = '<div class="newReasonDiv"><div class="row reasonLabel"><label for="dynamic-ABC" class="btn btn-info reasonCkControl" >' +
                 '<input type="checkbox" id="dynamic-ABC" class="badgebox" checked><span class="badge">&check;</span>' +
@@ -591,11 +690,11 @@
             $('#newReasonCounter').val(lastDynamicIndex);     //Update the Hidden Field that holds the last Index used
             $('html, body').animate({ scrollTop: $(document).height() }, "slow");
             //Remove the current List Item from the drop down as items cannot be added twice
-            $(this).parents('li').first().remove();
+            $(this).parents('li').first().hide();
             $('#btnSaveProg').prop("disabled", false);
             $('#addedReasons').find(".rCommentBox").last().focus();
 
-
+            var noStdReason = '';
 
 
             @*<div class="row nonStdRsn" >
@@ -624,9 +723,7 @@
 
             //loadDropDown("1,5~2,6")*@
 
-
-
-        });
+        }); //----- End of When an Item from the dropdown is selected ----------
 
         //$('.ddlReasonItem').click(function () {
         //    var reasonId = $(this).prop("id").replace("li_", "");
