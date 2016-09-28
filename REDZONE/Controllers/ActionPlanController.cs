@@ -17,7 +17,7 @@ namespace REDZONE.Controllers
 
             actionPlanList.Add(dummyActionPlan());
 
-            return View();
+            return View(actionPlanList);
         }
 
 
