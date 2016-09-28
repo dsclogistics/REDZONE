@@ -10,12 +10,15 @@ namespace REDZONE.Controllers
     public class ActionPlanController : Controller
     {
         // GET: ActionPlan
-        public ActionResult viewEdit()
+        public ActionResult viewEdit(int? id )
         {
+            // The "id" receives as a parameter is the Building Action Plan id ('bap_id'). We will pass that to the API to get the data
+            int bap_id = id ?? 0;
+
             //List of Action Plans sctarting with the current as first Item of the list
             List<actionPlan> actionPlanList = new List<actionPlan>();
 
-            actionPlanList.Add(dummyActionPlan());
+            actionPlanList.Add(dummyActionPlan(bap_id));
 
             return View(actionPlanList);
         }
@@ -25,10 +28,10 @@ namespace REDZONE.Controllers
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // ==================== TEMPORARY HELPER FUNTIONS FOR TESTING ================================ ////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        private actionPlan dummyActionPlan()
+        private actionPlan dummyActionPlan(int someBIP_id)
         {
             //Valid Action Pan Status values are:
-            // [rz_bapm_status] = 'Rejected' OR 'Approved' OR 'Ready For Review' OR 'WIP' OR 'Not Started'
+            // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
             actionPlan tempAP = new actionPlan();
             tempAP.apStatus = "Not Started";
             tempAP.actionPlanAction = "I am planning on working harder.";
