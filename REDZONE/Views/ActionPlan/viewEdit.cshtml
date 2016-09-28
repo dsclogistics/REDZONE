@@ -1,0 +1,30 @@
+﻿@model IEnumerable<REDZONE.Controllers.actionPlan>
+@{ ViewBag.Title = "viewEdit"; }
+
+<h2>Metric Performace Action PLanning</h2>
+
+<br />
+<h2>Reason Summary:</h2>
+<br />
+<div style="max-width:400px; ">
+    <ul style="text-align:center">
+        @foreach (var reason in Model.First().reasonList)
+        {
+            <li title="@reason.mpvr_Comment">@reason.reason_text</li>
+        }
+    </ul>
+</div>
+
+<br />
+
+<div style="text-align:left">Action Plan:</div>
+<div class="bordered" style="padding:15px">
+    @Model.First().actionPlanAction
+</div>
+<br />
+<div style="text-align:center">
+    <button>Save Plan</button>
+    <button>Submit Plan</button>
+</div>
+
+

@@ -419,11 +419,11 @@
     <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
     <Content Include="Views\MPVreasons\Assigment.cshtml" />
     <Content Include="Views\MPVreasons\viewReasons.cshtml" />
+    <Content Include="Views\ActionPlan\viewEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ActionPlan\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
