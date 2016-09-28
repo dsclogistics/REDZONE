@@ -37,6 +37,8 @@ namespace REDZONE.Controllers
                     ViewData["sOrder"] = "SA";
                     ViewData["bIcon"] = "glyphicon-sort-by-attributes-alt";
                     ViewData["sIcon"] = "glyphicon-sort";
+                    ViewData["bntClassB"] = "btn-primary";
+                    ViewData["bntClassS"] = "";
                     break;
                 case "SA":
                     dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.rowScore).ToList();
@@ -44,6 +46,8 @@ namespace REDZONE.Controllers
                     ViewData["sOrder"] = "SD";
                     ViewData["bIcon"] = "glyphicon-sort";
                     ViewData["sIcon"] = "glyphicon-sort-by-attributes";
+                    ViewData["bntClassB"] = "";
+                    ViewData["bntClassS"] = "btn-primary";
                     break;
                 case "SD":
                     dashBoard.buildings = dashBoard.buildings.OrderByDescending(row => row.rowScore).ToList();
@@ -51,6 +55,8 @@ namespace REDZONE.Controllers
                     ViewData["sOrder"] = "SA";
                     ViewData["bIcon"] = "glyphicon-sort";
                     ViewData["sIcon"] = "glyphicon-sort-by-attributes-alt";
+                    ViewData["bntClassB"] = "";
+                    ViewData["bntClassS"] = "btn-primary";
                     break;
                 default:
                     dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.BuildingName).ToList();
@@ -58,6 +64,8 @@ namespace REDZONE.Controllers
                     ViewData["sOrder"] = "SA";
                     ViewData["bIcon"] = "glyphicon-sort-by-attributes";
                     ViewData["sIcon"] = "glyphicon-sort";
+                    ViewData["bntClassB"] = "btn-primary";
+                    ViewData["bntClassS"] = "";
                     break;
             }
 
@@ -76,6 +84,8 @@ namespace REDZONE.Controllers
            // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
 
             if (String.IsNullOrEmpty(sortDir)) { sortDir = "ASC"; }
+            if (String.IsNullOrEmpty(sortMonth)) { sortMonth = "Building"; }
+
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
 
             if (!String.IsNullOrEmpty(sortMonth)) {
@@ -88,7 +98,7 @@ namespace REDZONE.Controllers
                 else {
                     if (sortDir.Equals("ASC")) { dashBoard.metricRows = dashBoard.metricRows.OrderBy(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
                     else { dashBoard.metricRows = dashBoard.metricRows.OrderByDescending(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
-
+                    dashBoard.rowHeadings.displayClass = "";  //Reset the clss of the Building Colu, so it can be sorted ascending when clicked
                     var sortedHdrCol = dashBoard.rowHeadings.entityMetricCells.Find(p => p.metricName == sortMonth);
                     sortedHdrCol.displayClass = sortDir;  // To let the view know which column was sorted (if any) and in what way ('ASC' or 'DESC')                
                 } 
