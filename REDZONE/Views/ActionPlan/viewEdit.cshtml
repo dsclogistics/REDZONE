@@ -1,4 +1,4 @@
-﻿@model IEnumerable<REDZONE.Controllers.actionPlan>
+﻿@model IEnumerable<REDZONE.Models.ActionPlan>
 @{ ViewBag.Title = "viewEdit"; }
 
 <h2>Metric Performace Action Planning</h2>
@@ -6,25 +6,44 @@
 <br />
 <h2>Reason Summary:</h2>
 <br />
-<div style="max-width:400px; ">
-    <ul style="text-align:center">
-        @foreach (var reason in Model.First().reasonList)
-        {
-            <li title="@reason.mpvr_Comment">@reason.reason_text</li>
-        }
-    </ul>
-</div>
 
-<br />
+@if (Model.Count() > 0)
+{
+    <div style="max-width:400px; border:black 1px">
+        <ul style="text-align:center">
+            @if (Model.First().reasonList.Count() > 0)
+            {
+                foreach (var reason in Model.First().reasonList)
+                {
+                    <li title="@reason.mpvr_Comment">@reason.reason_text</li>
+                }
+            }
+            else
+            {
+                <li>There are no reasons to display.</li>
+            }
 
-<div style="text-align:left">Action Plan:</div>
-<div class="bordered" style="padding:15px">
-    @Model.First().actionPlanAction
-</div>
-<br />
-<div style="text-align:center">
-    <button>Save Plan</button>
-    <button>Submit Plan</button>
-</div>
+        </ul>
+    </div>
+
+    <br />
+
+    <div style="text-align:left">Action Plan:</div>
+    <div class="bordered" style="padding:15px">
+            @Model.First().actionPlanAction
+    </div>
+    <br />
+    <div style="text-align:center">
+        <button>Save Plan</button>
+        <button>Submit Plan</button>
+    </div>
+}
+else
+{
+    <div class="bordered" style="padding:15px">
+        <span>There is no action plan to display.</span>
+    </div>
+}
+
 
 
