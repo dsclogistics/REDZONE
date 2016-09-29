@@ -670,8 +670,11 @@ namespace REDZONE.AppCode
             DateTime metricDate = new DateTime(Convert.ToInt16(actionYear), monthToInt(actionMonth), 1);
             DateTime todayDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 
-            //The Action Cell is visible only if it's the last month or the currnet month as long as they are closed
-            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate.AddMonths(2) == todayDate) || (metricDate == todayDate)) ? true : false;
+            //The Action Cell is visible only if it's the last month or the current month as long as they are closed.
+            actionCell.isViewable = ((metricDate.AddMonths(1) == todayDate) || (metricDate == todayDate)) ? true : false;
+            // If it's before the 15th of the month then we allow the current and the last two months to be visible
+            if (DateTime.Today.Day < 16) { if (metricDate.AddMonths(2) == todayDate) { actionCell.isViewable = true; } }
+
             actionCell.metricMonth = actionMonth;
             actionCell.metricName = getMonthShortName(actionMonth);
             actionCell.metricValue = actionCell.isViewable ? "Action Required [ Click Here ]" : "";
