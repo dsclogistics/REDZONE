@@ -39,6 +39,8 @@ namespace REDZONE.Controllers
 
             //actionPlanList.Add(dummyActionPlan(productName, bapmId, mpvId));
 
+            actionPlanList = actionPlanList.OrderBy(x => x.apVersion).ToList();
+
             return View(actionPlanList);
         }
 
@@ -47,23 +49,24 @@ namespace REDZONE.Controllers
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // ==================== TEMPORARY HELPER FUNTIONS FOR TESTING ================================ ////
         ///////////////////////////////////////////////////////////////////////////////////////////////////
-        private ActionPlan dummyActionPlan(string productName, int someBIP_id, int mpvId)
-        {
-            //Valid Action Pan Status values are:
-            // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
-            ActionPlan tempAP = new ActionPlan();
+        //private ActionPlan dummyActionPlan(string productName, int someBIP_id, int mpvId)
+        //{
+        //    //Valid Action Pan Status values are:
+        //    // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
+        //
+        //    ActionPlan tempAP = new ActionPlan();
 
-            //tempAP.apStatus = "Not Started";
-            //tempAP.actionPlanAction = "I am planning on working harder.";
-            //tempAP.reviewerComments = "";
+        //    //tempAP.apStatus = "Not Started";
+        //    //tempAP.actionPlanAction = "I am planning on working harder.";
+        //    //tempAP.reviewerComments = "";
 
-            List<MPReason> mpReasonList = new List<MPReason>();
-            mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
+        //    List<MPReason> mpReasonList = new List<MPReason>();
+        //    mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
 
-            tempAP.reasonList = mpReasonList;
-            //tempAP.reasonList.Add(addDummyReason("Reason 1"));
-            return tempAP;
-        }
+        //    tempAP.reasonList = mpReasonList;
+        //    //tempAP.reasonList.Add(addDummyReason("Reason 1"));
+        //    return tempAP;
+        //}
 
         //private MPReason addDummyReason(string reasonText)
         //{
