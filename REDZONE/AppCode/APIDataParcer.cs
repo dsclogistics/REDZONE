@@ -1149,8 +1149,38 @@ namespace REDZONE.AppCode
             return MetricPeriodList;
         }
 
+        //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
+        public List<ActionPlan> getActionPlanList(string productname, string rz_bapm_id)
+        {
+            List<ActionPlan> actionPlanList = new List<ActionPlan>();
+            ActionPlan tempActionPlan;
 
+            string raw_data = api.getActionPlans(productname, rz_bapm_id);
 
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jReasonList = (JArray)parsed_result["details"];
+                foreach (var res in jReasonList)
+                {
+                    tempActionPlan = new Models.ActionPlan();
+
+                    tempActionPlan.apVersion = (string)res["rz_apd_ap_ver"];
+                    tempActionPlan.apStatus = (string)res["rz_apd_ap_status"];
+                    tempActionPlan.actionPlanAction = (string)res["rz_apd_ap_text"];
+                    tempActionPlan.reviewerComments = (string)res["rz_apd_ap_review_text"];
+
+                    actionPlanList.Add(tempActionPlan);
+                }
+
+            }
+            catch
+            {
+
+            }
+            return actionPlanList;
+        }
 
         // ====================== HELPER FUNCTIONS ================================
         public static string intToMonth(int monthNo)
