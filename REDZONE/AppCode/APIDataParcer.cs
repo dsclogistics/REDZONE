@@ -595,7 +595,6 @@ namespace REDZONE.AppCode
                         {
                             //Loop thrugh all Metric rows to inspect each cell at the given index
 
-
                             string cellStatus = (bMetricRow.entityMetricCells[headerIndex].cellStatus == null) ? "Inactive" : bMetricRow.entityMetricCells[headerIndex].cellStatus;
                             if (columStatus != "Mixed")
                             {
@@ -623,7 +622,6 @@ namespace REDZONE.AppCode
                         }
                         headerIndex++;
                     }
-
                     bSummary.buildingHeadings = rowHeader;
                     bSummary.buildingScoreRow = rowTotals;
                     bSummary.viewableColumns = bSummary.buildingHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();

@@ -1,5 +1,6 @@
 ﻿using REDZONE.AppCode;
 using REDZONE.Models;
+using REDZONE.ModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +85,33 @@ namespace REDZONE.Controllers
             //
 
             return View(MPReasons);
+        }
+
+        // GET: /MPVreasons/_assignedNoStdrReason
+        public ActionResult _assignedNoStdrReason(int? nsChkNameIndex, string reasonId, string valRsnId, string reasonText, string reasonComment, string wasUpdated, string ddItems)
+        { 
+            int iChkIndex = nsChkNameIndex ?? 0;
+            string nsChkName = "fancy-checkbox-default-" + (iChkIndex).ToString("00");      //The control 'nsChkNameIndex' is increased by One and used as part of the name
+            
+            NonStdrReasonViewModel nsReason = new NonStdrReasonViewModel();
+            //Initialize nsReason
+            nsReason.checkBoxName = nsChkName;     //Name Must be unique for each Reason Check Box
+            nsReason.originalStatus = String.IsNullOrEmpty(reasonId)?"":"checked";
+            nsReason.reasonId = reasonId;
+            nsReason.valueReasonId = valRsnId;
+            nsReason.reasonText = reasonText;
+            nsReason.wasUpdated = wasUpdated;
+            dropDownItem ddI;
+
+            string[] ddListItems = ddItems.Split(new char[] {'~'}, StringSplitOptions.RemoveEmptyEntries);
+            //Parse and load all the drop down Items to display
+            foreach (string ddlElement in ddListItems) {
+                //Split the properties of each List Item:   //"Reason Id","Reason Text", "is visible"
+                string[] itemProperties = ddlElement.Split(',');
+                ddI = new dropDownItem(itemProperties[0], itemProperties[1], itemProperties[2], itemProperties[3].Equals("true"));  
+                nsReason.ddItems.Add(ddI);
+            }
+            return PartialView(nsReason);
         }
 
         public string addUpdateMPVReasons(string mpvr_id, string mtrc_period_val_id, string mpr_id, string mpvr_comment)

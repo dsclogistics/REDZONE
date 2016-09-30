@@ -100,9 +100,13 @@ namespace REDZONE.Controllers
                         if (String.IsNullOrEmpty(mpr_Id)) { mpr_Id = "0"; } // If the mpr_Id could not be determined, default back to "0"
                     }
                     else { return "0"; }
-                }  //Else the API Failed return default value
+                }
+                else {
+                    return "ERROR: " + parsed_API_result.GetValue("message").ToString();
+                }
             }
-            catch {//Return Default Value
+            catch(Exception ex) {//Return Error Message
+                return "ERROR: " + ex.Message;
             }
             return mpr_Id;
         }

@@ -180,6 +180,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MPVreasonsController.cs" />
+    <Compile Include="ModelViews\dropDownItem.cs" />
+    <Compile Include="ModelViews\NonStdrReasonViewModel.cs" />
     <Compile Include="Controllers\ReasonMgmtController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -420,6 +422,7 @@
     <Content Include="Views\MPVreasons\Assigment.cshtml" />
     <Content Include="Views\MPVreasons\viewReasons.cshtml" />
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
+    <Content Include="Views\MPVreasons\_assignedNoStdrReason.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

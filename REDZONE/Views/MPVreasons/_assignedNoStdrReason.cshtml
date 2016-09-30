@@ -1,0 +1,42 @@
+﻿@model REDZONE.ModelViews.NonStdrReasonViewModel
+@{ 
+    string checkDisplay = Model.originalStatus.Equals("checked") ? "" : "display:none;";
+    string noCheckDisplay = Model.originalStatus.Equals("checked") ? "display:none;" : "";
+    string cmtDisplay = (String.IsNullOrEmpty(Model.reasonId)) ? "display:none;" : "";
+    string ddlTopMarginOffset = (String.IsNullOrEmpty(Model.reasonId)) ? "margin-top:0px;" : "margin-top:-57px;";
+}
+
+<div class="nsReason" style="margin:0; padding:0px; width:100%; margin-bottom:10px">
+
+    <input type="hidden" id="wasUpdated" value="@Model.wasUpdated" />
+    <input type="hidden" id="origReasonId" value="@Model.reasonId" />
+    <input type="hidden" id="reasonId" value="@Model.reasonId" />
+    <input type="hidden" id="valueReasonId" value="@Model.valueReasonId" />
+
+    <div class="[ form-group ]" style="margin:0; padding:0px; width:100%">
+        <input class="nsCheckBox" type="checkbox" name="@Model.checkBoxName" id="@Model.checkBoxName" autocomplete="off" @Model.originalStatus />
+        <div class="[ btn-group ]" style="width:100%">
+            <label for="@Model.checkBoxName" class="[ btn btn-default ]" style="width:12.5%; min-width:45px">
+                <span class="[ glyphicon glyphicon-ok ]" style="@checkDisplay; width: 23px;"></span>
+                <span class="[ ghost ]" style="@noCheckDisplay; width: 23px;"> &nbsp;&nbsp;&nbsp;</span>
+            </label>
+            <label for="@Model.checkBoxName" class="[ btn btn-default dropdown-toggle active ]" style="width:87.5%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="nsReasonText">@Model.reasonText</span>
+                <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span>
+            </label>
+            <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:350px; border:4px double darkgray; margin-left:48px; @ddlTopMarginOffset" aria-labelledby="@Model.checkBoxName">
+                @*<li role="separator" class="divider" style="padding:0px"></li>*@
+                @foreach (REDZONE.ModelViews.dropDownItem item in Model.ddItems)
+                {
+                    <li style="padding:0px; @item.displayStyle"><a class="ddlReasonItem " id="li_@item.id" style="padding:0px; margin-left:15px;" href="#">@item.Text</a></li>
+                }
+                <li role="separator" class="divider" style="padding:0px"></li>
+                <li><a class="selNewReason" style="font-weight:bold" href="#">[ - Add New Reason - ]</a></li>
+            </ul>
+            <span class="rCommentBox" contenteditable="true" style="color:slategray; margin-left:50px; width:350px; margin-top:0px; @cmtDisplay ">
+                <span class="cmLabel" style="color:darkgray;">Comment: </span>
+                @Model.reasonComment
+            </span>
+        </div>
+    </div>
+</div>
