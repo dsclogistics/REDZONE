@@ -1169,6 +1169,8 @@ namespace REDZONE.AppCode
                 {
                     tempActionPlan = new Models.ActionPlan();
 
+                    tempActionPlan.bapm_id = rz_bapm_id;
+                    tempActionPlan.apd_id = (string)res["rz_apd_id"];
                     tempActionPlan.apVersion = (string)res["rz_apd_ap_ver"];
                     tempActionPlan.apStatus = (string)res["rz_apd_ap_status"];
                     tempActionPlan.actionPlanAction = (string)res["rz_apd_ap_text"];
