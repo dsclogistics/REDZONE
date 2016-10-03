@@ -24,7 +24,7 @@
     //Display Reasons
     <div id="divReasonSummary">
         <h4 style="text-align:left">Reason Summary</h4>
-        <div class="bordered" style="padding:15px; padding-bottom:10px; border-radius:4px ">
+        <div class="bordered" style="padding:15px; padding-bottom:10px; border-radius:4px; border-color:gray ">
             <ul style="text-align:center">
                 @if (Model.First().reasonList.Count() > 0)
                 {
@@ -64,13 +64,13 @@
     //Display previous action plan versions for current time period
     foreach (REDZONE.Models.ActionPlan actionPlan in Model.Where(x => x.apVersion != Model.First().apVersion))
     {
-        <div class="btn-toolbar">
-            <button type="button" class="btn btn-default btn-group">
+        <div class="btn-toolbar bordered" style="border-radius:4px; border-color:lightgray">
+            <button type="button" class="btn btn-default btn-group" style="margin-left:0px">
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
-            <h4 class="btn-group" style="text-align:left">Action Plan - Version @actionPlan.apVersion</h4>
+            <h4 class="btn-group" style="text-align:left; margin-bottom:-5px">Action Plan - Version @actionPlan.apVersion</h4>
         </div>
-        <div class="collapse" style="margin-left:45px">
+        <div class="collapse" style="margin-left:45px; margin-top:5px">
             <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.actionPlanAction</textarea>
             @if (actionPlan.apStatus == "Rejected")
             {
@@ -105,6 +105,7 @@ else
         submitActionPlan();
     });
 
+
     //------------------------------------------------------------------------------------------------
     //-------------------------------------------FUNCTIONS--------------------------------------------
     //------------------------------------------------------------------------------------------------
@@ -124,7 +125,7 @@ else
 
     function submitActionPlan() {
         var payload = buildSubmitActionPlanJSON();
-        alert(payload);
+        //alert(payload);
 
         $.ajax({
             url: '/ActionPlan/submitActionPlan',

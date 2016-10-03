@@ -55,8 +55,8 @@ namespace REDZONE.Controllers
                     newActionPlan.reasonList = mpReasonList;
                     newActionPlan.bapm_id = bapmId.ToString();
                     newActionPlan.apd_id = "";
-                    newActionPlan.apVersion = (string)actionPlanList.First().apVersion + 1;
-                    newActionPlan.apStatus = "WIP";
+                    newActionPlan.apVersion = (Int32.Parse(actionPlanList.First().apVersion) + 1).ToString();
+                    newActionPlan.apStatus = "Not Started";
                     newActionPlan.actionPlanAction = "";
                     newActionPlan.reviewerComments = "";
                     actionPlanList.Insert(0, newActionPlan);
