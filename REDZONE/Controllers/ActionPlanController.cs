@@ -42,7 +42,7 @@ namespace REDZONE.Controllers
 
             //actionPlanList.Add(dummyActionPlan(productName, bapmId, mpvId));
 
-            actionPlanList = actionPlanList.OrderBy(x => x.apVersion).ToList();
+            actionPlanList = actionPlanList.OrderByDescending(x => x.apVersion).ToList();
 
             return View(actionPlanList);
         }
