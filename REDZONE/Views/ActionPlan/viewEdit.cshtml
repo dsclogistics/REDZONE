@@ -30,27 +30,31 @@
     <br />
 
     <h4 style="text-align:left">Action Plan - Version @Model.First().apVersion</h4>
-    <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().actionPlanAction</textarea>
+    <textarea rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().actionPlanAction</textarea>
     <br />
-    <div style="text-align:center">
-        <button>Save Plan</button>
-        <button>Submit Plan</button>
+    <div style="text-align:right">
+        <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
+        <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
     </div>
+    <br />
 
-    foreach (REDZONE.Models.ActionPlan actionPlan in Model)
+    foreach (REDZONE.Models.ActionPlan actionPlan in Model.Where(x => x.apVersion != Model.First().apVersion))
     {
-        <div class="input-group">
-            <button type="button" class="btn btn-default input-group-addon" data-toggle="collapse" data-target="#demo">
+        <div class="btn-toolbar">
+            <button type="button" class="btn btn-default btn-group">
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
-            <h4 style="text-align:left">Action Plan - Version @actionPlan.apVersion</h4>
+            <h4 class="btn-group" style="text-align:left">Action Plan - Version @actionPlan.apVersion</h4>
         </div>
-        <div id="demo" class="collapse in">Some dummy text in here.</div>
+        <div class="collapse" style="margin-left:45px">
+            <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.actionPlanAction</textarea>
+            @if (actionPlan.apStatus == "Rejected")
+            {
+                <h4 style="text-align:left">Reviewer Comments</h4>
+                <textarea rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.reviewerComments</textarea>
+            }
+        </div>
 
-        
-        
-        
-        <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.actionPlanAction</textarea>
         <br />
     }
 }
@@ -64,3 +68,11 @@ else
 
 
 
+<script>
+    $('.btn-toolbar').on('click', '.btn', function (e) {
+        //alert('start');
+        var $target = $(this).parent().next();
+        //alert($target.attr("aria-expanded"));
+        $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+    })
+</script>
