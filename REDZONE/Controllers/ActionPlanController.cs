@@ -47,6 +47,39 @@ namespace REDZONE.Controllers
             return View(actionPlanList);
         }
 
+        public ActionResult AP_Add(int? bapm_id, int? mtrc_period_val_id)
+        {
+            // Testing: http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
+            //    //Valid Action Plan Status values are:
+            //    // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
+
+            // The "id" received as a parameter is the Building Action Plan Metric id ('bapm_id'). We will pass that to the API to get the data
+            int bapmId = bapm_id ?? 0;
+            int mpvId = mtrc_period_val_id ?? 0;
+            string productName = "Red Zone";
+
+            //List of Action Plans starting with the current as first Item of the list
+            List<ActionPlan> actionPlanList = new List<ActionPlan>();
+
+            actionPlanList = dataParcer.getActionPlanList(productName, bapmId.ToString());
+
+            //List of Reasons
+            List<MPReason> mpReasonList = new List<MPReason>();
+
+            mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
+
+            //Add reasons to each action plan model
+            foreach (ActionPlan actionPlan in actionPlanList)
+            {
+                actionPlan.reasonList = mpReasonList;
+            }
+
+            //actionPlanList.Add(dummyActionPlan(productName, bapmId, mpvId));
+
+            actionPlanList = actionPlanList.OrderByDescending(x => x.apVersion).ToList();
+
+            return View(actionPlanList);
+        }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
