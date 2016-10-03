@@ -12,6 +12,7 @@
         <input type="hidden" id="buildingName" value="@Model.bName"/>
         <input type="hidden" id="buildingYear" value="@Model.year" />
         <input type="hidden" id="buildingId" value="@Model.bId" />
+        <input type="hidden" id="cellIdSelected" value="" />
     </div>
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
@@ -94,8 +95,9 @@
                             Goals Missed
                         </td>
                     </tr>  <!-- END OF HEADERS/TITLES ROW -->
-
-                    <!-- ======== Begin loop sections of Building Metric Rows======== -->
+                    
+                    <!-- ================================================================================================ -->
+                    <!-- ================== Begin loop sections of Building Metric Rows ================================= -->
                     @foreach (var buildingRow in Model.metricRows)
                     {
                         colCounter = 0;
@@ -112,16 +114,20 @@
                                 if (cellIsViewable)
                                 {
                                     string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
-                                    <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="MPid=@buildingCell.mtrc_period_id MPvalId=@buildingCell.cellValueId">
-                                        <div class="@hasReasonsClass" style="margin:0; padding:4px">
+                                    string APstatusFlag = (buildingCell.rz_bapm_status != "") ? "*" : "";
+                                    <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="MPid=@buildingCell.mtrc_period_id MPvalId=@buildingCell.cellValueId @buildingCell.rz_bapm_status">
+                                        <div class="@hasReasonsClass mvCell" style="margin:0; padding:4px; ">
                                             <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
                                             <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
                                             <input type="hidden" id="colIndex" value="month-@colCounter.ToString("00")" />
+                                            <input type="hidden" id="bamp_status" value="@buildingCell.rz_bapm_status" />
+                                            <input type="hidden" id="bapm_id" value="@buildingCell.rz_bapm_id" />
+                                            <input type="hidden" id="hasReasons" value="@hasReasonsClass" />
                                             @*@Model.metricColWidth*@
                                             @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                             { <br /> }
                                             else
-                                            { <span id="mValue">@buildingCell.metricValue</span> }
+                                            { <span id="mValue">@buildingCell.metricValue </span><span style="color:blue">@APstatusFlag</span> }
                                         </div>
                                     </td>
                                 }
@@ -133,6 +139,8 @@
                         </tr>
                     }  @*  <------- End of BuildingRow Rows Section ---- *@
 
+
+                    <!--  ************ Start of the TOTALS ROW ******************  -->
                     <tr class="buildingRow totalsRow">
                         <td class="buildingCol " style="width:16.66%">
                             @*@Model.buildingScoreRow.rowName*@
@@ -308,16 +316,27 @@
 <!-- START OF RIGHT CLICK CONTEXT MENU -->
 <nav id="context-menu" class="context-menu" style="border: 3px double gray">
     <ul class="context-menu__items" style="padding:0; margin:0; color:darkgray">
-        <li class="context-menu__item ">
+        <li id="li_View" class="context-menu__item ">
             <a href="#" class="context-menu__link" data-action="View">
                 View Reasons
             </a>
         </li>
-        <li class="context-menu__item" >
-            <a href="#" class="context-menu__link" data-action="Manage" >
+        <li id="li_Add" class="context-menu__item " style="display:none">
+            <a href="#" class="context-menu__link" data-action="Add">
+                Add Reasons
+            </a>
+        </li>
+        <li id="li_Manage" class="context-menu__item">
+            <a href="#" class="context-menu__link" data-action="Manage">
                 Manage Reasons
             </a>
         </li>
+        <li id="li_ViewAP" class="context-menu__item" style="display:none">
+            <a href="#" class="context-menu__link" data-action="ViewAP">
+                View Action Plan
+            </a>
+        </li>
+
         @*<li class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="Menu3">
                 <i class="fa fa-times"></i>  Menu Item 3

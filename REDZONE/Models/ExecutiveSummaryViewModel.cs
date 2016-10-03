@@ -72,8 +72,12 @@ namespace REDZONE.Models
         public int score { get; set; }    
         public string displayClass { get; set; }
         public string cellStatus { get; set; }
-        public string caption { get; set; }             //For Title Property (mouseover caption)
+        public string caption { get; set; }          //For Title Property (mouseover caption)
         public bool hasReasons { get; set; }
+        public string rz_bap_id { get; set; }        //Building Action Plan  Id
+        public string rz_bapm_id { get; set; }       //Building Action Plan Metric Id
+        public string rz_bapm_status { get; set; }   //Building Action Plan Metric Status
+
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
         //-------- Metric Specific Constructor -----------\

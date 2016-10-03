@@ -76,3 +76,8 @@
     border-bottom: 11px solid transparent;
     border-top: 11px solid #f00;
 } /* </magic> */
+
+.cellSelected {
+    border:3px double blue;
+   
+}

@@ -210,7 +210,7 @@ namespace REDZONE.AppCode
             return result;
         }
 
-        // ===== Retrieve the API URL USed for the application based on the current Environment's Server Name
+        // ===== Retrieve the API URL USed for the application based on the current Environment's Server Name ==========
         public static string getAPIurl()
         {
             string serverName = Environment.MachineName.ToUpper();

@@ -3,8 +3,8 @@ $(document).ready(function () {
     $(".menuItem").removeClass("menuSelected");
     $("#mDashboard").addClass("menuSelected");
 
-
-//================== This section handles the Custom context Menu Capabilities=================
+//======================== START OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=======================================
+//================== This section handles the Custom context Menu Capabilities==================================
 "use strict";
 //document.addEventListener("contextmenu", function (e) {
 //    console.log(e);
@@ -55,9 +55,18 @@ function contextListener() {
         taskItemInContext = elementRightClicked(e, taskItemClassName);
 
         if (taskItemInContext) {
-            //A valid cell type was clicked
+            //A valid cell type was right clicked
             //Before displaying menu, verify that the cell is active else do not display menu
             var $cellClicked = $("#" + taskItemInContext.getAttribute("id"));  // Object (CELL) that was right clicked
+
+            //alert("Id clicked is: " + $cellClicked.find('.mvCell').first().prop("id"));  //test only
+
+            //If there was already another cell cellected, Unselect and reset it it before selecting the new one
+            if ($('#cellIdSelected').val() != "") {
+                $($('#cellIdSelected').val()).find(".mvCell").first().removeClass("cellSelected");
+            }
+            //Store the value Id of the cell that was selected
+            $('#cellIdSelected').val("#" + taskItemInContext.getAttribute("id"));
             var mpId = $cellClicked.find("#mpId").first().val();
             if (!(!mpId || mpId == "")) {
                 // If the Cell has a valid Metric Period Id then show the menu
@@ -78,11 +87,40 @@ function contextListener() {
 }
 
 function toggleMenuOn() {
+    var $cellSelected = $($('#cellIdSelected').val());
+    var hasReasons = $cellSelected.find('#hasReasons').val();
+    var actionPlanSts = $cellSelected.find('#bamp_status').val();
+    
+    if (hasReasons == "") {    //There are no Reasons assigned
+        $('#li_Add').show();
+        $('#li_View').hide();
+        $('#li_Manage').hide();
+    }
+    else {  //There are reasons that can be viewed or managed
+        $('#li_Add').hide();
+        $('#li_View').show();
+        $('#li_Manage').show();
+    }
+
+    if (actionPlanSts == "") { actionPlanSts = "Not Needed";}
+    //alert("Action Plan Status is: '" + actionPlanSts + "'");
+
     if (menuState !== 1) {
         //$("#context-menu").show();
         menuState = 1;
         //menu.addClass(contextMenuActive);
+
+        //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
+        
+        if (actionPlanSts != "Not Needed") { $("#li_ViewAP").show(); }
+        else { $("#li_ViewAP").hide(); }
+        if (hasReasons == "") { }
+        else { }
+
         menu.classList.add(contextMenuActive);
+        //Highlite the current celected cell
+        //alert("Id clicked is: " + $($('#cellIdSelected').val()).find('.mvCell').first().prop("id"));  //test only
+        $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");        
     }
 }
 
@@ -91,6 +129,12 @@ function toggleMenuOff() {
         menuState = 0;
         //menu.removeClass(contextMenuActive);
         menu.classList.remove(contextMenuActive);
+    }
+    //Reset the 'Selected' Highlited status of the current cell if needed
+    if ($('#cellIdSelected').val() != "") {
+        //If there is a cell Selected
+        $($('#cellIdSelected').val()).find(".mvCell").first().removeClass("cellSelected");
+        $('#cellIdSelected').val(""); //Set indicator to Indicate there is no selected cell anymore
     }
 }
 
@@ -109,8 +153,6 @@ function clickListener() {
             }
         }
     });
-
-
 }
 
 function keyupListener() {
@@ -194,7 +236,7 @@ function menuItemListener(link) {
                   taskItemInContext.getAttribute("data-id") +
                   ", Task action - " + link.getAttribute("data-action"));
     toggleMenuOff();
-    if (contextMenuOption == "Manage") {
+    if (contextMenuOption == "Manage" || contextMenuOption == "Add") {
         //Save all context variables into Local Storage for Later use either on the Reason Assigment Page and within the popup Form
         cacheMetricValueVariables($cellClicked);
 
@@ -230,11 +272,21 @@ function menuItemListener(link) {
         //Display the popup Form After correctly populated by Ajax call
         $('#popupViewReasons').modal('show');
     }
-    else{
+    else if (contextMenuOption == "ViewAP") {
+        //alert("Redirecting to Action Plans is not enabled!!!!");
+
+        var buildingId = $('#buildingId').val();
+        var buildingYear = $('#buildingYear').val();
+        var backUrl = '/Home/BuildingSummary/?year=' + buildingYear + '&buildingID=' + buildingId;
+        //alert("Back URL is: " + backUrl);
+        window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + $cellClicked.find('#bapm_id').val() + "&mtrc_period_val_id=" + getMPvalueId() + "&returnUrl=" + backUrl;
+        // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
+    }
+    else {
         alert("This menu option is not yet Enabled.");
     }
 }
-    //======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
+//======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
 
 function cacheMetricValueVariables($cellClicked) {
     //alert("Inside caching method for Cell Id: " + $cellClicked.prop("id"));
