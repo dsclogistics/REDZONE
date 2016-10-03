@@ -101,6 +101,7 @@ namespace REDZONE.Controllers
             nsReason.valueReasonId = valRsnId;
             nsReason.reasonText = reasonText;
             nsReason.wasUpdated = wasUpdated;
+            nsReason.reasonComment = reasonComment;
             dropDownItem ddI;
 
             string[] ddListItems = ddItems.Split(new char[] {'~'}, StringSplitOptions.RemoveEmptyEntries);
