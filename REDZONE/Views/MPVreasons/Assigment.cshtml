@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<REDZONE.Models.MPReason>
-
-@{
-    ViewBag.Title = "Assigment";
-}
+@{ ViewBag.Title = "Assigment";  }
 <style>
     .headerCell {
         border: 1px solid black;
@@ -191,7 +188,7 @@
                         if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
                         else { commentStatus = "display: none"; }
 
-                <div class="reasonDiv" id="parent_@ckBoxCounter">
+                <div class="stdrReasonDiv" id="parent_@ckBoxCounter">
                     <input type="hidden" id="wasUpdated" value="N" />
                     <input type="hidden" id="origSts" value="@ckStatus" />
                     <input type="hidden" id="reasonId" value="@item.reason_id" />
@@ -257,11 +254,6 @@
                 @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = "999", reasonId = "", valRsnId = "", reasonText = "[ Select Other Reason ... ]", reasonComment = "", wasUpdated = "N", ddItems = nsListItems })
 
             </div>
-
-
-
-
-
 
 
             <br /><br />
@@ -405,8 +397,6 @@
         $('#nsItemList').val($('#nsItemList').val() + rsId_toAdd + "," + rsText + ",,false~");
     }
 
-
-
     $(document).ready(function () {
         //Global Variables
         var originalComment = "";
@@ -424,11 +414,13 @@
         //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
         //============================ SAVE PROGRESS ACTION ====================================================
         $('#btnSaveProg').click(function () {
+            $(this).prop("disabled", true);      //Disable the save button until processing completes
             // This process will compile three lists that will be submitted to the server via ajax for processing:
             // List 1: DELETE LIST - A list all reason codes currently assigned that need to be deleted
             // List 2: UPDATE LIST - A list of reason codes already assigned that need to be updated (New comment for example)
             // List 3: ASSIGN LIST - A list of reason codes that need to be assigned (Added)
-            alert("Item to Delete: " + $('#nsItemsToDelete').val());
+            //if ($('#nsItemsToDelete').val() != "") { alert("Item to Delete: " + $('#nsItemsToDelete').val()); }
+            
             if (!getMPvalueId()) {
                 alert("Warning!! Your session has timed out. Changes will not be saved.\nPlease logon again.");
                 //-------------------- TO DO --------------------------------------------------------------------
@@ -438,8 +430,6 @@
             else {   // Do Saving procedure
             }
 
-
-            $(this).prop("disabled", true);
 
             // Parameters that will be used for all three actions and for both static and dynamic reason sections
             var rMPValueId = getURLid();     //This is the Cell Value Id      //or  getMPvalueId() if we want to retrieve value from Local storage (Global value for all items);
@@ -451,9 +441,10 @@
             var reasonsToAdd_List = "";
             //var rMPValueReasonText = "";     (The reason text is not needed, API just needs the reason Id)
 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
             // --- Loop through each reason (In the 'displayableReasons' DIV section) to compile the DELETE/ADD/Update lists ---
             //alert("Checking Existing Items");
-            $('.reasonDiv').each(function () {
+            $('.stdrReasonDiv').each(function () {
                 var $curReason = $(this);
 
                 //Check whether the item in question was changed. If not changed Skip it
@@ -490,20 +481,32 @@
             });
             
             //WARNING, THIS LOGIC HAS CHANGED "addedReasons" DIV HAS BEEN REMOVED  Replaced by "nonStdrReasonsDivAdded"   !!!!!!!!!!!!!!!!!!!
-            // --- Loop through all newly assigned reasons (In the 'addedReasons' DIV section) to compile a list of items to insert ------
-            $('.newReasonDiv').each(function () {
-                //Verify the current reason that was added is checked. If not skip it.
-                if ($(this).find('.badgebox').first().prop("checked") == true) {
-                    //Retrieve all the fields required by server to add a new Reason for posting
-                    //rMPValueReasonText = $(this).find('#newReasonText').first().html();        //Not needed anymore
-                    rMPReasonId = $(this).find('#reasonId').first().val();
-                    $(this).find('.rCommentBox').first().find('span:first').remove();   //Remove the unneeded 'span' tag inside the comments.
-                    rMPValueReasonComment = $(this).find('.rCommentBox').first().html().trim();
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            // --- Loop through all non-standard reason DIV (Both the curent and the newly added non-stdr reasons) to compile the DELETE/ADD/Update lists ---
+            $('#nonStdrReasonsDiv .nsReason, #nonStdrReasonsDivAdded .nsReason').each(function () {
+                //At this point all non-standard reasons found must be checked (Uncecked Items were removed already)
+                rMPReasonId = $(this).find('#reasonId').first().val();
+                rMPValueReasonId = $(this).find('#valueReasonId').first().val();      //Assigned Value Reason Id
 
+                $(this).find('.rCommentBox').first().find('span:first').remove();   //Remove the unneeded 'span' tag inside the comments.
+                rMPValueReasonComment = $(this).find('.rCommentBox').first().html().trim();
+
+                //var textTagId = "#li_" + $(this).find('#reasonId').first().val();
+                //var assignedRsnText = $(textTagId).html();
+
+                if (rMPValueReasonId != "") { // This is an Update to an Existing Assigned MPV Reason 
+                    // ~~~~~~~~~ THIS IS AN UPDATE ~~~~~~~~~~~~
+                    // Add the current Item to the "UPDATE" list
+                    reasonsToUpdate_List = reasonsToUpdate_List + rMPValueReasonId + "," + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
+
+                }
+                else {// This is a new assigned Assigned MPV Reason to ADD to the database
                     //// ~~~~~~~~~ THIS IS AN ADD [Add the current Item to the "ADD" list] ~~~~~~~~~~~~
                     reasonsToAdd_List = reasonsToAdd_List + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
                 }
+
             });
+
 
             //Finally, clean the input string from non valid characters and ending separator character
             reasonsToDelete_List = reasonsToDelete_List + $("#nsItemsToDelete").val();
@@ -571,7 +574,7 @@
             showAlert("New Action Plan Actions are not enabled yet<br\>Check again later.");
         });
         $('#reasonListSection').on('change', '.badgebox', function () {
-            var $parentDiv = $(this).parents(".reasonDiv").first();
+            var $parentDiv = $(this).parents(".stdrReasonDiv").first();
             var $thisComment = $parentDiv.find(".rCommentBox").first();
             if ($(this).prop("checked")) {                    // If it gets Checked Add the comment box
                 $thisComment.show();
@@ -580,7 +583,7 @@
                 $thisComment.hide();
             }
         });
-        //-------
+        //------- When Non Standard Chexkbox is checked or unchecked ------------------------------
         $('#reasonListSection').on('change', '.nsCheckBox', function () {
             $nsReasonDiv = $(this).parents('.nsReason').first();
             $nsReasonDiv.find('#wasUpdated').first().val("Y");       //Flag current reason as "changed"
@@ -595,20 +598,24 @@
                 //   Open the dropdown for a value to be selected
                 //$(this).parent().find('.dropdown-menu').first().toggle();
                 //$(this).parent().find('.dropdown-toggle').first().trigger('click.bs.dropdown');    //Not tested
-                $(this).parent().find('.dropdown-menu').first().trigger('click.bs.dropdown');    //Not tested
+                //$(this).parent().find('.dropdown-menu').first().trigger('click.bs.dropdown');    //Not tested
                 // Find a way to close it when an item is selected
                 //----------------------------------------------------
             }
             else {
                 //alert("You unchecked me!");
+                var nsRsnMPValue_old_id = $nsReasonDiv.find('#valueReasonId').first().val();
                 var rsId_old = $nsReasonDiv.find('#reasonId').first().val();
                 var oldLiId = "#li_" + rsId_old;                         //Save the 'Li' tag Id of the Reason Id that was unchecked
 
-                //When unchecked, verify if this item's Old Id is not blank (Which means it was originally assigned in the database)
+                //If the ns Assigned Reason was an existing assigned reason (in the database, then get the mpvalueReasonId to delete it)
+                // otherwise (the original mpvalueReasonId is blank, it means was recently added but not save so there is no need to delete it)
+
+                //When unchecked, verify if this item's Old mp valueReasonId is not blank (Which means it was originally assigned in the database)
                 //If so, it needs to be flagged for deletion
-                if ($nsReasonDiv.find('#origReasonId').first().val() != "") {
-                    //alert("Reason Id '" + rsId_old + "' has been flagged for Deletion");
-                    $('#nsItemsToDelete').val($('#nsItemsToDelete').val() + rsId_old + ",");
+                if (nsRsnMPValue_old_id != "") {
+                    //alert("MP Value Reason Id '" + nsRsnMPValue_old_id + "' has been flagged for Deletion");
+                    $('#nsItemsToDelete').val($('#nsItemsToDelete').val() + nsRsnMPValue_old_id + ",");
                 }
 
                 //$OKbox.hide();
@@ -618,7 +625,7 @@
                 //$nsReasonDiv.find('#nsReasonText').first().html("[ Select other Reason ... ]");     //Reset The Text
 
                 $('.nsReason').each(function () {      //loop through all the Existing Drop down boxes
-                    //Readd (show) the Old (Now Unselected) Reason Id so it can be added back again by the user if needed
+                    //Read (show) the Old (Now Unselected) Reason Id so it can be added back again by the user if needed
                     $(this).find(oldLiId).first().parents('li').first().show();
                 });
                 rsList_ItemChangeId(rsId_old, "show");        // Reset the Reason from the Page List so it is shown and included in New Drop Downs
@@ -630,53 +637,48 @@
             $('#btnSaveProg').prop("disabled", false);
 
         });
-
-
+    // -----------------------------------------------------------------------------------------------------
         $(".stdrChkReason").change(function () {
-            // When a check box is changed, flag the reason Item as "modified"
-            $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+            // When a Standard Reason check box is changed, flag the reason Item as "modified"
+            $(this).parents('.stdrReasonDiv').first().find('#wasUpdated').first().val("Y");
             $('#btnSaveProg').prop("disabled", false);
         });
-
+    // -----------------------------------------------------------------------------------------------------
         //$('.reasonComment').change(function () {
         //    // When a Comment box is changed, flag the reason Item as "modified"
         //    alert("Comment chnaged");
-        //    $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+        //    $(this).parents('.stdrReasonDiv').first().find('#wasUpdated').first().val("Y");
         //});
         //function extractComment(DIVtext) {
         //    var commentText = DIVtext.replace("&nbsp;", "").trim();
         //    return commentText;
         //}
-
+        // -----------------------------------------------------------------------------------------------------
         $('#reasonListSection').on('focus', '.rCommentBox', function () {
             $(this).find(".cmLabel").remove();      // Remove the Label <span> tag since it is not part of the comment text
             originalComment = $(this).text().replace("&nbsp;", "").trim();   //Save the Original comment text to determine if it was modified
             $(this).html(originalComment);        //Resave the comment in a cleaned/trimmed way
         });
-
+        // -----------------------------------------------------------------------------------------------------
         $('#reasonListSection').on('focusout', '.rCommentBox', function () {
             var updatedComment = $(this).text().replace("&nbsp;", "").trim();      //Get the new comment Text
             $(this).html(updatedComment);    //Reset the comment box data
             $(this).prepend('<span class="cmLabel" style="color:darkgray;">Comment: </span>');    //add the <span> label tag back
             if (updatedComment != originalComment) {
                 //The comment text was changed. Update the 'updated' flag
-                $(this).parents('.reasonDiv').first().find('#wasUpdated').first().val("Y");
+                $(this).parents('.stdrReasonDiv').first().find('#wasUpdated').first().val("Y");
                 $('#btnSaveProg').prop("disabled", false);
-                alert("Comment was updated.\nNew Comment: " + updatedComment);
+                //alert("Comment was updated.\nNew Comment: " + updatedComment);
             }
             //$(this).find(".cmLabel").show();      //Put the Comment label back after leaving the comment field
         });
-
+        // -----------------------------------------------------------------------------------------------------
         $('#reasonListSection').on('click', '.selNewReason', function () {
             //Reset the New Reason text box and show the dialog form
             $('#inputReasonText').val("");
             $('#addReasonForm').modal('show');
         });
-
-
-
-
-
+        // -----------------------------------------------------------------------------------------------------
 
 
 
