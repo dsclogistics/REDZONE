@@ -158,8 +158,6 @@ $(document).ready(function () {
         $('#nonStdrReasonsDiv .nsReason, #nonStdrReasonsDivAdded .nsReason').each(function () {
             //There is nothing to Delete on these sections (all delete actions have already been handled by the uncheck action)
             //At this point all non-standard reasons found should be checked (Uncecked Items were removed already)
-            alert("Updated val is: " + $(this).find('#wasUpdated').first().val());
-
             rMPReasonId = $(this).find('#reasonId').first().val();
             rMPValueReasonId = $(this).find('#valueReasonId').first().val();      //Assigned Value Reason Id
 
@@ -339,7 +337,7 @@ $(document).ready(function () {
             //The comment text was changed. Update the 'updated' flag for this reason
             $(this).parents('.mpvReason').first().find('#wasUpdated').first().val("Y");
             $('#btnSaveProg').prop("disabled", false);
-            alert("Comment was updated.\nNew Comment: " + updatedComment);
+            //alert("Comment was updated.\nNew Comment: " + updatedComment);
         }
         //$(this).find(".cmLabel").show();      //Put the Comment label back after leaving the comment field
     });
