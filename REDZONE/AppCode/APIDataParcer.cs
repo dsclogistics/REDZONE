@@ -513,8 +513,11 @@ namespace REDZONE.AppCode
                                             tmp.hasReasons = (reasonCount > 0);
                                             tmp.cellStatus = cellStatus;
                                             tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
-
                                             tmp.cellValueId = (string)apiCellValue["mtrc_period_val_id"];
+
+                                            tmp.rz_bap_id = (string)apiCellValue["rz_bap_id"];
+                                            tmp.rz_bapm_id = (string)apiCellValue["rz_bapm_id"];
+                                            tmp.rz_bapm_status = (string)apiCellValue["rz_bapm_status"];
 
                                             tmp.mtrc_period_id = (string)apiCellValue["mtrc_period_id"];
                                             //..... Get the value in a formatted way
