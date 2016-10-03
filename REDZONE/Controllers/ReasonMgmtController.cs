@@ -78,7 +78,7 @@ namespace REDZONE.Controllers
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //POST: /ReasonMgmt/saveMPReason
+        //POST: /ReasonMgmt/addMPReason
         [HttpPost]
         public string addMPReason(string raw_json)
         {
