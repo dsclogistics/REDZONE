@@ -112,8 +112,20 @@ function toggleMenuOn() {
 
         //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
         
-        if (actionPlanSts != "Not Needed") { $("#li_ViewAP").show(); }
-        else { $("#li_ViewAP").hide(); }
+        if (actionPlanSts != "Not Needed") {
+            if (actionPlanSts == "Not Started") {
+                $("#li_ViewAP").hide();
+                $("#li_StartAP").show();
+            }
+            else {
+                $("#li_ViewAP").show();
+                $("#li_StartAP").hide();
+            }
+        }
+        else {
+            $("#li_ViewAP").hide();
+            $("#li_StartAP").hide();
+        }
         if (hasReasons == "") { }
         else { }
 
@@ -278,9 +290,18 @@ function menuItemListener(link) {
         var buildingId = $('#buildingId').val();
         var buildingYear = $('#buildingYear').val();
         var backUrl = '/Home/BuildingSummary/?year=' + buildingYear + '&buildingID=' + buildingId;
+        var bapmId = $cellClicked.find('#bapm_id').val();
+        var mpvId = getMPvalueId();
+
+        var errorMessage = "";
+        if (bapmId == null || bapmId == "") { errorMessage = "The Action Plan for Metric Id can't be resolved.\n"; }
+        if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPLease refresh your browser and try again."; }
+        if (errorMessage != "") { alert(errorMessage); }
+        else {
+            window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + $cellClicked.find('#bapm_id').val() + "&mtrc_period_val_id=" + getMPvalueId() + "&returnUrl=" + backUrl;
+            // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
+        }
         //alert("Back URL is: " + backUrl);
-        window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + $cellClicked.find('#bapm_id').val() + "&mtrc_period_val_id=" + getMPvalueId() + "&returnUrl=" + backUrl;
-        // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
     }
     else {
         alert("This menu option is not yet Enabled.");
