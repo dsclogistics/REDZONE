@@ -246,10 +246,9 @@ function menuItemListener(link) {
     //console.log("Task ID - " + taskItemInContext.getAttribute("data-id") + ", Task action - " + link.getAttribute("data-action"));
 
     toggleMenuOff();
-
+    cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
     if (contextMenuOption == "Manage" || contextMenuOption == "Add" ) {
         //If user is Managing or adding Reasons
-        cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
         //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
         window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
