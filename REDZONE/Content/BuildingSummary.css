@@ -20,7 +20,7 @@
     z-index: 10;
     list-style-type:none;
     overflow: hidden;
-    border: 1px solid #CCC;
+    /*border: 1px solid #CCC;*/
     white-space: nowrap;
     font-family: sans-serif;
     background: #FFF;
@@ -28,6 +28,8 @@
     border-radius: 8px;
     margin:0;
     padding: 0;
+    /*border: 3px double gray;*/
+    box-shadow: 10px 10px 5px #888888;
 }
 .context-menu--active {
     display: block;
