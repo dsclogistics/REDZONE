@@ -96,7 +96,7 @@ $(document).ready(function () {
         //if ($('#nsItemsToDelete').val() != "") { alert("Item to Delete: " + $('#nsItemsToDelete').val()); }
 
         if (!getMPvalueId()) {
-            alert("Warning!! Your session has timed out. Changes will not be saved.\nPlease logon again.");
+            showAlert("Warning!! Your session has timed out. Some of the changes might not be saved.\nGo back to building dashboard and try again.");
             //-------------------- TO DO --------------------------------------------------------------------
             // -- Restore all Local Storage Values from the cached webpage labels so user is not kicked out
             //-----------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ $(document).ready(function () {
 
         if (reasonsToDelete_List == "" && reasonsToUpdate_List == "" && reasonsToAdd_List == "") {
             //There is Nothing to post
-            alert("There are no changes to Save");
+            showAlert("There are no changes to Save");
         }
         else {
             //Perform Ajax Call to post/save changes: Parameters to Post= string addList, string deleteList, string updateList
@@ -206,7 +206,7 @@ $(document).ready(function () {
                 //contentType: "application/json; charset=utf-8",
                 //dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    showAlert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 //alert("Update Operation completed:\n\n=========== OPERATION RESULTS ===============\n" + d);
@@ -345,6 +345,7 @@ $(document).ready(function () {
     $('#reasonListSection').on('click', '.selNewReason', function () {
         //Reset the New Reason text box and show the dialog form
         $('#inputReasonText').val("");
+        $('#puErrorMsg').hide();               //Hide the Pupup form error message if visible before displaying the form
         $('#addReasonForm').modal('show');
     });
     // -----------------------------------------------------------------------------------------------------
@@ -375,7 +376,7 @@ $(document).ready(function () {
             //contentType: "application/json; charset=utf-8",
             //dataType: "json",
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed Retrieve template for New reason. Please try again!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                showAlert("Failed Retrieve template for New reason. Please try again!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 $('#ddlWait').hide();
             }
         }).done(function (d) {
@@ -422,8 +423,9 @@ $(document).ready(function () {
     });
 
     $('#inputReasonText').keydown(function (e) {
-        $('#btnAddReasonDetail').prop("disabled", false);
+        $('#puErrorMsg').html("").hide();  //Hide the error message if visible
         $(this).removeClass("hasError");
+        $('#btnAddReasonDetail').prop("disabled", false);
     });
 
     $('#btnCancelReasons').click(function () {
@@ -438,12 +440,13 @@ $(document).ready(function () {
         //verify that user did not enter invalid characters
         if ((reasonText.indexOf("<") != -1) || (reasonText.indexOf("'") != -1) || (reasonText.indexOf("\"") != -1)) {
             $('#inputReasonText').addClass("hasError");
-            alert("Reason Text has invalid characters.\nPlease correct and try again.");
+            $('#puErrorMsg').html("Reason Text has invalid characters.\nPlease correct and try again.").show();  //Display the error message
             return false;
         }
         if (reasonText == "") {
             $('#inputReasonText').addClass("hasError");
-            alert("Reason Text Cannot be blank");
+            $('#puErrorMsg').html("Reason Text Cannot be blank").show();
+            //showAlert("Reason Text Cannot be blank");
             return false;
         }
         // --------- End of Form Validation -----------------------
@@ -465,13 +468,13 @@ $(document).ready(function () {
             //contentType: "application/json; charset=utf-8",
             //dataType: "json",
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                showAlert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (d) {
             // Check for Error Message response
             if (d.substring(0, 1) == "E") {
                 $('#inputReasonText').addClass("hasError");
-                alert(d);
+                showAlert(d);
             }
             else if (d != "0") {      // The "Add" Ajax Call is successful and we received an new reason_id back
                 //alert("Reason Addedd Successfully\nJason result mpr_Id: " + d);
@@ -493,7 +496,7 @@ $(document).ready(function () {
                 $('#btnSaveProg').prop("disabled", false);    //Re-Enable the Save progress button
                 //location.reload();
             } else {
-                alert("Error Saving the data./nThe Reason entered could not be added to the Database.");
+                showAlert("Error Saving the data./nThe Reason entered could not be added to the Database.");
                 //alert("Error Saving the data!\n" + JSON.stringify(d));
             }
         });

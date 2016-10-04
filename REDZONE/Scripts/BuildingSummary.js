@@ -105,34 +105,33 @@ function toggleMenuOn() {
     if (actionPlanSts == "") { actionPlanSts = "Not Needed";}
     //alert("Action Plan Status is: '" + actionPlanSts + "'");
 
+    //----------------------
+    //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
+    if (actionPlanSts != "Not Needed") {
+        if (actionPlanSts == "Not Started") {
+            $("#li_ViewAP").hide();
+            $("#li_StartAP").show();
+        }
+        else {
+            $("#li_ViewAP").show();
+            $("#li_StartAP").hide();
+        }
+    }
+    else {
+        $("#li_ViewAP").hide();
+        $("#li_StartAP").hide();
+    }
+    if (hasReasons == "") { }
+    else { }
+    $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlite the current celected cell
+    //----------------------
+
     if (menuState !== 1) {
         //$("#context-menu").show();
         menuState = 1;
         //menu.addClass(contextMenuActive);
-
-        //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
-        
-        if (actionPlanSts != "Not Needed") {
-            if (actionPlanSts == "Not Started") {
-                $("#li_ViewAP").hide();
-                $("#li_StartAP").show();
-            }
-            else {
-                $("#li_ViewAP").show();
-                $("#li_StartAP").hide();
-            }
-        }
-        else {
-            $("#li_ViewAP").hide();
-            $("#li_StartAP").hide();
-        }
-        if (hasReasons == "") { }
-        else { }
-
-        menu.classList.add(contextMenuActive);
-        //Highlite the current celected cell
+        menu.classList.add(contextMenuActive);        
         //alert("Id clicked is: " + $($('#cellIdSelected').val()).find('.mvCell').first().prop("id"));  //test only
-        $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");        
     }
 }
 
