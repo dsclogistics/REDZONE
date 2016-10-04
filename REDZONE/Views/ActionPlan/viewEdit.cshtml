@@ -8,10 +8,11 @@
 
 <div class="panel panel-info" style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
-        <span style="font-weight:bold; font-size:20px" id="showTable">Metric Performance Action Planning</span><br />
+        <span style="font-weight:bold; font-size:20px" id="metricName"></span>
+        <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
         <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
         <span style="font-weight:bold; color: black" id="metricDate"></span>
-    </div>
+</div>
 
     <div class="panel-body padding2 ">
         @if (Model.Count() > 0)
@@ -19,28 +20,45 @@
             string currentAPVersion = Model.First().apVersion;
             string currentAPStatus = Model.First().apStatus;
             string currentDisabled = "";
+            string displayStatus = "";
             switch (currentAPStatus)
             {
+                case "Not Started":
+                    displayStatus = "New";
+                    break;
                 case "WIP":
+                    displayStatus = "In Process";
                     break;
                 case "Ready For Review":
+                    displayStatus = "Ready For Review";
+                    currentDisabled = "Disabled";
+                    break;
                 case "Rejected":
+                    displayStatus = "Rejected";
+                    currentDisabled = "Disabled";
+                    break;
                 case "Approved":
+                    displayStatus = "Approved";
                     currentDisabled = "Disabled";
                     break;
                 default:
+                    displayStatus = currentAPStatus;
                     break;
             }
+
+            <div id="divCurrentStatus">
+                <h4 style="text-align:left; color:green">Action Plan Status: @displayStatus</h4>
+            </div>
 
             //Display Reasons
             <div id="divReasonSummary">
                 <h4 style="text-align:left">Reason Summary</h4>
-                <div class="bordered" style="padding:15px; padding-bottom:10px; border-radius:4px; border-color:lightgray ">
+                <div class="bordered" style="padding:10px; padding-bottom:5px; border-radius:4px; border-color:lightgray ">
                     <ul style="text-align:center">
                         @if (Model.First().reasonList.Count() > 0)
-                    {
-                        foreach (var reason in Model.First().reasonList)
                         {
+                            foreach (var reason in Model.First().reasonList)
+                            {
                                 <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
                             }
                         }
@@ -51,6 +69,9 @@
 
                     </ul>
                 </div>
+                <div id="btnsReasons" style="text-align:right; margin-top:5px">
+                    <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
+                </div>
                 <br />
             </div>
 
@@ -59,15 +80,14 @@
                 <h4 style="text-align:left">Action Plan - Version @currentAPVersion</h4>
                 <input type="hidden" id="apVersion" value=@currentAPVersion />
 
-                <h5 style="text-align:left">Status: @currentAPStatus</h5>
-
                 @*Action Plan*@
-                <textarea id="apText" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" @currentDisabled>@Model.First().actionPlanAction</textarea>
+                <textarea id="apText" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" @currentDisabled>@Model.First().actionPlanAction</textarea>
                 <br />
                 <div id="btnsActionPlan" style="text-align:right">
                     <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
                     <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
-                    @if (!userRole.Contains("REVIEWER") && currentDisabled == "") {
+                    @if (!userRole.Contains("REVIEWER") && currentDisabled == "")
+                    {
                         <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
                         <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
                     }
@@ -77,7 +97,8 @@
                 @*Approve/Reject*@
                 @if (userRole.Contains("REVIEWER"))
                 {
-                    <textarea id="apReviewComment" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
+                    <h4 style="text-align:left">Reviewer Comments</h4>
+                    <textarea id="apReviewComment" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
                     <br />
                     <div id="btnsReviewAP" style="text-align:right">
                         <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
@@ -95,9 +116,10 @@
             {
                 <div class="btn-toolbar bordered" style="border-radius:4px; border-color:lightgray">
                     <button type="button" class="btn btn-default btn-group" style="margin-left:0px">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
                     </button>
                     <h4 class="btn-group" style="text-align:left; margin-bottom:-5px">Action Plan - Version @actionPlan.apVersion</h4>
+
                 </div>
                 <div class="collapse" style="margin-left:45px; margin-top:5px">
                     <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.actionPlanAction</textarea>
@@ -124,20 +146,30 @@
 
 
 <script>
+    //-------------------------------------------LOCAL VARIABLES-------------------------------------------
+    function getMPid() { return localStorage.getItem("mpId"); }
     function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
     function getMetricName() { return localStorage.getItem("mpName"); }
+    function getMPvalueId() { return localStorage.getItem("mpValueId"); }
     function getMetricDate() { return localStorage.getItem("mpValueDate"); }
 
     $(document).ready(function () {
+        $("#metricName").html(getMetricName());
         $("#buildingName").html(getBuildingName());
         $("#metricDate").html(getMetricDate());
     });
 
+    //-------------------------------------------ACTIONS-------------------------------------------
     $('.btn-toolbar').on('click', '.btn', function (e) {
         var $target = $(this).parent().next();
         //alert($target.attr("aria-expanded"));
         $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+        $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
     })
+
+    $('#btnsReasons').on('click', '#btnEditReasons', function () {
+        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+    });
 
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
         //var validated = validateReasonRow();
