@@ -34,7 +34,6 @@ function init() {
 }
 
 function elementRightClicked(e, className) {
-
     var el = e.srcElement || e.target;
 
     //alert("Right Click: (" + className + ")" + el.classList[0].toString());
