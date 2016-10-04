@@ -288,7 +288,7 @@ function menuItemListener(link) {
         if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
         if (errorMessage != "") { alert(errorMessage); }
         else {
-            window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + $cellClicked.find('#bapm_id').val() + "&mtrc_period_val_id=" + getMPvalueId() + "&returnUrl=" + backUrl;
+            window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + bapmId + "&mtrc_period_val_id=" + mpvId; //+ "&returnUrl=" + backUrl;
             // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
         }
         //alert("Back URL is: " + backUrl);
