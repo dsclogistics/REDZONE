@@ -28,6 +28,8 @@ namespace REDZONE.Controllers
             int bapmId = bapm_id ?? 0;
             int mpvId = mtrc_period_val_id ?? 0;
             string productName = "Red Zone";
+
+            ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
             ViewBag.bapmId = bapmId;
 
             //List of Action Plans starting with the current as first item of the list
@@ -109,7 +111,8 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string saveActionPlan(string raw_json)
         {
-            string status = api.saveActionPlan(raw_json);
+            
+            string status = api.saveActionPlan(raw_json.Replace("\n","\\n"));
 
             return returnResultMessage(status);
         }

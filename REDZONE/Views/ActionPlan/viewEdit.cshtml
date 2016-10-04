@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<REDZONE.Models.ActionPlan>
 @{ ViewBag.Title = "viewEdit"; }
+@{string userRole = ViewBag.curUserRole;}
+
+<div id="globalVariables">
+    <input type="hidden" id="userRole" value="@userRole" />
+</div>
 
 <div class="panel panel-info" style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
@@ -56,25 +61,33 @@
 
                 <h5 style="text-align:left">Status: @currentAPStatus</h5>
 
+                @*Action Plan*@
                 <textarea id="apText" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" @currentDisabled>@Model.First().actionPlanAction</textarea>
                 <br />
                 <div id="btnsActionPlan" style="text-align:right">
                     <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
                     <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
-                    <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
-                    <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                    @if (!userRole.Contains("REVIEWER") && currentDisabled == "") {
+                        <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
+                        <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                    }
                 </div>
                 <br />
                 
-                <textarea id="apReviewComment" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
-                <br />
-                <div id="btnsReviewAP" style="text-align:right">
-                    <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
-                    <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
-                    <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
-                    <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
-                </div>
-                <br />
+                @*Approve/Reject*@
+                @if (userRole.Contains("REVIEWER"))
+                {
+                    <textarea id="apReviewComment" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
+                    <br />
+                    <div id="btnsReviewAP" style="text-align:right">
+                        <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
+                        <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
+                        <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
+                        <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
+                    </div>
+                    <br />
+                }
+
             </div>
 
             //Display previous action plan versions for current time period
@@ -111,6 +124,15 @@
 
 
 <script>
+    function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
+    function getMetricName() { return localStorage.getItem("mpName"); }
+    function getMetricDate() { return localStorage.getItem("mpValueDate"); }
+
+    $(document).ready(function () {
+        $("#buildingName").html(getBuildingName());
+        $("#metricDate").html(getMetricDate());
+    });
+
     $('.btn-toolbar').on('click', '.btn', function (e) {
         var $target = $(this).parent().next();
         //alert($target.attr("aria-expanded"));
@@ -196,7 +218,7 @@
         var rz_apd_subm_app_user_id = "1";
         var rz_apd_id = $('#apDetailId').val();
 
-        var rz_apd_ap_text = $('#apText').val().replace();
+        var rz_apd_ap_text = $('#apText').val();
 
         var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
         //alert("Json submitted:\n" + jsonPayloadDetail);
