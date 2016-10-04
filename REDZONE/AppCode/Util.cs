@@ -283,7 +283,7 @@ namespace REDZONE.AppCode
                 case "DELGADO_FELICIANO":
                 case "ABDUGUEV_RASUL":
                 case "CHEN_ALEX":
-                    appUserRoles = "ADMIN;";
+                    appUserRoles = "ADMIN;REVIEWER";
                     break;
                 case "GOPAL_GIRI":
                     appUserRoles = "SUPER";
