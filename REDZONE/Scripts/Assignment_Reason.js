@@ -150,7 +150,7 @@ $(document).ready(function () {
                         // Add the current Item to the "DELETE" list
                         reasonsToDelete_List = reasonsToDelete_List + rMPValueReasonId + ",";
                     }
-                }
+                 }
             }
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

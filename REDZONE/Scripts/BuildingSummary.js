@@ -244,26 +244,22 @@ function menuItemListener(link) {
     //convert jscript object clicked into jQuery Object (For ease of data retrieval)
     var $cellClicked = $("#" + taskItemInContext.getAttribute("id"));  // Object (CELL) that was right clicked
     var contextMenuOption = link.getAttribute("data-action");
-    console.log("Task ID - " +
-                  taskItemInContext.getAttribute("data-id") +
-                  ", Task action - " + link.getAttribute("data-action"));
-    toggleMenuOff();
-    if (contextMenuOption == "Manage" || contextMenuOption == "Add") {
-        //Save all context variables into Local Storage for Later use either on the Reason Assigment Page and within the popup Form
-        cacheMetricValueVariables($cellClicked);
+    var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    //console.log("Task ID - " + taskItemInContext.getAttribute("data-id") + ", Task action - " + link.getAttribute("data-action"));
 
+    toggleMenuOff();
+
+    if (contextMenuOption == "Manage" || contextMenuOption == "Add" ) {
+        //If user is Managing or adding Reasons
+        cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
         //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
-        var buildingId = $('#buildingId').val();
-        var buildingYear = $('#buildingYear').val();
-        var backUrl = '/Home/BuildingSummary/?year=' + buildingYear + '&buildingID=' + buildingId;
-        //alert("Back URL is: " + backUrl);
         window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
     else if (contextMenuOption == "View") {
         //Reset the Popup Details as to not display older Data
         $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
         // Populate via Ajax the partial View that will be displayed in the pop up Form
-        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id
+        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
         //Parameters to pass:  "id" (Metric Period Value Id) 
         $.ajax({
             url: '/MPVReasons/viewReasons',
@@ -284,18 +280,13 @@ function menuItemListener(link) {
         //Display the popup Form After correctly populated by Ajax call
         $('#popupViewReasons').modal('show');
     }
-    else if (contextMenuOption == "ViewAP") {
-        //alert("Redirecting to Action Plans is not enabled!!!!");
-
-        var buildingId = $('#buildingId').val();
-        var buildingYear = $('#buildingYear').val();
-        var backUrl = '/Home/BuildingSummary/?year=' + buildingYear + '&buildingID=' + buildingId;
+    else if (contextMenuOption == "ViewAP" || contextMenuOption == "StartAP") {
+        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
         var bapmId = $cellClicked.find('#bapm_id').val();
-        var mpvId = getMPvalueId();
-
         var errorMessage = "";
+
         if (bapmId == null || bapmId == "") { errorMessage = "The Action Plan for Metric Id can't be resolved.\n"; }
-        if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPLease refresh your browser and try again."; }
+        if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
         if (errorMessage != "") { alert(errorMessage); }
         else {
             window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + $cellClicked.find('#bapm_id').val() + "&mtrc_period_val_id=" + getMPvalueId() + "&returnUrl=" + backUrl;
