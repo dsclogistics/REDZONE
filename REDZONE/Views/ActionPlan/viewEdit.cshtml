@@ -16,8 +16,10 @@
             string currentDisabled = "";
             switch (currentAPStatus)
             {
-                case "Rejected":
+                case "WIP":
+                    break;
                 case "Ready For Review":
+                case "Rejected":
                 case "Approved":
                     currentDisabled = "Disabled";
                     break;
@@ -61,6 +63,16 @@
                     <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
                     <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
                     <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                </div>
+                <br />
+                
+                <textarea id="apReviewComment" rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
+                <br />
+                <div id="btnsReviewAP" style="text-align:right">
+                    <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
+                    <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
+                    <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
+                    <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
                 </div>
                 <br />
             </div>
@@ -111,6 +123,27 @@
         submitActionPlan();
     });
 
+    $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
+        var status = 'Rejected';
+
+        //buildSubmitAPReviewJSON(status);
+        submitAPReview(status);
+    });
+
+
+    $('#btnsReviewAP').on('click', '#btnApproveActionPlan', function () {
+        var status = 'Approved';
+
+        //buildSubmitAPReviewJSON(status);
+        submitAPReview(status);
+    });
+
+    $('#btnsActionPlan').on('click', '#btnSaveActionPlan', function () {
+
+        //alert(buildSaveActionPlanJSON());
+
+        saveActionPlan();
+    });
 
     //------------------------------------------------------------------------------------------------
     //-------------------------------------------FUNCTIONS--------------------------------------------
@@ -149,6 +182,89 @@
         }).done(function (d) {
             if (d == "Success") {
                 alert("Action Plan Submitted!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    function buildSaveActionPlanJSON() {
+        var productname = "Red Zone";
+        var rz_bapm_id = $('#bapmId').val();
+        var rz_apd_ap_ver = $('#apVersion').val();
+        var rz_apd_subm_app_user_id = "1";
+        var rz_apd_id = $('#apDetailId').val();
+
+        var rz_apd_ap_text = $('#apText').val().replace();
+
+        var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+    function saveActionPlan() {
+        var payload = buildSaveActionPlanJSON();
+        alert(payload);
+
+        $.ajax({
+            url: '/ActionPlan/saveActionPlan',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/saveactionplan',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Action Plan Saved!");
+                location.reload();
+            } else {
+                alert("Error Saving the data!\n" + JSON.stringify(d));
+            }
+        });
+    }
+
+    function buildSubmitAPReviewJSON(status) {
+        var productname = "Red Zone";
+        var rz_apd_subm_app_user_id = "2";
+        var rz_apd_id = $('#apDetailId').val();
+        var rz_apd_ap_review_text = $('#apReviewComment').val();
+        var rz_apd_ap_status = status;
+
+        //If status is rejected, review text element is required (optional for Approved status)
+
+        var jsonPayload = '{"productname":"' + productname + '","rz_apd_revw_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_review_text":"' + rz_apd_ap_review_text + '","rz_apd_ap_status":"' + rz_apd_ap_status + '"}';
+
+        //alert("Json submitted:\n" + jsonPayloadDetail);
+        return jsonPayload
+    }
+
+    function submitAPReview(status) {
+        var payload = buildSubmitAPReviewJSON(status);
+        //alert(payload);
+
+        $.ajax({
+            url: '/ActionPlan/submitActionPlanReview',
+            //url: 'http://dscapidev/dscmtrc/api/v1/metric/submitactionplanreview',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            data: { raw_json: payload },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            if (d == "Success") {
+                alert("Action Plan Review Submitted!");
                 location.reload();
             } else {
                 alert("Error Saving the data!\n" + JSON.stringify(d));

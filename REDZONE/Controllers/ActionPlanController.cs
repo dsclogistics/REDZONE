@@ -87,11 +87,29 @@ namespace REDZONE.Controllers
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //POST: /ActionPlan/submitActionPlanDetail
+        //POST: /ActionPlan/submitActionPlan
         [HttpPost]
         public string submitActionPlan(string raw_json)
         {
             string status = api.submitActionPlan(raw_json);
+
+            return returnResultMessage(status);
+        }
+
+        //POST: /ActionPlan/submitActionPlanReview
+        [HttpPost]
+        public string submitActionPlanReview(string raw_json)
+        {
+            string status = api.submitAPReview (raw_json);
+
+            return returnResultMessage(status);
+        }
+
+        //POST: /ActionPlan/saveActionPlanDetail
+        [HttpPost]
+        public string saveActionPlan(string raw_json)
+        {
+            string status = api.saveActionPlan(raw_json);
 
             return returnResultMessage(status);
         }
