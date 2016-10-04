@@ -280,12 +280,22 @@ namespace REDZONE.AppCode
             switch (username.ToUpper())
             {
                 // Set ADMIN Group Level
+                // Ed, John, Kevin G, Tracey White, Chris Boughey, Darrell, Jennifer Krueger, me, Giri, and all developers.
                 case "DELGADO_FELICIANO":
                 case "ABDUGUEV_RASUL":
                 case "CHEN_ALEX":
+                case "POGANY_KEVIN":
+                case "GOPAL_GIRI":
+                case "ZUISS_EDWARD":
+                case "OCALLAGHAN_JOHN":            //John.OCallaghan@dsc-logistics.com
+                case "GLYNN_KEVIN":                //kevin.glynn@dsc-logistics.com
+                case "WHITE_TRACEY":
+                case "BOUGHEY_CHRISTOPHER":        //Chris.Boughey@dsc-logistics.com
+                case "REED_DARRELL":               //darrell.reed@dsc-logistics.com
+                case "KRUEGER_JENNIFER":           //jennifer.krueger@dsc-logistics.com
                     appUserRoles = "ADMIN;";
                     break;
-                case "GOPAL_GIRI":
+                case "...":
                     appUserRoles = "SUPER";
                     break;
                 default:
