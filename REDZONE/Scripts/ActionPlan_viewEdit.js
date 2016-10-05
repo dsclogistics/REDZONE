@@ -30,7 +30,7 @@ $(document).ready(function () {
     //-------------------------------------------ACTIONS---------------------------------------------
     //-----------------------------------------------------------------------------------------------
     $('.btn-toolbar').on('click', '.btn', function (e) {
-        var $target = $(this).parent().next();
+        var $target = $(this).parentsUntil('btn-toolbar').next();
         //alert($target.attr("aria-expanded"));
         $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
         $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');

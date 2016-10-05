@@ -142,17 +142,22 @@
             //SECTION: PREVIOUS ACTION PLANS
             foreach (REDZONE.Models.ActionPlan actionPlan in Model.Where(x => x.apVersion != Model.First().apVersion))
             {
-                <div class="btn-toolbar bordered" style="border-radius:4px; border-color:lightgray">
-                    <button type="button" class="btn btn-default btn-group" style="margin-left:0px">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </button>
-                    <h4 class="btn-group" style="text-align:left; margin-bottom:-5px">Action Plan - Version @actionPlan.apVersion</h4>
+                <div class="btn-toolbar">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:lightgray; border-right:transparent">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </div>
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:lightgray;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">Action Plan - Version @actionPlan.apVersion</h4>
+                    </div>
                 </div>
 
-                <div class="collapse" style="margin-left:40px; margin-top:5px">
-                    <h4 style="text-align:left; color:red">Action Plan Status: @actionPlan.apStatus</h4>
+                <div class="collapse" style="margin-left:40px">
+                    <h4 style="text-align:left; color:red; margin-top:10px">Action Plan Status: @actionPlan.apStatus</h4>
                     <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.actionPlanAction</div>
                     <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
+                    
                     <h4 style="text-align:left">Reviewer Comments</h4>
                     <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.reviewerComments</div>
                     <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
