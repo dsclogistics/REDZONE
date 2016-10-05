@@ -136,9 +136,12 @@ namespace REDZONE.Controllers
 
         public string modifyMPVReasons(string addList, string deleteList, string updateList)
         {//The order of the parameters on each list is ""
-            // UPDATE: rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
-            // ADD:                       rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
             // DELETE:  rMPValueReasonId [,]
+            // ADD:                       rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
+            // UPDATE: rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment  [~]
+
+            //The order of operations are: "Deletes" are performed first, "Add" second (Since sdome Ids need to be removed and then readded new
+            // as to avoid any db insert errors. "Updates" are performed last
             string user_id = User.Identity.Name;
             string mtrc_period_val_id = "";
             string mpr_id = "";
@@ -149,41 +152,6 @@ namespace REDZONE.Controllers
             string updateResults = "";
             int counter = 0;
 
-            // --------- Assign (ADD) New Metric Period Value Reason ------------------------------------------\
-            addResults = "ADD Operation:  --> ";
-            if (!String.IsNullOrEmpty(addList))
-            {
-                string[] addReasonList = addList.Split('~');
-                string jSonResponses = "";
-                
-                foreach (string item in addReasonList)
-                { //Process each new reason to add
-                    string[] reasonData = item.Split(',');
-                    //Array order is:  rMPValueId , rMPReasonId , rMPValueReasonComment
-                    mtrc_period_val_id = reasonData[0];
-                    mpr_id = reasonData[1];
-                    mpvr_comment = reasonData[2];
-
-                    string jPayload = "{\"assignedreasons\":[{" + 
-                            "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
-                            "\"mpr_id\":\"" + mpr_id + "\"," +
-                            "\"user_id\":\"" + user_id + "\"," +
-                            "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
-
-                    string raw_data = api.addUpdateMPVReasons(jPayload);
-                    jSonResponses += raw_data;
-
-                    counter++;
-                    
-                }
-                addResults += "  [ " + counter + " Reasons to Add Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
-            }
-            else
-            {  //Else bypass the process, there is nothing in the list.
-                addResults = "  [ No New Reasons to Add ]" + Environment.NewLine;
-            }
-            addResults += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
-            //================ END OF THE "ADD" FUNCTIONALITY =================================================
 
             //-------- Remove (DELETE) Currently Assigned Metric Period Value Reasons ------------------------\
             deleteResults = "DELETE Operation:  --> ";
@@ -224,6 +192,43 @@ namespace REDZONE.Controllers
             }
             deleteResults += Environment.NewLine + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
             //================ END OF THE "DELETE" FUNCTIONALITY ==============================================
+
+
+            // --------- Assign (ADD) New Metric Period Value Reason ------------------------------------------\
+            addResults = "ADD Operation:  --> ";
+            if (!String.IsNullOrEmpty(addList))
+            {
+                string[] addReasonList = addList.Split('~');
+                string jSonResponses = "";
+
+                foreach (string item in addReasonList)
+                { //Process each new reason to add
+                    string[] reasonData = item.Split(',');
+                    //Array order is:  rMPValueId , rMPReasonId , rMPValueReasonComment
+                    mtrc_period_val_id = reasonData[0];
+                    mpr_id = reasonData[1];
+                    mpvr_comment = reasonData[2];
+
+                    string jPayload = "{\"assignedreasons\":[{" +
+                            "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+                            "\"mpr_id\":\"" + mpr_id + "\"," +
+                            "\"user_id\":\"" + user_id + "\"," +
+                            "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+
+                    string raw_data = api.addUpdateMPVReasons(jPayload);
+                    jSonResponses += raw_data;
+
+                    counter++;
+
+                }
+                addResults += "  [ " + counter + " Reasons to Add Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
+            }
+            else
+            {  //Else bypass the process, there is nothing in the list.
+                addResults = "  [ No New Reasons to Add ]" + Environment.NewLine;
+            }
+            addResults += "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " + Environment.NewLine;
+            //================ END OF THE "ADD" FUNCTIONALITY =================================================
 
 
             //-------- Update (UPDATE) Currently Assigned Metric Period Value Reasons ------------------------\

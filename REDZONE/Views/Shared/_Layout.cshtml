@@ -62,68 +62,87 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/RedzoneGlobal.js"></script>
     <script>
-        //If this is the first page display after Login, set the localStorage variables accordingly
-        function setServerPostback() {
-            resetUserInfo("", "", "", "", true);
-        }
+    //If this is the first page display after Login, set the localStorage variables accordingly
+    function setServerPostback() {
+        resetUserInfo("", "", "", "", true);
+    }
 
-        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
-            $.ajax({
-                @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
-                url: '/Account/resetUserInfo',
-                method: "POST",
-                cache: false,
-                dataType: "text",
-                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Ajax Failed: " + errorThrown);
-                    localStorage.clear();
-                }
-            }).done(function (d) {
-                //DO Something (Nothing for now)
-            });
-
-            //return localStorage.getItem("CAMid");
-        }
-
-        try {
-            if ("@pageFirstLoad" == "True") {
-                localStorage.setItem("first_name", "@userFName");
-                localStorage.setItem("last_name", "@userLName");
-                localStorage.setItem("username", "@userFullName");
-                localStorage.setItem("email", "@userEmail");
-                localStorage.setItem("firstLoad", "False");
-                localStorage.setItem("userRole", "@userRole");
-                resetUserInfo("", "", "", "", "", true);
-                //setServerPostback();
-                //alert("This is a first Page load");
+    function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
+        $.ajax({
+            @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
+            url: '/Account/resetUserInfo',
+            method: "POST",
+            cache: false,
+            dataType: "text",
+            data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Ajax Failed: " + errorThrown);
+                localStorage.clear();
             }
-            else {
-                if ("@pageFirstLoad" == "") {
-                    //Somehow the Session Variables were lost. reset Them!
-                    //alert("Session Variables were somehow lost. Resetting...");
-                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
-                    $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
-                }
-                //alert("This is not the fist application page load.");
-            }
-        }
-        catch(err) {
-            alert("An unhandled error exist: \n" + err);
-        }
-
-        $(document).ready(function () {
-            var userRole = localStorage.getItem("userRole");
-            $("#liUserRole").html("@userRole");
-            //$("#liUserRole").click(function () {
-            //    alert("Your Role is '" + $(this).html() + "'");
-            //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
-            //});
+        }).done(function (d) {
+            //DO Something (Nothing for now)
         });
-    </script>    
+
+        //return localStorage.getItem("CAMid");
+    }
+
+    try {
+        if ("@pageFirstLoad" == "True") {
+            localStorage.setItem("first_name", "@userFName");
+            localStorage.setItem("last_name", "@userLName");
+            localStorage.setItem("username", "@userFullName");
+            localStorage.setItem("email", "@userEmail");
+            localStorage.setItem("firstLoad", "False");
+            localStorage.setItem("userRole", "@userRole");
+            resetUserInfo("", "", "", "", "", true);
+            //setServerPostback();
+            //alert("This is a first Page load");
+        }
+        else {
+            if ("@pageFirstLoad" == "") {
+                //Somehow the Session Variables were lost. reset Them!
+                //alert("Session Variables were somehow lost. Resetting...");
+                resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
+                $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
+            }
+            //alert("This is not the fist application page load.");
+        }
+    }
+    catch(err) {
+        alert("An unhandled error exist: \n" + err);
+    }
+
+    function showPopupForm(formTitle, formText) {
+        $(".popupFormTitle").html(formTitle);
+        $("#popupFormBodyData").html(formText);
+        $('#popupForm').modal('show');
+    }
+
+    $(document).ready(function () {
+        var userRole = localStorage.getItem("userRole");
+        $("#liUserRole").html("@userRole");
+        //$("#liUserRole").click(function () {
+        //    alert("Your Role is '" + $(this).html() + "'");
+        //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
+        //});
+        $('.cmdViewCred').click(function () {
+            var userFirstName = localStorage.getItem("first_name");
+            var userLastName = localStorage.getItem("last_name");
+            var userFullName = userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1) + ' ' + userLastName.charAt(0).toUpperCase() + userLastName.slice(1);
+
+            var userInfo = '<div class="row" style="text-align: center"><h3>Credentials Report for:</h3></div><br /><br /><div class="row"><div class="col-xs-3 col-sm-offset-1">Name:</div><div class="col-xs-8">' +
+                userFullName + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Email</div><div class="col-xs-8">' +
+                localStorage.getItem("email") + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Role:</div><div class="col-xs-8">' +
+                userRole + '</div></div>';
+            showPopupForm('User Credential Information', userInfo);
+        });
+
+    });
+</script>    
 </head>
 
 <body>
+
     @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
     @if (!Request.IsAuthenticated )
     {
@@ -132,27 +151,14 @@
     }
     else
     {
-
-        @*/---------------------------------- TO DO -----------------------------------------\
-            ||      Validate Login Token, if token does not exist or if it's Expired            ||
-            ||                 Kick User back to the Login Page                                 ||
-            \\----------------------------------------------------------------------------------//*@
-
-
         @* ------- Render the partial View that contains the Navigation Bar (MENU) ---------- *@
-        <div style="text-align:center">
-            @Html.Partial("_NavMenu")
-        </div>
+        <div style="text-align:center"> @Html.Partial("_NavMenu") </div>
         @*-----------------------------------------------------------------------------------*@
 
-
         @* ------- Render the partial View that contains the Application BODY  ------------- *@        
-
             <div class="container body-content text-center" style="width:100%; max-width:1500px; margin-top:22px" >
-            @*<div class="container-fluid body-content text-center" style="border:1px solid blue;" >*@
                 @RenderBody()
             </div>
-
         @*-----------------------------------------------------------------------------------*@
 
 
@@ -185,7 +191,29 @@
         }
         }
         </div>
-        
+
+
+
+    <div id="popupForm" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="width:35%; min-width:400px">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="color:white; background-color:#904545">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title popupFormTitle" style="text-align:center"></h4>
+                </div>
+                <div class="modal-body" id="popupFormBody">
+                    <div class="row " id="popupFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                    </div>
+                </div>
+                <div class="modal-footer" id="popupFormFooter" style="text-align:center">
+                    <button type="button" class="btn btn-primary" id="btnCancelpopupForm" data-dismiss="modal" style="width:120px">DONE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
         @Scripts.Render("~/bundles/bootstrap")
         @Scripts.Render("~/bundles/jqueryUI")
         @RenderSection("scripts", required: false)

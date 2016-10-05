@@ -12,7 +12,6 @@
     th {
         text-align: center;
     }
-
     .rCommentBox {
         -moz-appearance: textfield-multiline;
         -webkit-appearance: textarea;
@@ -20,23 +19,23 @@
         font: medium -moz-fixed;
         font: -webkit-small-control;
         overflow: auto;
-        font-weight: bold;
         max-width: 375px;
         padding: 5px;
         min-height: 50px;
         border-radius: 5px;
         text-align: left;
         margin: 0 auto;
-        width: 340px;
-        margin-right: 5px;
-        margin-top: 10px;
-        margin-left: 15px;
+        margin-top:0px;
+        margin-left:50px; 
         margin-bottom: 0px;
+        margin-right: 5px;
         overflow-x: hidden;
         text-wrap: normal;
         box-shadow: inset 0px 0px 3px;
-    }
 
+        width:350px; 
+        color:slategray; 
+    }
     .reasonLabel {
         margin: 0 auto;
         max-width: 400px;
@@ -44,18 +43,15 @@
         margin-bottom: 1px;
         padding: 0;
     }
-
     .modal-header {
         background-color: #2052a3;
         color: white;
         font-weight: bold;
     }
-
     .hasError {
         border-color: red;
         background-color: #feb9b9;
     }
-
     .noData {
         color: red;
         padding: 40px 10px;
@@ -68,7 +64,7 @@
         font-size: 18px;
     }
 
-    #nonStdrReasonsDiv, #nonStdrReasonsDivAdded, #nonStdRsnDropDown {
+    #nonStdrReasonsDiv, #nonStdrReasonsDivAdded, #nonStdRsnDropDown, #standardReasonsDiv {
         margin: 0 auto;
         max-width: 400px;
         text-align: left;
@@ -80,37 +76,34 @@
         padding: 2px;
     }
 
+    /******* THIS 'badgebox' CSS STYLE IS NO LONGER USED - LEFT FOR REFERENCE ONLY ***********/
     /***************** Check box control Styling ****************************/
     /********** Hiding the checkbox, but allowing it to be focused **********/
     .badgebox {
         opacity: 0;
     }
-
-        .badgebox + .badge {
-            text-indent: -999999px; /* Move the check mark away when unchecked */
+    .badgebox + .badge {
+            text-indent: -999999px; /* Move the check mark away when unchecked */ 
             width: 27px; /* Makes the badge's width stay the same checked and unchecked */
             border-radius: 3px; /*Make the badge Look like square checkbox*/
             border: 1px solid darkgray;
             height: 25px;
             background-color: white;
-        }
-
-        .badgebox:focus + .badge {
+    }
+    .badgebox:focus + .badge {
             /* Set something to make the badge looks focused */
             /* This really depends on the application, in my case it was: */
             /* Adding a light border */
             box-shadow: inset 0px 0px 5px;
             /* Taking the difference out of the padding */
         }
-
-        .badgebox:checked + .badge {
+    .badgebox:checked + .badge {
             /* Move the check mark back when checked */
             text-indent: 0;
             color: darkblue;
             font-size: 16px;
             background-color: #f9fff0;
         }
-
     .reasonCkControl {
         /*background-color: #365f97;*/
         background-color: #f9f9f9;
@@ -129,20 +122,51 @@
         display: none;
     }
 
-        .form-group input[type="checkbox"] + .btn-group > label:first-child span {
+    .form-group input[type="checkbox"] + .btn-group > label:first-child span {
             width: 23px;
             height: 22px;
             border: 1px solid lightgray;
             border-radius: 3px;
             /*padding-left:10px;*/
-        }
+    }
 
-        .form-group input[type="checkbox"] + .btn-group > label:first-child {
+    .form-group input[type="checkbox"] + .btn-group > label:first-child {
             height: 34px;
             padding: 5px 10px;
-        }
+    }
+    /********************* End of Check box control Styling *********************************/
+    /*.blueHdr {
+        font-family:Arial;
+        background-image: -webkit-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
+        background-image:      -o-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#d9edf7), to(#c4e3f3));
+        background-image:         linear-gradient(to bottom, #d9edf7 0%, #c4e3f3 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9edf7', endColorstr='#ffc4e3f3', GradientType=0);
+        background-repeat: repeat-x;
+    }*/
+    .colorPrimary{
+        background-image: -webkit-linear-gradient(top, #337ab7 0%, #265a88 100%);
+        background-image:      -o-linear-gradient(top, #337ab7 0%, #265a88 100%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#337ab7), to(#265a88));
+        background-image:         linear-gradient(to bottom, #337ab7 0%, #265a88 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff265a88', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+        background-repeat: repeat-x;
+        border-color: #245580;
+        color:white;
+        font-family:Arial !important;
+}
+    .mpvReason {
+        margin:0; 
+        padding:0px; 
+        width:100%; 
+        margin-bottom:5px;
+    }
+/*.colorPrimary:hover, .colorPrimary:focus {
+    background-color: #265a88;
+    background-position: 0 -15px;
+}*/
 
-    /************* End of Check box control Styling*********************************/
 </style>
 <script src="~/Scripts/Assignment_Reason.js"></script>
 
@@ -152,9 +176,9 @@
     <input type="hidden" id="ssoName" value="@User.Identity.Name" />
 </div>
 
-<div class="panel panel-info" style="margin-top:5px; font-family:Arial; ">
+<div class="panel panel-info " style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
-        <span style="font-weight:bold; font-size:20px" id="showTable">Red Zone Metric Reason Assignment</span><br />
+        <span style="font-weight:bold; font-size:20px" id="showTable">Metric Reason Assignment</span><br />
         <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
         <span style="font-weight:bold; color: black" id="metricDate"></span>
     </div>
@@ -168,19 +192,19 @@
             </div>
             <div class="row" style="margin:0">
                 <div class="col-xs-2 col-xs-offset-3 headerCell" style="background-color:lightgray"><span class="mNameCell"></span></div>
-                <div class="col-xs-2 headerCell" style="background-color:#bbedff"><span id="mGoalCell"></span></div>
+                <div class="col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell"></span></div>
                 <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal"></div>
             </div>
         </div> <!-- END OF HEADER INFORMATION-->
-        <!-- **************** START OF THE ASSIGNED REASONS LIST ******************* -->
 
+        <!-- **************** START OF THE REASONS LIST SECTION ******************* -->
         <div id="reasonListSection">
-            <div class="alert-success " style="font-size:18px; font-family:bold; margin-bottom:10px; padding:3px">Available Reasons for Metric</div>
+            <div class="colorPrimary" style="margin:0 auto; font-size:18px; font-family:bold; margin-bottom:10px; padding:3px; background-color:blue">Select Reasons for Metric Performance</div>
             <br />
             <div class="noData" style="@noDataClass">There are no Reasons Defined for the '<span class="mNameCell"></span>' Metric </div>
 
             @* ---------------- This section contains all STANDARD REASONS that are currently selected in the model---------*@
-            <div class="row " id="displayableReasons" style="text-align: center">
+            <div class="row " id="standardReasonsDiv" style="text-align: center">
                 @{ int ckBoxCounter = 0;
                  string commentStatus = "display: none";
                 }
@@ -190,31 +214,66 @@
                     {
                         // Only Show the reason code if it's a Standard Reason //or it it is Assigned
                         string ckStatus = "";
-                        if (item.isAssigned) { ckStatus = "checked"; }
-                        if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
+                        if (item.isAssigned)
+                        {
+                            ckStatus = "checked";
+                            commentStatus = "";
+                        }
                         else { commentStatus = "display: none"; }
+                        
+                        
+                        //if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
+                        //else { commentStatus = "display: none"; }
 
-                        <div class="stdrReasonDiv mpvReason" id="parent_@ckBoxCounter">
-                            <input type="hidden" id="wasUpdated" value="N" />
-                            <input type="hidden" id="origSts" value="@ckStatus" />
-                            <input type="hidden" id="reasonId" value="@item.reason_id" />
-                            <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
-                            <div class="row reasonLabel">
-                                <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkControl" title="@item.reason_description">
-                                    <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox stdrChkReason" @ckStatus>
-                                    <span class="badge">&check;</span><span style="margin-left: 10px">@item.reason_text</span>
-                                    @*@if (item.reason_std_yn.Equals("Y"))
-                                        {
-                                            <span style="float: right; color: lightblue; font-size: 10px">[Standard]</span>
-                                        }*@
-                                    <br />
-                                    <span class="rCommentBox" contenteditable="true" style="color:slategray; @commentStatus">
-                                        <span class="cmLabel" style="color:darkgray;">Comment: </span>
-                                        @item.mpvr_Comment
-                                    </span>
+                        string checkDisplay = item.isAssigned ? "" : "display:none;";
+                        string noCheckDisplay = item.isAssigned ? "display:none;" : "";
+
+                        @*<div class="stdrReason mpvReason" id="parent_@ckBoxCounter">
+        <input type="hidden" id="wasUpdated" value="N" />
+        <input type="hidden" id="origSts" value="@ckStatus" />
+        <input type="hidden" id="reasonId" value="@item.reason_id" />
+        <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
+
+        <div class="row reasonLabel">
+            <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkControl" title="@item.reason_description">
+                <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox rsCheckBox" @ckStatus>
+                <span class="badge">&check;</span>
+                <span style="margin-left: 10px">@item.reason_text</span>
+                <br />
+                <span class="rCommentBox" contenteditable="true" style="color:slategray; @commentStatus">
+                    <span class="cmLabel" style="color:darkgray;">Comment: </span>
+                    @item.mpvr_Comment
+                </span>
+            </label>
+        </div>
+    </div>*@
+                    
+                    <div id="parent_@ckBoxCounter" class="stdrReason mpvReason" style="">
+                        <input type="hidden" id="wasUpdated" value="N" />
+                        <input type="hidden" id="origSts" value="@ckStatus" />
+                        <input type="hidden" id="reasonId" value="@item.reason_id" />
+                        <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
+
+                        <div class="[ form-group ]" style="margin:0; padding:0px; width:100%">
+                            <input id="primary-@ckBoxCounter" class="stdrCheckBox rsCheckBox" type="checkbox" name="primary-@ckBoxCounter" autocomplete="off" @ckStatus />
+                            <div class="[ btn-group ]" style="width:100%">
+                                <label for="primary-@ckBoxCounter" class="[ btn btn-default ]" style="width:12.5%; min-width:45px">
+                                    <span class="[ glyphicon glyphicon-ok ]" style="width:23px; box-shadow: inset 0px 0px 5px; @checkDisplay"></span>
+                                    <span class="[ ghost ]" style="width: 23px; @noCheckDisplay"> &nbsp;&nbsp;&nbsp;</span>
                                 </label>
+                                <label for="primary-@ckBoxCounter" class="[ btn btn-primary ]" style="width:87.5%; border-top-right-radius: 4px;border-bottom-right-radius: 4px;    " aria-haspopup="true" aria-expanded="false">
+                                    <span id="nsReasonText">@item.reason_text</span>
+                                </label>
+                                <span class="rCommentBox" contenteditable="true" style="@commentStatus ">
+                                    <span class="cmLabel" style="color:darkgray;">Comment: </span>
+                                    @item.mpvr_Comment
+                                </span>
                             </div>
+
+
                         </div>
+                    </div>
+
                         ckBoxCounter++;
                     }
                 }
@@ -222,7 +281,6 @@
 
 
             @* ------ This section contains all the ASSIGNED NON-STANDARD REASONS that are currently selected in the model---------*@
-            <br />
             <div id="nonStdrReasonsDiv" class="row ">
                 @* -------- Display all No Standard Reason that are currently assigned-------- *@
                 @{
@@ -257,18 +315,19 @@
             @* ------ This section contains a static Drop Down with all the non Standard reasons that can be Assigned to the Metric Period Value --------------*@
             <div id="nonStdRsnDropDown" class="row ">
 
-                @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = "999", reasonId = "", valRsnId = "", reasonText = "[ Select Other Reason ... ]", reasonComment = "", wasUpdated = "N", ddItems = nsListItems })
+                @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = "999", reasonId = "", valRsnId = "", reasonText = "[ Select Other Reason ]", reasonComment = "", wasUpdated = "N", ddItems = nsListItems })
 
             </div>
 
 
             <br /><br />
             <div class="row " style="text-align:center">
-                <button id="btnSaveProg" class="btn btn-primary" style="width:135px; " disabled>Save Progres</button>
+                <button id="btnSaveProg" class="btn btn-primary" style="width:135px; " disabled>Save Progress</button>
                 <button id="btnBeginAction" class="btn btn-primary" style="width:135px; margin-left:20px">Begin Action Plan</button>
                 <button id="btnCancelReasons" class="btn btn-warning" style="width:135px; margin-left:80px">Cancel</button>
             </div>
         </div>
+        <!-- ****************************** END OF LIST OF REASONS SECTION ***************************************** -->
         <br />
 
     </div>
@@ -318,7 +377,7 @@
                 <h4 class="modal-title msgFormTitle">Operation Results</h4>
             </div>
             <div class="modal-body" id="msgFormBody">
-                <div class="row" id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                <div class="row " id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
                 </div>
             </div>
             <div class="modal-footer" id="msgFormFooter" style="text-align:center">
@@ -359,7 +418,7 @@
     </tr>
     }
 </table>
-
+<br /><br /><br /><br />
 
 <script>
     $(document).ready(function () {
