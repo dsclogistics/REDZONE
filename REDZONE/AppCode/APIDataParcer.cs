@@ -1175,6 +1175,12 @@ namespace REDZONE.AppCode
                     tempActionPlan.apStatus = (string)res["rz_apd_ap_status"];
                     tempActionPlan.actionPlanAction = (string)res["rz_apd_ap_text"];
                     tempActionPlan.reviewerComments = (string)res["rz_apd_ap_review_text"];
+                    tempActionPlan.submittedBy = (string)res["submittedby"];
+                    tempActionPlan.reviewedBy = (string)res["reviewedby"];
+
+                    if (String.IsNullOrEmpty(tempActionPlan.reviewerComments)) tempActionPlan.reviewerComments = "";
+                    if (String.IsNullOrEmpty(tempActionPlan.submittedBy)) tempActionPlan.submittedBy = "";
+                    if (String.IsNullOrEmpty(tempActionPlan.reviewedBy)) tempActionPlan.reviewedBy = "";
 
                     actionPlanList.Add(tempActionPlan);
                 }

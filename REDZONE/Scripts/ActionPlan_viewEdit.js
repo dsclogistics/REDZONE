@@ -17,7 +17,12 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     $('#apText').on('keyup', function () {
         var characters = $(this).text().length;
-        $('#apTextChars').text() = 'Characters:' + characters;
+        $('#apTextChars').text(characters + '/2000');
+    })
+
+    $('#apReviewComment').on('keyup', function () {
+        var characters = $(this).text().length;
+        $('#apReviewChars').text(characters + '/2000');
     })
 
 
@@ -118,6 +123,7 @@ function buildSaveActionPlanJSON() {
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
     var rz_apd_ap_text = $('#apText').text();
+    alert('rz_apd_id:' + rz_apd_id);
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -155,7 +161,7 @@ function buildSubmitAPReviewJSON(status) {
     var productname = "Red Zone";
     var rz_apd_subm_app_user_id = "2";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_review_text = $('#apReviewComment').val();
+    var rz_apd_ap_review_text = $('#apReviewComment').text();
     var rz_apd_ap_status = status;
 
     //If status is rejected, review text element is required (optional for Approved status)
