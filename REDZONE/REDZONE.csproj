@@ -358,6 +358,7 @@
       <DependentUpon>DSCREDZONE_ENTITY.edmx</DependentUpon>
       <LastGenOutput>DSCREDZONE_ENTITY.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\ActionPlan_viewEdit.js" />
     <Content Include="Scripts\Assignment_Reason.js" />
     <Content Include="Scripts\bootstrap-dialog.js" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />

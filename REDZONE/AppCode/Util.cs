@@ -283,7 +283,6 @@ namespace REDZONE.AppCode
                 // Ed, John, Kevin G, Tracey White, Chris Boughey, Darrell, Jennifer Krueger, me, Giri, and all developers.
                 case "DELGADO_FELICIANO":
                 case "ABDUGUEV_RASUL":
-                case "CHEN_ALEX":
                 case "POGANY_KEVIN":
                 case "GOPAL_GIRI":
                 case "ZUISS_EDWARD":
@@ -294,6 +293,9 @@ namespace REDZONE.AppCode
                 case "REED_DARRELL":               //darrell.reed@dsc-logistics.com
                 case "KRUEGER_JENNIFER":           //jennifer.krueger@dsc-logistics.com
                     appUserRoles = "ADMIN;REVIEWER";
+                    break;
+                case "CHEN_ALEX":
+                    appUserRoles = "ADMIN;";
                     break;
                 case "...":
                     appUserRoles = "SUPER";

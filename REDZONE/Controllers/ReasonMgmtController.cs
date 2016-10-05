@@ -37,7 +37,7 @@ namespace REDZONE.Controllers
             {
                 MPReasonList = dataParcer.getMPReasonList(id.ToString());
 
-                List<MPReason> list1 = MPReasonList.Where(x => x.reason_order != "").OrderBy(x => x.reason_order).ToList();
+                List<MPReason> list1 = MPReasonList.Where(x => x.reason_order != "").OrderBy(x => Int32.Parse(x.reason_order)).ToList();
 
                 List<MPReason> list2 = MPReasonList.Where(x => x.reason_order == "").OrderBy(x => x.reason_text).ToList();
 

@@ -15,6 +15,8 @@ namespace REDZONE.Models
         public string apStatus { get; set; }
         public string actionPlanAction { get; set; }
         public string reviewerComments { get; set; }
+        public string submittedBy { get; set; }
+        public string reviewedBy { get; set; }
 
         public ActionPlan() { reasonList = new List<MPReason>(); }
     }
