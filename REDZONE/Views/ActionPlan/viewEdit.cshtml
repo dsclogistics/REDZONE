@@ -2,6 +2,8 @@
 @{ ViewBag.Title = "viewEdit"; }
 @{string userRole = ViewBag.curUserRole;}
 
+<script src="~/Scripts/ActionPlan_viewEdit.js"></script>
+
 <div id="globalVariables">
     <input type="hidden" id="userRole" value="@userRole" />
 </div>
@@ -19,7 +21,8 @@
         {
             string currentAPVersion = Model.First().apVersion;
             string currentAPStatus = Model.First().apStatus;
-            string currentDisabled = "";
+            string apEditable = "true";
+            string reviewEditable = "true";
             string displayStatus = "";
             switch (currentAPStatus)
             {
@@ -31,29 +34,34 @@
                     break;
                 case "Ready For Review":
                     displayStatus = "Ready For Review";
-                    currentDisabled = "Disabled";
+                    apEditable = "false";
+                    reviewEditable = "true";
                     break;
                 case "Rejected":
                     displayStatus = "Rejected";
-                    currentDisabled = "Disabled";
+                    apEditable = "false";
+                    reviewEditable = "false";
                     break;
                 case "Approved":
                     displayStatus = "Approved";
-                    currentDisabled = "Disabled";
+                    apEditable = "false";
+                    reviewEditable = "false";
                     break;
                 default:
                     displayStatus = currentAPStatus;
                     break;
             }
 
+
+
             <div id="divCurrentStatus">
                 <h4 style="text-align:left; color:green">Action Plan Status: @displayStatus</h4>
             </div>
 
-            //Display Reasons
+            //SECTION: REASONS
             <div id="divReasonSummary">
                 <h4 style="text-align:left">Reason Summary</h4>
-                <div class="bordered" style="padding:10px; padding-bottom:5px; border-radius:4px; border-color:lightgray ">
+                <div class="bordered" style="padding:10px; padding-bottom:0px; border-radius:4px; border-color:lightgray ">
                     <ul style="text-align:center">
                         @if (Model.First().reasonList.Count() > 0)
                         {
@@ -75,30 +83,45 @@
                 <br />
             </div>
 
-            //Display current action plan
+            //SECTION: CURRENT ACTION PLAN SECTION
             <div id="divCurrentActionPlan">
                 <h4 style="text-align:left">Action Plan - Version @currentAPVersion</h4>
                 <input type="hidden" id="apVersion" value=@currentAPVersion />
 
+                @*-----------*@
                 @*Action Plan*@
-                <textarea id="apText" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" @currentDisabled>@Model.First().actionPlanAction</textarea>
-                <br />
-                <div id="btnsActionPlan" style="text-align:right">
-                    <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
-                    <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
-                    @if (!userRole.Contains("REVIEWER") && currentDisabled == "")
+                @*-----------*@
+                @if (userRole.Contains("REVIEWER") && apEditable == "true")
+                {
+                    <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; color:red">The action plan is not yet ready for review.</div>
+                    <br />
+                }
+                else
+                {
+                    @*<textarea id="apText" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" @apEditable>@Model.First().actionPlanAction</textarea>*@
+                    <div id="apText" class="bordered" contenteditable="@apEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().actionPlanAction</div>
+                    <div id="apTextChars"></div>
+                    <br />
+                    <div id="btnsActionPlan" style="text-align:right">
+                        <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
+                        <input type="hidden" id="apDetailId" value=@Model.First().apd_id />
+                        @if (!userRole.Contains("REVIEWER") && apEditable == "true")
                     {
-                        <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
-                        <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
-                    }
-                </div>
-                <br />
-                
+                            <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
+                            <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                        }
+                    </div>
+                    <br />
+                }
+
+                @*--------------*@
                 @*Approve/Reject*@
-                @if (userRole.Contains("REVIEWER"))
+                @*--------------*@
+                @if (userRole.Contains("REVIEWER") && apEditable == "false")
                 {
                     <h4 style="text-align:left">Reviewer Comments</h4>
-                    <textarea id="apReviewComment" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>
+                    @*<textarea id="apReviewComment" rows="3" style="padding:15px; text-align:left; border-radius:4px; min-width:100%">@Model.First().reviewerComments</textarea>*@
+                    <div id="apReviewComment" class="bordered" contenteditable="@reviewEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().reviewerComments</div>
                     <br />
                     <div id="btnsReviewAP" style="text-align:right">
                         <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
@@ -111,7 +134,7 @@
 
             </div>
 
-            //Display previous action plan versions for current time period
+            //SECTION: PREVIOUS ACTION PLANS
             foreach (REDZONE.Models.ActionPlan actionPlan in Model.Where(x => x.apVersion != Model.First().apVersion))
             {
                 <div class="btn-toolbar bordered" style="border-radius:4px; border-color:lightgray">
@@ -119,17 +142,14 @@
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </button>
                     <h4 class="btn-group" style="text-align:left; margin-bottom:-5px">Action Plan - Version @actionPlan.apVersion</h4>
-
-                </div>
-                <div class="collapse" style="margin-left:45px; margin-top:5px">
-                    <textarea rows="10" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.actionPlanAction</textarea>
-                    @if (actionPlan.apStatus == "Rejected")
-                    {
-                        <h4 style="text-align:left">Reviewer Comments</h4>
-                        <textarea rows="8" style="padding:15px; text-align:left; border-radius:4px; min-width:100%" disabled>@actionPlan.reviewerComments</textarea>
-                    }
                 </div>
 
+                <div class="collapse" style="margin-left:40px; margin-top:5px">
+                    <h4 style="text-align:left; color:red">Action Plan Status: @actionPlan.apStatus</h4>
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.actionPlanAction</div>
+                    <h4 style="text-align:left">Reviewer Comments</h4>
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.reviewerComments</div>
+                </div>
                 <br />
             }
         }
@@ -142,187 +162,3 @@
         }
     </div>
 </div>
-
-
-
-<script>
-    //-------------------------------------------LOCAL VARIABLES-------------------------------------------
-    function getMPid() { return localStorage.getItem("mpId"); }
-    function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
-    function getMetricName() { return localStorage.getItem("mpName"); }
-    function getMPvalueId() { return localStorage.getItem("mpValueId"); }
-    function getMetricDate() { return localStorage.getItem("mpValueDate"); }
-
-    $(document).ready(function () {
-        $("#metricName").html(getMetricName());
-        $("#buildingName").html(getBuildingName());
-        $("#metricDate").html(getMetricDate());
-    });
-
-    //-------------------------------------------ACTIONS-------------------------------------------
-    $('.btn-toolbar').on('click', '.btn', function (e) {
-        var $target = $(this).parent().next();
-        //alert($target.attr("aria-expanded"));
-        $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
-        $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
-    })
-
-    $('#btnsReasons').on('click', '#btnEditReasons', function () {
-        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
-    });
-
-    $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
-        //var validated = validateReasonRow();
-        //if (validated) updateMPReason();
-        submitActionPlan();
-    });
-
-    $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
-        var status = 'Rejected';
-
-        //buildSubmitAPReviewJSON(status);
-        submitAPReview(status);
-    });
-
-
-    $('#btnsReviewAP').on('click', '#btnApproveActionPlan', function () {
-        var status = 'Approved';
-
-        //buildSubmitAPReviewJSON(status);
-        submitAPReview(status);
-    });
-
-    $('#btnsActionPlan').on('click', '#btnSaveActionPlan', function () {
-
-        //alert(buildSaveActionPlanJSON());
-
-        saveActionPlan();
-    });
-
-    //------------------------------------------------------------------------------------------------
-    //-------------------------------------------FUNCTIONS--------------------------------------------
-    //------------------------------------------------------------------------------------------------
-
-    function buildSubmitActionPlanJSON() {
-        var productname = "Red Zone";
-        var rz_bapm_id = $('#bapmId').val();
-        var rz_apd_ap_ver = $('#apVersion').val();
-        var rz_apd_subm_app_user_id = "1";
-        var rz_apd_id = $('#apDetailId').val();
-        var rz_apd_ap_text = $('#apText').val();
-
-        var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
-        //alert("Json submitted:\n" + jsonPayloadDetail);
-        return jsonPayload
-    }
-
-    function submitActionPlan() {
-        var payload = buildSubmitActionPlanJSON();
-        //alert(payload);
-
-        $.ajax({
-            url: '/ActionPlan/submitActionPlan',
-            //url: 'http://dscapidev/dscmtrc/api/v1/metric/submitactionplan',
-            method: "POST",
-            cache: false,
-            //type: "POST",
-            //data: payload,
-            data: { raw_json: payload },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            if (d == "Success") {
-                alert("Action Plan Submitted!");
-                location.reload();
-            } else {
-                alert("Error Saving the data!\n" + JSON.stringify(d));
-            }
-        });
-    }
-
-    function buildSaveActionPlanJSON() {
-        var productname = "Red Zone";
-        var rz_bapm_id = $('#bapmId').val();
-        var rz_apd_ap_ver = $('#apVersion').val();
-        var rz_apd_subm_app_user_id = "1";
-        var rz_apd_id = $('#apDetailId').val();
-
-        var rz_apd_ap_text = $('#apText').val();
-
-        var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
-        //alert("Json submitted:\n" + jsonPayloadDetail);
-        return jsonPayload
-    }
-
-    function saveActionPlan() {
-        var payload = buildSaveActionPlanJSON();
-        alert(payload);
-
-        $.ajax({
-            url: '/ActionPlan/saveActionPlan',
-            //url: 'http://dscapidev/dscmtrc/api/v1/metric/saveactionplan',
-            method: "POST",
-            cache: false,
-            //type: "POST",
-            //data: payload,
-            data: { raw_json: payload },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            if (d == "Success") {
-                alert("Action Plan Saved!");
-                location.reload();
-            } else {
-                alert("Error Saving the data!\n" + JSON.stringify(d));
-            }
-        });
-    }
-
-    function buildSubmitAPReviewJSON(status) {
-        var productname = "Red Zone";
-        var rz_apd_subm_app_user_id = "2";
-        var rz_apd_id = $('#apDetailId').val();
-        var rz_apd_ap_review_text = $('#apReviewComment').val();
-        var rz_apd_ap_status = status;
-
-        //If status is rejected, review text element is required (optional for Approved status)
-
-        var jsonPayload = '{"productname":"' + productname + '","rz_apd_revw_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_review_text":"' + rz_apd_ap_review_text + '","rz_apd_ap_status":"' + rz_apd_ap_status + '"}';
-
-        //alert("Json submitted:\n" + jsonPayloadDetail);
-        return jsonPayload
-    }
-
-    function submitAPReview(status) {
-        var payload = buildSubmitAPReviewJSON(status);
-        //alert(payload);
-
-        $.ajax({
-            url: '/ActionPlan/submitActionPlanReview',
-            //url: 'http://dscapidev/dscmtrc/api/v1/metric/submitactionplanreview',
-            method: "POST",
-            cache: false,
-            //type: "POST",
-            //data: payload,
-            data: { raw_json: payload },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            if (d == "Success") {
-                alert("Action Plan Review Submitted!");
-                location.reload();
-            } else {
-                alert("Error Saving the data!\n" + JSON.stringify(d));
-            }
-        });
-    }
-</script>

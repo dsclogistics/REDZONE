@@ -854,9 +854,17 @@
                         passValidation = false;
                         //$(this).css("background-color", "red");
                     }
+                    else if (thisVal.length > 100) {
+                        alertString = alertString + 'Reason text must be less than 100 characters.\n';
+                        passValidation = false;
+                    }
                     break;
 
                 case "reason_description":
+                    if (thisVal.length > 150) {
+                        alertString = alertString + 'Reason description must be less than 150 characters.\n';
+                        passValidation = false;
+                    }
                     break;
 
                 case "reason_std_yn":
@@ -902,9 +910,17 @@
                         passValidation = false;
                         //$(this).css("background-color", "red");
                     }
+                    else if (thisVal.length > 100) {
+                        alertString = alertString + 'Reason text must be less than 100 characters.\n';
+                        passValidation = false;
+                    }
                     break;
 
                 case "item_reason_description":
+                    if (thisVal.length > 150) {
+                        alertString = alertString + 'Reason description must be less than 150 characters.\n';
+                        passValidation = false;
+                    }
                     break;
 
                 case "item_reason_std_yn":
