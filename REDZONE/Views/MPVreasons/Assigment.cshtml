@@ -176,22 +176,23 @@
     <input type="hidden" id="ssoName" value="@User.Identity.Name" />
 </div>
 
-<div class="panel panel-info " style="margin-top:5px; font-family:Arial; ">
+<div class="panel panel-default " style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
-        <span style="font-weight:bold; font-size:20px" id="showTable">Metric Reason Assignment</span><br />
-        <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
-        <span style="font-weight:bold; color: black" id="metricDate"></span>
+        <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Reason Assignment</span><br />
+        <span style="font-weight:bold; color: #525151; font-size:x-large; padding:0px" id="buildingName"></span>
+        <span style="display:none">&nbsp;-&nbsp;</span>
+        <span style="font-weight:bold; color: black; display:none" id="metricDate"></span>
     </div>
     <div class="panel-body padding2 ">
-        <div style="margin:0 auto; text-align:center; margin-bottom:8px">
+        <div style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
             <!-- Metric Period Header Information  -->
             <div class="row" style="margin:0; font-weight:bold">
-                <div class="col-xs-2 headerCell col-xs-offset-3" style="background-color:lightgray">Metric</div>
+                <div class="col-xs-2 headerCell col-xs-offset-3" style="background-color:#f0eaea">Metric</div>
                 <div class="col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
-                <div class="col-xs-2 headerCell" style="background-color:lightgray"><span id="metricDate1"></span></div>
+                <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1"></span></div>
             </div>
             <div class="row" style="margin:0">
-                <div class="col-xs-2 col-xs-offset-3 headerCell" style="background-color:lightgray"><span class="mNameCell"></span></div>
+                <div class="col-xs-2 col-xs-offset-3 headerCell" style="background-color:#f0eaea"><span class="mNameCell"></span></div>
                 <div class="col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell"></span></div>
                 <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal"></div>
             </div>
