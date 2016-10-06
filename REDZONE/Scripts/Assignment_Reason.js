@@ -184,7 +184,6 @@ $(document).ready(function () {
                         //This is a dual operation: "DELETE" of the Old Reason Id and an "ADD" of the new Reason Id 
                         reasonsToDelete_List = reasonsToDelete_List + rMPValueReasonId + ",";
                         reasonsToAdd_List = reasonsToAdd_List + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
-
                     } else {
                         // ~~~~~~~~~ THIS IS AN UPDATE (Add the current Item to the "UPDATE" list) ~~~~~~~~~~~~
                         reasonsToUpdate_List = reasonsToUpdate_List + rMPValueReasonId + "," + rMPValueId + "," + rMPReasonId + "," + rMPValueReasonComment + "~";
@@ -211,6 +210,7 @@ $(document).ready(function () {
             showAlert("There are no changes to Save");
         }
         else {
+            //alert("Submitting action to Server:\nADD:" + reasonsToAdd_List + "\nDELETE:" + reasonsToDelete_List + "\nUPDATE: " + reasonsToUpdate_List);
             //Perform Ajax Call to post/save changes: Parameters to Post= string addList, string deleteList, string updateList
             $.ajax({
                 url: '/MPVreasons/modifyMPVReasons',

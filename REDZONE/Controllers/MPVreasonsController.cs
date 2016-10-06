@@ -1,4 +1,5 @@
-﻿using REDZONE.AppCode;
+﻿using Newtonsoft.Json.Linq;
+using REDZONE.AppCode;
 using REDZONE.Models;
 using REDZONE.ModelViews;
 using System;
@@ -183,8 +184,11 @@ namespace REDZONE.Controllers
 
                 string raw_data = api.removeAssignedReason(jPayload);
                 jSonResponses += raw_data;
-
-                deleteResults += "  [ " + counter + " Reasons to Delete Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
+                
+                JObject parsed_result = JObject.Parse(raw_data);
+                string resultColor = ((string)parsed_result["result"]).ToUpper().Equals("SUCCESS") ? "blue" : "red";
+                string actionMsg = "<span style=\"color:" + resultColor + "\">" + (string)parsed_result["result"] + ": " + counter + " " + (string)parsed_result["message"] + "</span>";
+                deleteResults += "  [ " + counter + " Reasons to Delete Found ]" + Environment.NewLine + actionMsg;//jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
@@ -200,7 +204,8 @@ namespace REDZONE.Controllers
             {
                 string[] addReasonList = addList.Split('~');
                 string jSonResponses = "";
-
+                string actionMsg = "";
+                counter = 0;
                 foreach (string item in addReasonList)
                 { //Process each new reason to add
                     string[] reasonData = item.Split(',');
@@ -217,11 +222,18 @@ namespace REDZONE.Controllers
 
                     string raw_data = api.addUpdateMPVReasons(jPayload);
                     jSonResponses += raw_data;
-
                     counter++;
 
+
+                    JObject parsed_result = JObject.Parse(raw_data);
+                    if( ((string)parsed_result["result"]).ToUpper().Equals("SUCCESS")){
+                        actionMsg += "<span style=\"color:blue\">Reason ID '" + mpr_id + "' Was added Successfully </span>" + Environment.NewLine;
+                    }
+                    else{
+                        actionMsg += "<span style=\"color:red\">Reason ID '" + mpr_id + "' could not be added: " + (string)parsed_result["result"] + "</span>" + Environment.NewLine;
+                    }
                 }
-                addResults += "  [ " + counter + " Reasons to Add Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
+                addResults += "  [ " + counter + " Reasons to Add Found ]" + Environment.NewLine + actionMsg; //jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
@@ -238,7 +250,7 @@ namespace REDZONE.Controllers
                 counter = 0;
                 string[] updateReasonList = updateList.Split('~');
                 string jSonResponses = "";
-
+                string actionMsg = "";
                 foreach (string item in updateReasonList)
                 { //Process each reason to Update
                     string[] reasonData = item.Split(',');
@@ -260,8 +272,18 @@ namespace REDZONE.Controllers
                     jSonResponses += raw_data;
                     counter++;
 
+                    JObject parsed_result = JObject.Parse(raw_data);
+                    if (((string)parsed_result["result"]).ToUpper().Equals("SUCCESS"))
+                    {
+                        actionMsg += "<span style=\"color:blue\">Reason ID '" + mpr_id + "' Was Updated Successfully </span>" + Environment.NewLine;
+                    }
+                    else
+                    {
+                        actionMsg += "<span style=\"color:red\">Reason ID '" + mpr_id + "' could not be updated: " + (string)parsed_result["result"] + "</span>" + Environment.NewLine;
+                    }
+
                 }
-                updateResults += "  [ " + counter + " Assigned Reason to updated Found ]" + Environment.NewLine + jSonResponses + Environment.NewLine;
+                updateResults += "  [ " + counter + " Assigned Reason to updated Found ]" + Environment.NewLine + actionMsg; // jSonResponses + Environment.NewLine;
             }
             else
             {  //Else bypass the process, there is nothing in the list.
