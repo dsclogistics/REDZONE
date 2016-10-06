@@ -37,7 +37,13 @@ $(document).ready(function () {
     })
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
-        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+        alert("Metric Id is: " + getMPid());
+        if (getMPid() == null) {
+            alert("Session variables were lost");
+        }
+        else {
+            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+        }
     });
 
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
