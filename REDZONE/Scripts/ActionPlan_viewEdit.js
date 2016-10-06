@@ -15,14 +15,16 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     //------------------------------------------BEHAVIOR---------------------------------------------
     //-----------------------------------------------------------------------------------------------
+
     $('#apText').on('keyup', function () {
-        var characters = $(this).text().length;
-        $('#apTextChars').text(characters + '/2000');
+        var characters = $(this).val().length;
+        //var linebreaks = ($(this).val().match(/\n/g) || []).length;
+        $('#apTextChars').text(characters + ' / 2000');
     })
 
     $('#apReviewComment').on('keyup', function () {
         var characters = $(this).text().length;
-        $('#apReviewChars').text(characters + '/2000');
+        $('#apReviewChars').text(characters + ' / 2000');
     })
 
 
@@ -37,6 +39,8 @@ $(document).ready(function () {
     })
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
+        localStorage.setItem("backUrl", document.URL);
+        //alert(localStorage.getItem("backUrl"));
         window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
     });
 
@@ -82,7 +86,7 @@ function buildSubmitActionPlanJSON() {
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').text();
+    var rz_apd_ap_text = $('#apText').val();
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -122,8 +126,7 @@ function buildSaveActionPlanJSON() {
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').text();
-    alert('rz_apd_id:' + rz_apd_id);
+    var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -132,7 +135,7 @@ function buildSaveActionPlanJSON() {
 
 function saveActionPlan() {
     var payload = buildSaveActionPlanJSON();
-    alert(payload);
+    //alert(payload);
 
     $.ajax({
         url: '/ActionPlan/saveActionPlan',

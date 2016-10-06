@@ -31,35 +31,28 @@ namespace REDZONE.Controllers
             ViewBag.bapmId = bapmId;
 
             //List of Action Plans starting with the current as first item of the list
-            List<ActionPlan> actionPlanList = new List<ActionPlan>();
-            actionPlanList = dataParcer.getActionPlanList(productName, bapmId.ToString());
-            actionPlanList = actionPlanList.OrderByDescending(x => x.apVersion).ToList();
+            ActionPlanViewModel apViewModel = new ActionPlanViewModel();
+            apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
+            apViewModel.actionPlanList = apViewModel.actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
 
-            //List of Reasons
+            //Add List of Reasons 
             List<MPReason> mpReasonList = new List<MPReason>();
             mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
+            apViewModel.reasonList = mpReasonList;
 
             //Model logic
-            if (actionPlanList.Count > 0)
+            if (apViewModel.actionPlanList.Count > 0)
             {
-                //Add reasons to each action plan model
-                foreach (ActionPlan actionPlan in actionPlanList)
-                {
-                    actionPlan.reasonList = mpReasonList;
-                }
-
-                if (actionPlanList.First().apStatus == "Rejected")
+                if (apViewModel.actionPlanList.First().apStatus == "Rejected")
                 {
                     //When action plan list is NOT empty, but most recent version status is Rejected, pass in "empty" model
                     ActionPlan newActionPlan = new ActionPlan();
-                    newActionPlan.reasonList = mpReasonList;
-                    newActionPlan.bapm_id = bapmId.ToString();
                     newActionPlan.apd_id = "";
-                    newActionPlan.apVersion = (Int32.Parse(actionPlanList.First().apVersion) + 1).ToString();
+                    newActionPlan.apVersion = (Int32.Parse(apViewModel.actionPlanList.First().apVersion) + 1).ToString();
                     newActionPlan.apStatus = "Not Started";
                     newActionPlan.actionPlanAction = "";
                     newActionPlan.reviewerComments = "";
-                    actionPlanList.Insert(0, newActionPlan);
+                    apViewModel.actionPlanList.Insert(0, newActionPlan);
                 }
                 else
                 {
@@ -67,21 +60,30 @@ namespace REDZONE.Controllers
                 }
 
             }
+            else if (apViewModel.actionPlanList.Count == 0 && apViewModel.bapmStatus == "Not Started")
+            {
+                //When action plan list is empty, pass in "empty" model
+                ActionPlan newActionPlan = new ActionPlan();
+                newActionPlan.apd_id = "";
+                newActionPlan.apVersion = "1";
+                newActionPlan.apStatus = "Not Started";
+                newActionPlan.actionPlanAction = "";
+                newActionPlan.reviewerComments = "";
+                apViewModel.actionPlanList.Add(newActionPlan);
+            }
             else
             {
                 //When action plan list is empty, pass in "empty" model
                 ActionPlan newActionPlan = new ActionPlan();
-                newActionPlan.reasonList = mpReasonList;
-                newActionPlan.bapm_id = bapmId.ToString();
                 newActionPlan.apd_id = "";
                 newActionPlan.apVersion = "1";
-                newActionPlan.apStatus = "WIP";
+                newActionPlan.apStatus = "";
                 newActionPlan.actionPlanAction = "";
                 newActionPlan.reviewerComments = "";
-                actionPlanList.Add(newActionPlan);
+                apViewModel.actionPlanList.Add(newActionPlan);
             }
 
-            return View(actionPlanList);
+            return View(apViewModel);
         }
 
 
@@ -115,39 +117,39 @@ namespace REDZONE.Controllers
             return returnResultMessage(status);
         }
 
-        public ActionResult AP_Add(int? bapm_id, int? mtrc_period_val_id)
-        {
-            // Testing: http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
-            //    //Valid Action Plan Status values are:
-            //    // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
+        //public ActionResult AP_Add(int? bapm_id, int? mtrc_period_val_id)
+        //{
+        //    // Testing: http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
+        //    //    //Valid Action Plan Status values are:
+        //    //    // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
 
-            // The "id" received as a parameter is the Building Action Plan Metric id ('bapm_id'). We will pass that to the API to get the data
-            int bapmId = bapm_id ?? 0;
-            int mpvId = mtrc_period_val_id ?? 0;
-            string productName = "Red Zone";
+        //    // The "id" received as a parameter is the Building Action Plan Metric id ('bapm_id'). We will pass that to the API to get the data
+        //    int bapmId = bapm_id ?? 0;
+        //    int mpvId = mtrc_period_val_id ?? 0;
+        //    string productName = "Red Zone";
 
-            //List of Action Plans starting with the current as first Item of the list
-            List<ActionPlan> actionPlanList = new List<ActionPlan>();
+        //    //List of Action Plans starting with the current as first Item of the list
+        //    List<ActionPlan> actionPlanList = new List<ActionPlan>();
 
-            actionPlanList = dataParcer.getActionPlanList(productName, bapmId.ToString());
+        //    actionPlanList = dataParcer.getActionPlanList(productName, bapmId.ToString());
 
-            //List of Reasons
-            List<MPReason> mpReasonList = new List<MPReason>();
+        //    //List of Reasons
+        //    List<MPReason> mpReasonList = new List<MPReason>();
 
-            mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
+        //    mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
 
-            //Add reasons to each action plan model
-            foreach (ActionPlan actionPlan in actionPlanList)
-            {
-                actionPlan.reasonList = mpReasonList;
-            }
+        //    //Add reasons to each action plan model
+        //    foreach (ActionPlan actionPlan in actionPlanList)
+        //    {
+        //        actionPlan.reasonList = mpReasonList;
+        //    }
 
-            //actionPlanList.Add(dummyActionPlan(productName, bapmId, mpvId));
+        //    //actionPlanList.Add(dummyActionPlan(productName, bapmId, mpvId));
 
-            actionPlanList = actionPlanList.OrderByDescending(x => x.apVersion).ToList();
+        //    actionPlanList = actionPlanList.OrderByDescending(x => x.apVersion).ToList();
 
-            return View(actionPlanList);
-        }
+        //    return View(actionPlanList);
+        //}
 
         /////////////////////////////////////////////////////////////////
         // ==================== PRIVATE METHODS ==================== ////
