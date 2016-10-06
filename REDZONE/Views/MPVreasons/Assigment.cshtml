@@ -5,76 +5,74 @@
 }
 <style>
     .headerCell {
-        border: 1px solid black;
-        padding: 5px;
-    }
+            border: 1px solid black;
+            padding: 5px;
+        }
 
     th {
-        text-align: center;
-    }
+            text-align: center;
+        }
     .rCommentBox {
-        -moz-appearance: textfield-multiline;
-        -webkit-appearance: textarea;
-        border: 1px solid lightgray;
-        font: medium -moz-fixed;
-        font: -webkit-small-control;
-        overflow: auto;
-        max-width: 375px;
-        padding: 5px;
-        min-height: 50px;
-        border-radius: 5px;
-        text-align: left;
-        margin: 0 auto;
-        margin-top:0px;
-        margin-left:50px; 
-        margin-bottom: 0px;
-        margin-right: 5px;
-        overflow-x: hidden;
-        text-wrap: normal;
-        box-shadow: inset 0px 0px 3px;
+            -moz-appearance: textfield-multiline;
+            -webkit-appearance: textarea;
+            border: 1px solid lightgray;
+            font: medium -moz-fixed;
+            font: -webkit-small-control;
+            overflow: auto;
+            max-width: 375px;
+            padding: 5px;
+            min-height: 50px;
+            border-radius: 5px;
+            text-align: left;
+            margin: 0 auto;
+            margin-top:0px;
+            margin-left:50px;
+            margin-bottom: 0px;
+            margin-right: 5px;
+            overflow-x: hidden;
+            text-wrap: normal;
+            box-shadow: inset 0px 0px 3px;
 
-        width:350px; 
-        color:slategray; 
-    }
+            width:350px;
+            color:slategray;
+        }
     .reasonLabel {
-        margin: 0 auto;
-        max-width: 400px;
-        text-align: left;
-        margin-bottom: 1px;
-        padding: 0;
-    }
+            margin: 0 auto;
+            max-width: 400px;
+            text-align: left;
+            margin-bottom: 1px;
+            padding: 0;
+        }
     .modal-header {
-        background-color: #2052a3;
-        color: white;
-        font-weight: bold;
-    }
+            background-color: #2052a3;
+            color: white;
+            font-weight: bold;
+        }
     .hasError {
-        border-color: red;
-        background-color: #feb9b9;
-    }
+            border-color: red;
+            background-color: #feb9b9;
+        }
     .noData {
-        color: red;
-        padding: 40px 10px;
-        border: 4px double black;
-        border-radius: 7px;
-        max-width: 900px;
-        margin: 0 auto;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        font-size: 18px;
-    }
-
+            color: red;
+            padding: 40px 10px;
+            border: 4px double black;
+            border-radius: 7px;
+            max-width: 900px;
+            margin: 0 auto;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
     #nonStdrReasonsDiv, #nonStdrReasonsDivAdded, #nonStdRsnDropDown, #standardReasonsDiv {
-        margin: 0 auto;
-        max-width: 400px;
-        text-align: left;
-        margin-bottom: 3px;
-        padding: 0px;
-    }
-
+            margin: 0 auto;
+            max-width: 400px;
+            text-align: left;
+            margin-bottom: 3px;
+            padding: 0px;
+        }
     .padding2 {
-        padding: 2px;
-    }
+            padding: 2px;
+        }
 
     /******* THIS 'badgebox' CSS STYLE IS NO LONGER USED - LEFT FOR REFERENCE ONLY ***********/
     /***************** Check box control Styling ****************************/
@@ -83,67 +81,64 @@
         opacity: 0;
     }
     .badgebox + .badge {
-            text-indent: -999999px; /* Move the check mark away when unchecked */ 
-            width: 27px; /* Makes the badge's width stay the same checked and unchecked */
-            border-radius: 3px; /*Make the badge Look like square checkbox*/
-            border: 1px solid darkgray;
-            height: 25px;
-            background-color: white;
-    }
+                text-indent: -999999px; /* Move the check mark away when unchecked */
+                width: 27px; /* Makes the badge's width stay the same checked and unchecked */
+                border-radius: 3px; /*Make the badge Look like square checkbox*/
+                border: 1px solid darkgray;
+                height: 25px;
+                background-color: white;
+        }
     .badgebox:focus + .badge {
-            /* Set something to make the badge looks focused */
-            /* This really depends on the application, in my case it was: */
-            /* Adding a light border */
-            box-shadow: inset 0px 0px 5px;
-            /* Taking the difference out of the padding */
-        }
+                /* Set something to make the badge looks focused */
+                /* This really depends on the application, in my case it was: */
+                /* Adding a light border */
+                box-shadow: inset 0px 0px 5px;
+                /* Taking the difference out of the padding */
+            }
     .badgebox:checked + .badge {
-            /* Move the check mark back when checked */
-            text-indent: 0;
-            color: darkblue;
-            font-size: 16px;
-            background-color: #f9fff0;
-        }
+                /* Move the check mark back when checked */
+                text-indent: 0;
+                color: darkblue;
+                font-size: 16px;
+                background-color: #f9fff0;
+            }
     .reasonCkControl {
-        /*background-color: #365f97;*/
-        background-color: #f9f9f9;
-        color: black;
-        font-weight: bold;
-        width: 100%;
-        text-align: left;
-        margin-bottom: 4px;
-    }
+            /*background-color: #365f97;*/
+            background-color: #f9f9f9;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 4px;
+        }
     /************* End of Check box control Styling*********************************/
 
     /**************** Drop Down With Checkbox control Styling***************************/
     /******  Hiding the checkbox attached to DDL, but allowing it to be focused ********/
-
     .form-group input[type="checkbox"] {
         display: none;
     }
-
     .form-group input[type="checkbox"] + .btn-group > label:first-child span {
-            width: 23px;
-            height: 22px;
-            border: 1px solid lightgray;
-            border-radius: 3px;
-            /*padding-left:10px;*/
-    }
-
+        width: 23px;
+        height: 22px;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        /*padding-left:10px;*/
+     }
     .form-group input[type="checkbox"] + .btn-group > label:first-child {
-            height: 34px;
-            padding: 5px 10px;
+        height: 34px;
+        padding: 5px 10px;
     }
     /********************* End of Check box control Styling *********************************/
     /*.blueHdr {
-        font-family:Arial;
-        background-image: -webkit-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
-        background-image:      -o-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#d9edf7), to(#c4e3f3));
-        background-image:         linear-gradient(to bottom, #d9edf7 0%, #c4e3f3 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9edf7', endColorstr='#ffc4e3f3', GradientType=0);
-        background-repeat: repeat-x;
-    }*/
+            font-family:Arial;
+            background-image: -webkit-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
+            background-image:      -o-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#d9edf7), to(#c4e3f3));
+            background-image:         linear-gradient(to bottom, #d9edf7 0%, #c4e3f3 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9edf7', endColorstr='#ffc4e3f3', GradientType=0);
+            background-repeat: repeat-x;
+        }*/
     .colorPrimary{
         background-image: -webkit-linear-gradient(top, #337ab7 0%, #265a88 100%);
         background-image:      -o-linear-gradient(top, #337ab7 0%, #265a88 100%);
@@ -155,18 +150,35 @@
         border-color: #245580;
         color:white;
         font-family:Arial !important;
-}
-    .mpvReason {
-        margin:0; 
-        padding:0px; 
-        width:100%; 
-        margin-bottom:5px;
     }
-/*.colorPrimary:hover, .colorPrimary:focus {
-    background-color: #265a88;
-    background-position: 0 -15px;
-}*/
+    .mpvReason {
+            margin:0;
+            padding:0px;
+            width:100%;
+            margin-bottom:5px;
+        }
+    /*.colorPrimary:hover, .colorPrimary:focus {
+        background-color: #265a88;
+        background-position: 0 -15px;
+    }*/
 
+    /*#reasonListSection .dropdown-toggle {
+        text-shadow: 0 1px 0 #fff;
+        background-image: -webkit-linear-gradient(top, #fff 0%, #e0e0e0 100%);
+        background-image:      -o-linear-gradient(top, #fff 0%, #e0e0e0 100%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e0e0e0));
+        background-image:         linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+        background-repeat: repeat-x;
+        border-color: #dbdbdb;
+        border-color: #ccc;
+        color: black;
+    }
+    #reasonListSection .dropdown-toggle:hover {
+        background-color: #e0e0e0;
+        background-position: 0 -15px;
+    }*/
 </style>
 <script src="~/Scripts/Assignment_Reason.js"></script>
 
@@ -197,7 +209,6 @@
                 <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal"></div>
             </div>
         </div> <!-- END OF HEADER INFORMATION-->
-
         <!-- **************** START OF THE REASONS LIST SECTION ******************* -->
         <div id="reasonListSection">
             <div class="colorPrimary" style="margin:0 auto; font-size:18px; font-family:bold; margin-bottom:10px; padding:3px; background-color:blue">Select Reasons for Metric Performance</div>
@@ -221,8 +232,8 @@
                             commentStatus = "";
                         }
                         else { commentStatus = "display: none"; }
-                        
-                        
+
+
                         //if (!String.IsNullOrEmpty(item.mpvr_Comment)) { commentStatus = ""; }
                         //else { commentStatus = "display: none"; }
 
@@ -230,50 +241,50 @@
                         string noCheckDisplay = item.isAssigned ? "display:none;" : "";
 
                         @*<div class="stdrReason mpvReason" id="parent_@ckBoxCounter">
-        <input type="hidden" id="wasUpdated" value="N" />
-        <input type="hidden" id="origSts" value="@ckStatus" />
-        <input type="hidden" id="reasonId" value="@item.reason_id" />
-        <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
+                                <input type="hidden" id="wasUpdated" value="N" />
+                                <input type="hidden" id="origSts" value="@ckStatus" />
+                                <input type="hidden" id="reasonId" value="@item.reason_id" />
+                                <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
 
-        <div class="row reasonLabel">
-            <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkControl" title="@item.reason_description">
-                <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox rsCheckBox" @ckStatus>
-                <span class="badge">&check;</span>
-                <span style="margin-left: 10px">@item.reason_text</span>
-                <br />
-                <span class="rCommentBox" contenteditable="true" style="color:slategray; @commentStatus">
-                    <span class="cmLabel" style="color:darkgray;">Comment: </span>
-                    @item.mpvr_Comment
-                </span>
-            </label>
-        </div>
-    </div>*@
-                    
-                    <div id="parent_@ckBoxCounter" class="stdrReason mpvReason" style="">
-                        <input type="hidden" id="wasUpdated" value="N" />
-                        <input type="hidden" id="origSts" value="@ckStatus" />
-                        <input type="hidden" id="reasonId" value="@item.reason_id" />
-                        <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
+                                <div class="row reasonLabel">
+                                    <label for="primary-@ckBoxCounter" class="btn btn-default reasonCkControl" title="@item.reason_description">
+                                        <input type="checkbox" id="primary-@ckBoxCounter" class="badgebox rsCheckBox" @ckStatus>
+                                        <span class="badge">&check;</span>
+                                        <span style="margin-left: 10px">@item.reason_text</span>
+                                        <br />
+                                        <span class="rCommentBox" contenteditable="true" style="color:slategray; @commentStatus">
+                                            <span class="cmLabel" style="color:darkgray;">Comment: </span>
+                                            @item.mpvr_Comment
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>*@
 
-                        <div class="[ form-group ]" style="margin:0; padding:0px; width:100%">
-                            <input id="primary-@ckBoxCounter" class="stdrCheckBox rsCheckBox" type="checkbox" name="primary-@ckBoxCounter" autocomplete="off" @ckStatus />
-                            <div class="[ btn-group ]" style="width:100%">
-                                <label for="primary-@ckBoxCounter" class="[ btn btn-default ]" style="width:12.5%; min-width:45px">
-                                    <span class="[ glyphicon glyphicon-ok ]" style="width:23px; box-shadow: inset 0px 0px 5px; @checkDisplay"></span>
-                                    <span class="[ ghost ]" style="width: 23px; @noCheckDisplay"> &nbsp;&nbsp;&nbsp;</span>
-                                </label>
-                                <label for="primary-@ckBoxCounter" class="[ btn btn-primary ]" style="width:87.5%; border-top-right-radius: 4px;border-bottom-right-radius: 4px;    " aria-haspopup="true" aria-expanded="false">
-                                    <span id="nsReasonText">@item.reason_text</span>
-                                </label>
-                                <span class="rCommentBox" contenteditable="true" style="@commentStatus ">
-                                    <span class="cmLabel" style="color:darkgray;">Comment: </span>
-                                    @item.mpvr_Comment
-                                </span>
+                        <div id="parent_@ckBoxCounter" class="stdrReason mpvReason" style="">
+                            <input type="hidden" id="wasUpdated" value="N" />
+                            <input type="hidden" id="origSts" value="@ckStatus" />
+                            <input type="hidden" id="reasonId" value="@item.reason_id" />
+                            <input type="hidden" id="valueReasonId" value="@item.val_reason_id" />
+
+                            <div class="[ form-group ]" style="margin:0; padding:0px; width:100%">
+                                <input id="primary-@ckBoxCounter" class="stdrCheckBox rsCheckBox" type="checkbox" name="primary-@ckBoxCounter" autocomplete="off" @ckStatus />
+                                <div class="[ btn-group ]" style="width:100%">
+                                    <label for="primary-@ckBoxCounter" class="[ btn btn-default ]" style="width:12.5%; min-width:45px">
+                                        <span class="[ glyphicon glyphicon-ok ]" style="width:23px; box-shadow: inset 0px 0px 5px; @checkDisplay"></span>
+                                        <span class="[ ghost ]" style="width: 23px; @noCheckDisplay"> &nbsp;&nbsp;&nbsp;</span>
+                                    </label>
+                                    <label for="primary-@ckBoxCounter" class="[ btn btn-primary dropdown-toggle btnText ]" style="width:87.5%; " aria-haspopup="true" aria-expanded="false">
+                                        <span id="nsReasonText" style="float:left; @if (item.isAssigned){<text>font-weight:bold;</text>} ">@item.reason_text</span>
+                                    </label>
+                                    <span class="rCommentBox" contenteditable="true" style="@commentStatus ">
+                                        <span class="cmLabel" style="color:darkgray; ">Comment: </span>
+                                        @item.mpvr_Comment
+                                    </span>
+                                </div>
+
+
                             </div>
-
-
                         </div>
-                    </div>
 
                         ckBoxCounter++;
                     }
@@ -297,13 +308,13 @@
                 @foreach (var nsAssignedItem in Model.Where(x => x.reason_std_yn != "Y" && x.isAssigned).ToList())
                 { //loop through all Reason codes that are non-Standard
                     nsChkCounter++;
-                    @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = nsChkCounter, reasonId = nsAssignedItem.reason_id, valRsnId = nsAssignedItem.val_reason_id, reasonText = nsAssignedItem.reason_text, reasonComment= nsAssignedItem.mpvr_Comment, wasUpdated = "N", ddItems = nsListItems })
+                    @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = nsChkCounter, reasonId = nsAssignedItem.reason_id, valRsnId = nsAssignedItem.val_reason_id, reasonText = nsAssignedItem.reason_text, reasonComment = nsAssignedItem.mpvr_Comment, wasUpdated = "N", ddItems = nsListItems })
                 }
             </div>
 
             <div id="ddlWait" class="bordered" style="margin:0 auto; max-width: 400px;  padding:0px; display:none">
-                 <div style="margin-top:7px;">Please wait. Loading new element</div>
-                 <div style="padding:10px"><img src="~/Images/ui-anim_basic_16x16.gif" /></div>
+                <div style="margin-top:7px;">Please wait. Loading new element</div>
+                <div style="padding:10px"><img src="~/Images/ui-anim_basic_16x16.gif" /></div>
             </div>
 
             @* ------ This section contains all the DYNAMICALLY ADDED NON-STANDARD REASONS from the drop Down Selection to be Assigned -----------------------*@
@@ -407,16 +418,16 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td>@Html.DisplayFor(modelItem => item.reason_id)</td>
-        <td>@Html.DisplayFor(modelItem => item.metric_period_id)</td>
-        <td>@Html.DisplayFor(modelItem => item.reason_text)</td>
-        <td>@Html.DisplayFor(modelItem => item.reason_order)</td>
-        <td>@Html.DisplayFor(modelItem => item.reason_description)</td>
-        <td>@Html.DisplayFor(modelItem => item.reason_std_yn)</td>
-        <td>@Html.DisplayFor(modelItem => item.isAssigned)</td>
-        <td>@Html.DisplayFor(modelItem => item.times_used)</td>
-    </tr>
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.reason_id)</td>
+            <td>@Html.DisplayFor(modelItem => item.metric_period_id)</td>
+            <td>@Html.DisplayFor(modelItem => item.reason_text)</td>
+            <td>@Html.DisplayFor(modelItem => item.reason_order)</td>
+            <td>@Html.DisplayFor(modelItem => item.reason_description)</td>
+            <td>@Html.DisplayFor(modelItem => item.reason_std_yn)</td>
+            <td>@Html.DisplayFor(modelItem => item.isAssigned)</td>
+            <td>@Html.DisplayFor(modelItem => item.times_used)</td>
+        </tr>
     }
 </table>
 <br /><br /><br /><br />

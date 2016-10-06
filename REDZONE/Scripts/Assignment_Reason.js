@@ -267,8 +267,14 @@ $(document).ready(function () {
     $('.stdrCheckBox').change(function () {
         var $parentDiv = $(this).parents(".stdrReason").first();
         var $thisComment = $parentDiv.find(".rCommentBox").first();
-        if ($(this).prop("checked")) { $thisComment.show(); }
-        else { $thisComment.hide(); }
+        if ($(this).prop("checked")) {
+            $thisComment.show();
+            $parentDiv.find('#nsReasonText').first().css("font-weight", "bold");
+        }
+        else {
+            $thisComment.hide();
+            $parentDiv.find('#nsReasonText').first().css("font-weight", "normal");
+        }
     });
 
 

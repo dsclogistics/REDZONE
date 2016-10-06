@@ -4,8 +4,8 @@
     string noCheckDisplay = Model.originalStatus.Equals("checked") ? "display:none;" : "";
     string cmtDisplay = (String.IsNullOrEmpty(Model.reasonId)) ? "display:none;" : "";
     string ddlTopMarginOffset = (String.IsNullOrEmpty(Model.reasonId)) ? "margin-top:0px;" : "margin-top:-57px;";
+    string fontWeight = Model.reasonText.Contains("Select Other") ? "" : "font-weight:bold;";
 }
-
 <div class="nsReason mpvReason " style="">
     <input type="hidden" id="wasUpdated" value="@Model.wasUpdated" />
     <input type="hidden" id="origReasonId" value="@Model.reasonId" />
@@ -19,8 +19,8 @@
                 <span class="[ glyphicon glyphicon-ok  ]" style="@checkDisplay;  box-shadow: inset 0px 0px 5px;"></span>
                 <span class="[ ghost ]" style="@noCheckDisplay; width: 23px;"> &nbsp;&nbsp;&nbsp;</span>
             </label>
-            <label for="@Model.checkBoxName" class="[ btn btn-primary dropdown-toggle ]" style="width:87.5%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span id="nsReasonText">@Model.reasonText</span>
+            <label for="@Model.checkBoxName" class="[ btn btn-primary dropdown-toggle btnText]" style="width:87.5%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="nsReasonText" style="float:left; @fontWeight">@Model.reasonText</span>
                 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span>
             </label>
             <ul id="reasonDropdown" class="dropdown-menu top" style="min-width:350px; border:4px double darkgray; margin-left:48px; @ddlTopMarginOffset" aria-labelledby="@Model.checkBoxName">
