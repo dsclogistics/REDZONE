@@ -53,11 +53,7 @@ $(document).ready(function () {
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
         //var validated = validateReasonRow();
         //if (validated) updateMPReason();
-        //submitActionPlan();
-
-        var msg = '<div style="text-align:center">TEST MESSAGE</div>'
-        showAlert(msg);
-        //showPopupForm("Red Zone Message", "TEST MESSAGE", "Y");
+        submitActionPlan();
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
@@ -121,7 +117,7 @@ function submitActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
-            showPopupForm("Red Zone Message", "Action Plan Submitted!", "Y");
+            showAlert("Action Plan Submitted Successfully!", "", "Y");
             //location.reload();
         } else {
             alert('<div class="alert-danger">Error Saving the Data!<br />' + JSON.stringify(d) + '</div>');
@@ -157,11 +153,11 @@ function saveActionPlan() {
         //contentType: "application/json; charset=utf-8",
         //dataType: "json",
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            showAlert("Failed to Save Data. Ajax Failed!!<br/>Error:" + textStatus + "," + errorThrown, "danger"); //<-- Trap and alert of any errors if they occurred
         }
     }).done(function (d) {
         if (d == "Success") {
-            showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
+            showAlert("Action Plan Saved!", "", "Y");
             //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
@@ -199,11 +195,11 @@ function submitAPReview(status) {
         //contentType: "application/json; charset=utf-8",
         //dataType: "json",
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            showAlert("Failed to Save Data. Ajax Failed!!<br/>Error:" + textStatus + "," + errorThrown, "danger"); //<-- Trap and alert of any errors if they occurred
         }
     }).done(function (d) {
         if (d == "Success") {
-            showPopupForm("Red Zone Message", "Action Plan Review Submitted!", "Y");
+            showAlert("Action Plan Review Submitted!", "", "Y");
             //showAlert(msg, msgStyle)
             //showPopupForm(formTitle, formText)
             //location.reload();
