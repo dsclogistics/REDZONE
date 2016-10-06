@@ -46,7 +46,7 @@ $(document).ready(function () {
             alert("Session variables were lost");
         }
         else {
-        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
         }
     });
 
@@ -54,7 +54,9 @@ $(document).ready(function () {
         //var validated = validateReasonRow();
         //if (validated) updateMPReason();
         //submitActionPlan();
-        showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
+
+        var msg = '<div style="text-align:center">TEST MESSAGE</div>'
+        showPopupForm("Red Zone Message", "TEST MESSAGE", "Y");
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {

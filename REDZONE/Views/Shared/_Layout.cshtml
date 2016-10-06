@@ -121,14 +121,6 @@
         }
     }
 
-    $('.puf').on("hidden.bs.modal", function () {
-        alert('flag is ' + $('#reloadPage').val());
-        if ($('#reloadPage').val() == 'Y') {
-            $('#reloadPage').val('N');
-            location.reload();
-        }   
-    });
-
     $(document).ready(function () {
         var userRole = localStorage.getItem("userRole");
         $("#liUserRole").html("@userRole");
@@ -147,7 +139,12 @@
                 userRole + '</div></div>';
             showPopupForm('User Credential Information', userInfo);
         });
-
+        $('#popupForm').on("hidden.bs.modal", function () {
+            if ($('#reloadPage').val() == 'Y') {
+                $('#reloadPage').val('N');
+                location.reload();
+            }
+        });
     });
 </script>    
 </head>
@@ -215,7 +212,7 @@
                     <h4 class="modal-title popupFormTitle" style="text-align:center"></h4>
                 </div>
                 <div class="modal-body" id="popupFormBody">
-                    <div class="row " id="popupFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                    <div class="row " id="popupFormBodyData" style="margin-top:40px; margin-bottom:30px; text-align:center">
                     </div>
                 </div>
                 <div class="modal-footer" id="popupFormFooter" style="text-align:center">
