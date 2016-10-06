@@ -1153,10 +1153,11 @@ namespace REDZONE.AppCode
         }
 
         //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
-        public List<ActionPlan> getActionPlanList(string productname, string rz_bapm_id)
+        public ActionPlanViewModel getActionPlanList(string productname, string rz_bapm_id)
         {
+            ActionPlanViewModel apViewModel = new ActionPlanViewModel();
             List<ActionPlan> actionPlanList = new List<ActionPlan>();
-            ActionPlan tempActionPlan;
+            ActionPlan tempActionPlan = new ActionPlan();
 
             string raw_data = api.getActionPlans(productname, rz_bapm_id);
 
@@ -1164,12 +1165,16 @@ namespace REDZONE.AppCode
             {
                 JObject parsed_result = JObject.Parse(raw_data);
 
+                apViewModel.bapm_id = (string)parsed_result["rz_bapm_id"];
+                apViewModel.bapmStatus = (string)parsed_result["rz_bapm_status"];
+                if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";
+                if (String.IsNullOrEmpty(apViewModel.bapmStatus)) apViewModel.bapmStatus = "";
+
                 JArray jReasonList = (JArray)parsed_result["details"];
                 foreach (var res in jReasonList)
                 {
                     tempActionPlan = new Models.ActionPlan();
 
-                    tempActionPlan.bapm_id = rz_bapm_id;
                     tempActionPlan.apd_id = (string)res["rz_apd_id"];
                     tempActionPlan.apVersion = (string)res["rz_apd_ap_ver"];
                     tempActionPlan.apStatus = (string)res["rz_apd_ap_status"];
@@ -1185,12 +1190,14 @@ namespace REDZONE.AppCode
                     actionPlanList.Add(tempActionPlan);
                 }
 
+                apViewModel.actionPlanList = actionPlanList;
+
             }
             catch
             {
 
             }
-            return actionPlanList;
+            return apViewModel;
         }
 
         // ====================== HELPER FUNCTIONS ================================

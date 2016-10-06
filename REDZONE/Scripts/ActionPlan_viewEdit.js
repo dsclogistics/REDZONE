@@ -15,14 +15,16 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     //------------------------------------------BEHAVIOR---------------------------------------------
     //-----------------------------------------------------------------------------------------------
+
     $('#apText').on('keyup', function () {
-        var characters = $(this).text().length;
-        $('#apTextChars').text(characters + '/2000');
+        var characters = $(this).val().length;
+        //var linebreaks = ($(this).val().match(/\n/g) || []).length;
+        $('#apTextChars').text(characters + ' / 2000');
     })
 
     $('#apReviewComment').on('keyup', function () {
         var characters = $(this).text().length;
-        $('#apReviewChars').text(characters + '/2000');
+        $('#apReviewChars').text(characters + ' / 2000');
     })
 
 
@@ -37,19 +39,22 @@ $(document).ready(function () {
     })
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
+        localStorage.setItem("backUrl", document.URL);
+        //alert(localStorage.getItem("backUrl"));
         alert("Metric Id is: " + getMPid());
         if (getMPid() == null) {
             alert("Session variables were lost");
         }
         else {
-            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
         }
     });
 
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
         //var validated = validateReasonRow();
         //if (validated) updateMPReason();
-        submitActionPlan();
+        //submitActionPlan();
+        showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
@@ -88,7 +93,7 @@ function buildSubmitActionPlanJSON() {
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').text();
+    var rz_apd_ap_text = $('#apText').val();
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -114,8 +119,8 @@ function submitActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Submitted!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Submitted!", "Y");
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
@@ -128,8 +133,7 @@ function buildSaveActionPlanJSON() {
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').text();
-    alert('rz_apd_id:' + rz_apd_id);
+    var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -138,7 +142,7 @@ function buildSaveActionPlanJSON() {
 
 function saveActionPlan() {
     var payload = buildSaveActionPlanJSON();
-    alert(payload);
+    //alert(payload);
 
     $.ajax({
         url: '/ActionPlan/saveActionPlan',
@@ -155,8 +159,8 @@ function saveActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Saved!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
@@ -167,7 +171,7 @@ function buildSubmitAPReviewJSON(status) {
     var productname = "Red Zone";
     var rz_apd_subm_app_user_id = "2";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_review_text = $('#apReviewComment').text();
+    var rz_apd_ap_review_text = $('#apReviewComment').val();
     var rz_apd_ap_status = status;
 
     //If status is rejected, review text element is required (optional for Approved status)
@@ -197,8 +201,10 @@ function submitAPReview(status) {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Review Submitted!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Review Submitted!", "Y");
+            //showAlert(msg, msgStyle)
+            //showPopupForm(formTitle, formText)
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }

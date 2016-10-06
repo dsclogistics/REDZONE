@@ -112,11 +112,22 @@
         alert("An unhandled error exist: \n" + err);
     }
 
-    function showPopupForm(formTitle, formText) {
+    function showPopupForm(formTitle, formText, reload) {
         $(".popupFormTitle").html(formTitle);
         $("#popupFormBodyData").html(formText);
         $('#popupForm').modal('show');
+        if (reload == 'Y') {
+            $('#reloadPage').val('Y');
+        }
     }
+
+    $('.puf').on("hidden.bs.modal", function () {
+        alert('flag is ' + $('#reloadPage').val());
+        if ($('#reloadPage').val() == 'Y') {
+            $('#reloadPage').val('N');
+            location.reload();
+        }   
+    });
 
     $(document).ready(function () {
         var userRole = localStorage.getItem("userRole");
@@ -144,6 +155,7 @@
 <body>
 
     @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
+    <div><input type="hidden" id="reloadPage" value="N" /></div>
     @if (!Request.IsAuthenticated )
     {
         @RenderBody()
@@ -195,7 +207,7 @@
 
 
     <div id="popupForm" class="modal fade" role="dialog">
-        <div class="modal-dialog" style="width:35%; min-width:400px">
+        <div class="modal-dialog puf" style="width:35%; min-width:400px">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="color:white; background-color:#904545">

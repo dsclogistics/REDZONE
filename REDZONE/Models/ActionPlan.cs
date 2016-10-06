@@ -8,8 +8,6 @@ namespace REDZONE.Models
 {
     public class ActionPlan
     {
-        public List<MPReason> reasonList { get; set; }
-        public string bapm_id { get; set; }
         public string apd_id { get; set; }
         public string apVersion { get; set; }
         public string apStatus { get; set; }
@@ -17,7 +15,5 @@ namespace REDZONE.Models
         public string reviewerComments { get; set; }
         public string submittedBy { get; set; }
         public string reviewedBy { get; set; }
-
-        public ActionPlan() { reasonList = new List<MPReason>(); }
     }
 }
