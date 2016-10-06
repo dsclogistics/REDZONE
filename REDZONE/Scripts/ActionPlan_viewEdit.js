@@ -77,7 +77,6 @@ $(document).ready(function () {
     $('#btnsActionPlan').on('click', '#btnSaveActionPlan', function () {
 
         //alert(buildSaveActionPlanJSON());
-
         saveActionPlan();
     });
 });
@@ -124,7 +123,7 @@ function submitActionPlan() {
             showPopupForm("Red Zone Message", "Action Plan Submitted!", "Y");
             //location.reload();
         } else {
-            alert("Error Saving the data!\n" + JSON.stringify(d));
+            alert('<div class="alert-danger">Error Saving the Data!<br />' + JSON.stringify(d) + '</div>');
         }
     });
 }
