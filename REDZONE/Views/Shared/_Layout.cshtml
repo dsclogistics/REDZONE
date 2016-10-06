@@ -116,9 +116,17 @@
         $(".popupFormTitle").html(formTitle);
         $("#popupFormBodyData").html(formText);
         $('#popupForm').modal('show');
-        if (reload == 'Y') {
-            $('#reloadPage').val('Y');
-        }
+        if (reload == 'Y') {$('#reloadPage').val('Y'); }
+    }
+    function showAlert(msg, msgStyle, reload) {
+        var msgClass = "alert-" + msgStyle;
+        if (reload == 'Y') { $('#reloadPage').val('Y'); }
+        if (msgStyle == null || msgStyle == "") { msgClass = ""; }
+        $("#msgFormBodyData").removeClass("alert-warning");
+        $("#msgFormBodyData").removeClass("alert-danger");
+        $("#msgFormBodyData").addClass(msgClass);
+        $("#msgFormBodyData").html(msg);
+        $('#msgForm').modal('show');
     }
 
     $(document).ready(function () {
@@ -140,6 +148,12 @@
             showPopupForm('User Credential Information', userInfo);
         });
         $('#popupForm').on("hidden.bs.modal", function () {
+            if ($('#reloadPage').val() == 'Y') {
+                $('#reloadPage').val('N');
+                location.reload();
+            }
+        });
+        $('#msgForm').on("hidden.bs.modal", function () {
             if ($('#reloadPage').val() == 'Y') {
                 $('#reloadPage').val('N');
                 location.reload();
@@ -201,7 +215,26 @@
         }
         </div>
 
-
+    <div>
+        <div id="msgForm" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="width:35%; min-width:400px">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header bg-primary" >
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title msgFormTitle">Red Zone Application Message</h4>
+                    </div>
+                    <div class="modal-body" id="msgFormBody">
+                        <div class="row " id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="msgFormFooter" style="text-align:center">
+                        <button type="button" class="btn btn-primary" id="btnCancelMsgForm" data-dismiss="modal" style="width:120px">DONE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="popupForm" class="modal fade" role="dialog">
         <div class="modal-dialog puf" style="width:35%; min-width:400px">

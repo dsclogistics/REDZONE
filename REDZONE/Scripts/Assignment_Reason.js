@@ -1,13 +1,5 @@
 ﻿
-function showAlert(msg, msgStyle) {
-    var msgClass = "alert-" + msgStyle;
-    if (msgStyle == null || msgStyle == "") { msgClass = "";}
-    $("#msgFormBodyData").removeClass("alert-warning");
-    $("#msgFormBodyData").removeClass("alert-danger");
-    $("#msgFormBodyData").addClass(msgClass);
-    $("#msgFormBodyData").html(msg);
-    $('#msgForm').modal('show');
-}
+
 function getMPid() { return localStorage.getItem("mpId"); }
 function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
 function getMetricName() { return localStorage.getItem("mpName"); }

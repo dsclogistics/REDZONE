@@ -56,7 +56,8 @@ $(document).ready(function () {
         //submitActionPlan();
 
         var msg = '<div style="text-align:center">TEST MESSAGE</div>'
-        showPopupForm("Red Zone Message", "TEST MESSAGE", "Y");
+        showAlert(msg);
+        //showPopupForm("Red Zone Message", "TEST MESSAGE", "Y");
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
