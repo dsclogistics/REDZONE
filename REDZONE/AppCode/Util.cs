@@ -281,8 +281,7 @@ namespace REDZONE.AppCode
             {
                 // Set ADMIN Group Level
                 // Ed, John, Kevin G, Tracey White, Chris Boughey, Darrell, Jennifer Krueger, me, Giri, and all developers.
-                case "DELGADO_FELICIANO":
-                
+
                 case "POGANY_KEVIN":
                 case "GOPAL_GIRI":
                 case "ZUISS_EDWARD":
@@ -294,11 +293,14 @@ namespace REDZONE.AppCode
                 case "KRUEGER_JENNIFER":           //jennifer.krueger@dsc-logistics.com
                     appUserRoles = "ADMIN;REVIEWER";
                     break;
+                case "DELGADO_FELICIANO":
+                    appUserRoles = "ADMIN;REVIEWER;THE_CIO";
+                    break;
                 case "CHEN_ALEX":
                     appUserRoles = "ADMIN;";
                     break;
                 case "ABDUGUEV_RASUL":
-                    appUserRoles = "ADMIN;REVIEWER;SUPER";
+                    appUserRoles = "ADMIN;REVIEWER;SUPERAPPROVER";
                     break;
                 case "...":
                     appUserRoles = "SUPER";

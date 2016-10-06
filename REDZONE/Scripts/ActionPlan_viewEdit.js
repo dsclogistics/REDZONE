@@ -47,7 +47,8 @@ $(document).ready(function () {
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
         //var validated = validateReasonRow();
         //if (validated) updateMPReason();
-        submitActionPlan();
+        //submitActionPlan();
+        showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
@@ -112,8 +113,8 @@ function submitActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Submitted!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Submitted!", "Y");
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
@@ -152,8 +153,8 @@ function saveActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Saved!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Saved!", "Y");
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
@@ -164,7 +165,7 @@ function buildSubmitAPReviewJSON(status) {
     var productname = "Red Zone";
     var rz_apd_subm_app_user_id = "2";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_review_text = $('#apReviewComment').text();
+    var rz_apd_ap_review_text = $('#apReviewComment').val();
     var rz_apd_ap_status = status;
 
     //If status is rejected, review text element is required (optional for Approved status)
@@ -194,8 +195,10 @@ function submitAPReview(status) {
         }
     }).done(function (d) {
         if (d == "Success") {
-            alert("Action Plan Review Submitted!");
-            location.reload();
+            showPopupForm("Red Zone Message", "Action Plan Review Submitted!", "Y");
+            //showAlert(msg, msgStyle)
+            //showPopupForm(formTitle, formText)
+            //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
