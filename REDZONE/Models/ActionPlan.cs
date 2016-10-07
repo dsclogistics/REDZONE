@@ -13,7 +13,18 @@ namespace REDZONE.Models
         public string apStatus { get; set; }
         public string actionPlanAction { get; set; }
         public string reviewerComments { get; set; }
-        public string submittedBy { get; set; }
-        public string reviewedBy { get; set; }
+        public string submittedBy { get; set; }      //aka Building/Metric Owner
+        public string reviewedBy { get; set; }       //aka Building/Metric Reviewer        
+        public string apMetric { get; set; }
+        public string apMeetingDate { get; set; }
+        public string apLastUpdt { get; set; }
+    }
+
+    public class monthActionPlan { 
+        //Month Action Plan
+        public string displayId { get; set; }
+        public string apBuilding { get; set; }
+        public string apMonth { get; set; }
+        public List<ActionPlan> metricActPlans = new List<ActionPlan>();
     }
 }

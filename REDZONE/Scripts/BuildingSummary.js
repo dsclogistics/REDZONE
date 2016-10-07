@@ -346,6 +346,37 @@ function resetMetricValueVariables() {
     localStorage.setItem("mpValueDate", "");
 }
 
+//$('#APhistory').on('click', '.btn', function (e) {
+//    alert("Clicked");
+//    var $target = $(this).parentsUntil('btn-toolbar').next();
+//    alert($target.attr("aria-expanded"));
+//    //$target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+//    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+//})
+
+$('#APhistory').on('click', '.btnVieAP', function () {
+    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+});
+
+    //    //Populate all the month history Info
+//    //Parameters to pass:  "id" (Metric Period Value Id) 
+//$.ajax({
+//    url: '/MPVReasons/viewReasons',
+//    method: "POST",
+//    cache: false,
+//    //type: "POST",
+//    //data: payload,
+//    data: { id: mpvId },
+//    //contentType: "application/json; charset=utf-8",
+//    //dataType: "json",
+//    error: function (jqXHR, textStatus, errorThrown) {
+//        alert("Failed to retrieve Reasons Data from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+//    }
+//}).done(function (d) {
+//    $("#reasonsViewContainer").html(d);
+//});
+
+
 });
 
 

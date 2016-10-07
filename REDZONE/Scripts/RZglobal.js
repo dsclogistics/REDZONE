@@ -71,3 +71,13 @@ function obsAlert(myMessage) {
         }]
     });
 };
+
+function getUserRoles_Building(userId) {    
+    switch (userId.toUpperCase) {
+        case "DELGADO_FELICIANO":
+            alert("You are " + use.toUpperCase());
+            break;
+        default: alert("You are not " + use.toUpperCase());
+            break;    
+    }
+}

@@ -176,6 +176,7 @@
     <Compile Include="Controllers\ActionPlanController.cs" />
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\AppErrorController.cs" />
+    <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\ExecutiveSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
@@ -427,6 +428,7 @@
     <Content Include="Views\MPVreasons\viewReasons.cshtml" />
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
     <Content Include="Views\MPVreasons\_assignedNoStdrReason.cshtml" />
+    <Content Include="Views\Building\_APSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
