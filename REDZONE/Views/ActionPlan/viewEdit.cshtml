@@ -24,7 +24,7 @@
             string apEditable = "";
             string reviewEditable = "";
             string displayStatus = "";
-            string displayColor = "black";
+            string displayColor = "green";
             switch (currentAPStatus)
             {
                 case "Not Started":
@@ -44,6 +44,12 @@
                     reviewEditable = "disabled";
                     displayColor = "red";
                     break;
+                case "Rejected New":
+                    displayStatus = "Rejected (New Plan Required)";
+                    apEditable = "";
+                    reviewEditable = "";
+                    displayColor = "red";
+                    break;
                 case "Approved":
                     displayStatus = "Approved";
                     apEditable = "disabled";
@@ -56,7 +62,7 @@
 
 
             <div id="divCurrentStatus">
-                <h4 style="text-align:left; color:green">Action Plan Status: @displayStatus</h4>
+                <h4 style="text-align:left; color:@displayColor">Action Plan Status: @displayStatus</h4>
             </div>
 
             //SECTION: REASONS
@@ -99,7 +105,7 @@
                 }
                 else
                 {
-                    <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" @apEditable>@Model.actionPlanList.First().actionPlanAction</textarea>
+                    <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @apEditable>@Model.actionPlanList.First().actionPlanAction</textarea>
                     @*<div id="apText" class="bordered" contenteditable="@apEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().actionPlanAction</div>*@
 
                     <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
@@ -124,7 +130,7 @@
                 @if (userRole.Contains("REVIEWER") && apEditable == "disabled")
                 {
                     <h4 style="text-align:left">Reviewer Comments</h4>
-                    <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" @reviewEditable>@Model.actionPlanList.First().reviewerComments</textarea>
+                    <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @reviewEditable>@Model.actionPlanList.First().reviewerComments</textarea>
                     //<div id="apReviewComment" class="bordered" contenteditable="@reviewEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().reviewerComments</div>
                     
                     <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
