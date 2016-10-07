@@ -98,7 +98,7 @@ function buildSubmitActionPlanJSON() {
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').val();
+    var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -107,7 +107,7 @@ function buildSubmitActionPlanJSON() {
 
 function submitActionPlan() {
     var payload = buildSubmitActionPlanJSON();
-    //alert(payload);
+    alert(payload);
 
     $.ajax({
         url: '/ActionPlan/submitActionPlan',
