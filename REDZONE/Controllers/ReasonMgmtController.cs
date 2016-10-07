@@ -27,7 +27,16 @@ namespace REDZONE.Controllers
 
             MetricPeriodList = dataParcer.getMetricPeriodList();
 
-            ViewBag.metric_period_sel_list = new SelectList(MetricPeriodList, "mtrc_period_id", "mtrc_period_name", id);
+            var rzMetricPeriodList = MetricPeriodList
+                .Where(x => x.prod_name == "Red Zone")
+                .ToList()
+                .Select(x => new
+                {
+                    mtrc_period_id = x.mtrc_period_id,
+                    mtrc_period_name = x.mtrc_period_name + " (" + x.mtrc_prod_display_text + ")"
+                });
+
+            ViewBag.metric_period_sel_list = new SelectList(rzMetricPeriodList, "mtrc_period_id", "mtrc_period_name", id);
             ViewBag.id = id;
 
             //Get List of Metric Period Reasons
