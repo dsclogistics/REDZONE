@@ -104,7 +104,7 @@
                                             <td class="firstCol">
                                                 <span class="sortIcon glyphicon glyphicon-sort" style="float:left; display:none"></span>
                                                 <span class="reason-list-display-field" id="reason_text">@Html.DisplayFor(modelItem => item.reason_text)</span>
-                                                @Html.TextBoxFor(modelItem => item.reason_text, new { @class = "reason-list-edit-field created-by-admin", style = "display:none" })
+                                                @Html.TextBoxFor(modelItem => item.reason_text, new { @class = "reason-list-edit-field created-by-admin", style = "display:none; min-width:100%; text-align:center" })
                                             </td>
                                             <td>
                                                 <span id="reason_order">@Html.DisplayFor(modelItem => item.reason_order)</span>
@@ -112,7 +112,7 @@
                                             </td>
                                             <td>
                                                 <span class="reason-list-display-field" id="reason_description">@Html.DisplayFor(modelItem => item.reason_description)</span>
-                                                @Html.TextBoxFor(modelItem => item.reason_description, new { @class = "reason-list-edit-field", style = "display:none" })
+                                                @Html.TextBoxFor(modelItem => item.reason_description, new { @class = "reason-list-edit-field", style = "display:none; min-width:100%; text-align:center" })
                                             </td>
                                             <td class="std-checkbox" align="center">
                                                 @Html.HiddenFor(modelItem => item.reason_std_yn, new { @class = "reason-list-edit-field" })
