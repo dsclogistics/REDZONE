@@ -49,7 +49,7 @@ namespace REDZONE.Controllers
                     ActionPlan newActionPlan = new ActionPlan();
                     newActionPlan.apd_id = "";
                     newActionPlan.apVersion = (Int32.Parse(apViewModel.actionPlanList.First().apVersion) + 1).ToString();
-                    newActionPlan.apStatus = "Not Started";
+                    newActionPlan.apStatus = "Rejected New";
                     newActionPlan.actionPlanAction = "";
                     newActionPlan.reviewerComments = "";
                     apViewModel.actionPlanList.Insert(0, newActionPlan);

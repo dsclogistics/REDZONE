@@ -51,9 +51,8 @@ $(document).ready(function () {
     });
 
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
-        //var validated = validateReasonRow();
-        //if (validated) updateMPReason();
-        submitActionPlan();
+        var validated = validateActionPlanSubmit();
+        (validated) ? submitActionPlan() : showAlert("Action Plan text is required!", "", "N");;
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
@@ -85,13 +84,21 @@ $(document).ready(function () {
 
 
 //------------------------------------------------------------------------------------------------
+function validateActionPlanSubmit() {
+    var rz_apd_ap_text = $('#apText').val();
+
+    var confirmed = confirm("Are you sure you want to submit this action plan? You will not be able to make changes afterwards.");
+
+    return (rz_apd_ap_text == "" || !confirmed) ? false : true;
+}
+
 function buildSubmitActionPlanJSON() {
     var productname = "Red Zone";
     var rz_bapm_id = $('#bapmId').val();
     var rz_apd_ap_ver = $('#apVersion').val();
     var rz_apd_subm_app_user_id = "1";
     var rz_apd_id = $('#apDetailId').val();
-    var rz_apd_ap_text = $('#apText').val();
+    var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
     var jsonPayload = '{"productname":"' + productname + '", "rz_bapm_id":"' + rz_bapm_id + '", "rz_apd_ap_ver":"' + rz_apd_ap_ver + '","rz_apd_subm_app_user_id":"' + rz_apd_subm_app_user_id + '","rz_apd_id":"' + rz_apd_id + '","rz_apd_ap_text":"' + rz_apd_ap_text + '"}';
     //alert("Json submitted:\n" + jsonPayloadDetail);
@@ -100,7 +107,7 @@ function buildSubmitActionPlanJSON() {
 
 function submitActionPlan() {
     var payload = buildSubmitActionPlanJSON();
-    //alert(payload);
+    alert(payload);
 
     $.ajax({
         url: '/ActionPlan/submitActionPlan',
@@ -200,8 +207,6 @@ function submitAPReview(status) {
     }).done(function (d) {
         if (d == "Success") {
             showAlert("Action Plan Review Submitted!", "", "Y");
-            //showAlert(msg, msgStyle)
-            //showPopupForm(formTitle, formText)
             //location.reload();
         } else {
             alert("Error Saving the data!\n" + JSON.stringify(d));

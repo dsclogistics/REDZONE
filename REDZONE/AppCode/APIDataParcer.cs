@@ -1140,6 +1140,8 @@ namespace REDZONE.AppCode
                     tempMetricPeriod.mtrc_period_id = (string)res["mtrc_period_id"];
                     tempMetricPeriod.mtrc_period_name = (string)res["mtrc_period_name"];
                     tempMetricPeriod.mtrc_period_token = (string)res["mtrc_period_token"];
+                    tempMetricPeriod.mtrc_prod_display_text = (string)res["mtrc_prod_display_text"];
+                    tempMetricPeriod.prod_name = (string)res["prod_name"];
 
                     MetricPeriodList.Add(tempMetricPeriod);
                 }
