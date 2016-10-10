@@ -76,7 +76,8 @@
     display: block;
     border-left: 11px solid transparent;
     border-bottom: 11px solid transparent;
-    border-top: 11px solid #f00;
+    border-top: 11px solid black;  /*Black Corner Triangle*/
+    /*border-top: 11px solid #f00;*/  /*Red Corner Triangle*/
 } /* </magic> */
 
 .cellSelected {

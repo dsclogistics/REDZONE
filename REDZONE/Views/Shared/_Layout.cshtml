@@ -124,7 +124,7 @@
         if (msgStyle == null || msgStyle == "") { msgClass = ""; }
         $("#msgFormBodyData").removeClass("alert-warning");
         $("#msgFormBodyData").removeClass("alert-danger");
-        $("#msgFormBodyData").addClass(msgClass);
+        if (msgStyle) { $("#msgFormBodyData").addClass(msgClass); }        
         $("#msgFormBodyData").html(msg);
         $('#msgForm').modal('show');
     }

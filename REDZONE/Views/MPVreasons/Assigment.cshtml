@@ -335,7 +335,7 @@
             <br /><br />
             <div class="row " style="text-align:center">
                 <button id="btnSaveProg" class="btn btn-primary" style="width:135px; " disabled>Save Progress</button>
-                <button id="btnBeginAction" class="btn btn-primary" style="width:135px; margin-left:20px">Begin Action Plan</button>
+                <button id="btnBeginAction" class="btn btn-primary" style="width:135px; margin-left:20px; display:none">Begin Action Plan</button>
                 <button id="btnCancelReasons" class="btn btn-warning" style="width:135px; margin-left:80px">Cancel</button>
             </div>
         </div>
@@ -419,6 +419,15 @@
     $(document).ready(function () {
         //var urlMsg = decodeURIComponent("(at)urlReturn");
         //alert("Return URL is: " + $('#urlReturn').val());
+
+
+        //If the Status of the current Metric Period Value is "Not Started" (This display is part of the "Start Action Plan") Show the Start AP Button
+        if (localStorage.getItem("mpvStatus") == "Not Started") {
+            $('#btnBeginAction').show();
+        }
+        
+
+
     });
 
 </script>
