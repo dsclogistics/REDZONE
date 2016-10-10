@@ -805,6 +805,7 @@ namespace REDZONE.AppCode
                 MeasuredRowEntity header = new MeasuredRowEntity();
                 mSummary.missedGoals.rowName = "Goals Missed"; 
                 header.rowName = "Buildings";
+                header.displayClass = "";
                 MeasuredRowEntity goal = new MeasuredRowEntity();
                 goal.rowName = "Goal";
                 if (apiBuildings.HasValues)
@@ -833,7 +834,7 @@ namespace REDZONE.AppCode
                                 
                                 hdrCell.metricName = (string)m["Month"];
                                 hdrCell.metricValue = String.Empty;
-                                hdrCell.displayClass = "cell-NoValue";
+                                hdrCell.displayClass = "";
                                 hdrCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
                                 hdrCell.isViewable = false;
                                 goalCell.metricMonth = (string)m["Month"];

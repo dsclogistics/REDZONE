@@ -18,7 +18,7 @@ namespace REDZONE.Controllers
         APIDataParcer parcer = new APIDataParcer();
         //=================================================================
 
-        public ActionResult Index(string month, string year)
+        public ActionResult Index(string month, string year, string sortOrder)
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             DateTime defaultDate = DateTime.Today.AddMonths(-1);
@@ -27,6 +27,48 @@ namespace REDZONE.Controllers
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
             ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null);
+
+            switch (sortOrder)
+            {
+                case "BD":
+                    dashBoard.buildings = dashBoard.buildings.OrderByDescending(row => row.BuildingName).ToList();
+                    //On click, specify the expected state of the building and score icons.
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort-by-attributes-alt";
+                    ViewData["sIcon"] = "glyphicon-sort";
+                    ViewData["bntClassB"] = "btn-primary";
+                    ViewData["bntClassS"] = "";
+                    break;
+                case "SA":
+                    dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.rowScore).ToList();
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SD";
+                    ViewData["bIcon"] = "glyphicon-sort";
+                    ViewData["sIcon"] = "glyphicon-sort-by-attributes";
+                    ViewData["bntClassB"] = "";
+                    ViewData["bntClassS"] = "btn-primary";
+                    break;
+                case "SD":
+                    dashBoard.buildings = dashBoard.buildings.OrderByDescending(row => row.rowScore).ToList();
+                    ViewData["bOrder"] = "BA";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort";
+                    ViewData["sIcon"] = "glyphicon-sort-by-attributes-alt";
+                    ViewData["bntClassB"] = "";
+                    ViewData["bntClassS"] = "btn-primary";
+                    break;
+                default:
+                    dashBoard.buildings = dashBoard.buildings.OrderBy(row => row.BuildingName).ToList();
+                    ViewData["bOrder"] = "BD";
+                    ViewData["sOrder"] = "SA";
+                    ViewData["bIcon"] = "glyphicon-sort-by-attributes";
+                    ViewData["sIcon"] = "glyphicon-sort";
+                    ViewData["bntClassB"] = "btn-primary";
+                    ViewData["bntClassS"] = "";
+                    break;
+            }
+
             return View(dashBoard);
         }
 
@@ -42,6 +84,8 @@ namespace REDZONE.Controllers
            // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
 
             if (String.IsNullOrEmpty(sortDir)) { sortDir = "ASC"; }
+            if (String.IsNullOrEmpty(sortMonth)) { sortMonth = "Building"; }
+
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
 
             if (!String.IsNullOrEmpty(sortMonth)) {
@@ -54,7 +98,7 @@ namespace REDZONE.Controllers
                 else {
                     if (sortDir.Equals("ASC")) { dashBoard.metricRows = dashBoard.metricRows.OrderBy(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
                     else { dashBoard.metricRows = dashBoard.metricRows.OrderByDescending(row => row.entityMetricCells.Single(x => x.metricName == sortMonth).metricDoubleValue).ToList(); }
-
+                    dashBoard.rowHeadings.displayClass = "";  //Reset the clss of the Building Colu, so it can be sorted ascending when clicked
                     var sortedHdrCol = dashBoard.rowHeadings.entityMetricCells.Find(p => p.metricName == sortMonth);
                     sortedHdrCol.displayClass = sortDir;  // To let the view know which column was sorted (if any) and in what way ('ASC' or 'DESC')                
                 } 
