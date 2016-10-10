@@ -222,6 +222,8 @@
 
 <script>
     $(document).ready(function () {
+        $(".menuItem").removeClass("menuSelected");
+        $("#mAdmin").addClass("menuSelected");
 
         $("#mpName").html($("#metric_period_sel_list option:selected").text());
         //Metric Period Dropdown
