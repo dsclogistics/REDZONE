@@ -311,6 +311,42 @@ namespace REDZONE.AppCode
             }
             return appUserRoles;
         }
+
+        //This function accepts a Date String and converts it to a new format
+        public static string formatDate(string dateString, string newFormat)
+        {   
+            string tempDate = String.Empty;
+            try { tempDate = DateTime.Parse(dateString).ToString(newFormat); }
+            catch { tempDate = dateString; }            //If convertion fails, return the original String
+            return tempDate;
+        }
+
+        public static string getMetricMeetingOwner(string metricName){
+            string meetingOwner = String.Empty;
+            switch (metricName) { 
+                case "Net FTE":
+                case "OT":
+                    meetingOwner = "Christina Dempsey";
+                    break;
+                case "Turnover":
+                case "Trainees":
+                    meetingOwner = "Mona Mounts";
+                    break;
+                case "Safety":
+                    meetingOwner = "Joe Smiesko";
+                    break;
+                case "IT Tickets":
+                    meetingOwner = "Pete Kuranchie";
+                    break;
+                case "Financial":
+                    meetingOwner = "Steve Pignataro";
+                    break;
+                default:
+                    meetingOwner = "TBD";
+                    break;
+            }
+            return meetingOwner;
+        }
     }
 
 

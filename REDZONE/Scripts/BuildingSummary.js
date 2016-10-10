@@ -108,7 +108,9 @@ function toggleMenuOn() {
     //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
     if (actionPlanSts != "Not Needed") {
         if (actionPlanSts == "Not Started") {
+            $('#li_Add').hide();
             $("#li_ViewAP").hide();
+            $("#li_ContinueAP").hide();
             $("#li_StartAP").show();
         }
         else {
@@ -247,10 +249,12 @@ function menuItemListener(link) {
 
     toggleMenuOff();
     cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
-    if (contextMenuOption == "Manage" || contextMenuOption == "Add" ) {
+    if (contextMenuOption == "Manage" || contextMenuOption == "Add") {
+        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
         //If user is Managing or adding Reasons
         //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
         window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
+        window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
     else if (contextMenuOption == "View") {
         //Reset the Popup Details as to not display older Data
@@ -277,7 +281,11 @@ function menuItemListener(link) {
         //Display the popup Form After correctly populated by Ajax call
         $('#popupViewReasons').modal('show');
     }
-    else if (contextMenuOption == "ViewAP" || contextMenuOption == "StartAP") {
+    else if (contextMenuOption == "StartAP") {
+        //RedirectUSer to the Reason Management Page to Start by editing/Adding Reasons
+
+    }
+    else if (contextMenuOption == "ViewAP" || contextMenuOption == "StartAP" || contextMenuOption == "ContinueAP") {
         var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
         var bapmId = $cellClicked.find('#bapm_id').val();
         var errorMessage = "";
@@ -318,14 +326,12 @@ function cacheMetricValueVariables($cellClicked) {
     localStorage.setItem("mpValueDisplayClass", $cellClicked.find("#mDisplayClass").first().val());
     localStorage.setItem("mpValueDate", metricDate);
 }
-
 function getMetricValueVariablesMessage() {
     var message = 'Building: ' + getBuildingName() + '\nMetric Name: ' + getMetricName() + '\nMetric Goal: ' + getMetricGoal();
     message = message + '\nMetric Period Id: ' + getMPid() + '\nMP Value Id: ' + getMPvalueId() + '\nMetric Value: ' + getMPvalue();
     message = message + "\nDisplay Class: " + getMPvalueDisplayClass() + "\nMetric Date: " + getMetricDate();
     return message;
 }
-
 function getMPid() { return localStorage.getItem("mpId");}
 function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
 function getMetricName() { return localStorage.getItem("mpName"); }
@@ -334,7 +340,6 @@ function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMPvalue() { return localStorage.getItem("mpValue"); }
 function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
-
 function resetMetricValueVariables() {
     localStorage.setItem("mpId", "");
     localStorage.setItem("mpBuildingName", "");

@@ -77,6 +77,8 @@ namespace REDZONE.Models
         public string rz_bap_id { get; set; }        //Building Action Plan  Id
         public string rz_bapm_id { get; set; }       //Building Action Plan Metric Id
         public string rz_bapm_status { get; set; }   //Building Action Plan Metric Status
+        public string metricOwner { get; set; }      // Metric Owner of this Metric Value
+        public string metricLastUpdt { get; set; }
 
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }
@@ -103,6 +105,7 @@ namespace REDZONE.Models
         public int redTotals { get; set; }
         public string scoreGoalColor { get; set; }
         public string redTotalColor { get; set; }
+        public string rowOwner { get; set; }
         public List<MeasuredCellEntity> entityMetricCells = new List<MeasuredCellEntity>();
 
         //-------- Empty Constructor ------------\

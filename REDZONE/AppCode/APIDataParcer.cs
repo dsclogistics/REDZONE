@@ -468,6 +468,7 @@ namespace REDZONE.AppCode
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
                         row.scoreGoal = (string)mtr["mpg_display_text"];
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
+                        row.rowOwner = AppCode.Util.getMetricMeetingOwner(row.rowName);
                         if (months.HasValues)
                         {
                             foreach (var m in months)
@@ -518,7 +519,7 @@ namespace REDZONE.AppCode
                                             tmp.rz_bap_id = (string)apiCellValue["rz_bap_id"];
                                             tmp.rz_bapm_id = (string)apiCellValue["rz_bapm_id"];
                                             tmp.rz_bapm_status = (string)apiCellValue["rz_bapm_status"];
-
+                                            tmp.metricLastUpdt = AppCode.Util.formatDate((string)apiCellValue["last_updated"],"MMM dd, yyyy");
                                             tmp.mtrc_period_id = (string)apiCellValue["mtrc_period_id"];
                                             //..... Get the value in a formatted way
                                             int valDecPlaces = 0;      //Harcoded value for now, not used

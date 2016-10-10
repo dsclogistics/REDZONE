@@ -111,7 +111,7 @@
                             colCounter = 0;
                             <tr class="buildingRow">
                                 <td class="buildingCol" style="width:16.66%">
-                                    <a href="@buildingRow.rowURL" id="mName">@buildingRow.rowName</a>
+                                    <a href="@buildingRow.rowURL" id="mName" title="Metric Owner: @buildingRow.rowOwner">@buildingRow.rowName</a>
                                 </td> <!-- Metric Name Column -->
                                 <td class="buildingCol" style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold;">
                                     <span id="mGoal">@buildingRow.scoreGoal</span>
@@ -161,12 +161,12 @@
                             {
                                 if (buildingCell.isViewable)
                                 {
-                                    <td class="buildingCol @buildingCell.displayClass" style="width:@Model.metricColWidth">
-                                        @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                        <td class="buildingCol @buildingCell.displayClass" style="width:@Model.metricColWidth">
+                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                         { <br /> }
                                         else
                                         { @buildingCell.metricValue }
-                                    </td>
+                        </td>
                                 }
                             }
                             <td class="buildingCol scoreCol" style="width:8.33%;">
@@ -198,8 +198,8 @@
                                         else
                                         {
                                             @*<a href="@actionCell.cellValueURL" style="color:red; ">@actionCell.metricValue</a>*@
-                                            <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
-                                            <br />
+                                            @*<a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>*@
+                                            <div style="color:red;" title="Right click Red Cells for Action Plan">Action Required</div>
                                             @*<text>Total Closed: @actionCell.score</text>*@
                                         }
                                     </td>
@@ -216,7 +216,67 @@
                         <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span>
                         <br /><br />
                     </div>*@
-            <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
+                <br />
+      <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
+                <div id="APhistory" style="max-width:1000px; margin:0 auto">
+                    @*Draw a Section for each Month in Reverse Order*@
+                    @{colCounter = 0;}
+                    @for (int mIndex = Model.buildingHeadings.entityMetricCells.Count() - 1; mIndex >= 0; mIndex--)
+                    {
+                        REDZONE.Models.MeasuredCellEntity dscBldngHdr = Model.buildingHeadings.entityMetricCells[mIndex];
+                        int monthReds = 0;
+                        Int32.TryParse(@Model.buildingScoreRow.entityMetricCells[mIndex].metricValue, out monthReds);
+
+                        if (monthReds > 2)
+                        {
+                            string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
+                            <div class="row" style="margin-top:7px">
+                                <div class="btn-toolbar">
+                                    <div class="bordered monthLabel" style="border-top-left-radius:4px; border-bottom-left-radius:4px; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                                        <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-color:transparent; " data-toggle="collapse" data-target="#@monthDivId">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </button>
+                                    </div>
+                                    <div class="bordered monthLabel" style="width:100%; background-color:#f7f7f7">
+                                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">@dscBldngHdr.metricMonth Action Plan</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="@monthDivId" class="collapse" style="margin-left:40px;">
+                                <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
+                                    <thead>
+                                        <tr style="font-weight:bold">
+                                            <td style="width:30%">Metric</td>
+                                            <td style="width:25%">Status</td>
+                                            <td style="width:15%">Meeting Date</td>
+                                            <td style="width:15%">Meeting Owner</td>
+                                            <td style="width:15%">Last Update</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var buildingRow in Model.metricRows)
+                                        {
+                                            //if (@buildingRow.entityMetricCells[mIndex].rz_bapm_status == "Approved")
+                                            if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
+                                            {
+                                                <tr>
+                                                    <td style="width:30%">@buildingRow.rowName</td>
+                                                    <td style="width:25%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
+                                                    <td style="width:15%">TBD</td>
+                                                    <td style="width:15%">@buildingRow.rowOwner</td>
+                                                    <td style="width:15%">@buildingRow.entityMetricCells[mIndex].metricLastUpdt</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        colCounter++;
+                    }
+                </div>
+                <br />
+                            <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
                 <div class="row" style="margin:10px 0px;">
                     <div class="col-sm-5 ">
                         <div class="row actions-th" style="background-color:#f5f5f5">
@@ -308,57 +368,6 @@
                     </div>
                 </div> <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
 
-
-
-      <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
-                <br />
-                <div id="APhistory" style="max-width:1000px; margin:0 auto">
-                    @*Draw a Section for each Month in Reverse Order*@
-                    @{colCounter = 0;}
-                    @for (int mIndex = Model.buildingHeadings.entityMetricCells.Count() - 1; mIndex >= 0; mIndex--)
-                    {
-                        REDZONE.Models.MeasuredCellEntity dscBldngHdr = Model.buildingHeadings.entityMetricCells[mIndex];
-                        string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
-                        <div class="row" style="margin-top:7px">
-                            <div class="btn-toolbar">
-                                <div class="bordered monthLabel" style="border-top-left-radius:4px; border-bottom-left-radius:4px; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-color:transparent; " data-toggle="collapse" data-target="#@monthDivId">
-                                        <span class="glyphicon glyphicon-chevron-right"></span>
-                                    </button>
-                                </div>
-                                <div class="bordered monthLabel" style="width:100%; background-color:#faf7f7">
-                                    <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">@dscBldngHdr.metricMonth Action Plan</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="@monthDivId" class="collapse" style="margin-left:40px;">
-                            <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
-                                <thead>
-                                    <tr>
-                                        <td style="width:30%">Metric</td>
-                                        <td style="width:25%">Status</td>
-                                        <td style="width:15%">Meeting Date</td>
-                                        <td style="width:15%">Meeting Owner</td>
-                                        <td style="width:15%">Last Update</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var buildingRow in Model.metricRows)
-                                    {
-                                        <tr>
-                                            <td style="width:30%">TEST</td>
-                                            <td style="width:25%">TEST</td>
-                                            <td style="width:15%">TEST</td>
-                                            <td style="width:15%">TEST</td>
-                                            <td style="width:15%">TEST</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        colCounter++;
-                    }
-                </div>
             }
             else
             {
@@ -398,12 +407,17 @@
                 Start Action Plan
             </a>
         </li>
+        <li id="li_ContinueAP" class="context-menu__item" style="display:none">
+            <a href="#" class="context-menu__link" data-action="ContinueAP">
+                Continue Action Plan
+            </a>
+        </li>
 
         @*<li class="context-menu__item">
-                <a href="#" class="context-menu__link" data-action="Menu3">
-                    <i class="fa fa-times"></i>  Menu Item 3
-                </a>
-         </li>*@
+                   <a href="#" class="context-menu__link" data-action="Menu3">
+                       <i class="fa fa-times"></i>  Menu Item 3
+                   </a>
+            </li>*@
     </ul>
 </nav>  <!-- END OF RIGHT CLICK CONTEXT MENU -->
 <!-- START OF RIGHT CLICK POPUP REASONS DISPLAY  -->
