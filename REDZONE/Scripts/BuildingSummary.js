@@ -86,6 +86,10 @@ function contextListener() {
 }
 
 function toggleMenuOn() {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //There is logic still missing to introduce the Authorization Validation to hide Show Menu Options//////////
+    //     Current Logic Only accounts for Metric Value Status                               ///////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var $cellSelected = $($('#cellIdSelected').val());
     var hasReasons = $cellSelected.find('#hasReasons').val();
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
@@ -103,28 +107,45 @@ function toggleMenuOn() {
 
     if (actionPlanSts == "") { actionPlanSts = "Not Needed";}
     //alert("Action Plan Status is: '" + actionPlanSts + "'");
-
     //----------------------
     //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
     if (actionPlanSts != "Not Needed") {
+        //Action Plan is Required
         if (actionPlanSts == "Not Started") {
             $('#li_Add').hide();
             $("#li_ViewAP").hide();
-            $("#li_ContinueAP").hide();
             $("#li_StartAP").show();
+            $("#li_ContinueAP").hide();
+            $("#li_ReviewAP").hide();
+        }
+        else if (actionPlanSts == "Rejected" || actionPlanSts == "WIP") {
+            /////////////////////////// TO DO ////////////////////////////////////
+            //   Enable the Authorization function check /////////////////////////
+            if ("UserRole" == "Reviewer" && actionPlanSts == "Ready For Review") {
+                $("#li_ReviewAP").show();
+                $("#li_ContinueAP").hide();
+            }
+            else {
+                $("#li_ReviewAP").hide();
+                $("#li_ContinueAP").show();
+            }
+            $("#li_ViewAP").hide();
+            $("#li_StartAP").hide();
         }
         else {
             $("#li_ViewAP").show();
             $("#li_StartAP").hide();
+            $("#li_ContinueAP").hide();
+            $("#li_ReviewAP").hide();
         }
     }
     else {
+        //All AP Options must be disabled if the AP is not required
         $("#li_ViewAP").hide();
         $("#li_StartAP").hide();
+        $("#li_ContinueAP").hide();
     }
-    if (hasReasons == "") { }
-    else { }
-    $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlite the current celected cell
+    $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlight the current celected cell
     //----------------------
 
     if (menuState !== 1) {
@@ -245,22 +266,22 @@ function menuItemListener(link) {
     var $cellClicked = $("#" + taskItemInContext.getAttribute("id"));  // Object (CELL) that was right clicked
     var contextMenuOption = link.getAttribute("data-action");
     var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
     //console.log("Task ID - " + taskItemInContext.getAttribute("data-id") + ", Task action - " + link.getAttribute("data-action"));
 
     toggleMenuOff();
     cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
     if (contextMenuOption == "Manage" || contextMenuOption == "Add") {
-        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
+        localStorage.setItem("mpvStatus", "");   //Reset "Status" Local Storage Value 
         //If user is Managing or adding Reasons
         //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
-        window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
+        //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
         window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
     else if (contextMenuOption == "View") {
         //Reset the Popup Details as to not display older Data
         $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
         // Populate via Ajax the partial View that will be displayed in the pop up Form
-        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
         //Parameters to pass:  "id" (Metric Period Value Id) 
         $.ajax({
             url: '/MPVReasons/viewReasons',
@@ -283,10 +304,11 @@ function menuItemListener(link) {
     }
     else if (contextMenuOption == "StartAP") {
         //RedirectUSer to the Reason Management Page to Start by editing/Adding Reasons
-
+        localStorage.setItem("mpvStatus", "Not Started");
+        localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
+        window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
-    else if (contextMenuOption == "ViewAP" || contextMenuOption == "StartAP" || contextMenuOption == "ContinueAP") {
-        var mpvId = taskItemInContext.getAttribute("id");         //This is the Cell Id  OR  $cellClicked.prop("id")
+    else if (contextMenuOption == "ViewAP" || contextMenuOption == "ContinueAP") {
         var bapmId = $cellClicked.find('#bapm_id').val();
         var errorMessage = "";
 

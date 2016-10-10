@@ -85,7 +85,11 @@
                     </ul>
                 </div>
                 <div id="btnsReasons" style="text-align:right; margin-top:5px">
-                    <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
+                    @if (currentAPStatus.Equals("WIP") || currentAPStatus.Equals("Rejected") || currentAPStatus.Equals("Not Started"))
+                    {  //(actionPlanSts == "Rejected" || actionPlanSts == "WIP")
+                        <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
+                    }
+                    
                 </div>
                 <br />
             </div>

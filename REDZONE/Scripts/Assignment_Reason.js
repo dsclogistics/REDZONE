@@ -252,8 +252,9 @@ $(document).ready(function () {
     $("#btnCancelMsgForm").click(function () {
         if ($('#reloadAfterPopup').val() == "Y") { window.location.reload(); }
     });
-    $('#btnBeginAction').click(function () {
-        showAlert("New Action Plan Actions are not enabled yet<br\>Check again later.");
+    $('#btnBeginAction').click(function () {        
+        //showAlert("New Action Plan Actions are not enabled yet<br\>Check again later.");
+        window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + localStorage.getItem("bapmId") + "&mtrc_period_val_id=" + getMPvalueId(); //+ "&returnUrl=" + backUrl;
     });
 
     $('.stdrCheckBox').change(function () {
