@@ -66,9 +66,3 @@ function getNextOrder() {
     maxValue = (maxValue == null) ? 1 : maxValue + 1;
     return maxValue;
 }
-
-$(document).ready(function () {
-
-    // This is the New Branch
-
-});
