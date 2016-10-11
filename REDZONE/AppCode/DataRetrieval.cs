@@ -679,7 +679,7 @@ namespace REDZONE.AppCode
             request.Method = "POST";
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"productname\":\"" + productname + "\", \"metric_period_id\":\"" + metric_period_id + "\", \"dsc_mtrc_lc_bldg_id\":\"" + dsc_mtrc_lc_bldg_id + "\", \"begmonth\":\"" + begmonth + "\", \"begyear\":\"" + begyear + "\", \"endmonth\":\"" + endmonth + "\", \"endyear\":\"" + endyear + "\"}";
+            string parsedContent = "{\"productname\":\"" + productname + "\", \"mtrc_period_id\":\"" + metric_period_id + "\", \"dsc_mtrc_lc_bldg_id\":\"" + dsc_mtrc_lc_bldg_id + "\", \"begmonth\":\"" + begmonth + "\", \"begyear\":\"" + begyear + "\", \"endmonth\":\"" + endmonth + "\", \"endyear\":\"" + endyear + "\"}";
             Byte[] bytes = encoding.GetBytes(parsedContent);
             string JsonString = String.Empty;
             try
