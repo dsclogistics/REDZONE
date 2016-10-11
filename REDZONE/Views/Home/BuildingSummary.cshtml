@@ -72,6 +72,7 @@
                 </div>
             </div>
         </div> <!-- END OF PANEL HEADER -->
+
         <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
             @if (Model.isModelValid)
             {
@@ -151,11 +152,11 @@
 
                         <!--  ************ Start of the TOTALS ROW ******************  -->
                         <tr class="buildingRow totalsRow">
-                            <td class="buildingCol " style="width:16.66%">
+                            <td class="buildingCol " style="width:16.66%; padding:0; padding-top:4px">
                                 @*@Model.buildingScoreRow.rowName*@
-                                <span>Building Score</span>
-                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:1px" title="Show Actions Required by Building Score">
-                                    <span class="glyphicon glyphicon-question-sign" style="font-size:large"></span>
+                                <span style="margin-top:10px; padding-top:10px">Building Score</span>
+                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:0px; " title="Show Actions Required by Building Score">
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size:large;"></span>
                                 </button>
                             </td><!-- Metric Name Column -->
                             <td class="buildingCol " style="width:8.33%; ">
@@ -251,7 +252,14 @@
                                         </button>
                                     </div>
                                     <div class="bordered monthLabel" style="width:100%; background-color:#f7f7f7">
-                                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">Action Plans for <span style="font-weight:bold">@dscBldngHdr.metricMonth @Model.year</span> </h4>
+                                        <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px ">
+                                            Action Plans for <span style="font-weight:bold">@dscBldngHdr.metricMonth @Model.year</span> 
+                                            @if (isFirstMonth)
+                                            {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px"> [Action Plans are required]</span>}
+                                        </span>
+                                        @if(Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open")){
+                                            <span style="float:right; color:red; margin-right:5px">* Metrics for this month have not been finalized</span>
+                                        }
                                     </div>
                                 </div>
                             </div>
