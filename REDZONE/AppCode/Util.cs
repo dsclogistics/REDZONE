@@ -297,7 +297,7 @@ namespace REDZONE.AppCode
                     appUserRoles = "ADMIN;";
                     break;
                 case "CHEN_ALEX":
-                    appUserRoles = "ADMIN;";
+                    appUserRoles = "ADMIN;REVIEWER";
                     break;
                 case "ABDUGUEV_RASUL":
                     appUserRoles = "ADMIN;REVIEWER;SUPERAPPROVER";
