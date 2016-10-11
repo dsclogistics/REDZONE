@@ -11,11 +11,13 @@ namespace REDZONE.Models
         public string bapm_id { get; set; }
         public string bapmStatus { get; set; }
         public List<ActionPlan> actionPlanList { get; set; }
+        public List<PriorActionPlan> priorActionPlanList { get; set; }
 
         public ActionPlanViewModel()
         {
             reasonList = new List<MPReason>();
             actionPlanList = new List<ActionPlan>();
+            priorActionPlanList = new List<PriorActionPlan>();
         }
 
     }

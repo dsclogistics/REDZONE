@@ -413,7 +413,6 @@
             // Call Ajax to Save the New Reason Row Order. After Save we can just reload the page so it picks up the new DB order
             //alert(buildReorderMPReasonJSON());
             reorderMPReasons();
-            location.reload();
             //$('#btnsReordering').hide();
             //$('#btnsReorder').show();
             //$('.sortIcon').hide();
@@ -650,8 +649,7 @@
             }
         }).done(function (d) {
             if (d == "Success") {
-                alert("Reason Added!");
-                location.reload();
+                showAlert("Reason Added!", "", "Y");
             } else {
                 alert("Error Saving the data!\n" + JSON.stringify(d));
             }
@@ -735,8 +733,7 @@
             }
         }).done(function (d) {
             if (d == "Success") {
-                alert("Reason Updated!");
-                location.reload();
+                showAlert("Reason Updated!", "", "Y");
             } else {
                 alert("Error Saving the data!\n" + JSON.stringify(d));
             }
@@ -792,8 +789,7 @@
                 }
             }).done(function (d) {
                 if (d == "Success") {
-                    alert("Reason Removed!");
-                    location.reload();
+                    showAlert("Reason Removed!", "", "Y");
                 } else {
                     alert("Error Saving the data!\n" + JSON.stringify(d));
                 }
@@ -844,8 +840,7 @@
             }
         }).done(function (d) {
             if (d == "Success") {
-                alert("Reason Reordered!");
-                location.reload();
+                showAlert("Reasons Reordered!", "", "Y");
             } else {
                 alert("Error Saving the data!\n" + JSON.stringify(d));
             }
