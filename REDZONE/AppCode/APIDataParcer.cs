@@ -1204,14 +1204,14 @@ namespace REDZONE.AppCode
         }
 
         //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, and endyear.
-        public List<PriorActionPlan> getPriorActionPlanList(string productname, string metric_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
+        public List<PriorActionPlan> getPriorActionPlanList(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         {
             List<PriorActionPlan> priorActionPlanList = new List<PriorActionPlan>();
             PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
             List<MPReason> reasonList = new List<MPReason>();
             MPReason tempMPReason = new MPReason();
 
-            string raw_data = api.getPriorActionPlans(productname, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
+            string raw_data = api.getPriorActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
 
             try
             {

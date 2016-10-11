@@ -3,14 +3,19 @@
 //------------------------------------------------------------------------------------------------
 function getMPid() { return localStorage.getItem("mpId"); }
 function getBuildingName() { return localStorage.getItem("mpBuildingName"); }
+function getBuildingId() { return localStorage.getItem("buildingId"); }
 function getMetricName() { return localStorage.getItem("mpName"); }
 function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
 
 $(document).ready(function () {
+    //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------Initialize--------------------------------------------
+    //-----------------------------------------------------------------------------------------------
     $("#metricName").html(getMetricName());
     $("#buildingName").html(getBuildingName());
     $("#metricDate").html(getMetricDate());
+    displayPriorActionPlans();
 
     //-----------------------------------------------------------------------------------------------
     //------------------------------------------BEHAVIOR---------------------------------------------
@@ -32,6 +37,13 @@ $(document).ready(function () {
     //-------------------------------------------ACTIONS---------------------------------------------
     //-----------------------------------------------------------------------------------------------
     $('.btn-toolbar').on('click', '.btn', function (e) {
+        var $target = $(this).parentsUntil('btn-toolbar').next();
+        //alert($target.attr("aria-expanded"));
+        $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+        $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    })
+
+    $('#divPriorActionPlans').on('click', '.btn', function (e) {
         var $target = $(this).parentsUntil('btn-toolbar').next();
         //alert($target.attr("aria-expanded"));
         $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
@@ -81,6 +93,43 @@ $(document).ready(function () {
 //-------------------------------------------FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------------------------
 
+function displayPriorActionPlans() {
+
+    var productname = "Red Zone";
+    var mtrc_period_id = "1";
+    var dsc_mtrc_lc_bldg_id = "40";
+    var begmonth = "1";
+    var begyear = "2016";
+    var endmonth = "9";
+    var endyear = "2016";
+
+    var formData = {
+        productname: productname,
+        mtrc_period_id: mtrc_period_id,
+        dsc_mtrc_lc_bldg_id: dsc_mtrc_lc_bldg_id,
+        begmonth: begmonth,
+        begyear: begyear,
+        endmonth: endmonth,
+        endyear: endyear
+    };
+
+    $.ajax({
+        url: '/ActionPlan/_priorActionPlans',
+        //url: 'http://dscapidev/dscmtrc/api/v1/metric/getpriorap',
+        method: "POST",
+        cache: false,
+        //type: "POST",
+        //data: payload,
+        data: formData,
+        //contentType: "application/json; charset=utf-8",
+        //dataType: "json",
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+        }
+    }).done(function (d) {
+        $("#divPriorActionPlans").html(d);
+    });
+}
 
 
 //------------------------------------------------------------------------------------------------
