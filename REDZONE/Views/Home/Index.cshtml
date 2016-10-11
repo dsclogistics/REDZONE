@@ -7,6 +7,8 @@
 @{
     double colWidth = .72 / Model.allMetrics.Count;
     string strColWidth = colWidth.ToString("00.00%");
+    string btnClassBldng = (ViewData["bntClassB"] == null) ? "" : ViewData["bntClassB"].ToString();
+    string btnClassScore = (ViewData["bntClassS"] == null) ? "" : ViewData["bntClassS"].ToString();
 }
 
 
