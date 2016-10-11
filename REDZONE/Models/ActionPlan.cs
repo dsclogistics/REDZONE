@@ -27,4 +27,11 @@ namespace REDZONE.Models
         public string apMonth { get; set; }
         public List<ActionPlan> metricActPlans = new List<ActionPlan>();
     }
+
+    public class PriorActionPlan
+    {
+        public string priorMetricGoal { get; set; }
+        public string priorMetricValue { get; set; }
+        public List<MPReason> priorReasonList { get; set; }
+    }
 }

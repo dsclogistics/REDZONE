@@ -41,7 +41,7 @@ $(document).ready(function () {
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
         //alert(localStorage.getItem("backUrl"));
-        alert("Metric Id is: " + getMPid());
+        //alert("Metric Id is: " + getMPid());
         if (getMPid() == null) {
             alert("Session variables were lost");
         }

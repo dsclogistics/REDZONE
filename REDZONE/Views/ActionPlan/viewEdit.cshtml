@@ -2,6 +2,12 @@
 @{ ViewBag.Title = "viewEdit"; }
 @{string userRole = ViewBag.curUserRole;}
 
+<style>
+    .headerCell {
+        border: 1px solid black;
+        padding: 5px;
+    }
+</style>
 <script src="~/Scripts/ActionPlan_viewEdit.js"></script>
 
 <div id="globalVariables">
@@ -29,14 +35,17 @@
             {
                 case "Not Started":
                     displayStatus = "New";
+                    displayColor = "orange";
                     break;
                 case "WIP":
                     displayStatus = "In Process";
+                    displayColor = "orange";
                     break;
                 case "Ready For Review":
                     displayStatus = "Ready For Review";
                     apEditable = "disabled";
                     reviewEditable = "";
+                    displayColor = "orange";
                     break;
                 case "Rejected":
                     displayStatus = "Rejected";
@@ -54,6 +63,7 @@
                     displayStatus = "Approved";
                     apEditable = "disabled";
                     reviewEditable = "disabled";
+                    displayColor = "green";
                     break;
                 default:
                     displayStatus = currentAPStatus;
@@ -68,7 +78,7 @@
             //SECTION: REASONS
             <div id="divReasonSummary">
                 <h4 style="text-align:left">Reason Summary</h4>
-                <div class="bordered" style="padding:10px; padding-bottom:0px; border-radius:4px; border-color:lightgray ">
+                <div class="bordered" style="padding:10px; padding-bottom:0px; border-radius:4px; border-color:darkgray ">
                     <ul style="text-align:center">
                         @if (Model.reasonList.Count() > 0)
                         {
@@ -84,13 +94,13 @@
 
                     </ul>
                 </div>
-                <div id="btnsReasons" style="text-align:right; margin-top:5px">
-                    @if (currentAPStatus.Equals("WIP") || currentAPStatus.Equals("Rejected") || currentAPStatus.Equals("Not Started"))
-                    {  //(actionPlanSts == "Rejected" || actionPlanSts == "WIP")
+                @if (!(currentAPStatus == "Ready For Review" || currentAPStatus == "Approved"))
+                {
+                    <div id="btnsReasons" style="text-align:right; margin-top:5px">
                         <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
-                    }
-                    
-                </div>
+                    </div>
+                }
+
                 <br />
             </div>
 
@@ -104,7 +114,7 @@
                 @*-----------*@
                 @if (userRole.Contains("REVIEWER") && apEditable == "")
                 {
-                    <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; color:red">The action plan is not yet ready for review.</div>
+                    <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">The action plan is not yet ready for review.</div>
                     <br />
                 }
                 else
@@ -154,32 +164,82 @@
 
             </div>
 
-            //SECTION: PREVIOUS ACTION PLANS
+            //SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN 
             <br />
             foreach (REDZONE.Models.ActionPlan actionPlan in Model.actionPlanList.Where(x => x.apVersion != Model.actionPlanList.First().apVersion))
             {
                 <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:lightgray; border-right:transparent">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:lightgray;">
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">Action Plan - Version @actionPlan.apVersion</h4>
                     </div>
                 </div>
 
                 <div class="collapse" style="margin-left:40px">
                     <h4 style="text-align:left; color:red; margin-top:10px">Action Plan Status: @actionPlan.apStatus</h4>
-                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.actionPlanAction</div>
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>
                     <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
                     
                     <h4 style="text-align:left">Reviewer Comments</h4>
-                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@actionPlan.reviewerComments</div>
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>
                     <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
                 </div>
                 <br />
             }
+
+            //SECTION: PRIOR MONTH ACTION PLANS
+            <br />
+            <div class="bordered" style="border-color:darkgray; background-color:darkgray"><h4 style="font-weight:bold; color:white">Prior Month Action Plans</h4></div>
+            //foreach{
+                <br />
+                <div class="btn-toolbar">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </div>
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">//MONTH// Action Plan</h4>
+                    </div>
+                </div>
+
+                <div class="collapse" style="margin-left:40px">
+                    <h4 style="text-align:left; color:red; margin-top:10px">Action Plan Status: //STATUS//</h4>
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">
+                        <div class="row">
+                            <div class="col-md-6" style="margin:0 auto; text-align:left; margin-bottom:8px; margin-top:5px">
+                                <!-- Metric Period Header Information  -->
+                                <div class="row" style="margin:0; font-weight:bold">
+                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea">Metric</div>
+                                    <div class="col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
+                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1">//MONTH//</span></div>
+                                </div>
+                                <div class="row" style="margin:0">
+                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span class="mNameCell">//mNAME//</span></div>
+                                    <div class="col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">//mGOAL//</span></div>
+                                    <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal">//mVALUE//</div>
+                                </div>
+                            </div> <!-- END OF HEADER INFORMATION-->
+
+                            <div class="col-md-6">
+                                <ul style="text-align:left">
+                                    <li>Reason 1</li>
+                                    <li>Reason 2</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div>Action Plan Text</div>
+                    </div>
+                    <div style="text-align:left;color:gray">Submitted By: //SUBMITTED BY//</div>
+                </div>
+                <br />
+            //}
         }
         else
         {
@@ -188,5 +248,6 @@
                 <span>There is no action plan to display.</span>
             </div>
         }
+
     </div>
 </div>
