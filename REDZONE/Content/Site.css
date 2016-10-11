@@ -83,7 +83,10 @@ textarea {
     background-color:#fcb55a;   /*Orange*/
 }
 .Score-Red5 {
-    background-color:#f75643;   /*Red Color: old:#ffbb8b   I:#ee7e7e   team:f75643*/        
+    padding:0;
+    background-color:#f75643;   /*Red Color: old:#ffbb8b   I:#ee7e7e   team:f75643*/
+    height:100%;
+    border: none;
 }
 
 .bg-Primary-Gradient {

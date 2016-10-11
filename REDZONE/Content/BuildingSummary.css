@@ -56,12 +56,14 @@
     margin:0 auto; 
     margin-top:10px; 
     margin-bottom:10px; 
-    border: 4px double black; 
-    border-radius:6px; 
+    /*border: 4px double black;*/ 
+    border: none;
+    /*border-radius:6px;*/ 
     /*border-color: #a50404;*/
-    border-color: #011b47;
+    /*border-color: #011b47;*/
     /*background-color:#f5fdff;*/  /*#f6fff5*/
-    background-color:#fffefa;
+    /*background-color:#fffefa;*/
+    background-color: white;
     padding:10px;
 }
 .note {

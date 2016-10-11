@@ -23,6 +23,7 @@ var contextMenuClassName = "context-menu";
 var contextMenuItemClassName = "context-menu__item";
 var contextMenuLinkClassName = "context-menu__link";
 var contextMenuActive = "context-menu--active";     ///_---------------NEED THIS DEFINED --------------
+var scoreActionContent = '<div class="row actions-th" style="background-color:#f5f5f5; text-align:center">Actions Required by Building Score</div><div class="row" style="margin: 8px 10px 0px 10px; "><table class="table-bordered" style="margin:0;"><tr><td style="background-color:#f9f97f; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">3 Red</td><td style="text-align: left; padding-left:15px;"><span style="">Action Plan form required on individual red metrics from the Building Lead</span></td></tr><tr><td style="background-color:#fcb55a; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">4 Red</td><td style="text-align: left; padding-left:15px;"><span style="">Above plus, monthly group meetings required led by appropiate Corporate Resource for each \'Red Metric\' (See schedule)</span></td></tr><tr><td style="background-color:#f75643; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">5+ Red</td><td style="text-align: left; padding-left:15px;"><span style="">Above Plus, LC Review at Supply Chain Council</span></td></tr></table></div>';
 
 init();
 
@@ -354,6 +355,7 @@ function cacheMetricValueVariables($cellClicked) {
     localStorage.setItem("mpValue", $cellClicked.find("#mValue").first().html());
     localStorage.setItem("mpValueDisplayClass", $cellClicked.find("#mDisplayClass").first().val());
     localStorage.setItem("mpValueDate", metricDate);
+    localStorage.setItem("buildingId", $('#buildingId').val());
 }
 function getMetricValueVariablesMessage() {
     var message = 'Building: ' + getBuildingName() + '\nMetric Name: ' + getMetricName() + '\nMetric Goal: ' + getMetricGoal();
@@ -392,7 +394,12 @@ $('#APhistory').on('click', '.btnVieAP', function () {
     $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
 });
 
-    //    //Populate all the month history Info
+$('#btnActionsRequired').click(function () {
+    showPopupForm("SCORE REQUIRED ACTIONS", scoreActionContent, "N");
+});
+
+
+//    //Populate all the month history Info
 //    //Parameters to pass:  "id" (Metric Period Value Id) 
 //$.ajax({
 //    url: '/MPVReasons/viewReasons',

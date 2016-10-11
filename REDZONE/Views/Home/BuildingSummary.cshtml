@@ -153,7 +153,10 @@
                         <tr class="buildingRow totalsRow">
                             <td class="buildingCol " style="width:16.66%">
                                 @*@Model.buildingScoreRow.rowName*@
-                                Building Score
+                                <span>Building Score</span>
+                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:1px" title="Show Actions Required by Building Score">
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size:large"></span>
+                                </button>
                             </td><!-- Metric Name Column -->
                             <td class="buildingCol " style="width:8.33%; ">
                                 <br />
@@ -162,7 +165,7 @@
                             {
                                 if (buildingCell.isViewable)
                                 {
-                                    <td class="buildingCol @buildingCell.displayClass" style="width:@Model.metricColWidth">
+                                    <td class="buildingCol @buildingCell.displayClass" style="border-bottom: 1px solid lightgray; width:@Model.metricColWidth">
                                         @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                         { <br /> }
                                         else
@@ -189,7 +192,7 @@
                             @{colCounter = 0;}
                             @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
                             {
-                                <td class="" style="border-bottom: 1px solid lightgray; width: @Model.metricColWidth">
+                                <td class="" style="border:none; width: @Model.metricColWidth">
                                     <br />
                                 </td>
 
@@ -219,19 +222,27 @@
                         <br /><br />
                     </div>*@
                 <br />
-      <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
+                
+                
+ <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
                 <div id="APhistory" style="max-width:1000px; margin:0 auto">
                     @*Draw a Section for each Month in Reverse Order*@
-                    @{colCounter = 0;}
+                    @{
+                        colCounter = 0;
+                        bool isFirstMonth = true;
+                      }
                     @for (int mIndex = Model.buildingHeadings.entityMetricCells.Count() - 1; mIndex >= 0; mIndex--)
                     {
                         REDZONE.Models.MeasuredCellEntity dscBldngHdr = Model.buildingHeadings.entityMetricCells[mIndex];
                         int monthReds = 0;
                         Int32.TryParse(@Model.buildingScoreRow.entityMetricCells[mIndex].metricValue, out monthReds);
-
+                        
+                        string collapseStatus = isFirstMonth?"in":"";
+                        
                         if (monthReds > 2)
                         {
                             string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
+                            
                             <div class="row" style="margin-top:7px">
                                 <div class="btn-toolbar">
                                     <div class="bordered monthLabel" style="border-top-left-radius:4px; border-bottom-left-radius:4px; border-top-right-radius:0px; border-bottom-right-radius:0px">
@@ -240,14 +251,14 @@
                                         </button>
                                     </div>
                                     <div class="bordered monthLabel" style="width:100%; background-color:#f7f7f7">
-                                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">@dscBldngHdr.metricMonth Action Plan</h4>
+                                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:5px ">Action Plans for <span style="font-weight:bold">@dscBldngHdr.metricMonth @Model.year</span> </h4>
                                     </div>
                                 </div>
                             </div>
-                            <div id="@monthDivId" class="collapse" style="margin-left:40px;">
+                            <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px;">
                                 <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
                                     <thead>
-                                        <tr style="font-weight:bold">
+                                        <tr style="font-weight:bold; background-color:lightgray">
                                             <td style="width:30%">Metric</td>
                                             <td style="width:25%">Status</td>
                                             <td style="width:15%">Meeting Date</td>
@@ -262,7 +273,7 @@
                                             if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
                                             {
                                                 <tr>
-                                                    <td style="width:30%">@buildingRow.rowName</td>
+                                                    <td style="width:30%; font-weight:bold">@buildingRow.rowName</td>
                                                     <td style="width:25%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
                                                     <td style="width:15%">TBD</td>
                                                     <td style="width:15%">@buildingRow.rowOwner</td>
@@ -273,40 +284,16 @@
                                     </tbody>
                                 </table>
                             </div>
+                            isFirstMonth = false;
                         }
                         colCounter++;
                     }
                 </div>
                 <br />
-                            <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
-                <div class="row" style="margin:10px 0px;">
-                    <div class="col-sm-5 ">
-                        <div class="row actions-th" style="background-color:#f5f5f5">
-                            Actions Required by Building Score
-                        </div>
-                        <div class="row" style="margin: 8px 10px 0px 10px; ">
-                            <table class="table-bordered" style="margin:0;">
-                                <tr>
-                                    <td style="background-color:#f9f97f; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">3 Red</td>
-                                    <td style="text-align: left; padding-left:15px;">
-                                        <span style="">Action Plan form required on individual red metrics from the Building Lead (click actionable link)</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="background-color:#fcb55a; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">4 Red</td>
-                                    <td style="text-align: left; padding-left:15px;">
-                                        <span style="">Above plus, monthly group meetings required led by appropiate Corporate Resource for each red metric (See schedule)</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="background-color:#f75643; font-weight:bold; font-size:x-large; padding:10px; vertical-align:middle; width:25%;">5+ Red</td>
-                                    <td style="text-align: left; padding-left:15px;">
-                                        <span style="">Above Plus, LC Review at Supply Chain Council</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                
+                
+ <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
+                @*<div class="row" style="margin:10px 0px;">
                     <div class="col-sm-7">
                         <div class="row actions-th" style="background-color:#f5f5f5">
                             Meeting Date and Times
@@ -325,38 +312,38 @@
                                     <tr style="padding:0">
                                         <td style="width:20%">POP/Net FTE</td>
                                         <td style="width:20%">Christina Dempsey</td>
-                                        <td style="width:20%">@*08/15/2016*@</td>
-                                        <td style="width:40%">@*10:00 AM*@</td>
+                                        <td style="width:20%"></td>
+                                        <td style="width:40%"></td>
                                     </tr>
                                     <tr class="bordered-r">
                                         <td>Turnover</td>
                                         <td>Mona Mounts</td>
-                                        <td>@*08/14/2016*@</td>
-                                        <td>@*10:00 AM*@</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>OT</td>
                                         <td>Christina Dempsey</td>
-                                        <td>@*08/12/2016*@</td>
-                                        <td>@*10:00 AM*@</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>Trainees</td>
                                         <td>Mona Mounts</td>
-                                        <td>@*08/14/2016*@</td>
-                                        <td>@*10:00 AM*@</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>Safety</td>
                                         <td>Joe Smiesko</td>
-                                        <td>@*08/19/2016*@</td>
-                                        <td>@*10:00 AM*@</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>IT Tickets</td>
                                         <td>Pete Kuranchie</td>
-                                        <td>@*08/18/2016*@</td>
-                                        <td>@*10:00 AM*@</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td>Financial</td>
@@ -368,7 +355,7 @@
                             </table>
                         </div>
                     </div>
-                </div> <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
+                </div>*@ <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
 
             }
             else
@@ -381,6 +368,8 @@
         </div> <!-- END OF PANEL BODY -->
     </div><!-- END OF PANEL -->
 </div> <!-- ROW END -->
+
+
 <!--  ************************************* START OF RIGHT CLICK CONTEXT MENU **************************************** -->
 <nav id="context-menu" class="context-menu" style="border: 3px double gray">
     <ul class="context-menu__items" style="padding:0; margin:0; color:darkgray">
@@ -427,6 +416,7 @@
             </li>*@
     </ul>
 </nav>  <!-- END OF RIGHT CLICK CONTEXT MENU -->
+
 <!-- START OF RIGHT CLICK POPUP REASONS DISPLAY  -->
 <div id="popupViewReasons" class="modal fade" role="dialog">
     <div class="modal-dialog" style="width:50%; min-width:670px">
@@ -448,9 +438,10 @@
                 </div>
             </div>
             <div class="modal-footer" id="reasonEditFooter" style="text-align:center">
-                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal" style="width:120px">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnCancelReasonEdit" data-dismiss="modal" style="width:120px">DONE</button>
             </div>
         </div>
     </div>
 </div>
 <!-- END OF RIGHT CLICK POPUP REASONS DISPLAY  -->
+
