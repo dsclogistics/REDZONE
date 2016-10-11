@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using Newtonsoft.Json.Linq;
-using REDZONE.Models;
+﻿using REDZONE.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,10 +127,11 @@ namespace REDZONE.Controllers
                     ///---------------- SKIP Authorization Roles at the Loging part for Now ------------
                     ////string uRoles = getUserRoles(loginModel.Username);
                     //setUserRoles(loginModel.Username, new string[] { Session["roles"].ToString() });
+                    setUserRoles(loginModel.Username, new string[] { "ADMIN", "OTHER" });
                     ///----------------------------------------------------------------------------------
 
                     // Set the Authentication Encrypted Cookie
-                    FormsAuthentication.SetAuthCookie(loginModel.Username, true);                   
+                    //FormsAuthentication.SetAuthCookie(loginModel.Username, true);                   
 
                     //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
 
@@ -505,7 +503,7 @@ namespace REDZONE.Controllers
                  1,                             // version
                  userName,                      // user name
                  DateTime.Now,                  // created
-                 DateTime.Now.AddMinutes(20),   // expires
+                 DateTime.Now.AddMinutes(60),   // expires
                  true,                          // persistent?
                  userRoles              // can be used to store roles
               );

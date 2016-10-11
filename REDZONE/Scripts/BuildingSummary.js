@@ -95,14 +95,21 @@ function toggleMenuOn() {
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
     
     if (hasReasons == "") {    //There are no Reasons assigned
-        $('#li_Add').show();
+        //Check if the current MPV Status Allows for reasons to be Added
+        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") { $('#li_Add').hide(); }
+        else { $('#li_Add').show(); }
         $('#li_View').hide();
         $('#li_Manage').hide();
     }
     else {  //There are reasons that can be viewed or managed
+        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {
+            $('#li_Manage').hide();
+        }
+        else {
+            $('#li_Manage').show();
+        }
         $('#li_Add').hide();
         $('#li_View').show();
-        $('#li_Manage').show();
     }
 
     if (actionPlanSts == "") { actionPlanSts = "Not Needed";}
