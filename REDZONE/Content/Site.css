@@ -86,7 +86,20 @@ textarea {
     background-color:#f75643;   /*Red Color: old:#ffbb8b   I:#ee7e7e   team:f75643*/        
 }
 
-        /*
+.bg-Primary-Gradient {
+    background-image: -webkit-linear-gradient(top, #337ab7 0%, #265a88 100%);
+    background-image:      -o-linear-gradient(top, #337ab7 0%, #265a88 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#337ab7), to(#265a88));
+    background-image:         linear-gradient(to bottom, #337ab7 0%, #265a88 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff265a88', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    background-repeat: repeat-x;
+    border-color: #245580;
+    color:white;
+    font-family:Arial !important;
+}
+  
+      /*
         const string COLOR_YELLOW = "yellow";
         const string COLOR_GREEN = "#33cc00";
         const string COLOR_LIGHT_GREEN = "#b3ff99";      
