@@ -30,6 +30,9 @@ namespace REDZONE.Controllers
             ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
             ViewBag.bapmId = bapmId;
 
+            //-------------------------------
+            //Populate Action Plan View Model
+            //-------------------------------
             //List of Action Plans starting with the current as first item of the list
             ActionPlanViewModel apViewModel = new ActionPlanViewModel();
             apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
@@ -40,7 +43,9 @@ namespace REDZONE.Controllers
             mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
             apViewModel.reasonList = mpReasonList;
 
+            //-----------
             //Model logic
+            //-----------
             if (apViewModel.actionPlanList.Count > 0)
             {
                 if (apViewModel.actionPlanList.First().apStatus == "Rejected")
@@ -87,9 +92,18 @@ namespace REDZONE.Controllers
         }
 
 
+        // GET: _priorActionPlans
+        public ActionResult _priorActionPlans(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
+        {
+            List<PriorActionPlan> priorAPList = new List<PriorActionPlan>();
+
+
+
+            return PartialView(priorAPList);
+        }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //POST: /ActionPlan/submitActionPlan
+            //POST: /ActionPlan/submitActionPlan
         [HttpPost]
         public string submitActionPlan(string raw_json)
         {

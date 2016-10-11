@@ -429,6 +429,7 @@
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
     <Content Include="Views\MPVreasons\_assignedNoStdrReason.cshtml" />
     <Content Include="Views\Building\_APSummary.cshtml" />
+    <Content Include="Views\ActionPlan\_priorActionPlans.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

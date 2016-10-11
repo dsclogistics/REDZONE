@@ -30,8 +30,18 @@ namespace REDZONE.Models
 
     public class PriorActionPlan
     {
-        public string priorMetricGoal { get; set; }
-        public string priorMetricValue { get; set; }
-        public List<MPReason> priorReasonList { get; set; }
+        public string apd_id { get; set; }
+        public string bapm_id { get; set; }
+        public string mtrc_period_val_id { get; set; }
+        public string priorAPMonth { get; set; }
+        public string priorAPYear { get; set; }
+        public string priorAPMetricGoalText { get; set; }
+        public string priorAPMetricValue { get; set; }
+        public string priorAPStatus { get; set; }
+        public string priorAPText { get; set; }
+        public string priorAPReviewText { get; set; }
+        public string submittedBy { get; set; }
+        public string approvedBy { get; set; }
+        public List<MPReason> priorAPReasonList { get; set; }
     }
 }

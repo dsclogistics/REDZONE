@@ -671,6 +671,36 @@ namespace REDZONE.AppCode
             }
         }
 
+        //Get list of action plans from prior months
+        public string getPriorActionPlans(string productname, string metric_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
+        {
+            string endPoint = "getpriorap";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = "{\"productname\":\"" + productname + "\", \"metric_period_id\":\"" + metric_period_id + "\", \"dsc_mtrc_lc_bldg_id\":\"" + dsc_mtrc_lc_bldg_id + "\", \"begmonth\":\"" + begmonth + "\", \"begyear\":\"" + begyear + "\", \"endmonth\":\"" + endmonth + "\", \"endyear\":\"" + endyear + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
         //Submit Existing/New Action Plan
         public string submitActionPlan(string raw_json)
         {
