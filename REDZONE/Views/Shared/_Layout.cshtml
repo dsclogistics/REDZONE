@@ -62,55 +62,55 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/RedzoneGlobal.js"></script>
     <script>
-    //If this is the first page display after Login, set the localStorage variables accordingly
-    function setServerPostback() {
-        resetUserInfo("", "", "", "", true);
-    }
-
-    function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
-        $.ajax({
-            @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
-            url: '/Account/resetUserInfo',
-            method: "POST",
-            cache: false,
-            dataType: "text",
-            data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Ajax Failed: " + errorThrown);
-                localStorage.clear();
-            }
-        }).done(function (d) {
-            //DO Something (Nothing for now)
-        });
-
-        //return localStorage.getItem("CAMid");
-    }
-
-    try {
-        if ("@pageFirstLoad" == "True") {
-            localStorage.setItem("first_name", "@userFName");
-            localStorage.setItem("last_name", "@userLName");
-            localStorage.setItem("username", "@userFullName");
-            localStorage.setItem("email", "@userEmail");
-            localStorage.setItem("firstLoad", "False");
-            localStorage.setItem("userRole", "@userRole");
-            resetUserInfo("", "", "", "", "", true);
-            //setServerPostback();
-            //alert("This is a first Page load");
+        //If this is the first page display after Login, set the localStorage variables accordingly
+        function setServerPostback() {
+            resetUserInfo("", "", "", "", true);
         }
-        else {
-            if ("@pageFirstLoad" == "") {
-                //Somehow the Session Variables were lost. reset Them!
-                //alert("Session Variables were somehow lost. Resetting...");
-                resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
-                $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
-            }
-            //alert("This is not the fist application page load.");
+
+        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
+            $.ajax({
+                @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
+                url: '/Account/resetUserInfo',
+                method: "POST",
+                cache: false,
+                dataType: "text",
+                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Ajax Failed: " + errorThrown);
+                    localStorage.clear();
+                }
+            }).done(function (d) {
+                //DO Something (Nothing for now)
+            });
+
+            //return localStorage.getItem("CAMid");
         }
-    }
-    catch(err) {
-        alert("An unhandled error exist: \n" + err);
-    }
+
+        try {
+            if ("@pageFirstLoad" == "True") {
+                localStorage.setItem("first_name", "@userFName");
+                localStorage.setItem("last_name", "@userLName");
+                localStorage.setItem("username", "@userFullName");
+                localStorage.setItem("email", "@userEmail");
+                localStorage.setItem("firstLoad", "False");
+                localStorage.setItem("userRole", "@userRole");
+                resetUserInfo("", "", "", "", "", true);
+                //setServerPostback();
+                //alert("This is a first Page load");
+            }
+            else {
+                if ("@pageFirstLoad" == "") {
+                    //Somehow the Session Variables were lost. reset Them!
+                    //alert("Session Variables were somehow lost. Resetting...");
+                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
+                    $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
+                }
+                //alert("This is not the fist application page load.");
+            }
+        }
+        catch(err) {
+            alert("An unhandled error exist: \n" + err);
+        }
 
     function showPopupForm(formTitle, formText, reload) {
         $(".popupFormTitle").html(formTitle);
@@ -129,13 +129,13 @@
         $('#msgForm').modal('show');
     }
 
-    $(document).ready(function () {
-        var userRole = localStorage.getItem("userRole");
-        $("#liUserRole").html("@userRole");
-        //$("#liUserRole").click(function () {
-        //    alert("Your Role is '" + $(this).html() + "'");
-        //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
-        //});
+        $(document).ready(function () {
+            var userRole = localStorage.getItem("userRole");
+            $("#liUserRole").html("@userRole");
+            //$("#liUserRole").click(function () {
+            //    alert("Your Role is '" + $(this).html() + "'");
+            //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
+            //});
         $('.cmdViewCred').click(function () {
             var userFirstName = localStorage.getItem("first_name");
             var userLastName = localStorage.getItem("last_name");
@@ -160,7 +160,7 @@
             }
         });
     });
-</script>    
+    </script>    
 </head>
 
 <body>

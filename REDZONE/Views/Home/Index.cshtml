@@ -11,7 +11,6 @@
     string btnClassScore = (ViewData["bntClassS"] == null) ? "" : ViewData["bntClassS"].ToString();
 }
 
-
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <style>
     .scroll-Table {
@@ -90,7 +89,7 @@
                                             <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
                                                 <input class="sortOrder" type="hidden" id="bSortOrder" value="@ViewData["bOrder"]" />
                                                 <span style="font-weight:bold"> @Model.month @Model.year</span>
-                                                <button type="button" class="btn btn-sm sortButton" aria-label="Sort by" style="padding:0px 2px; float:right; margin-right:8px">
+                                                <button type="button" class="btn btn-sm sortButton @btnClassBldng" aria-label="Sort by" style="padding:0px 2px; float:right; margin-right:8px">
                                                     <span class="glyphicon @ViewData["bIcon"]" aria-hidden="true"></span>
                                                 </button>
                                             </td>
@@ -105,7 +104,7 @@
                                                 @*class="buildingCol headerCol scoreCol"*@
                                                 <input class="sortOrder" type="hidden" id="sSortOrder" value="@ViewData["sOrder"]" />
                                                 Building Score
-                                                <button type="button" class="btn btn-sm sortButton" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                                <button type="button" class="btn btn-sm sortButton @btnClassScore" aria-label="Sort by" style="padding:0px 2px; float:right">
                                                     <span class="glyphicon @ViewData["sIcon"]" aria-hidden="true"></span>
                                                 </button>
                                             </td>
