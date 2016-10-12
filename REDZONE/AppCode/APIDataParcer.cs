@@ -1222,6 +1222,7 @@ namespace REDZONE.AppCode
                 foreach (var res in jPriorActionPlanList)
                 {
                     tempPriorActionPlan = new Models.PriorActionPlan();
+                    reasonList = new List<MPReason>();
 
                     tempPriorActionPlan.apd_id = (string)res["rz_apd_id"];
                     tempPriorActionPlan.bapm_id = (string)res["rz_bapm_id"];
