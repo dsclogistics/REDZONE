@@ -20,7 +20,7 @@
         <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
         <span style="font-weight:bold; color: black" id="buildingName"></span>&nbsp;-&nbsp;
         <span style="font-weight:bold; color: black" id="metricDate"></span>
-</div>
+    </div>
 
     <div class="panel-body padding2 ">
         @if (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "")
@@ -192,8 +192,9 @@
             }
 
             //SECTION: PRIOR MONTH ACTION PLANS
+            //Populated by ajax call to load partial view
             <div id="divPriorActionPlans">
-
+                
             </div>
         }
         else
