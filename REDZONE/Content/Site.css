@@ -35,6 +35,10 @@ textarea {
 .bordered-g {
     border:1px solid gray;
 }
+.bordered-round {
+    border:1px solid black;
+    border-radius:4px;
+}
 .cell-NoValue {
     background-color:#efeeee;
 }

@@ -7,13 +7,10 @@
 <link href="~/Content/BuildingSummary.css" rel="stylesheet" />
 <script src="~/Scripts/BuildingSummary.js"></script>
 <style>
-    .monthLabel {
-        display: table-cell;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        vertical-align: middle;
-        border-color: black;
-    }
+  .divCell {
+      display: table-cell;
+      vertical-align: middle;      
+  }
 </style>
 
 <div class="row" style="font-family:Arial; margin-top: 5px">
@@ -184,8 +181,14 @@
 
                 <div class="row" style="border:none; margin: 0; padding:0; ">
                     <table class="" style="border:none; width:100%;">
-                        <tr class="" style="border:none">
-                            <!-- ACTIONS ROW   -->
+                        <tr>
+                            <td class="" style="border:none; text-align:left">
+                                <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span><br />
+                                <span style="margin-left:5px;">Right Click any cell to Add/Edit Reasons and Action Plans</span>
+                            </td>
+                        </tr>
+                        @*<tr class="" style="border:none">
+                            
                             <td class="" style="width:25%; border:none; text-align:left">
                                 <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span><br />
                                 <span style="margin-left:5px;">Right Click any cell to Add/Edit Reasons and Action Plans</span>
@@ -197,7 +200,7 @@
                                     <br />
                                 </td>
 
-                                @*bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
                                     if (cellIsViewable)
                                     {
                                         <td class="" style="border:none; width:@Model.metricColWidth">
@@ -210,12 +213,12 @@
                                             }
                                         </td>
                                     }
-                                    colCounter++;*@
+                                    colCounter++;
                             }
                             <td class="" style="width:8.33%; border:none">
                                 <br />
                             </td>
-                        </tr> <!-- ACTIONS ROW END -->
+                        </tr>*@ <!-- ACTIONS ROW END -->
                     </table>
                 </div> <!-- End of Actions Row -->
                 @*<div class="row" style="border:none; margin: 0; padding:0; text-align:left">
@@ -237,36 +240,44 @@
                         REDZONE.Models.MeasuredCellEntity dscBldngHdr = Model.buildingHeadings.entityMetricCells[mIndex];
                         int monthReds = 0;
                         Int32.TryParse(@Model.buildingScoreRow.entityMetricCells[mIndex].metricValue, out monthReds);
-                        
-                        string collapseStatus = isFirstMonth?"in":"";
-                        
+
+                        string collapseStatus = isFirstMonth ? "in" : "";
+
                         if (monthReds > 2)
                         {
                             string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
-                            
-                            <div class="row" style="margin-top:7px">
-                                <div class="btn-toolbar">
-                                    <div class="bordered monthLabel" style="border-top-left-radius:4px; border-bottom-left-radius:4px; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                        <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-color:transparent; " data-toggle="collapse" data-target="#@monthDivId">
-                                            <span class="glyphicon glyphicon-chevron-right"></span>
-                                        </button>
-                                    </div>
-                                    <div class="bordered monthLabel" style="width:100%; background-color:#f7f7f7">
-                                        <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px ">
-                                            Action Plans for <span style="font-weight:bold">@dscBldngHdr.metricMonth @Model.year</span> 
-                                            @if (isFirstMonth)
-                                            {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px"> [Action Plans are required]</span>}
-                                        </span>
-                                        @if(Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open")){
-                                            <span style="float:right; color:red; margin-right:5px">* Metrics for this month have not been finalized</span>
-                                        }
-                                    </div>
-                                </div>
+
+                            <div class="row bordered-round " style="margin-top:7px; border-width:.143em; background-color:#f7f7f7; width:100%; margin:0; padding:0">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td style="width:65%; text-align: left; vertical-align:central">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-right:2px solid gray" data-toggle="collapse" data-target="#@monthDivId">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                                </button>
+                                                <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
+                                                    Action Plans for @dscBldngHdr.metricMonth @Model.year
+                                                    @if (isFirstMonth)
+                                                    {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
+                                                </span>
+                                                @*@if (isFirstMonth)
+                                                {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
+                                            </div>
+                                        </td>
+                                        <td style="width:35%">
+                                            @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
+                                            {
+                                                <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; font-weight:normal">Metrics for this month have not been finalized</span></span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
+                        
                             <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px;">
                                 <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
                                     <thead>
-                                        <tr style="font-weight:bold; background-color:lightgray">
+                                        <tr class="" style="font-weight:bold; background-color:lightgray;">
                                             <td style="width:30%">Metric</td>
                                             <td style="width:25%">Status</td>
                                             <td style="width:15%">Meeting Date</td>
