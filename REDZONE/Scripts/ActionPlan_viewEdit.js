@@ -52,13 +52,13 @@ $(document).ready(function () {
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
-        //alert(localStorage.getItem("backUrl"));
+        alert(localStorage.getItem("backUrl"));
         //alert("Metric Id is: " + getMPid());
         if (getMPid() == null) {
             alert("Session variables were lost");
         }
         else {
-            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid();
+            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + document.URL;
         }
     });
 
