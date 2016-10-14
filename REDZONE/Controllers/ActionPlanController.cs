@@ -99,8 +99,6 @@ namespace REDZONE.Controllers
 
             priorAPList = dataParcer.getPriorActionPlanList(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
 
-
-
             return PartialView(priorAPList);
         }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =

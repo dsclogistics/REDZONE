@@ -87,6 +87,29 @@ $(document).ready(function () {
         //alert(buildSaveActionPlanJSON());
         saveActionPlan();
     });
+
+    $('#divPriorActionPlans').on('click', '#btnPriorActionPlanDetail', function () {
+        var bapm_id = $(this).parent().find('#priorBapmId').val();
+        var mpv_id = $(this).parent().find('#priorMpvId').val();
+        var metricDate = $(this).parent().find('#priorApMonth').val() + " " + $(this).parent().find('#priorApYear').val();
+
+
+        //SCRATCH THIS. DOESN'T WORK.
+        //NEED TO HIDE THE CURRENT ACTION PLAN AND AJAX THE OLD ACTION PLAN WITH OPTION TO GO BACK TO CURRENT ACTION PLAN.
+
+        localStorage.setItem("bapmId", bapm_id);
+        //SAME localStorage.setItem("mpId", mpId);
+        //SAME localStorage.setItem("mpBuildingName", $("#buildingName").val());
+        //SAME localStorage.setItem("mpName", $cellClicked.parent().find("#mName").first().html());
+        localStorage.setItem("mpGoal", $(this).parent().find('#priorMpGoal').val());
+        localStorage.setItem("mpValueId", mpv_id);
+        localStorage.setItem("mpValue", $(this).parent().find('#priorMpValue').val());
+        localStorage.setItem("mpValueDisplayClass", "Closed-Missed");
+        localStorage.setItem("mpValueDate", metricDate);
+        //SAME localStorage.setItem("buildingId", $('#buildingId').val());
+
+        window.location.href = "/ActionPlan/viewEdit/?bapm_id=" + bapm_id + "&mtrc_period_val_id=" + mpv_id;
+    });
 });
 
 //------------------------------------------------------------------------------------------------
@@ -95,13 +118,37 @@ $(document).ready(function () {
 
 function displayPriorActionPlans() {
 
+    var res = getMetricDate().split(" ", 2);
+    var month = monthToInt(res[0]);
+    var year = res[1];
+    var begmonth
+    var begyear
+    var endmonth
+    var endyear
+
     var productname = "Red Zone";
-    var mtrc_period_id = "1";
-    var dsc_mtrc_lc_bldg_id = "40";
-    var begmonth = "1";
-    var begyear = "2016";
-    var endmonth = "9";
-    var endyear = "2016";
+    var mtrc_period_id = getMPid();
+    var dsc_mtrc_lc_bldg_id = getBuildingId();
+
+    if (month >= 1 && month <= 12) {
+        begmonth = month;
+        begyear = year - 1;
+    }
+    else {
+        begmonth = "";
+        begyear = "";
+    }
+
+    if (month == 1) {
+        endmonth = 12;
+        endyear = year - 1;
+    } else if (month >= 2 && month <= 12) {
+        endmonth = month - 1;
+        endyear = year;
+    } else {
+        endmonth = "";
+        endyear = "";
+    }
 
     var formData = {
         productname: productname,
@@ -128,6 +175,7 @@ function displayPriorActionPlans() {
         }
     }).done(function (d) {
         $("#divPriorActionPlans").html(d);
+        $(".mNameCell").text(getMetricName());
     });
 }
 
@@ -261,4 +309,42 @@ function submitAPReview(status) {
             alert("Error Saving the data!\n" + JSON.stringify(d));
         }
     });
+}
+
+//------------------------------------------------------------------------------------------------
+//---------------------------------------HELPER FUNCTIONS-----------------------------------------
+//------------------------------------------------------------------------------------------------
+function monthToInt(monthName)
+{
+    var monthNo = 0;
+    switch (monthName)
+    {
+        case "January": monthNo = 1;
+            break;
+        case "February": monthNo = 2;
+            break;
+        case "March": monthNo = 3;
+            break;
+        case "April": monthNo = 4;
+            break;
+        case "May": monthNo = 5;
+            break;
+        case "June": monthNo = 6;
+            break;
+        case "July": monthNo = 7;
+            break;
+        case "August": monthNo = 8;
+            break;
+        case "September": monthNo = 9;
+            break;
+        case "October": monthNo = 10;
+            break;
+        case "November": monthNo = 11;
+            break;
+        case "December": monthNo = 12;
+            break;
+        default:
+            break;
+    }
+return monthNo;
 }
