@@ -14,13 +14,19 @@
         background-color: #92c6cb !important;
     }
 </style>
-<h2>Reason Management</h2>
 
-<div class="panel panel-default">
 
+<div class="panel panel-default" style="margin-top:5px">
     <div class="panel-heading" style="padding:4px">
-        <div class="row " style="margin:0; margin-bottom:0px;">
-            <div class="col-sm-5" style="text-align:right; padding:0px 0px"><span class="form-control" style="font-weight:bold; max-width:190px; float:right; border-top-right-radius:0px; border-bottom-right-radius:0px; background-color: rgb(51,122,183); color:white; border-color:rgb(51,122,183)">Select a Metric Period: </span></div>
+        <div>
+            <span style="font-size:x-large; font-weight:bold; color:darkblue">Reason Management</span>
+        </div>
+        <div class="row " style="margin:0; margin-bottom:0px; margin-top:5px">
+            <div class="col-sm-5" style="text-align:right; padding:0px 0px">
+                <span class="form-control" style="font-weight:bold; max-width:190px; float:right; border-top-right-radius:0px; border-bottom-right-radius:0px; background-color: rgb(51,122,183); color:white; border-color:rgb(51,122,183)">
+                    Select a Metric Period: 
+                </span>
+            </div>
             <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
         </div>
     </div>
@@ -184,7 +190,7 @@
 
         else
         {
-            <div class="row" id="divReasonList" style="border:4px double black; margin: 20px 0px; padding:30px; border-radius:7px">
+            <div class="row" id="divReasonList" style="border:2px solid black; margin: 20px 0px; padding:30px; border-radius:7px">
                 <span style="color:blue; font-weight:bold;">SELECT A VALUE FROM THE DROPDOWN</span>
             </div>
         }
