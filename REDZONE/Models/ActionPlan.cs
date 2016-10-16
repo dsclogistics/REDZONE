@@ -33,6 +33,8 @@ namespace REDZONE.Models
         public string apd_id { get; set; }
         public string bapm_id { get; set; }
         public string mtrc_period_val_id { get; set; }
+        public string mtrc_period_id { get; set; }
+        public string dsc_mtrc_lc_bldg_id { get; set; }
         public string priorAPMonth { get; set; }
         public string priorAPYear { get; set; }
         public string priorAPMetricGoalText { get; set; }
@@ -44,4 +46,5 @@ namespace REDZONE.Models
         public string approvedBy { get; set; }
         public List<MPReason> priorAPReasonList { get; set; }
     }
+
 }

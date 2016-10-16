@@ -1171,8 +1171,10 @@ namespace REDZONE.AppCode
 
                 apViewModel.bapm_id = (string)parsed_result["rz_bapm_id"];
                 apViewModel.bapmStatus = (string)parsed_result["rz_bapm_status"];
+                apViewModel.mpv_id = (string)parsed_result["mtrc_period_val_id"];
                 if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";
                 if (String.IsNullOrEmpty(apViewModel.bapmStatus)) apViewModel.bapmStatus = "";
+                if (String.IsNullOrEmpty(apViewModel.mpv_id)) apViewModel.mpv_id = "0";
 
                 JArray jReasonList = (JArray)parsed_result["details"];
                 foreach (var res in jReasonList)
@@ -1227,6 +1229,8 @@ namespace REDZONE.AppCode
                     tempPriorActionPlan.apd_id = (string)res["rz_apd_id"];
                     tempPriorActionPlan.bapm_id = (string)res["rz_bapm_id"];
                     tempPriorActionPlan.mtrc_period_val_id = (string)res["mtrc_period_val_id"];
+                    tempPriorActionPlan.mtrc_period_id = (string)res["mtrc_period_id"];
+                    tempPriorActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
                     tempPriorActionPlan.priorAPMonth = intToMonth((int)res["month"]);
                     tempPriorActionPlan.priorAPYear = (string)res["year"];
                     tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];

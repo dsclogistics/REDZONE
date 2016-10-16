@@ -14,8 +14,8 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     $("#metricName").html(getMetricName());
     $("#buildingName").html(getBuildingName());
-    $("#metricDate").html(getMetricDate());
-    displayPriorActionPlans();
+    //$("#metricDate").html(getMetricDate());
+    //displayPriorActionPlans();
 
     //-----------------------------------------------------------------------------------------------
     //------------------------------------------BEHAVIOR---------------------------------------------
@@ -37,18 +37,18 @@ $(document).ready(function () {
     //-------------------------------------------ACTIONS---------------------------------------------
     //-----------------------------------------------------------------------------------------------
     $('.btn-toolbar').on('click', '.btn', function (e) {
-        var $target = $(this).parentsUntil('btn-toolbar').next();
+        var $target = $(this).parentsUntil('btn-toolbar').next('.collapse');
         //alert($target.attr("aria-expanded"));
         $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
         $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
     })
 
-    $('#divPriorActionPlans').on('click', '.btn', function (e) {
-        var $target = $(this).parentsUntil('btn-toolbar').next();
-        //alert($target.attr("aria-expanded"));
-        $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
-        $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
-    })
+    //$('#divPriorActionPlans').on('click', '.btn', function (e) {
+    //    var $target = $(this).parentsUntil('btn-toolbar').next();
+    //    //alert($target.attr("aria-expanded"));
+    //    $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+    //    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    //})
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
@@ -91,24 +91,11 @@ $(document).ready(function () {
     $('#divPriorActionPlans').on('click', '#btnPriorActionPlanDetail', function () {
         var bapm_id = $(this).parent().find('#priorBapmId').val();
         var mpv_id = $(this).parent().find('#priorMpvId').val();
+        var mp_id = $(this).parent().find('#priorMpId').val();
+        var bldg_id = $(this).parent().find('#priorBldgId').val();
         var metricDate = $(this).parent().find('#priorApMonth').val() + " " + $(this).parent().find('#priorApYear').val();
 
-
-        //SCRATCH THIS. DOESN'T WORK.
-        //NEED TO HIDE THE CURRENT ACTION PLAN AND AJAX THE OLD ACTION PLAN WITH OPTION TO GO BACK TO CURRENT ACTION PLAN.
-
-        localStorage.setItem("bapmId", bapm_id);
-        //SAME localStorage.setItem("mpId", mpId);
-        //SAME localStorage.setItem("mpBuildingName", $("#buildingName").val());
-        //SAME localStorage.setItem("mpName", $cellClicked.parent().find("#mName").first().html());
-        localStorage.setItem("mpGoal", $(this).parent().find('#priorMpGoal').val());
-        localStorage.setItem("mpValueId", mpv_id);
-        localStorage.setItem("mpValue", $(this).parent().find('#priorMpValue').val());
-        localStorage.setItem("mpValueDisplayClass", "Closed-Missed");
-        localStorage.setItem("mpValueDate", metricDate);
-        //SAME localStorage.setItem("buildingId", $('#buildingId').val());
-
-        window.location.href = "/ActionPlan/viewEdit/?bapm_id=" + bapm_id + "&mtrc_period_val_id=" + mpv_id;
+        window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id +"&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
     });
 });
 
