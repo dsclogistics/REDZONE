@@ -60,6 +60,8 @@ namespace REDZONE.Controllers
 
             recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
+            ViewBag.metricDate = "";
+
             foreach(PriorActionPlan priorAP in recentAPList)
             {
                 if(bapmId.ToString() == priorAP.bapm_id)

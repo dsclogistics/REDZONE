@@ -321,10 +321,13 @@ function menuItemListener(link) {
         var errorMessage = "";
 
         if (bapmId == null || bapmId == "") { errorMessage = "The Action Plan for Metric Id can't be resolved.\n"; }
-        if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
+        //if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
         if (errorMessage != "") { alert(errorMessage); }
         else {
-            window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + bapmId + "&mtrc_period_val_id=" + mpvId; //+ "&returnUrl=" + backUrl;
+            //window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + bapmId + "&mtrc_period_val_id=" + mpvId; //+ "&returnUrl=" + backUrl;
+            window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + bapmId;
+            // + $('#buildingId').val()
+            //
             // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
         }
         //alert("Back URL is: " + backUrl);
@@ -371,6 +374,7 @@ function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMPvalue() { return localStorage.getItem("mpValue"); }
 function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
+function getBuildingId() { return localStorage.getItem("buildingId"); }
 function resetMetricValueVariables() {
     localStorage.setItem("mpId", "");
     localStorage.setItem("mpBuildingName", "");
@@ -380,6 +384,7 @@ function resetMetricValueVariables() {
     localStorage.setItem("mpValue", "");
     localStorage.setItem("mpValueDisplayClass", "");
     localStorage.setItem("mpValueDate", "");
+    localStorage.setItem("buildingId", "");
 }
 
 //$('#APhistory').on('click', '.btn', function (e) {

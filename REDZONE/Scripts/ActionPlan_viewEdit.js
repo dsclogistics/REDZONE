@@ -14,6 +14,9 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     $("#metricName").html(getMetricName());
     $("#buildingName").html(getBuildingName());
+    $(".mNameCell").html(getMetricName());
+    alert($("#metricDate").text);
+    if ($("#metricDate").text = "") { $("#metricDate").html(getMetricDate()); }
     //$("#metricDate").html(getMetricDate());
     //displayPriorActionPlans();
 
@@ -43,16 +46,9 @@ $(document).ready(function () {
         $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
     })
 
-    //$('#divPriorActionPlans').on('click', '.btn', function (e) {
-    //    var $target = $(this).parentsUntil('btn-toolbar').next();
-    //    //alert($target.attr("aria-expanded"));
-    //    $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
-    //    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
-    //})
-
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
-        alert(localStorage.getItem("backUrl"));
+        //alert(localStorage.getItem("backUrl"));
         //alert("Metric Id is: " + getMPid());
         if (getMPid() == null) {
             alert("Session variables were lost");
@@ -191,7 +187,7 @@ function buildSubmitActionPlanJSON() {
 
 function submitActionPlan() {
     var payload = buildSubmitActionPlanJSON();
-    alert(payload);
+    //alert(payload);
 
     $.ajax({
         url: '/ActionPlan/submitActionPlan',
