@@ -20,6 +20,21 @@ namespace REDZONE.Controllers
         //private ApplicationSignInManager _signInManager;
         //private ApplicationUserManager _userManager;
 
+        //GET: /Account/getLoginToken
+        [AllowAnonymous]
+        [HttpGet]
+        public string getLoginToken()
+        {
+            //This controller will generate a random Login Token that the client browser can use to encrypt credentials and login
+            string encryptToken = "TEST";  //Change routine to ran=domly generate a 16 character token
+            Session["loginToken"] = encryptToken;
+            return encryptToken;
+        }
+
+
+
+
+
         //
         // GET: /Account/Login
         [AllowAnonymous]

@@ -33,7 +33,6 @@ function init() {
     clickListener();
     keyupListener();
 }
-
 function elementRightClicked(e, className) {
     var el = e.srcElement || e.target;
 
@@ -49,7 +48,6 @@ function elementRightClicked(e, className) {
     }
     return false;
 }
-
 function contextListener() {
     document.addEventListener("contextmenu", function (e) {
         taskItemInContext = elementRightClicked(e, taskItemClassName);
@@ -61,7 +59,7 @@ function contextListener() {
 
             //alert("Id clicked is: " + $cellClicked.find('.mvCell').first().prop("id"));  //test only
 
-            //If there was already another cell cellected, Unselect and reset it it before selecting the new one
+            //If there was already another cell cellected, Unselect and reset it before selecting the new one
             if ($('#cellIdSelected').val() != "") {
                 $($('#cellIdSelected').val()).find(".mvCell").first().removeClass("cellSelected");
             }
@@ -85,7 +83,6 @@ function contextListener() {
         }
     });
 }
-
 function toggleMenuOn() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //There is logic still missing to introduce the Authorization Validation to hide Show Menu Options//////////
@@ -164,7 +161,6 @@ function toggleMenuOn() {
         //alert("Id clicked is: " + $($('#cellIdSelected').val()).find('.mvCell').first().prop("id"));  //test only
     }
 }
-
 function toggleMenuOff() {
     if (menuState !== 0) {
         menuState = 0;
@@ -178,7 +174,6 @@ function toggleMenuOff() {
         $('#cellIdSelected').val(""); //Set indicator to Indicate there is no selected cell anymore
     }
 }
-
 function clickListener() {
     document.addEventListener("click", function (e) {
         var clickeElIsLink = elementRightClicked(e, contextMenuLinkClassName);
@@ -195,7 +190,6 @@ function clickListener() {
         }
     });
 }
-
 function keyupListener() {
     window.onkeyup = function (e) {
         if (e.keyCode === 27) {
@@ -260,14 +254,12 @@ function positionMenu(e) {
         menu.style.top = clickCoordsY + "px";
     }
 }
-
 //This function can turn the menu off when browser window is being resized
 function resizeListener() {
     window.onresize = function (e) {
         toggleMenuOff();
     };
 }
-
 function menuItemListener(link) {
     // A valid selection was clicked from the context pop up menu
     //convert jscript object clicked into jQuery Object (For ease of data retrieval)
@@ -334,7 +326,6 @@ function menuItemListener(link) {
     }
 }
 //======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
-
 function cacheMetricValueVariables($cellClicked) {
     //alert("Inside caching method for Cell Id: " + $cellClicked.prop("id"));
     var mpId = $cellClicked.find("#mpId").first().val();
@@ -398,6 +389,14 @@ $('#btnActionsRequired').click(function () {
     showPopupForm("SCORE REQUIRED ACTIONS", scoreActionContent, "N");
 });
 
+$(".collapse").on('shown.bs.collapse', function () {
+    $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly Expanded Section
+});
+
+
+//$(".collapse").on('hidden.bs.collapse', function () {
+//    alert('The collapsible content is now hidden.');
+//});
 
 //    //Populate all the month history Info
 //    //Parameters to pass:  "id" (Metric Period Value Id) 

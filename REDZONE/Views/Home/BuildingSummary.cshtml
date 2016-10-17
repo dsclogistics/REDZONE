@@ -5,6 +5,8 @@
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <link href="~/Content/BuildingSummary.css" rel="stylesheet" />
+<script src="~/Scripts/aes.js"></script>
+<script src="~/Scripts/aes-ctr.js"></script>
 <script src="~/Scripts/BuildingSummary.js"></script>
 <style>
   .divCell {
@@ -152,7 +154,7 @@
                             <td class="buildingCol " style="width:16.66%; padding:0; padding-top:4px">
                                 @*@Model.buildingScoreRow.rowName*@
                                 <span style="margin-top:10px; padding-top:10px">Building Score</span>
-                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:0px; " title="Show Actions Required by Building Score">
+                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:0px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score">
                                     <span class="glyphicon glyphicon-question-sign" style="font-size:large;"></span>
                                 </button>
                             </td><!-- Metric Name Column -->
@@ -247,61 +249,62 @@
                         {
                             string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
 
-                            <div class="row bordered-round " style="margin-top:7px; border-width:.143em; background-color:#f7f7f7; width:100%; margin:0; padding:0">
-                                <table style="width:100%;">
-                                    <tr>
-                                        <td style="width:65%; text-align: left; vertical-align:central">
-                                            <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-right:2px solid gray" data-toggle="collapse" data-target="#@monthDivId">
-                                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                                </button>
-                                                <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
-                                                    Action Plans for @dscBldngHdr.metricMonth @Model.year
-                                                    @if (isFirstMonth)
-                                                    {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
-                                                </span>
-                                                @*@if (isFirstMonth)
-                                                {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
-                                            </div>
-                                        </td>
-                                        <td style="width:35%">
-                                            @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
-                                            {
-                                                <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; font-weight:normal">Metrics for this month have not been finalized</span></span>
-                                            }
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px;">
-                                <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
-                                    <thead>
-                                        <tr class="" style="font-weight:bold; background-color:lightgray;">
-                                            <td style="width:30%">Metric</td>
-                                            <td style="width:25%">Status</td>
-                                            <td style="width:15%">Meeting Date</td>
-                                            <td style="width:15%">Meeting Owner</td>
-                                            <td style="width:15%">Last Update</td>
+                            <div class="row" style="margin:0; padding:0; margin-bottom:7px;">
+                                <div class="row bordered-round " style="margin-top:7px; border-width:.143em; background-color:#f7f7f7; width:100%; margin:0; padding:0">
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="width:65%; text-align: left; vertical-align:central">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-right:2px solid gray" data-toggle="collapse" data-target="#@monthDivId">
+                                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                                    </button>
+                                                    <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
+                                                        Action Plans for @dscBldngHdr.metricMonth @Model.year
+                                                        @if (isFirstMonth)
+                                                        {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
+                                                    </span>
+                                                    @*@if (isFirstMonth)
+                            {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
+                                                </div>
+                                            </td>
+                                            <td style="width:35%">
+                                                @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
+                                                {
+                                                    <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; font-weight:normal">Metrics for this month have not been finalized</span></span>
+                                                }
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var buildingRow in Model.metricRows)
-                                        {
-                                            //if (@buildingRow.entityMetricCells[mIndex].rz_bapm_status == "Approved")
-                                            if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
+                                    </table>
+                                </div>
+                                <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px;">
+                                    <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
+                                        <thead>
+                                            <tr class="" style="font-weight:bold; background-color:lightgray;">
+                                                <td style="width:30%">Metric</td>
+                                                <td style="width:25%">Status</td>
+                                                <td style="width:15%">Meeting Date</td>
+                                                <td style="width:15%">Meeting Owner</td>
+                                                <td style="width:15%">Last Update</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var buildingRow in Model.metricRows)
                                             {
-                                                <tr>
-                                                    <td style="width:30%; font-weight:bold">@buildingRow.rowName</td>
-                                                    <td style="width:25%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
-                                                    <td style="width:15%">TBD</td>
-                                                    <td style="width:15%">@buildingRow.rowOwner</td>
-                                                    <td style="width:15%">@buildingRow.entityMetricCells[mIndex].metricLastUpdt</td>
-                                                </tr>
+                                                //if (@buildingRow.entityMetricCells[mIndex].rz_bapm_status == "Approved")
+                                                if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
+                                                {
+                                                    <tr>
+                                                        <td style="width:30%; font-weight:bold">@buildingRow.rowName</td>
+                                                        <td style="width:25%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
+                                                        <td style="width:15%">TBD</td>
+                                                        <td style="width:15%">@buildingRow.rowOwner</td>
+                                                        <td style="width:15%">@buildingRow.entityMetricCells[mIndex].metricLastUpdt</td>
+                                                    </tr>
+                                                }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             isFirstMonth = false;
                         }
@@ -309,7 +312,6 @@
                     }
                 </div>
                 <br />
-                
                 
  <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
                 @*<div class="row" style="margin:10px 0px;">
@@ -387,6 +389,8 @@
         </div> <!-- END OF PANEL BODY -->
     </div><!-- END OF PANEL -->
 </div> <!-- ROW END -->
+
+
 
 
 <!--  ************************************* START OF RIGHT CLICK CONTEXT MENU **************************************** -->

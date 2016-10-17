@@ -84,6 +84,10 @@
 } /* </magic> */
 
 .cellSelected {
-    border:3px double blue;
-   
+    /*border:3px solid blue;*/
+    outline: none;
+    border: 1px solid #0264b2;
+    /*border-width:2px;
+    border-color: #0264b2;*/  /*#9ecaed*/
+    box-shadow: 0 0 10px #1597ff;
 }
