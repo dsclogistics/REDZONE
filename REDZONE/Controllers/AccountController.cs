@@ -33,8 +33,12 @@ namespace REDZONE.Controllers
             //test comment
         }
 
-
-
+        // --------------------------------------------------------------------------------------
+        //New TEST for merging because Alex did not believe me (jk) so I had to create these changes
+        //as new comments and they can just be ignored.
+        //TEST
+        //TEST
+        // --------------------------------------------------------------------------------------
 
 
         //
