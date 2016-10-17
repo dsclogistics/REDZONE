@@ -1,3 +1,17 @@
 ﻿function submitEncry() {
-    alert('Submitting form');
+    //alert('Submitting form');
+    //TEST
+    //TEST
+    //TEST
+    ///TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
+    //TEST
 }
