@@ -8,6 +8,7 @@ function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMPvalue() { return localStorage.getItem("mpValue"); }
 function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
+function getBuildingId() { return localStorage.getItem("buildingId"); }
 function resetMetricValueVariables() {
     localStorage.setItem("mpId", "");
     localStorage.setItem("mpBuildingName", "");
@@ -17,6 +18,7 @@ function resetMetricValueVariables() {
     localStorage.setItem("mpValue", "");
     localStorage.setItem("mpValueDisplayClass", "");
     localStorage.setItem("mpValueDate", "");
+    localStorage.setItem("buildingId", "");
 }
 function rsList_ItemChangeId(rsId_toRemove, idAction) {
     //Actions can be "show" or "hide" //Do not remove Reason Item, just set it's display property to "hidden"
@@ -254,7 +256,9 @@ $(document).ready(function () {
     });
     $('#btnBeginAction').click(function () {        
         //showAlert("New Action Plan Actions are not enabled yet<br\>Check again later.");
-        window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + localStorage.getItem("bapmId") + "&mtrc_period_val_id=" + getMPvalueId(); //+ "&returnUrl=" + backUrl;
+        //alert("/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + localStorage.getItem("bapmId"));
+        //window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + localStorage.getItem("bapmId") + "&mtrc_period_val_id=" + getMPvalueId(); //+ "&returnUrl=" + backUrl;
+        window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + localStorage.getItem("bapmId");
     });
 
     $('.stdrCheckBox').change(function () {

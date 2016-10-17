@@ -444,10 +444,11 @@
     <Content Include="Views\ReasonMgmt\_RsnDetail.cshtml" />
     <Content Include="Views\MPVreasons\Assigment.cshtml" />
     <Content Include="Views\MPVreasons\viewReasons.cshtml" />
-    <Content Include="Views\ActionPlan\viewEdit.cshtml" />
+    <Content Include="Views\ActionPlan\viewEdit2.cshtml" />
     <Content Include="Views\MPVreasons\_assignedNoStdrReason.cshtml" />
     <Content Include="Views\Building\_APSummary.cshtml" />
     <Content Include="Views\ActionPlan\_priorActionPlans.cshtml" />
+    <Content Include="Views\ActionPlan\viewEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
