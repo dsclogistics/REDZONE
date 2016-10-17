@@ -29,6 +29,7 @@ namespace REDZONE.Controllers
             string encryptToken = "TEST";  //Change routine to ran=domly generate a 16 character token
             Session["loginToken"] = encryptToken;
             return encryptToken;
+            //This is a test I am using to show how a conflict can be resolved
             //test comment
         }
 
