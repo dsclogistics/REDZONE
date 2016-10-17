@@ -23,6 +23,8 @@ namespace REDZONE.Controllers
 
             // The "id" received as a parameter is the Building Action Plan Metric id ('bapm_id'). We will pass that to the API to get the action plan detail data.
             int bapmId = bapm_id ?? 0;
+            int intBldgId = bldg_id ?? 0;
+            int intMpId = mp_id ?? 0;
             string productName = "Red Zone";
 
             ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
@@ -41,7 +43,8 @@ namespace REDZONE.Controllers
 
             //Add List of Reasons 
             //-------------------
-            int mpv_id = Int32.Parse(apViewModel.mpv_id);
+            int mpv_id = 0;
+            Int32.TryParse(apViewModel.mpv_id, out mpv_id);
             List<MPReason> mpReasonList = new List<MPReason>();
 
             mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpv_id.ToString());
@@ -51,8 +54,8 @@ namespace REDZONE.Controllers
             //Add List of Recent Action Plans
             //-------------------------------
             List<PriorActionPlan> recentAPList = new List<PriorActionPlan>();
-            string mpId = mp_id.ToString() ?? "0";
-            string bldgId = bldg_id.ToString() ?? "0";
+            string mpId = intMpId.ToString();
+            string bldgId = intBldgId.ToString();
             string begmonth = DateTime.Now.Month.ToString();
             string begyear = (DateTime.Now.Year - 1).ToString();
             string endmonth = begmonth;
@@ -60,13 +63,11 @@ namespace REDZONE.Controllers
 
             recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
-            ViewBag.metricDate = "";
-
             foreach(PriorActionPlan priorAP in recentAPList)
             {
                 if(bapmId.ToString() == priorAP.bapm_id)
                 {
-                    ViewBag.metricDate = priorAP.priorAPMonth + " " + priorAP.priorAPYear;
+                    //ViewBag.metricDate = priorAP.priorAPMonth + " " + priorAP.priorAPYear;
                     recentAPList.Remove(priorAP);
                     break;
                 }
@@ -118,6 +119,7 @@ namespace REDZONE.Controllers
                 newActionPlan.actionPlanAction = "";
                 newActionPlan.reviewerComments = "";
                 apViewModel.actionPlanList.Add(newActionPlan);
+                apViewModel.bapmStatus = "";
             }
 
             return View(apViewModel);

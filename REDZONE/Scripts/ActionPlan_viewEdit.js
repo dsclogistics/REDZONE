@@ -7,16 +7,18 @@ function getBuildingId() { return localStorage.getItem("buildingId"); }
 function getMetricName() { return localStorage.getItem("mpName"); }
 function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
+function getBapmId() { return localStorage.getItem("bapmId") }
 
 $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     //-----------------------------------------Initialize--------------------------------------------
     //-----------------------------------------------------------------------------------------------
-    $("#metricName").html(getMetricName());
-    $("#buildingName").html(getBuildingName());
-    $(".mNameCell").html(getMetricName());
-    alert($("#metricDate").text);
-    if ($("#metricDate").text = "") { $("#metricDate").html(getMetricDate()); }
+    //$("#metricName").html(getMetricName());
+    //$("#buildingName").html(getBuildingName());
+    //$(".mNameCell").html(getMetricName());
+    if ($("#bapmId").val() == getBapmId()) {
+        $("#btnBackToCurrentAP").hide();
+    }
     //$("#metricDate").html(getMetricDate());
     //displayPriorActionPlans();
 
@@ -45,6 +47,15 @@ $(document).ready(function () {
         $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
         $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
     })
+
+    $('#divBackToCurrentAP').on('click', '#btnBackToCurrentAP', function () {
+        if (getMPid() == null) {
+            alert("Session variables were lost");
+        } else {
+            //alert(getBapmId());
+            window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + getBapmId();
+        }
+    });
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
@@ -91,6 +102,7 @@ $(document).ready(function () {
         var bldg_id = $(this).parent().find('#priorBldgId').val();
         var metricDate = $(this).parent().find('#priorApMonth').val() + " " + $(this).parent().find('#priorApYear').val();
 
+        //alert(getBapmId());
         window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id +"&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
     });
 });

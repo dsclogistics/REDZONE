@@ -317,6 +317,7 @@ function menuItemListener(link) {
         window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
     }
     else if (contextMenuOption == "ViewAP" || contextMenuOption == "ContinueAP") {
+        localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
         var bapmId = $cellClicked.find('#bapm_id').val();
         var errorMessage = "";
 
