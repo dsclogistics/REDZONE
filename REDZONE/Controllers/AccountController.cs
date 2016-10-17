@@ -25,23 +25,13 @@ namespace REDZONE.Controllers
         //GET: /Account/getLoginToken
         [AllowAnonymous]
         [HttpGet]
-        public string getLoginToken()
+        public string getIV()
         {
-            //This controller will generate a random Login Token that the client browser can use to encrypt credentials and login
-            string encryptToken = "TEST";  //Change routine to ran=domly generate a 16 character token
+            //This controller will generate a random IV (initialization Vector) that the client browser can use to encrypt credentials and login using AES encryption
+            string encryptToken = System.Web.Security.Membership.GeneratePassword(16, 3);
             Session["loginToken"] = encryptToken;
             return encryptToken;
-            //This is a test I am using to show how a conflict can be resolved
-            //test comment
         }
-
-        // --------------------------------------------------------------------------------------
-        //New TEST for merging because Alex did not believe me (jk) so I had to create these changes
-        //as new comments and they can just be ignored.
-        //TEST
-        //TEST
-        // --------------------------------------------------------------------------------------
-
 
         //
         // GET: /Account/Login
