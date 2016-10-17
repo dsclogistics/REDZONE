@@ -8,8 +8,6 @@ namespace REDZONE.Controllers
 {
     public class BuildingController : Controller
     {
-        //Unrelated test changes merge
-
         //// GET: Building
         //public ActionResult Index()
         //{
