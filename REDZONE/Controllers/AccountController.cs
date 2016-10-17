@@ -20,6 +20,8 @@ namespace REDZONE.Controllers
         //private ApplicationSignInManager _signInManager;
         //private ApplicationUserManager _userManager;
 
+        //Unrelated test changes merge
+
         //GET: /Account/getLoginToken
         [AllowAnonymous]
         [HttpGet]
