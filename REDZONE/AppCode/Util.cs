@@ -290,6 +290,7 @@ namespace REDZONE.AppCode
                 case "WHITE_TRACEY":
                 case "BOUGHEY_CHRISTOPHER":        //Chris.Boughey@dsc-logistics.com
                 case "REED_DARRELL":               //darrell.reed@dsc-logistics.com
+                case "Froseth_Erick":
                 case "KRUEGER_JENNIFER":           //jennifer.krueger@dsc-logistics.com
                     appUserRoles = "ADMIN;REVIEWER";
                     break;

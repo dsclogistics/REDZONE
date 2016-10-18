@@ -115,6 +115,21 @@ namespace REDZONE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
+            //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
+            string decryptToken = Session["loginToken"].ToString();
+            Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
+            //Session["loginToken"] = null;
+            try
+            {  //try to decrypt the password
+                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(loginModel.Password, decryptToken);
+                if (loginModel.Password.Equals("keyError"))
+                {
+                    ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
+                }
+            }
+            catch (Exception ex) { ModelState.AddModelError("", "ERROR: " + ex.Message); }
+
+
             if (!ModelState.IsValid) { return View(loginModel); }
 
             FormsAuthentication.SignOut();
@@ -124,7 +139,6 @@ namespace REDZONE.Controllers
             Session.Remove("last_name");
             Session.Remove("email");
             Session.Remove("userRole");
-
 
             try {
                 //Model State is Valid. Check Password
