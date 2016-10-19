@@ -1,0 +1,75 @@
+﻿@model REDZONE.Models.dscUser
+
+@{
+    ViewBag.Title = "userInfo";
+    string userStatusColor = Model.isValidUser? "blue" : "red";
+}
+
+<br />
+<div>
+    Select User Id to Display:
+    <input id="txtUserId" type="text" />
+    <input id="btnGetUserInfo" type="button" value="Get Info" />
+</div>
+<br />
+@if (Model.isValidUser)
+{
+    <div style="text-align:center; color:@userStatusColor">
+        @Model.userStatusMsg for user '@Model.fullName'
+    </div>
+    <br />
+    <div style="border:3px double black; padding:15px; border-radius:7px">
+        @Model.getUserJsonData()
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER ROLES</div>
+            @if (Model.roles.Count() > 0)
+            {
+                foreach (REDZONE.Models.userRole ur in Model.roles) {
+                    <div style="text-align:left">
+                        <span style="color:darkgreen">[@ur.appProduct]</span>
+                        <span style="font-weight:bold">@ur.roleName</span>
+                        @if (!String.IsNullOrEmpty(ur.metrics)) {
+                            <span>(For: @ur.metrics)</span>
+                        }
+                    </div>
+                }
+            }
+            else { 
+            <div style="color:red">There are no Roles defined for this user</div>
+            }
+        </div>
+        <div class="col-xs-6">
+            <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER BUILDINGS</div>
+            @if (Model.buildings.Count() > 0)
+            {
+                foreach (REDZONE.Models.building ub in Model.buildings)
+                {
+                    <div>
+                        @ub.buildingName
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="color:red">There are no Buildings Assigned to this user</div>
+            }
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#btnGetUserInfo').click(function () {
+            var userSSO = $('#txtUserId').val();
+            if (userSSO == "") {
+                alert("User Id is required.");
+            }
+            else {
+                window.location.href = "/Account/UserInfo/?userSSO=" + userSSO;
+            }
+        });
+    });
+</script>

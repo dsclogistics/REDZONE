@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using REDZONE.AppCode;
 
 namespace REDZONE.Controllers
 {
@@ -200,7 +201,7 @@ namespace REDZONE.Controllers
         }
 
         //--------------------------------------------------------------------------------------------------------------\\
-        // GET: /Account/LogOff
+        // POST: /Account/LogOff
         [HttpPost]
         public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, bool turnOff)
         {
@@ -223,6 +224,21 @@ namespace REDZONE.Controllers
             }
         }
         //--------------------------------------------------------------------------------------------------------------\\
+
+        //--------------------------------------------------------------------------------------------------------------\\
+        // GET: /Account/UserInfo
+        [HttpGet]
+        public ActionResult userInfo(string userSSO="")
+        {
+            DataRetrieval api = new DataRetrieval();
+            dscUser xUser = new dscUser(userSSO);            
+            List<string> roleList = xUser.getUserRolesList();
+            string uRoles = xUser.getUserRoles();
+            //ViewBag.rzUserData = String.IsNullOrEmpty(userSSO)? "" : xUser.getUserJsonData();
+            return View(xUser);
+        }
+        //--------------------------------------------------------------------------------------------------------------\\
+
 
         #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)

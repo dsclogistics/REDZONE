@@ -198,6 +198,7 @@
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MPVreasonsController.cs" />
     <Compile Include="Models\ActionPlanViewModel.cs" />
+    <Compile Include="Models\dscUser.cs" />
     <Compile Include="ModelViews\dropDownItem.cs" />
     <Compile Include="ModelViews\NonStdrReasonViewModel.cs" />
     <Compile Include="Controllers\ReasonMgmtController.cs" />
@@ -451,6 +452,7 @@
     <Content Include="Views\Building\_APSummary.cshtml" />
     <Content Include="Views\ActionPlan\_priorActionPlans.cshtml" />
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
+    <Content Include="Views\Account\userInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
