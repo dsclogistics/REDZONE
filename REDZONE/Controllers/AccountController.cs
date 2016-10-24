@@ -34,10 +34,6 @@ namespace REDZONE.Controllers
 
         //
         // GET: /Account/Login
-        //TEST
-        //test
-        //TeSt
-        //testt
         [AllowAnonymous]
         [HttpGet]
         public ActionResult Login(string returnUrl)

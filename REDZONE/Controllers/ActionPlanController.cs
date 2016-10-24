@@ -11,10 +11,6 @@ namespace REDZONE.Controllers
 {
     public class ActionPlanController : Controller
     {
-        //TEST
-        //test
-        //TeSt
-        //testt
 
         private DataRetrieval api = new DataRetrieval();
         private APIDataParcer dataParcer = new APIDataParcer();
