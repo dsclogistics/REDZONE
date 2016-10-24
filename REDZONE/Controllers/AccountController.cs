@@ -29,24 +29,10 @@ namespace REDZONE.Controllers
             string encryptToken = "TEST";  //Change routine to ran=domly generate a 16 character token
             Session["loginToken"] = encryptToken;
             return encryptToken;
-            //This is a test I am using to show how a conflict can be resolved
-            //test comment
         }
-
-        // --------------------------------------------------------------------------------------
-        //New TEST for merging because Alex did not believe me (jk) so I had to create these changes
-        //as new comments and they can just be ignored.
-        //TEST
-        //TEST
-        // --------------------------------------------------------------------------------------
-
 
         //
         // GET: /Account/Login
-        //TEST
-        //test
-        //TeSt
-        //testt
         [AllowAnonymous]
         [HttpGet]
         public ActionResult Login(string returnUrl)
