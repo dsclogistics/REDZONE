@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using REDZONE.AppCode;
 
 namespace REDZONE.Controllers
 {
@@ -23,10 +24,10 @@ namespace REDZONE.Controllers
         //GET: /Account/getLoginToken
         [AllowAnonymous]
         [HttpGet]
-        public string getLoginToken()
+        public string getIV()
         {
-            //This controller will generate a random Login Token that the client browser can use to encrypt credentials and login
-            string encryptToken = "TEST";  //Change routine to ran=domly generate a 16 character token
+            //This controller will generate a random IV (initialization Vector) that the client browser can use to encrypt credentials and login using AES encryption
+            string encryptToken = System.Web.Security.Membership.GeneratePassword(16, 3);
             Session["loginToken"] = encryptToken;
             return encryptToken;
         }
@@ -111,6 +112,21 @@ namespace REDZONE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
+            //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
+            string decryptToken = Session["loginToken"].ToString();
+            Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
+            //Session["loginToken"] = null;
+            try
+            {  //try to decrypt the password
+                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(loginModel.Password, decryptToken);
+                if (loginModel.Password.Equals("keyError"))
+                {
+                    ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
+                }
+            }
+            catch (Exception ex) { ModelState.AddModelError("", "ERROR: " + ex.Message); }
+
+
             if (!ModelState.IsValid) { return View(loginModel); }
 
             FormsAuthentication.SignOut();
@@ -120,7 +136,6 @@ namespace REDZONE.Controllers
             Session.Remove("last_name");
             Session.Remove("email");
             Session.Remove("userRole");
-
 
             try {
                 //Model State is Valid. Check Password
@@ -182,7 +197,7 @@ namespace REDZONE.Controllers
         }
 
         //--------------------------------------------------------------------------------------------------------------\\
-        // GET: /Account/LogOff
+        // POST: /Account/LogOff
         [HttpPost]
         public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, bool turnOff)
         {
@@ -205,6 +220,21 @@ namespace REDZONE.Controllers
             }
         }
         //--------------------------------------------------------------------------------------------------------------\\
+
+        //--------------------------------------------------------------------------------------------------------------\\
+        // GET: /Account/UserInfo
+        [HttpGet]
+        public ActionResult userInfo(string userSSO="")
+        {
+            DataRetrieval api = new DataRetrieval();
+            dscUser xUser = new dscUser(userSSO);            
+            List<string> roleList = xUser.getUserRolesList();
+            string uRoles = xUser.getUserRoles();
+            //ViewBag.rzUserData = String.IsNullOrEmpty(userSSO)? "" : xUser.getUserJsonData();
+            return View(xUser);
+        }
+        //--------------------------------------------------------------------------------------------------------------\\
+
 
         #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)

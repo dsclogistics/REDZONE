@@ -14,6 +14,41 @@ namespace REDZONE.AppCode
     {
         //private DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
         private string api_url = AppCode.Util.getAPIurl();
+        
+        //*******************************************************************************************
+        //***************************    API HELPER FUNCTION   **************************************
+        //** Just pass an endpoint and a payload to post and this helper will fetch the JSON data  **
+        //*******************************************************************************************
+        public string executeAPI(string endPoint, string payload = "")
+        {
+            //If the Payload Parameter is empty we assume the API call is a GET, else it's a POST
+            WebRequest request = WebRequest.Create(api_url + endPoint);        //Using Parameter passed
+            request.Method = String.IsNullOrEmpty(payload)?"GET" : "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = payload;                                    //Using Parameter passed
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+        //***********************************************************************************
+
 
         public string getMetricname(string productName, string tptName)
         {
@@ -101,7 +136,6 @@ namespace REDZONE.AppCode
                 return "ERROR: " + e.Message;
             }
         }
-
         public string saveRZMetric(string raw_json)
         {
             string endPoint = "metricperiodsave";
@@ -180,134 +214,153 @@ namespace REDZONE.AppCode
                 return JsonString;
             }
         }
-
         public string getExecSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear, string buildingID)
         {
             // {"productname":"Red Zone", "tptname":"Month","mtrcid":3,"calmonth":"June","calyear":2016}
             string endPoint = "summary";
-            WebRequest request = WebRequest.Create(api_url + endPoint);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
-                                     "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\"" + buildingID + "\"}";
-            Byte[] bytes = encoding.GetBytes(parsedContent);
-            string JsonString = String.Empty;
-            try
-            {
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(bytes, 0, bytes.Length);
-                newStream.Close();
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                    return JsonString;
-                }
-            }
-            catch (Exception e)
-            {
-                return "ERROR: " + e.Message;
-            }
+            string payload = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
+                              "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\"" + buildingID + "\"}";
+
+            return executeAPI(endPoint, payload);
+            //WebRequest request = WebRequest.Create(api_url + endPoint);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
+            //                         "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\"" + buildingID + "\"}";
+            //Byte[] bytes = encoding.GetBytes(parsedContent);
+            //string JsonString = String.Empty;
+            //try
+            //{
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //        return JsonString;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return "ERROR: " + e.Message;
+            //}
         }
         public string getBuildingSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear, string buildingID)
         {
             // {"productname":"Red Zone", "tptname":"Month","mtrcid":3,"calmonth":"June","calyear":2016}
             string endPoint = "buildingsummary";
-            WebRequest request = WebRequest.Create(api_url + endPoint);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
+            string payload = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
                                      "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\"" + buildingID + "\"}";
-            Byte[] bytes = encoding.GetBytes(parsedContent);
-            string JsonString = String.Empty;
-            try
-            {
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(bytes, 0, bytes.Length);
-                newStream.Close();
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                    return JsonString;
-                }
-            }
-            catch (Exception e)
-            {
-                return "ERROR: " + e.Message;
-            }
+            return executeAPI(endPoint, payload);
+
+
+            //WebRequest request = WebRequest.Create(api_url + endPoint);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrcid\":\"" + mtrcid +
+            //                         "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\",\"dsc_mtrc_lc_bldg_id\":\"" + buildingID + "\"}";
+            //Byte[] bytes = encoding.GetBytes(parsedContent);
+            //string JsonString = String.Empty;
+            //try
+            //{
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //        return JsonString;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return "ERROR: " + e.Message;
+            //}
         }
         public string getMetricSummary(string productName, string tptName, string mtrcid, string calyear)
         {
 
             string endPoint = "metricsummary";
-            WebRequest request = WebRequest.Create(api_url + endPoint);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            // {"productname":"Red Zone", "tptname":"Month","calyear":2016 , "mtrc_id":"3"  }
-            string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
+            string payload = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
                                      "\",\"calyear\":\"" + calyear + "\"}";
-            Byte[] bytes = encoding.GetBytes(parsedContent);
-            string JsonString = String.Empty;
-            try
-            {
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(bytes, 0, bytes.Length);
-                newStream.Close();
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                    return JsonString;
-                }
-            }
-            catch (Exception e)
-            {
-                return "ERROR: " + e.Message;
-            }
-        }
+            return executeAPI(endPoint, payload);
 
+
+
+            //WebRequest request = WebRequest.Create(api_url + endPoint);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //// {"productname":"Red Zone", "tptname":"Month","calyear":2016 , "mtrc_id":"3"  }
+            //string parsedContent = "{\"productname\":\"" + productName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
+            //                         "\",\"calyear\":\"" + calyear + "\"}";
+            //Byte[] bytes = encoding.GetBytes(parsedContent);
+            //string JsonString = String.Empty;
+            //try
+            //{
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //        return JsonString;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return "ERROR: " + e.Message;
+            //}
+        }
         public string reloadMetricValues(string packageName, string tptName, string mtrcid, string calmonth, string calyear)
         {
             // {"packagename":"volume", "tptname":"Month", "calmonth":"July", "calyear":2016,"mtrc_id": "6" }
             string endPoint = "autouploadmetric";
-            WebRequest request = WebRequest.Create(api_url + endPoint);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string parsedContent = "{\"packagename\":\"" + packageName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
-                                     "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\"}";
-            Byte[] bytes = encoding.GetBytes(parsedContent);
-            string JsonString = String.Empty;
-            try
-            {
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(bytes, 0, bytes.Length);
-                newStream.Close();
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                    return JsonString;
-                }
-            }
-            catch (Exception e)
-            {
-                return "ERROR: " + e.Message;
-            }
+            string payload = "{\"packagename\":\"" + packageName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
+                             "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\"}";
+            return executeAPI(endPoint, payload);
+
+
+            //WebRequest request = WebRequest.Create(api_url + endPoint);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //string parsedContent = "{\"packagename\":\"" + packageName + "\",\"tptname\":\"" + tptName + "\",\"mtrc_id\":\"" + mtrcid +
+            //                         "\",\"calmonth\":\"" + calmonth + "\",\"calyear\":\"" + calyear + "\"}";
+            //Byte[] bytes = encoding.GetBytes(parsedContent);
+            //string JsonString = String.Empty;
+            //try
+            //{
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //        return JsonString;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return "ERROR: " + e.Message;
+            //}
         }
         //--------------------------------------------------------------------------------------------------------
         //Json Data Retrieval for Metric Period Reasons
         public string getMetricPeriodReasons(string metricPeriodId)
         {
             string endPoint = "reasons";
+
             WebRequest request = WebRequest.Create(api_url + endPoint);
             request.Method = "POST";
             request.ContentType = "application/json";
@@ -333,7 +386,6 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
-
         //--------------------------------------------------------------------------------------------------------
         public string getAssignedMetricPeriodReasons(string mtrc_period_val_id)
         {
@@ -422,7 +474,6 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
-
 
         //Update Reason
         public string updateMPReason(string raw_json)
@@ -548,6 +599,7 @@ namespace REDZONE.AppCode
 
         public string addUpdateMPVReasons(string jsonPayload)
         {
+
             // This function saves or Updates Metric Period Value Reason Codes (FRom json parameter) into the Database
             // The jSon Payload determines the action. If "mpvr_id" field is found then that Id will get UPdated. 
             // If the "mpvr_id" is missing it will be considered a new mpvreason record to ADD
@@ -790,5 +842,12 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
+
+        public string getMockUserRoles(string userSSO) {
+            string endPoint = "getmockuserroles";
+            string payload = "{\"sso_id\":\"" + userSSO + "\"}";
+            return executeAPI(endPoint, payload);            
+        }
+
     }
 }
