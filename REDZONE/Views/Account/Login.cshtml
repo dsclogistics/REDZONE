@@ -69,6 +69,7 @@
                                     Password:
                                 </label>
                                 <div class="col-sm-8">
+                                    <input type="hidden" id="uPWD" name="uPWD">
                                     @*<input type="password" class="form-control" id="pwd" placeholder="Enter password">*@
                                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", id = "pwd", placeholder = "Enter password" } })
                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
@@ -78,7 +79,7 @@
                                 @ViewBag.errorMessage
                             </div>
                             <br />
-                            <button id="btnLogin" type="button" @*type="submit"*@ class="btn btn-block" style="background-color:#8B0000; color:white">
+                            <button id="btnRZLogin" type="button" class="btn btn-block" style="background-color:#8B0000; color:white">
                                 <span class="glyphicon glyphicon-off"></span> Login
                             </button>
                         </form>

@@ -431,7 +431,7 @@ namespace REDZONE.AppCode
             List<MeasuredCellEntity> metricValueCellList = new List<MeasuredCellEntity>();  // RowCellColection
             bSummary.year = year;
             rowHeader.rowName = bSummary.bName;
-            rowTotals.rowName = "Goals Missed";
+            rowTotals.rowName = "Building Score";
             rowActions.rowName = "ACTIONS PLAN";
             string raw_data = String.Empty;
             try
@@ -537,8 +537,8 @@ namespace REDZONE.AppCode
                                                 catch { }
                                             }
 
-                                            if (tmp.isGoalMet == "N")
-                                            {
+                                            if (tmp.isGoalMet == "N" && !cellStatus.Equals("Open"))
+                                            {// Open Periods do not count towards the totals as they are not complete yet
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
                                                 rowTotals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = rowTotals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
                                                 row.redTotals++;

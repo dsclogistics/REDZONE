@@ -19,10 +19,10 @@ namespace REDZONE.AppCode
         //***************************    API HELPER FUNCTION   **************************************
         //** Just pass an endpoint and a payload to post and this helper will fetch the JSON data  **
         //*******************************************************************************************
-        public string executeAPI(string endPoint, string payload = "")
+        public static string executeAPI(string endPoint, string payload = "")
         {
             //If the Payload Parameter is empty we assume the API call is a GET, else it's a POST
-            WebRequest request = WebRequest.Create(api_url + endPoint);        //Using Parameter passed
+            WebRequest request = WebRequest.Create(AppCode.Util.getAPIurl() + endPoint);        //Using Parameter passed
             request.Method = String.IsNullOrEmpty(payload)?"GET" : "POST";
             request.ContentType = "application/json";
             ASCIIEncoding encoding = new ASCIIEncoding();
@@ -841,12 +841,6 @@ namespace REDZONE.AppCode
             {
                 return e.Message;
             }
-        }
-
-        public string getMockUserRoles(string userSSO) {
-            string endPoint = "getmockuserroles";
-            string payload = "{\"sso_id\":\"" + userSSO + "\"}";
-            return executeAPI(endPoint, payload);            
         }
 
     }

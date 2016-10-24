@@ -5,6 +5,7 @@
     string userStatusColor = Model.isValidUser? "blue" : "red";
 }
 
+
 <br />
 <div>
     Select User Id to Display:
@@ -12,14 +13,18 @@
     <input id="btnGetUserInfo" type="button" value="Get Info" />
 </div>
 <br />
-@if (Model.isValidUser)
-{
+@if (!String.IsNullOrEmpty(@Model.dbUserId))
+{ //There is a valid User Name
     <div style="text-align:center; color:@userStatusColor">
         @Model.userStatusMsg for user '@Model.fullName'
     </div>
+}
+
+@if (Model.isValidUser)
+{
     <br />
     <div style="border:3px double black; padding:15px; border-radius:7px">
-        @Model.getUserJsonData()
+        @Model.getJsonUserData()
     </div>
     <br />
     <div class="row">
@@ -28,8 +33,8 @@
             @if (Model.roles.Count() > 0)
             {
                 foreach (REDZONE.Models.userRole ur in Model.roles) {
-                    <div style="text-align:left">
-                        <span style="color:darkgreen">[@ur.appProduct]</span>
+                    <div style="text-align:left" title="@ur.roleDesc">
+                        <span class="" style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
                         <span style="font-weight:bold">@ur.roleName</span>
                         @if (!String.IsNullOrEmpty(ur.metrics)) {
                             <span>(For: @ur.metrics)</span>
@@ -59,6 +64,20 @@
         </div>
     </div>
 }
+@if (Session["userRole"] != null)
+{
+    <div>
+        User Session Roles are: @Session["userRole"].ToString()
+    </div>
+}
+
+<div style="text-align:left; width:80%">
+    <br /><br />
+    <div>LDAP Authentication Test</div>
+    <div>User Id: <input id="userId" type="text" /></div>
+    <div>User Pw: <input id="userPwd" type="text" /></div>
+    <div><button id="btnSubmit">AD Logon TEST</button></div>
+</div>
 
 <script>
     $(document).ready(function () {
@@ -68,8 +87,16 @@
                 alert("User Id is required.");
             }
             else {
-                window.location.href = "/Account/UserInfo/?userSSO=" + userSSO;
+                window.location.href = "/Account/userInquire/?userSSO=" + userSSO;
             }
         });
-    });
+
+        $('#btnSubmit').click(function () {
+            var ui = $('#userId').val();
+            var up = $('#userPwd').val();
+            window.location.href = "/Account/userInquire/?userSSO=" + ui + "^" + up;
+        });
+
+    }); // End of Document->Ready
+
 </script>

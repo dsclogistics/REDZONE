@@ -160,6 +160,39 @@ namespace REDZONE.AppCode
             return applicationAPIurl;
         }
         //-------------------------------------------------------------------------------------------------------------------------
+        public static List<string> getUserRolesList(string username) {
+            List<string> roleList = new List<string>();
+
+            switch (username.ToUpper())
+            {
+                // Set ADMIN Group Level
+                // Ed, John, Kevin G, Tracey White, Chris Boughey, Darrell, Jennifer Krueger, me, Giri, and all developers.
+                case "CHEN_ALEX":
+                case "ABDUGUEV_RASUL":
+                case "POGANY_KEVIN":
+                case "GOPAL_GIRI":
+                case "ZUISS_EDWARD":
+                case "OCALLAGHAN_JOHN":            //John.OCallaghan@dsc-logistics.com
+                case "GLYNN_KEVIN":                //kevin.glynn@dsc-logistics.com
+                case "WHITE_TRACEY":
+                case "BOUGHEY_CHRISTOPHER":        //Chris.Boughey@dsc-logistics.com
+                case "REED_DARRELL":               //darrell.reed@dsc-logistics.com
+                case "FROSETH_ERICK":
+                case "KRUEGER_JENNIFER":           //jennifer.krueger@dsc-logistics.com
+                    roleList.Add("ADMIN");
+                    roleList.Add("REVIEWER");
+                    break;
+                case "DELGADO_FELICIANO":
+                    roleList.Add("ADMIN");
+                    break;
+                default:
+                    roleList.Add("RZ_USER");
+                    break;
+            }
+
+            return roleList;
+        }
+
         public static string getUserRoles(string username)
         {
             //Get User Role from DB or from harcoded List

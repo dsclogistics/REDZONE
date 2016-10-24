@@ -1,0 +1,97 @@
+﻿@model REDZONE.Models.dscUser
+
+<div class="row" style="text-align:center; margin:0; padding-left:25px; padding-right:25px">
+    <div class="row" style="font-size:20px; color:blue; font-weight:bold; margin-bottom:15px">
+        <span id="titleName">@Html.DisplayFor(model => model.fullName)</span>
+    </div>
+    <div class="row" style="margin-bottom:3px">
+        <div class="col-xs-8">
+            <div class="input-group" style="margin-left:15px;">
+                <span class="input-group-addon" style="width:120px;">Email:</span>
+                <input type="text" class="form-control" readonly="readonly" value="@Html.DisplayFor(model => model.emailAddress)" style="width:450px">
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <span style="font-weight:bold; margin-right:5px">Valid User: </span>
+            @Html.DisplayFor(model => model.isValidUser)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="input-group" style="margin-left:15px;">
+                <span class="input-group-addon" style="width:120px;">User SSO:</span>
+                <input type="text" class="form-control" readonly="readonly" value="@Html.DisplayFor(model => model.SSO)" style="width:450px">
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <span>@Html.DisplayFor(model => model.userStatusMsg)</span>
+        </div>
+    </div>
+
+    <hr />
+    @if (Model.isValidUser)
+    {
+        <br />
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER ROLES</div>
+                @if (Model.roles.Count() > 0)
+                {
+                    foreach (REDZONE.Models.userRole ur in Model.roles)
+                    {
+                <div style="text-align:left; margin-left:10px;" title="@ur.roleDesc">
+                    <span class="" style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
+                    <span style="font-weight:bold">@ur.roleName</span>
+                    @if (!String.IsNullOrEmpty(ur.metrics))
+                            {
+                            <span>(For: @ur.metrics)</span>
+                            }
+                </div>
+                    }
+                }
+                else
+                {
+                <div style="color:red">There are no Roles defined for this user</div>
+                }
+            </div>
+            <div class="col-xs-6">
+                <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER BUILDINGS</div>
+                @if (Model.buildings.Count() > 0)
+                {
+                    foreach (REDZONE.Models.building ub in Model.buildings)
+                    {
+                <div>
+                    @ub.buildingName
+                </div>
+                    }
+                }
+                else
+                {
+                <div style="color:red">There are no Buildings Assigned to this user</div>
+                }
+            </div>
+        </div>
+        <br />
+        <br />
+        <div id="jSonData" style="border:3px double black; padding:15px; border-radius:7px; display:none">
+            @Model.getJsonUserData()
+        </div>
+
+    }
+
+</div>
+
+<br />
+@*<div>
+    Is Admin: @User.IsInRole("ADMIN")
+    <br />
+    Is Manager: @User.IsInRole("MANAGER")
+</div>*@
+
+<script>
+    $(document).ready(function () {
+        $('#titleName').click(function () {
+            $('#jSonData').toggle();
+        });
+    });
+</script>

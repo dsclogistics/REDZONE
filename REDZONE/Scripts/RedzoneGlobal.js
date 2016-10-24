@@ -4,9 +4,7 @@
 
 //================ USER AUTHENTICATION RELATED FUNCTIONS =============================
 var SESSION_EXP = 60;   // Define The Maximum Session Inactivity Timeout (In Minutes)
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 function getUsrAutToken() {
     $.ajax({
         //url: '@Url.Action("getNewCAMid", "cognosUtils")',
@@ -100,3 +98,93 @@ function usrLogOff() {
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
+
+//================= REDZONE APPLICATION WIDE RELATED JAVASCRIPT and FUNCTIONS =================================\
+//----- Javascript to Execute before any HTML Page is even rendered or displayed ------------------------------
+function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pId, pTurnOff) {
+    $.ajax({
+        //url: '@Url.Action("getNewCAMid", "cognosUtils")',
+        url: '/Account/resetUserInfo',
+        method: "POST",
+        cache: false,
+        dataType: "text",
+        data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, uId:pId, turnOff: pTurnOff },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Ajax Failed: " + errorThrown);
+            localStorage.clear();
+        }
+    }).done(function (d) {
+        //DO Something (Nothing for now)
+    });
+
+    //return localStorage.getItem("CAMid");
+}
+function showPopupForm(formTitle, formText, reload) {
+    $(".popupFormTitle").html(formTitle);
+    $("#popupFormBodyData").html(formText);
+    $('#popupForm').modal('show');
+    if (reload == 'Y') { $('#reloadPage').val('Y'); }
+}
+function showAlert(msg, msgStyle, reload) {
+    var msgClass = "alert-" + msgStyle;
+    if (reload == 'Y') { $('#reloadPage').val('Y'); }
+    if (msgStyle == null || msgStyle == "") { msgClass = ""; }
+    $("#msgFormBodyData").removeClass("alert-warning");
+    $("#msgFormBodyData").removeClass("alert-danger");
+    if (msgStyle) { $("#msgFormBodyData").addClass(msgClass); }
+    $("#msgFormBodyData").html(msg);
+    $('#msgForm').modal('show');
+}
+
+
+//----- Javascript to Execute only after the HTML Page has been fully rendered/displayed ----------------------
+$(document).ready(function () {
+    var userRole = localStorage.getItem("userRole");
+
+    $('#cmdViewCred').click(function () {
+        //Retrieve the User Data and display it in a popup Form
+        $.ajax({
+            url: '/Account/_UserInfo',
+            method: "GET",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            //data: formData,
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Failed to Retrieve User credentials from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (uData) {
+            showPopupForm('User Credential Information', uData);
+        });
+        //var userFirstName = localStorage.getItem("first_name");
+        //var userLastName = localStorage.getItem("last_name");
+        ////var userFullName = userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1) + ' ' + userLastName.charAt(0).toUpperCase() + userLastName.slice(1);
+        //var userFullName = userFirstName + ' ' + userLastName;
+
+        //var userInfo = '<div class="row" style="text-align: center"><h3>Credentials Report for:</h3></div><br /><br /><div class="row"><div class="col-xs-3 col-sm-offset-1">Name:</div><div class="col-xs-8">' +
+        //    userFullName + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Email</div><div class="col-xs-8">' +
+        //    localStorage.getItem("email") + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Role:</div><div class="col-xs-8">' +
+        //    userRole + '</div></div>';
+        //showPopupForm('User Credential Information', userInfo);
+    });
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    $('#popupForm').on("hidden.bs.modal", function () {
+        if ($('#reloadPage').val() == 'Y') {
+            $('#reloadPage').val('N');
+            location.reload();
+        }
+    });
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    $('#msgForm').on("hidden.bs.modal", function () {
+        if ($('#reloadPage').val() == 'Y') {
+            $('#reloadPage').val('N');
+            location.reload();
+        }
+    });
+
+});
+
+//============= END OF THE REDZONE APPLICATION WIDE RELATED JAVASCRIPT and FUNCTIONS ==========================/

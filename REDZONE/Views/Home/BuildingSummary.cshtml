@@ -111,7 +111,7 @@
                         {
                             colCounter = 0;
                             <tr class="buildingRow">
-                                <td class="buildingCol" style="width:16.66%">
+                                <td class="buildingCol" style="width:16.66%; font-weight:bold">
                                     <a href="@buildingRow.rowURL" id="mName" title="Metric Owner: @buildingRow.rowOwner">@buildingRow.rowName</a>
                                 </td> <!-- Metric Name Column -->
                                 <td class="buildingCol" style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold;">
@@ -124,7 +124,7 @@
                                     {
                                         string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
                                         string APstatusFlag = (buildingCell.rz_bapm_status != "") ? "*" : "";
-                                        <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="MPid=@buildingCell.mtrc_period_id MPvalId=@buildingCell.cellValueId @buildingCell.rz_bapm_status">
+                                        <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="Right Click any cell to Add/Edit Reasons and Action Plans [STS: @buildingCell.cellStatus - @buildingCell.rz_bapm_status]">
                                             <div class="@hasReasonsClass mvCell" style="margin:0; padding:4px; ">
                                                 <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
                                                 <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
@@ -185,8 +185,8 @@
                     <table class="" style="border:none; width:100%;">
                         <tr>
                             <td class="" style="border:none; text-align:left">
-                                <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span><br />
-                                <span style="margin-left:5px;">Right Click any cell to Add/Edit Reasons and Action Plans</span>
+                                <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span>
+                                <span style="margin-left:5px; float:right; margin-right:30px">Right Click any cell to Add/Edit Reasons and Action Plans</span>
                             </td>
                         </tr>
                         @*<tr class="" style="border:none">
@@ -243,6 +243,7 @@
                         Int32.TryParse(@Model.buildingScoreRow.entityMetricCells[mIndex].metricValue, out monthReds);
 
                         string collapseStatus = isFirstMonth ? "in" : "";
+                        string APglyphicon = isFirstMonth ? "glyphicon-chevron-down" : "glyphicon-chevron-right";
 
                         if (monthReds > 2)
                         {
@@ -255,7 +256,7 @@
                                             <td style="width:65%; text-align: left; vertical-align:central">
                                                 <div class="btn-group" role="group">
                                                     <button type="button" class="btn btn-default btn-group btnVieAP" style="margin-left:0px; border-right:2px solid gray" data-toggle="collapse" data-target="#@monthDivId">
-                                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                                        <span class="glyphicon @APglyphicon"></span>
                                                     </button>
                                                     <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
                                                         Action Plans for @dscBldngHdr.metricMonth @Model.year
@@ -263,19 +264,19 @@
                                                         {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
                                                     </span>
                                                     @*@if (isFirstMonth)
-                            {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
+                                                    {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
                                                 </div>
                                             </td>
                                             <td style="width:35%">
                                                 @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
                                                 {
-                                                    <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; font-weight:normal">Metrics for this month have not been finalized</span></span>
+                                                    <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; ">Metrics for this month have not been finalized</span></span>
                                                 }
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
-                                <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px;">
+                                <div id="@monthDivId" class="collapse @collapseStatus" style="margin-left:40px; margin-top:5px">
                                     <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
                                         <thead>
                                             <tr class="" style="font-weight:bold; background-color:lightgray;">

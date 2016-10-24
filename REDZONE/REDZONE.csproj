@@ -452,7 +452,8 @@
     <Content Include="Views\Building\_APSummary.cshtml" />
     <Content Include="Views\ActionPlan\_priorActionPlans.cshtml" />
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
-    <Content Include="Views\Account\userInfo.cshtml" />
+    <Content Include="Views\Account\userInquire.cshtml" />
+    <Content Include="Views\Account\_UserInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

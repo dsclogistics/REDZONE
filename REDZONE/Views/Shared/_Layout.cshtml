@@ -1,27 +1,13 @@
 ﻿@{
     // +++++++++++++++ THIS IS A DEVELOPMENT BRANCH to implement New Feaures for Reason ans reason assigment Management ++++++++++++++++++
     
-    // If this is the first time that this page is displayed (After Login)
-    // Save all the User Profile Info to Local Storage
-    
-    string pageFirstLoad = (Session["firstLoad"] == null) ? "" : Session["firstLoad"].ToString();  //This ensure we have a value and avoid page errors even is Session Variable is lost 
-    string userFName = "";
-    string userLName = "";
-    string userFullName = "";
-    string userEmail = "";
-    string userRole = "";
-    try
-    {
-        userFName = Session["first_name"].ToString();
-        userLName = Session["last_name"].ToString();
-        userFullName = Session["username"].ToString();
-        userEmail = Session["email"].ToString();
-        userRole = Session["userRole"].ToString();
-    }
-    catch
-    {
-        //Response.Redirect("~/Account/Login?returnUrl=\\Home\\Index");
-    }
+    string pageFirstLoad = (Session["firstLoad"] == null) ? "NULL" : Session["firstLoad"].ToString();  //This ensure we have a value and avoid page errors even is Session Variable is lost 
+    string userFName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString();
+    string userLName = (Session["last_name"] == null) ? "" : Session["last_name"].ToString();
+    string userSSO = (Session["userSSO"] == null) ? "" : Session["userSSO"].ToString();
+    string userEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
+    string userRole = (Session["userRole"] == null) ? "" : Session["userRole"].ToString();
+    string empId = (Session["emp_id"] == null) ? "" : Session["emp_id"].ToString();
 }
 <!DOCTYPE html>
 <html>
@@ -62,103 +48,38 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/RedzoneGlobal.js"></script>
     <script>
+        // Verify that the session variables exist and have not been lost. Reset Them on the server via ajax if needed!
+        if ("@pageFirstLoad" == "NULL") {
+
+            //alert("Session Variables were somehow lost. Resetting...");
+            resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("userSSO"), localStorage.getItem("email"), localStorage.getItem("userRole"), localStorage.getItem("empId"), false);
+            $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
+        }
+        //------- This code should execute one-time and one-time only after a successful Login --------
+        //------- Or whenever the Local Storage Variables are somehow lost ----------------------------
         //If this is the first page display after Login, set the localStorage variables accordingly
-        function setServerPostback() {
-            resetUserInfo("", "", "", "", true);
-        }
-
-        function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pTurnOff) {
-            $.ajax({
-                @*url: '@Url.Action("getNewCAMid", "cognosUtils")',*@
-                url: '/Account/resetUserInfo',
-                method: "POST",
-                cache: false,
-                dataType: "text",
-                data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, turnOff: pTurnOff },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Ajax Failed: " + errorThrown);
-                    localStorage.clear();
-                }
-            }).done(function (d) {
-                //DO Something (Nothing for now)
-            });
-
-            //return localStorage.getItem("CAMid");
-        }
-
         try {
-            if ("@pageFirstLoad" == "True") {
+            if ("@pageFirstLoad" == "True" || (localStorage.getItem("userSSO") == null) || (localStorage.getItem("userSSO") == "")) {
+                // -------- Set all the Local Storage Items --------
                 localStorage.setItem("first_name", "@userFName");
                 localStorage.setItem("last_name", "@userLName");
-                localStorage.setItem("username", "@userFullName");
+                localStorage.setItem("userSSO", "@userSSO");
                 localStorage.setItem("email", "@userEmail");
                 localStorage.setItem("firstLoad", "False");
                 localStorage.setItem("userRole", "@userRole");
-                resetUserInfo("", "", "", "", "", true);
+                localStorage.setItem("empId", "@empId");
+                resetUserInfo("", "", "", "", "", "", true);   //Turn the "first Load" Session Variable flag off at the server side via Ajax
                 //setServerPostback();
                 //alert("This is a first Page load");
-            }
-            else {
-                if ("@pageFirstLoad" == "") {
-                    //Somehow the Session Variables were lost. reset Them!
-                    //alert("Session Variables were somehow lost. Resetting...");
-                    resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("username"), localStorage.getItem("email"), localStorage.getItem("userRole"), false);
-                    $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
-                }
-                //alert("This is not the fist application page load.");
             }
         }
         catch(err) {
             alert("An unhandled error exist: \n" + err);
         }
 
-    function showPopupForm(formTitle, formText, reload) {
-        $(".popupFormTitle").html(formTitle);
-        $("#popupFormBodyData").html(formText);
-        $('#popupForm').modal('show');
-        if (reload == 'Y') {$('#reloadPage').val('Y'); }
-    }
-    function showAlert(msg, msgStyle, reload) {
-        var msgClass = "alert-" + msgStyle;
-        if (reload == 'Y') { $('#reloadPage').val('Y'); }
-        if (msgStyle == null || msgStyle == "") { msgClass = ""; }
-        $("#msgFormBodyData").removeClass("alert-warning");
-        $("#msgFormBodyData").removeClass("alert-danger");
-        if (msgStyle) { $("#msgFormBodyData").addClass(msgClass); }        
-        $("#msgFormBodyData").html(msg);
-        $('#msgForm').modal('show');
-    }
 
-        $(document).ready(function () {
-            var userRole = localStorage.getItem("userRole");
-            $("#liUserRole").html("@userRole");
-            //$("#liUserRole").click(function () {
-            //    alert("Your Role is '" + $(this).html() + "'");
-            //    alert("Your Role is '" + localStorage.getItem("userRole") + "'");
-            //});
-        $('.cmdViewCred').click(function () {
-            var userFirstName = localStorage.getItem("first_name");
-            var userLastName = localStorage.getItem("last_name");
-            var userFullName = userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1) + ' ' + userLastName.charAt(0).toUpperCase() + userLastName.slice(1);
+    $(document).ready(function () {
 
-            var userInfo = '<div class="row" style="text-align: center"><h3>Credentials Report for:</h3></div><br /><br /><div class="row"><div class="col-xs-3 col-sm-offset-1">Name:</div><div class="col-xs-8">' +
-                userFullName + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Email</div><div class="col-xs-8">' +
-                localStorage.getItem("email") + '</div></div><div class="row"><div class="col-xs-3 col-sm-offset-1">Role:</div><div class="col-xs-8">' +
-                userRole + '</div></div>';
-            showPopupForm('User Credential Information', userInfo);
-        });
-        $('#popupForm').on("hidden.bs.modal", function () {
-            if ($('#reloadPage').val() == 'Y') {
-                $('#reloadPage').val('N');
-                location.reload();
-            }
-        });
-        $('#msgForm').on("hidden.bs.modal", function () {
-            if ($('#reloadPage').val() == 'Y') {
-                $('#reloadPage').val('N');
-                location.reload();
-            }
-        });
     });
     </script>    
 </head>
@@ -167,10 +88,14 @@
 
     @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
     <div><input type="hidden" id="reloadPage" value="N" /></div>
-    @if (!Request.IsAuthenticated )
+    @if (!Request.IsAuthenticated)
     {
-        @RenderBody()
-        Html.Action("LogOff", "Account");
+        try
+        {
+            @RenderBody()
+            Html.Action("LogOff", "Account");
+        }
+        catch { }
     }
     else
     {
@@ -237,7 +162,7 @@
     </div>
 
     <div id="popupForm" class="modal fade" role="dialog">
-        <div class="modal-dialog puf" style="width:40%; min-width:400px">
+        <div class="modal-dialog puf" style="width:60%; min-width:400px">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header bg-Primary-Gradient" style="color:white; ">  @*background-color:#904545*@

@@ -26,15 +26,18 @@
             padding: CryptoJS.pad.Pkcs7
         });
 
-        var message = '<div style="text-align:center">The server you are trying to access has requested to encrypt your credential using a single-use encryption key:<div>' + iv +
-                      '</div></div><div><br />Submiting Encrypted Credentials:</div><div>' + ciphertext + '</div>';
-        var messagePlain = '\nThe server you are trying to access has requested to encrypt your credentials using a single-use encryption key:\n' + iv +
-                      '\n\n\nSubmiting Encrypted Credentials:\n' + ciphertext + '\n';
-        alert(messagePlain);
+        //var message = '<div style="text-align:center">The server you are trying to access has requested to encrypt your credential using a single-use encryption key:<div>' + iv +
+        //              '</div></div><div><br />Submiting Encrypted Credentials:</div><div>' + ciphertext + '</div>';
+        //var messagePlain = '\nThe server you are trying to access has requested to encrypt your credentials using a single-use encryption key:\n' + iv +
+        //              '\n\n\nSubmiting Encrypted Credentials:\n' + ciphertext + '\n';
+        //alert(messagePlain);
 
-        //alert("Your password has ben encrypted before submission:\nPassword: '" + ciphertext + "'\n was submitted.");
+        //alert("Your password has ben encrypted before submission:\nPassword: '" + ciphertext + "'\n will be submitted.");
         //alert('Encrypting Form...\nPassword: ' + $("#pwd").val() + " encrypted with token '" + iv + "' => #" + ciphertext + "#");
-        $('#pwd').val(ciphertext);
+        $('#pwd').val(Array($('#pwd').val().length + 1).join("X"));
+        //alert("New password is: " + $('#pwd').val());
+        $('#uPWD').val(ciphertext);
+        //alert("Hidden Field Value is: " + $('#uPWD').val());
         //If everything is OK, submit the form.
         //document.forms['myform'].submit();
         //document.forms[0].submit();
@@ -55,8 +58,9 @@ $(document).ready(function () {
         }        
     });
 
-    $('#btnLogin').click(function () {
+    $('#btnRZLogin').click(function () {
         //Submit the Login Credentials
+        $('#btnRZLogin').prop("disabled", true);
         submitEncry();
     });
 

@@ -114,54 +114,46 @@ namespace REDZONE.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
+        public ActionResult login(LoginViewModel loginModel, string uPWD, string ReturnUrl)
         {
+            //--------------------- Decryption and Input Validation Section ----------------------------------
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
             string decryptToken = Session["loginToken"].ToString();
             Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
             //Session["loginToken"] = null;
             try
             {  //try to decrypt the password
-                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(loginModel.Password, decryptToken);
+
+                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(uPWD, decryptToken);
                 if (loginModel.Password.Equals("keyError"))
                 {
                     ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
                 }
             }
             catch (Exception ex) { ModelState.AddModelError("", "ERROR: " + ex.Message); }
-
+            //-------- END of the Decryption and Input Validation Section ----------------------------------
 
             if (!ModelState.IsValid) { return View(loginModel); }
 
-            FormsAuthentication.SignOut();
-            Session.Remove("emp_id");    //Session["emp_id"] = null;
-            Session.Remove("role");      //Session["role"] = null;
+            // ----- Reset/Remove the Authorization Cookie and other related session variables if any -----
+            FormsAuthentication.SignOut();   
+            Session.Remove("emp_id");            //Session["emp_id"] = null;
+            Session.Remove("role");              //Session["role"] = null;
             Session.Remove("first_name");
             Session.Remove("last_name");
             Session.Remove("email");
             Session.Remove("userRole");
 
             try {
-                //Model State is Valid. Check Password
+                //Model State is Valid. Check Password                
                 if (isLogonValid(loginModel))
                 {  // Is password is Valid, set the Authorization cookie and redirect
                     // the user to the link it came from (Or the Home page is no return URL was specified)
 
-                    //JObject parsed_result = JObject.Parse(data_retrieval.getObserver(Session["first_name"].ToString(), Session["last_name"].ToString(), Session["email"].ToString()));
-                    //foreach (var res in parsed_result["resource"])
-                    //{
-                    //    Session.Add("emp_id", (string)res["dsc_observer_emp_id"]);
-                    //}
 
-                    
-                    ///---------------- SKIP Authorization Roles at the Loging part for Now ------------
-                    ////string uRoles = getUserRoles(loginModel.Username);
-                    //setUserRoles(loginModel.Username, new string[] { Session["roles"].ToString() });
-                    setUserRoles(loginModel.Username, new string[] { "ADMIN", "OTHER" });
-                    ///----------------------------------------------------------------------------------
+                    //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
+                    registerUser(loginModel.Username, new string[] { "ADMIN", "OTHER" });
 
-                    // Set the Authentication Encrypted Cookie
-                    //FormsAuthentication.SetAuthCookie(loginModel.Username, true);                   
 
                     //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
 
@@ -201,22 +193,37 @@ namespace REDZONE.Controllers
         }
 
         //--------------------------------------------------------------------------------------------------------------\\
-        // POST: /Account/LogOff
+        // POST: /Account/LogOff           (Called via ajax from the Client side)
         [HttpPost]
-        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, bool turnOff)
+        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, string uId, bool turnOff)
         {
             //This function will be trigger via Ajax from the client to reset all the User Info Session Variables if lost 
             try {
                 if (!turnOff)
                 {   //Only reset the Session Variables if the TurnOff flag is set to "False"
+                    //First check to make sure we have valid values to use, otherwise retrieve them from DB through API call
+                    if (String.IsNullOrEmpty(uId)) { 
+                       //All client Local Storage values are null or were erased somehow. Retrieve data from DB
+                        dscUser currentUser = new dscUser(User.Identity.Name);
+                        if (currentUser.isValidUser) {
+                            uFName = currentUser.FirstName;
+                            uLName = currentUser.LastName;
+                            uLoginName = currentUser.SSO;
+                            email = currentUser.emailAddress;
+                            uRole = currentUser.getUserRoles();
+                            uId = currentUser.dbUserId;
+                        }
+                    }
                     Session["first_name"] = uFName;
                     Session["last_name"] = uLName;
-                    Session["username"] = uLoginName;
+                    Session["userSSO"] = uLoginName;
+                    //Session["userSSO"] = User.Identity.Name;
                     Session["email"] = email;
                     Session["userRole"] = uRole;
+                    Session["emp_id"] = uId;
                 }
 
-                Session["firstLoad"] = "False";    //Reset it always
+                Session["firstLoad"] = "False";    //Always reset this flag
                 return "True";
             }
             catch {
@@ -228,18 +235,43 @@ namespace REDZONE.Controllers
         //--------------------------------------------------------------------------------------------------------------\\
         // GET: /Account/UserInfo
         [HttpGet]
-        public ActionResult userInfo(string userSSO="")
+        public ActionResult userInquire(string userSSO="")
         {
-            DataRetrieval api = new DataRetrieval();
-            dscUser xUser = new dscUser(userSSO);            
-            List<string> roleList = xUser.getUserRolesList();
-            string uRoles = xUser.getUserRoles();
+            dscUser appUser;
+            userSSO = userSSO.Trim();
+            if (String.IsNullOrEmpty(userSSO)) { 
+            //No User was defined. Create Empty User and redirect to the View
+                appUser = new dscUser();
+                return View(appUser);
+            }
+
+            //---------------- TEST SECTION FOR LDAP Signon Validation using encryption ---------------
+            if (userSSO.Contains("^")) { 
+            //This is AD Testing Data. Create a AD validation test used and return user to view
+                appUser = new dscUser();
+                string[] temp = userSSO.Split('^');
+                appUser.FirstName = temp[0];
+                appUser.LastName = temp[1];
+                appUser.userStatusMsg = "LDAP Authentication Test Message";
+                appUser.dbUserId = "999";
+                return View(appUser);
+            }
+            //----------- END of LDAP TEST Validation  ---------------
+
+            appUser = new dscUser(userSSO);
+            //string uRoles = appUser.getUserRoles();
+            //List<string> roleList = appUser.getUserRolesList();
             //ViewBag.rzUserData = String.IsNullOrEmpty(userSSO)? "" : xUser.getUserJsonData();
-            return View(xUser);
+            return View(appUser);
+        }
+        
+        [HttpGet]
+        public PartialViewResult _UserInfo()
+        { //This controller will display the current Logged On User Credential Information
+            dscUser appUser = new dscUser(User.Identity.Name);
+            return PartialView(appUser);
         }
         //--------------------------------------------------------------------------------------------------------------\\
-
-
         #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)
         //[HttpPost]
@@ -461,88 +493,108 @@ namespace REDZONE.Controllers
         //============= PRIVATE LOGIN HELPER METHODS ==================
         private bool isLogonValid(LoginViewModel loginModel)
         {
-            if ((loginModel.Username.Equals("delgado_feliciano") || loginModel.Username.Equals("abduguev_rasul")) && loginModel.Password.Equals("~~"))
+            dscUser logggedUser = new dscUser();
+            bool isDeveloper = false;
+            
+            //-------- Section to be Used during Development --------------------------------\
+            //Retrieve the User information for Developers
+            switch (loginModel.Username.ToUpper()+loginModel.Password) { 
+                case "DELGADO_FELICIANO~~":
+                case "ABDUGUEV_RASUL~~":
+                     isDeveloper= true;
+                     logggedUser = new dscUser(loginModel.Username.Trim());  //Retrieve all User Info
+                     logggedUser.isAuthenticated = true;
+                     break;
+                default: break;
+            }
+            //-------- END of Section to be Used during Development -------------------------/
+            
+            if (!isDeveloper) { logggedUser = new dscUser(loginModel.Username.Trim(), loginModel.Password.Trim()); }
+
+            if (logggedUser.isAuthenticated)
             {
-                if (loginModel.Username.Equals("delgado_feliciano"))
-                {
-                    Session.Add("first_name", "Feliciano");
-                    Session.Add("last_name", "Delgado");
-                    Session.Add("username", loginModel.Username);                    
-                    Session.Add("email", "feliciano.delgado@dsc-logistics.com");
-                    //string test = Session["first_name"].ToString() + Session["last_name"].ToString() + Session["email"].ToString();
-                }
-                else
-                {
-                    Session.Add("first_name", "Rasul");
-                    Session.Add("last_name", "Abduguev");
-                    Session.Add("username", loginModel.Username);
-                    Session.Add("email", "rasul.abduguev@dsc-logistics.com");
-                }
-                Session["emp_id"] = "12345";    //Temporarily to avoid auto-signoff
-                Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
-                Session["userRole"] = "ADMIN";
+                Session.Add("first_name", logggedUser.FirstName);
+                Session.Add("last_name", logggedUser.LastName);
+                Session.Add("username", logggedUser.fullName);
+                Session["userSSO"] = logggedUser.SSO;
+                Session["email"] = logggedUser.emailAddress;
+                Session["emp_id"] = logggedUser.dbUserId; 
+                Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
+                Session["userRole"] = logggedUser.getUserRoles();
                 return true;
             }
+            else {
+                ViewBag.errorMessage = logggedUser.userStatusMsg;
+                return false;
+            }
+            
 
-            string ldaurl = ConfigurationManager.AppSettings["LDAPURL"];
-            WebRequest request = WebRequest.Create(ldaurl);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string JsonString;
-            //string errorJsonString;
-            Byte[] bytes;
-            try
-            {
-                bytes = encoding.GetBytes(parsedContent);
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(bytes, 0, bytes.Length);
-                newStream.Close();
+            //string ldaurl = ConfigurationManager.AppSettings["LDAPURL"];
+            //WebRequest request = WebRequest.Create(ldaurl);
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //string JsonString;
+            ////string errorJsonString;
+            //Byte[] bytes;
+            //try
+            //{
+            //    bytes = encoding.GetBytes(parsedContent);
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();
 
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                }//end of using
-                JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
-                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<dynamic, dynamic>>(JsonString);
-                //use JsonObject to retrieve json data   
-                if (JsonObject["result"] == "SUCCESS")
-                {
-                    Session.Add("first_name", JsonObject["DSCAuthenticationSrv"]["first_name"]);
-                    Session.Add("last_name", JsonObject["DSCAuthenticationSrv"]["last_name"]);
-                    Session.Add("username", loginModel.Username);
-                    Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
-                    Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
-                    Session["userRole"] = REDZONE.AppCode.Util.getUserRoles(loginModel.Username); 
-                    //string role = (from r in db.OBS_ROLE
-                    //               join ur in db.OBS_USER_ROLE
-                    //               on r.obs_role_id equals ur.obs_role_id
-                    //               join ua in db.OBS_USER_AUTH
-                    //                on ur.obs_user_auth_id equals ua.obs_user_auth_id
-                    //               where ua.obs_user_auth_dsc_ad_name == loginModel.Username && r.obs_role_active_yn == "Y"
-                    //               && ua.obs_user_auth_active_yn == "Y" && ur.obs_user_role_eff_start_dt <= DateTime.Now && ur.obs_user_role_eff_end_dt > DateTime.Now
-                    //               select r.obs_role_name).FirstOrDefault();
-                    return true;  /// Authenticasion was sucessful!!
-                }
-                else
-                {
-                    ViewBag.errorMessage = JsonObject["message"];
-                    return false;
-                }
-            }//end of try
-            catch (Exception ex)
-            {
-                ViewBag.errorMessage = ex.Message;
-                return false;  // Failed to authenticate the User
-            }//end of catch
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //    }//end of using
+            //    JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+            //    dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<dynamic, dynamic>>(JsonString);
+            //    //use JsonObject to retrieve json data   
+            //    if (JsonObject["result"] == "SUCCESS")
+            //    {
+            //        Session.Add("first_name", JsonObject["DSCAuthenticationSrv"]["first_name"]);
+            //        Session.Add("last_name", JsonObject["DSCAuthenticationSrv"]["last_name"]);
+            //        Session.Add("username", loginModel.Username);
+            //        Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
+            //        Session["firstLoad"] = "True";  //To trigger localStorage logic when first logged in
+            //        Session["userRole"] = REDZONE.AppCode.Util.getUserRoles(loginModel.Username); 
+            //        //string role = (from r in db.OBS_ROLE
+            //        //               join ur in db.OBS_USER_ROLE
+            //        //               on r.obs_role_id equals ur.obs_role_id
+            //        //               join ua in db.OBS_USER_AUTH
+            //        //                on ur.obs_user_auth_id equals ua.obs_user_auth_id
+            //        //               where ua.obs_user_auth_dsc_ad_name == loginModel.Username && r.obs_role_active_yn == "Y"
+            //        //               && ua.obs_user_auth_active_yn == "Y" && ur.obs_user_role_eff_start_dt <= DateTime.Now && ur.obs_user_role_eff_end_dt > DateTime.Now
+            //        //               select r.obs_role_name).FirstOrDefault();
+            //        return true;  /// Authenticasion was sucessful!!
+            //    }
+            //    else
+            //    {
+            //        ViewBag.errorMessage = JsonObject["message"];
+            //        return false;
+            //    }
+            //}//end of try
+            //catch (Exception ex)
+            //{
+            //    ViewBag.errorMessage = ex.Message;
+            //    return false;  // Failed to authenticate the User
+            //}//end of catch
+
+
         }
 
-        private void setUserRoles(string userName, string[] roles)
+        //=========================================================================================================
+        private void registerUser(string userName, string[] roles)
         {
-            string userRoles = String.Join(";", roles);
+            // Set the Authentication Encrypted Cookie
+            //FormsAuthentication.SetAuthCookie(loginModel.Username, true);      //Simple Application User Registration without roles
+
+            string userRoles = String.Empty;         // String.Join(";", roles);
+            userRoles = (Session["userRole"] == null) ? String.Join(";", roles) : Session["userRole"].ToString();
 
             var authTicket = new FormsAuthenticationTicket(
                  1,                             // version
@@ -550,7 +602,7 @@ namespace REDZONE.Controllers
                  DateTime.Now,                  // created
                  DateTime.Now.AddMinutes(60),   // expires
                  true,                          // persistent?
-                 userRoles              // can be used to store roles
+                 userRoles              // User Data portion [can be used to store roles]
               );
 
             string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
