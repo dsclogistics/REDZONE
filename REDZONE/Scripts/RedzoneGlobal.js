@@ -64,11 +64,35 @@ function getUsrName() {
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
-function getUsrRole() {
+function getUserRoles() {
     //if (!isUsrTokenValid()) {
     //    return "";
     //}else
-    return localStorage.getItem("usrRole");
+    return localStorage.getItem("userRole");
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Use this function only after the validity of the token has been Stablised.
+function getUserBuildings() {
+    //if (!isUsrTokenValid()) {
+    //    return "";
+    //}else
+    return localStorage.getItem("userBuildings");
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Use this function only after the validity of the token has been Stablised.
+function hasRole(someRole) {
+    if (someRole == null || someRole == "") { return false; }
+    var roles = localStorage.getItem("userRole");
+    if (roles == null) { return false; }
+    return (roles.indexOf(someRole.toUpperCase()) !== -1);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Use this function only after the validity of the token has been Stablised.
+function hasBuilding(someBuilding) {
+    if (someBuilding == null || someBuilding == "") { return false; }
+    var buildingList = localStorage.getItem("userBuildings");
+    if (buildingList == null) { return false; }
+    return (buildingList.indexOf(someBuilding.toUpperCase()) !== -1);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
@@ -140,8 +164,6 @@ function showAlert(msg, msgStyle, reload) {
 
 //----- Javascript to Execute only after the HTML Page has been fully rendered/displayed ----------------------
 $(document).ready(function () {
-    var userRole = localStorage.getItem("userRole");
-
     $('#cmdViewCred').click(function () {
         //Retrieve the User Data and display it in a popup Form
         $.ajax({

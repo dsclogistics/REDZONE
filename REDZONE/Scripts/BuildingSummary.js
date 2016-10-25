@@ -35,7 +35,6 @@ function init() {
 }
 function elementRightClicked(e, className) {
     var el = e.srcElement || e.target;
-
     //alert("Right Click: (" + className + ")" + el.classList[0].toString());
     if (el.classList.contains(className)) {
         return el;
@@ -85,17 +84,21 @@ function contextListener() {
 }
 function toggleMenuOn() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //There is logic still missing to introduce the Authorization Validation to hide Show Menu Options//////////
-    //     Current Logic Only accounts for Metric Value Status                               ///////////////////
+    // There is logic still missing to introduce the Authorization Validation to hide Show Menu Options ////////
+    //            Current Logic Only accounts for Metric Value Status                               ////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var $cellSelected = $($('#cellIdSelected').val());
     var hasReasons = $cellSelected.find('#hasReasons').val();
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
-    
+
+
     if (hasReasons == "") {    //There are no Reasons assigned
         //Check if the current MPV Status Allows for reasons to be Added
-        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") { $('#li_Add').hide(); }
-        else { $('#li_Add').show(); }
+        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {$('#li_Add').hide();}
+        else { //Reasons can be added but only if you are an Admin, or approved building owner (RZ_AP_SUBMITTER)
+            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN")) { }
+            $('#li_Add').show();
+        }
         $('#li_View').hide();
         $('#li_Manage').hide();
     }
@@ -366,7 +369,8 @@ function getMPvalueId() { return localStorage.getItem("mpValueId"); }
 function getMPvalue() { return localStorage.getItem("mpValue"); }
 function getMPvalueDisplayClass() { return localStorage.getItem("mpValueDisplayClass"); }
 function getMetricDate() { return localStorage.getItem("mpValueDate"); }
-function getBuildingId() { return localStorage.getItem("buildingId"); }
+//function getBuildingId() { return localStorage.getItem("buildingId"); }
+function getBuildingId() { return $('#buildingId').val(); }
 function resetMetricValueVariables() {
     localStorage.setItem("mpId", "");
     localStorage.setItem("mpBuildingName", "");

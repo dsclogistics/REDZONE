@@ -7,6 +7,7 @@
     string userSSO = (Session["userSSO"] == null) ? "" : Session["userSSO"].ToString();
     string userEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
     string userRole = (Session["userRole"] == null) ? "" : Session["userRole"].ToString();
+    string userBuildings = (Session["userBuildings"] == null) ? "" : Session["userBuildings"].ToString();
     string empId = (Session["emp_id"] == null) ? "" : Session["emp_id"].ToString();
 }
 <!DOCTYPE html>
@@ -67,6 +68,7 @@
                 localStorage.setItem("email", "@userEmail");
                 localStorage.setItem("firstLoad", "False");
                 localStorage.setItem("userRole", "@userRole");
+                localStorage.setItem("userBuildings", "@userBuildings");
                 localStorage.setItem("empId", "@empId");
                 resetUserInfo("", "", "", "", "", "", true);   //Turn the "first Load" Session Variable flag off at the server side via Ajax
                 //setServerPostback();

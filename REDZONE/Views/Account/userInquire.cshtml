@@ -79,6 +79,18 @@
     <div><button id="btnSubmit">AD Logon TEST</button></div>
 </div>
 
+<div>
+    Check If I have this role:
+    <input type="text" id="txtRole" />
+    <input type="button" id="b1" value="Check Role"/>
+</div>
+<br />
+<div>
+    Check If I have this Building:
+    <input type="text" id="txtBuilding" />
+    <input type="button" id="b2" value="Check Building" />
+</div>
+
 <script>
     $(document).ready(function () {
         $('#btnGetUserInfo').click(function () {
@@ -95,6 +107,21 @@
             var ui = $('#userId').val();
             var up = $('#userPwd').val();
             window.location.href = "/Account/userInquire/?userSSO=" + ui + "^" + up;
+        });
+
+        $('#b1').click(function () {
+            //alert(hasRole("AdmiN"));
+            var roleToInspect = $('#txtRole').val().toUpperCase();
+            if (roleToInspect == "") { alert("Enter a valid Role."); }
+            else if (hasRole(roleToInspect)) { alert("Yes, you are an " + roleToInspect); }
+            else{ alert("NO! You are not an " + roleToInspect); }
+        });
+        $('#b2').click(function () {
+            var b = $('#txtBuilding').val().toUpperCase();  //User entered value
+            //alert("Current building List is: " + getUserBuildings());            
+            if (b == "") { alert("Enter a valid Building."); }
+            else if (hasBuilding(b) ) { alert("Yes, building '" + b + "' is assigned to you."); }
+            else { alert("NO, building '" + b + "' is NOT assigned to you."); }
         });
 
     }); // End of Document->Ready

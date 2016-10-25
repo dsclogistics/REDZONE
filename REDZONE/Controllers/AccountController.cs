@@ -139,6 +139,7 @@ namespace REDZONE.Controllers
             Session.Remove("last_name");
             Session.Remove("email");
             Session.Remove("userRole");
+            Session.Remove("userBuildings");
 
             try {
                 //Model State is Valid. Check Password                
@@ -191,7 +192,7 @@ namespace REDZONE.Controllers
         //--------------------------------------------------------------------------------------------------------------\\
         // POST: /Account/LogOff           (Called via ajax from the Client side)
         [HttpPost]
-        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, string uId, bool turnOff)
+        public string resetUserInfo(string uFName, string uLName, string uLoginName, string email, string uRole, string uBuildings, string uId, bool turnOff)
         {
             //This function will be trigger via Ajax from the client to reset all the User Info Session Variables if lost 
             try {
@@ -207,6 +208,7 @@ namespace REDZONE.Controllers
                             uLoginName = currentUser.SSO;
                             email = currentUser.emailAddress;
                             uRole = currentUser.getUserRoles();
+                            uBuildings = currentUser.getUserBuildings();
                             uId = currentUser.dbUserId;
                         }
                     }
@@ -216,6 +218,7 @@ namespace REDZONE.Controllers
                     //Session["userSSO"] = User.Identity.Name;
                     Session["email"] = email;
                     Session["userRole"] = uRole;
+                    Session["userBuildings"] = uBuildings;
                     Session["emp_id"] = uId;
                 }
 
@@ -500,6 +503,8 @@ namespace REDZONE.Controllers
                      isDeveloper= true;
                      logggedUser = new dscUser(loginModel.Username.Trim());  //Retrieve all User Info
                      logggedUser.isAuthenticated = true;
+                    building dummyBuilding = new building(){id = "999", buildingName = "ALL", buildingCode = "ALL" };
+                    logggedUser.buildings.Add(dummyBuilding);
                      break;
                 default: break;
             }
@@ -517,6 +522,7 @@ namespace REDZONE.Controllers
                 Session["emp_id"] = logggedUser.dbUserId; 
                 Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
                 Session["userRole"] = logggedUser.getUserRoles();
+                Session["userBuildings"] = logggedUser.getUserBuildings();
                 return true;
             }
             else {

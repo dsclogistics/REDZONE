@@ -198,6 +198,9 @@ namespace REDZONE.Models
                 roles.Add(roleNew);
             }
         }
+        public string getUserBuildings() {
+            return "|" + String.Join("|", buildings.Select(x => x.id).ToList()) + "|";
+        }
         #endregion
     }
 
@@ -218,6 +221,7 @@ namespace REDZONE.Models
     public class building {
         public string id { get; set; }
         public string buildingName { get; set; }
+        public string buildingCode { get; set; }
     }
 
 }
