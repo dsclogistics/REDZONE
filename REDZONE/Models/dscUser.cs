@@ -217,6 +217,12 @@ namespace REDZONE.Models
         public string getUserBuildings() {
             return "|" + String.Join("|", buildings.Select(x => x.id).ToList()) + "|";
         }
+        public string getReviewerMetrics(){
+            //Retrieve the User Reviewer Roll (If any)
+            userRole reviewerRole = roles.FirstOrDefault(x => x.roleName == "RZ_AP_REVIEWER");
+            if (reviewerRole == null) { return "||"; }   //No Metrics assigned as a Reviewer
+            return "|" + reviewerRole.metrics + "|";
+        }
         #endregion
     }
 
@@ -226,7 +232,7 @@ namespace REDZONE.Models
         public string roleName { get; set; }
         public string roleDesc { get; set; }
         public List<roleMetric> roleMetrics = new List<roleMetric>();
-        public string metrics { get { return String.Join(", ", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpName).ToList()); } }
+        public string metrics { get { return String.Join("|", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpName).ToList()); } }
     }
 
     public class roleMetric {

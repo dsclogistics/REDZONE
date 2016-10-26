@@ -3,6 +3,12 @@ $(document).ready(function () {
     $(".menuItem").removeClass("menuSelected");
     $("#mDashboard").addClass("menuSelected");
 
+    //This function is exclusive for the Building Summary Page
+    function reviewerHasMetric(metricName) {        
+        var reviewerMetrics = $('#reviewerMetrics').val().toUpperCase();
+        //alert("Reviewer' Metrics are: " + reviewerMetrics);
+        return (reviewerMetrics.indexOf('|' + metricName.toUpperCase() + '|') !== -1);
+    }    
 //======================== START OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=======================================
 //================== This section handles the Custom context Menu Capabilities==================================
 "use strict";
@@ -83,23 +89,24 @@ function contextListener() {
     });
 }
 function toggleMenuOn() {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // There is logic still missing to introduce the Authorization Validation to hide Show Menu Options ////////
-    //            Current Logic Only accounts for Metric Value Status                               ////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //alert("User Buildings: " + getUserBuildings() + "\nCurrent Building: " + $('#buildingId').val());
     var $cellSelected = $($('#cellIdSelected').val());
     var hasReasons = $cellSelected.find('#hasReasons').val();
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
-
+    var hasBuildingAccess = hasBuilding($('#buildingId').val());
+    var cellMetricName = $cellSelected.parents('.buildingRow').first().find('#mName').html();
+    var hasMetricAssigned = reviewerHasMetric(cellMetricName);  //Check if the selected metric is assigned to the Current User as a Reviewer.
     var noItems = "";
     $('#li_NoOptions').hide();
     
+    //alert("This User has building Access: " + hasBuildingAccess );
+    //alert("Current Metric Name is: " + cellMetricName);
     if (hasReasons == "") {    //There are no Reasons assigned       
         //Before displaying the context menu, set the correct "Reason" Related options based on the status of the cell that was right clicked
         //Check if the current MPV Status Allows for reasons to be Added
         if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {$('#li_Add').hide();}
         else { //Reasons can be added but only if you are an Admin, or approved building owner (RZ_AP_SUBMITTER)
-            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN")) {
+            if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN")) {
                 $('#li_Add').show();
             } else { $('#li_Add').hide(); }
         }
@@ -114,7 +121,7 @@ function toggleMenuOn() {
             $('#li_Manage').hide();   //Not in proper Status for Manage
         }
         else {
-            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))         //&& hasBuilding("CurrentBuilding")      ///// 1 /////
+            if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN")) 
             { $('#li_Manage').show(); }
             else { $('#li_Manage').hide(); }
         }
@@ -137,7 +144,7 @@ function toggleMenuOn() {
                 //Only authorized user (Building Submitter or Admin) can Start the AP. No other action AP can be taken
                 $('#li_Add').hide();     //Starting an action plan alreay includes the "Add Reasons" action
                 // Show the start AP only if this is an admin or a submitter with proper building access
-                if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 2 /////
+                if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN"))
                 { $("#li_StartAP").show(); }
                 else { $("#li_StartAP").hide(); }
                 break;
@@ -145,37 +152,37 @@ function toggleMenuOn() {
             case "WIP":
                 //$("#li_StartAP").hide();       //AP has Already started. Cannot be started again     //(Option is already off by default)
                 // --- CONTINUE AP ---  AP can only be continued by Submitter (with Building Access) or Admin
-                if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 3 /////
+                if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN"))
                 {
                     $("#li_ContinueAP").show();
                 }
 
                 //AP Can only be Viewed by "Building User" or "Submitter (with Building Access)" or "Admin"
-                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true) || hasRole("RZ_ADMIN")) { //&& hasBuilding("CurrentBuilding")  ///// 4 /////
+                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess ) || hasRole("RZ_ADMIN")) { 
                     $("#li_ViewAP").show();
                 }
                 //Reviewers with Metric Access can also view the AP if the AP is in Rejected Status
-                if (( actionPlanSts == "Rejected" && hasRole("RZ_AP_REVIEWER") && true) ) {  //&& hasMetric("CurrentMetric")      ///// 5 /////
+                if ((actionPlanSts == "Rejected" && hasRole("RZ_AP_REVIEWER") && hasMetricAssigned)) { 
                     $("#li_ViewAP").show();
                 }
                 break;
             case "Ready For Review":
                 //$("#li_ContinueAP").hide();       //AP Cannot Be "Continued" if it's ready for Review        //Already turned off by default
                 // --- REVIEW OPTION --- AP Can only be Reviewed by Reviewer (With Metric Access)  or an Admin
-                if ((hasRole("RZ_AP_REVIEWER") && true) || hasRole("RZ_ADMIN")) {  //&& hasMetric("CurrentMetric")                ///// 6 /////
+                if ((hasRole("RZ_AP_REVIEWER") && hasMetricAssigned) || hasRole("RZ_ADMIN")) {
                     $("#li_ReviewAP").show();
                 }
                 // else{    $("#li_ReviewAP").hide();   }           //Already turned off by default
 
                 // --- VIEW OPTION --- AP Can only be Viewed by "Building User" or "Submitter (with Building Access)" or "Admin"
-                if (  ((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true)  ||  hasRole("RZ_ADMIN")  ) {  //&& hasBuilding("CurrentBuilding")          ///// 7 /////
+                if (  ((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess )  ||  hasRole("RZ_ADMIN")  ) { 
                     $("#li_ViewAP").show();
                 }
                 //else { $("#li_ViewAP").hide(); }             //Already turned off by default
                 break;
             case "Approved":
                 // Building User or Submitter (With Building Access) or reviewer (With proper Metric Access) or ADMIN can View the AP
-                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true) || hasRole("RZ_ADMIN") || (hasRole("RZ_AP_REVIEWER") && true) )   //&& hasBuilding/Metric("CurrentBuilding/Metric")          ///// 8 /////
+                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess) || hasRole("RZ_ADMIN") || (hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
                 {
                     $("#li_ViewAP").show();
                 }
@@ -183,39 +190,7 @@ function toggleMenuOn() {
             default:   //Nothing, all AP options are already turned off by default
                 break; 
         }
-        //if (actionPlanSts == "Not Started") {
-        //    $('#li_Add').hide();
-        //    $("#li_ViewAP").hide();
-        //    $("#li_ContinueAP").hide();
-        //    $("#li_ReviewAP").hide();
-        //    // Show the start AP only if this is an admin or a submitter with proper building access
-        //    if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 2 /////
-        //    { $("#li_StartAP").show(); }
-        //    else { $("#li_StartAP").hide(); }
-        //}
-        //else if (actionPlanSts == "Rejected" || actionPlanSts == "WIP") {
-        //    $("#li_ViewAP").hide();
-        //    $("#li_StartAP").hide();          //Already started
-
-        //    if (actionPlanSts == "Ready For Review") { //Only Reviewers with metric access and Admins can do something here
-        //        if ( (hasRole("RZ_AP_REVIEWER") && true) || hasRole("RZ_ADMIN") ) {  //&& hasMetric("CurrentMetric")          ///// 3 /////
-        //        $("#li_ReviewAP").show();
-        //        $("#li_ContinueAP").hide();
-        //    }
-        //    else {
-        //        $("#li_ReviewAP").hide();
-        //        $("#li_ContinueAP").show();
-        //    }
-        //}
-        //else {
-        //    $("#li_ViewAP").show();
-        //    $("#li_StartAP").hide();
-        //    $("#li_ContinueAP").hide();
-        //    $("#li_ReviewAP").hide();
-        //}
     } // End if "if" (actionPlanSts != "Not Needed")
-
-
     //----------------------
     $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlight the current celected cell
     if (menuState !== 1) {

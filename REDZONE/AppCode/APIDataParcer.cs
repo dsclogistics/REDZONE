@@ -424,9 +424,9 @@ namespace REDZONE.AppCode
 
             //Define and Initializa Model Object Components
             BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();   // Main Metric Model Object. Returned back to calling method
-            MeasuredRowEntity rowHeader = new MeasuredRowEntity();                //Model Contains one Header Row
-            MeasuredRowEntity rowTotals = new MeasuredRowEntity();                //Model Contains one Totals Row
-            MeasuredRowEntity rowActions = new MeasuredRowEntity();               //Model Contains one Row with Link Actions
+            MeasuredRowEntity rowHeader = new MeasuredRowEntity();                // Model Contains one Header Row
+            MeasuredRowEntity rowTotals = new MeasuredRowEntity();                // Model Contains one Totals Row
+            MeasuredRowEntity rowActions = new MeasuredRowEntity();               // Model Contains one Row with Link Actions
             List<MeasuredRowEntity> metricsRowList = new List<MeasuredRowEntity>();         // Building Metrics (Row) List
             List<MeasuredCellEntity> metricValueCellList = new List<MeasuredCellEntity>();  // RowCellColection
             bSummary.year = year;

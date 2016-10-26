@@ -21,6 +21,7 @@
         <input type="hidden" id="buildingYear" value="@Model.year" />
         <input type="hidden" id="buildingId" value="@Model.bId" />
         <input type="hidden" id="cellIdSelected" value="" />
+        <input type="hidden" id="reviewerMetrics" value="@ViewBag.ReviewerMetrics" />
     </div>
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
@@ -105,6 +106,7 @@
                                 Goals Missed
                             </td>
                         </tr>  <!-- END OF HEADERS/TITLES ROW -->
+
                  <!-- =========================================================================================================== -->
                  <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
                         @foreach (var buildingRow in Model.metricRows)
@@ -184,11 +186,15 @@
                 <div class="row" style="border:none; margin: 0; padding:0; ">
                     <table class="" style="border:none; width:100%;">
                         <tr>
+                            <td style="width:15%">Reviewer Metrics: </td>
+                            <td style="text-align:left">@ViewBag.ReviewerMetrics</td>
+                        </tr>
+                        @*<tr>
                             <td class="" style="border:none; text-align:left">
                                 <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span>
                                 <span style="margin-left:5px; float:right; margin-right:30px">Right Click any cell to Add/Edit Reasons and Action Plans</span>
                             </td>
-                        </tr>
+                        </tr>*@
                         @*<tr class="" style="border:none">
                             
                             <td class="" style="width:25%; border:none; text-align:left">
@@ -280,9 +286,10 @@
                                     <table class="table table-condensed table-hover" style="width:95%; margin-left:30px; text-align:center">
                                         <thead>
                                             <tr class="" style="font-weight:bold; background-color:lightgray;">
-                                                <td style="width:30%">Metric</td>
-                                                <td style="width:25%">Status</td>
-                                                <td style="width:15%">Meeting Date</td>
+                                                <td style="width:25%">Metric</td>
+                                                <td style="width:20%">Status</td>
+                                                <td style="width:13%">Action</td>
+                                                <td style="width:12%">Meeting Date</td>
                                                 <td style="width:15%">Meeting Owner</td>
                                                 <td style="width:15%">Last Update</td>
                                             </tr>
@@ -294,9 +301,32 @@
                                                 if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
                                                 {
                                                     <tr>
-                                                        <td style="width:30%; font-weight:bold">@buildingRow.rowName</td>
-                                                        <td style="width:25%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
-                                                        <td style="width:15%">TBD</td>
+                                                        <td style="width:25%; font-weight:bold">@buildingRow.rowName</td>
+                                                        <td style="width:20%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
+                                                        <td style="width:13%">
+                                                            @{
+                                                    switch (buildingRow.entityMetricCells[mIndex].rz_bapm_status)
+                                                    {
+                                                        case "Not Started":
+                                                            <a href="#" style="color:red">Start AP</a>
+                                                            break;
+                                                        case "WIP":
+                                                        case "Rejected":
+                                                            <a href="#" style="color:red">Continue</a>
+                                                            break;
+                                                        case "Approved":
+                                                            <a href="#" style="color:blue">View</a>
+                                                            break;
+                                                        case "Ready For Review":
+                                                            <a href="#" style="color:red">Review</a>
+                                                            break;
+                                                        default:
+                                                            <span>[ Undefined ]</span>
+                                                            break;
+                                                                }
+                                                            }
+                                                        </td>
+                                                        <td style="width:12%">N/A</td>
                                                         <td style="width:15%">@buildingRow.rowOwner</td>
                                                         <td style="width:15%">@buildingRow.entityMetricCells[mIndex].metricLastUpdt</td>
                                                     </tr>

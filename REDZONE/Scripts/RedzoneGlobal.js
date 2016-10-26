@@ -81,7 +81,7 @@ function getUserBuildings() {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
 function hasRole(someRole) {
-    if (someRole == null || someRole == "") { return false; }
+    if (someRole == null || someRole == "" || someRole == "undefined") { return false; }
     var roles = localStorage.getItem("userRole");
     //alert("Current Roles:" + roles);
     if (roles == null) { return false; }
@@ -90,9 +90,9 @@ function hasRole(someRole) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
 function hasBuilding(someBuilding) {
-    if (someBuilding == null || someBuilding == "") { return false; }
+    if (someBuilding == null || someBuilding == "" || someBuilding == "undefined") { return false; }
     var buildingList = localStorage.getItem("userBuildings");
-    if (buildingList == null) { return false; }
+    if (buildingList == null || buildingList == "") { return false; }
     return (buildingList.indexOf(('|' + someBuilding.toUpperCase() + '|') ) !== -1);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
