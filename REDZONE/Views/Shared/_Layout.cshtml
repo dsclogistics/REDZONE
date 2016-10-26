@@ -53,7 +53,7 @@
         if ("@pageFirstLoad" == "NULL") {
 
             //alert("Session Variables were somehow lost. Resetting...");
-            resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("userSSO"), localStorage.getItem("email"), localStorage.getItem("userRole"), localStorage.getItem("empId"), false);
+            resetUserInfo(localStorage.getItem("first_name"), localStorage.getItem("last_name"), localStorage.getItem("userSSO"), localStorage.getItem("email"), localStorage.getItem("userRole"), localStorage.getItem("userBuildings"), localStorage.getItem("empId"), false);
             $("#userAvatar").html(localStorage.getItem("first_name") + " " + localStorage.getItem("last_name"));
         }
         //------- This code should execute one-time and one-time only after a successful Login --------
@@ -70,7 +70,7 @@
                 localStorage.setItem("userRole", "@userRole");
                 localStorage.setItem("userBuildings", "@userBuildings");
                 localStorage.setItem("empId", "@empId");
-                resetUserInfo("", "", "", "", "", "", true);   //Turn the "first Load" Session Variable flag off at the server side via Ajax
+                resetUserInfo("", "", "", "", "", "", "", true);   //Turn the "first Load" Session Variable flag off at the server side via Ajax
                 //setServerPostback();
                 //alert("This is a first Page load");
             }

@@ -91,71 +91,133 @@ function toggleMenuOn() {
     var hasReasons = $cellSelected.find('#hasReasons').val();
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
 
-
-    if (hasReasons == "") {    //There are no Reasons assigned
+    var noItems = "";
+    $('#li_NoOptions').hide();
+    
+    if (hasReasons == "") {    //There are no Reasons assigned       
+        //Before displaying the context menu, set the correct "Reason" Related options based on the status of the cell that was right clicked
         //Check if the current MPV Status Allows for reasons to be Added
         if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {$('#li_Add').hide();}
         else { //Reasons can be added but only if you are an Admin, or approved building owner (RZ_AP_SUBMITTER)
-            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN")) { }
-            $('#li_Add').show();
+            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN")) {
+                $('#li_Add').show();
+            } else { $('#li_Add').hide(); }
         }
         $('#li_View').hide();
         $('#li_Manage').hide();
     }
     else {  //There are reasons that can be viewed or managed
+        $('#li_Add').hide();
+        $('#li_View').show();      //Any authenticated user can view Reasons
+
         if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {
-            $('#li_Manage').hide();
+            $('#li_Manage').hide();   //Not in proper Status for Manage
         }
         else {
-            $('#li_Manage').show();
+            if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))         //&& hasBuilding("CurrentBuilding")      ///// 1 /////
+            { $('#li_Manage').show(); }
+            else { $('#li_Manage').hide(); }
         }
-        $('#li_Add').hide();
-        $('#li_View').show();
     }
+
+    //===============  ACTION PLAN MENU OPTION DISPLAY CONFIGURATION SECTION  ====================================
+    //Before displaying the context menu, set the correct "AP" menu options based on the status of the cell that was right clicked
+    //--- By Default all the Action Plan Option will be disabled (Hidden) -- Specific Status and conditions will turn them on ----------
+    $("#li_ViewAP").hide();
+    $("#li_StartAP").hide();
+    $("#li_ContinueAP").hide();
+    $("#li_ReviewAP").hide();
 
     if (actionPlanSts == "") { actionPlanSts = "Not Needed";}
-    //alert("Action Plan Status is: '" + actionPlanSts + "'");
-    //----------------------
-    //Before displaying the contect menu, set the correct menu options based on the status of the cell that was right clicked
     if (actionPlanSts != "Not Needed") {
-        //Action Plan is Required
-        if (actionPlanSts == "Not Started") {
-            $('#li_Add').hide();
-            $("#li_ViewAP").hide();
-            $("#li_StartAP").show();
-            $("#li_ContinueAP").hide();
-            $("#li_ReviewAP").hide();
-        }
-        else if (actionPlanSts == "Rejected" || actionPlanSts == "WIP") {
-            /////////////////////////// TO DO ////////////////////////////////////
-            //   Enable the Authorization function check /////////////////////////
-            if ("UserRole" == "Reviewer" && actionPlanSts == "Ready For Review") {
-                $("#li_ReviewAP").show();
-                $("#li_ContinueAP").hide();
-            }
-            else {
-                $("#li_ReviewAP").hide();
-                $("#li_ContinueAP").show();
-            }
-            $("#li_ViewAP").hide();
-            $("#li_StartAP").hide();
-        }
-        else {
-            $("#li_ViewAP").show();
-            $("#li_StartAP").hide();
-            $("#li_ContinueAP").hide();
-            $("#li_ReviewAP").hide();
-        }
-    }
-    else {
-        //All AP Options must be disabled if the AP is not required
-        $("#li_ViewAP").hide();
-        $("#li_StartAP").hide();
-        $("#li_ContinueAP").hide();
-    }
-    $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlight the current celected cell
-    //----------------------
+        //alert("Action PLan Status is: " + actionPlanSts);
+        //Action Plan is Required ---- Set correct Options based on the Current AP Status and User Roles ------
+        switch ( actionPlanSts ) {
+            case "Not Started":
+                //Only authorized user (Building Submitter or Admin) can Start the AP. No other action AP can be taken
+                $('#li_Add').hide();     //Starting an action plan alreay includes the "Add Reasons" action
+                // Show the start AP only if this is an admin or a submitter with proper building access
+                if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 2 /////
+                { $("#li_StartAP").show(); }
+                else { $("#li_StartAP").hide(); }
+                break;
+            case "Rejected":
+            case "WIP":
+                //$("#li_StartAP").hide();       //AP has Already started. Cannot be started again     //(Option is already off by default)
+                // --- CONTINUE AP ---  AP can only be continued by Submitter (with Building Access) or Admin
+                if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 3 /////
+                {
+                    $("#li_ContinueAP").show();
+                }
 
+                //AP Can only be Viewed by "Building User" or "Submitter (with Building Access)" or "Admin"
+                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true) || hasRole("RZ_ADMIN")) { //&& hasBuilding("CurrentBuilding")  ///// 4 /////
+                    $("#li_ViewAP").show();
+                }
+                //Reviewers with Metric Access can also view the AP if the AP is in Rejected Status
+                if (( actionPlanSts == "Rejected" && hasRole("RZ_AP_REVIEWER") && true) ) {  //&& hasMetric("CurrentMetric")      ///// 5 /////
+                    $("#li_ViewAP").show();
+                }
+                break;
+            case "Ready For Review":
+                //$("#li_ContinueAP").hide();       //AP Cannot Be "Continued" if it's ready for Review        //Already turned off by default
+                // --- REVIEW OPTION --- AP Can only be Reviewed by Reviewer (With Metric Access)  or an Admin
+                if ((hasRole("RZ_AP_REVIEWER") && true) || hasRole("RZ_ADMIN")) {  //&& hasMetric("CurrentMetric")                ///// 6 /////
+                    $("#li_ReviewAP").show();
+                }
+                // else{    $("#li_ReviewAP").hide();   }           //Already turned off by default
+
+                // --- VIEW OPTION --- AP Can only be Viewed by "Building User" or "Submitter (with Building Access)" or "Admin"
+                if (  ((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true)  ||  hasRole("RZ_ADMIN")  ) {  //&& hasBuilding("CurrentBuilding")          ///// 7 /////
+                    $("#li_ViewAP").show();
+                }
+                //else { $("#li_ViewAP").hide(); }             //Already turned off by default
+                break;
+            case "Approved":
+                // Building User or Submitter (With Building Access) or reviewer (With proper Metric Access) or ADMIN can View the AP
+                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && true) || hasRole("RZ_ADMIN") || (hasRole("RZ_AP_REVIEWER") && true) )   //&& hasBuilding/Metric("CurrentBuilding/Metric")          ///// 8 /////
+                {
+                    $("#li_ViewAP").show();
+                }
+                break;
+            default:   //Nothing, all AP options are already turned off by default
+                break; 
+        }
+        //if (actionPlanSts == "Not Started") {
+        //    $('#li_Add').hide();
+        //    $("#li_ViewAP").hide();
+        //    $("#li_ContinueAP").hide();
+        //    $("#li_ReviewAP").hide();
+        //    // Show the start AP only if this is an admin or a submitter with proper building access
+        //    if ((hasRole("RZ_AP_SUBMITTER") && true) || hasRole("RZ_ADMIN"))       //&& hasBuilding("CurrentBuilding")        ///// 2 /////
+        //    { $("#li_StartAP").show(); }
+        //    else { $("#li_StartAP").hide(); }
+        //}
+        //else if (actionPlanSts == "Rejected" || actionPlanSts == "WIP") {
+        //    $("#li_ViewAP").hide();
+        //    $("#li_StartAP").hide();          //Already started
+
+        //    if (actionPlanSts == "Ready For Review") { //Only Reviewers with metric access and Admins can do something here
+        //        if ( (hasRole("RZ_AP_REVIEWER") && true) || hasRole("RZ_ADMIN") ) {  //&& hasMetric("CurrentMetric")          ///// 3 /////
+        //        $("#li_ReviewAP").show();
+        //        $("#li_ContinueAP").hide();
+        //    }
+        //    else {
+        //        $("#li_ReviewAP").hide();
+        //        $("#li_ContinueAP").show();
+        //    }
+        //}
+        //else {
+        //    $("#li_ViewAP").show();
+        //    $("#li_StartAP").hide();
+        //    $("#li_ContinueAP").hide();
+        //    $("#li_ReviewAP").hide();
+        //}
+    } // End if "if" (actionPlanSts != "Not Needed")
+
+
+    //----------------------
+    $($('#cellIdSelected').val()).find('.mvCell').first().addClass("cellSelected");   //Highlight the current celected cell
     if (menuState !== 1) {
         //$("#context-menu").show();
         menuState = 1;
@@ -163,7 +225,17 @@ function toggleMenuOn() {
         menu.classList.add(contextMenuActive);        
         //alert("Id clicked is: " + $($('#cellIdSelected').val()).find('.mvCell').first().prop("id"));  //test only
     }
-}
+
+    $('#cMenu li').each(function () {
+        if ($(this).is(":visible")) { noItems = "HASITEMS"; }
+    });
+    if (noItems == "") {
+        $('#li_NoOptions').show();
+    }
+
+} // End of "Toggle Menu on" -------------------------
+
+
 function toggleMenuOff() {
     if (menuState !== 0) {
         menuState = 0;

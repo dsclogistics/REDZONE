@@ -105,8 +105,8 @@
                                 Goals Missed
                             </td>
                         </tr>  <!-- END OF HEADERS/TITLES ROW -->
-                        <!-- ================================================================================================ -->
-                        <!-- ================== Begin loop sections of Building Metric Rows ================================= -->
+                 <!-- =========================================================================================================== -->
+                 <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
                         @foreach (var buildingRow in Model.metricRows)
                         {
                             colCounter = 0;
@@ -395,8 +395,8 @@
 
 <!--  ************************************* START OF RIGHT CLICK CONTEXT MENU **************************************** -->
 <nav id="context-menu" class="context-menu" style="border: 3px double gray">
-    <ul class="context-menu__items" style="padding:0; margin:0; color:darkgray">
-        <li id="li_View" class="context-menu__item ">
+    <ul id="cMenu" class="context-menu__items " style="padding:0; margin:0; color:darkgray">
+        <li id="li_View" class="context-menu__item">
             <a href="#" class="context-menu__link" data-action="View">
                 View Reasons
             </a>
@@ -429,6 +429,11 @@
         <li id="li_ReviewAP" class="context-menu__item" style="display:none">
             <a href="#" class="context-menu__link" data-action="ReviewAP">
                 Review Action Plan
+            </a>
+        </li>
+        <li id="li_NoOptions" class="context-menu__item" style="display:none">
+            <a href="#" class="context-menu__link" data-action="Nothing">
+                No Actions Allowed for This Metric Value
             </a>
         </li>
 

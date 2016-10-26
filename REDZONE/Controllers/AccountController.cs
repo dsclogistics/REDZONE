@@ -503,8 +503,6 @@ namespace REDZONE.Controllers
                      isDeveloper= true;
                      logggedUser = new dscUser(loginModel.Username.Trim());  //Retrieve all User Info
                      logggedUser.isAuthenticated = true;
-                    building dummyBuilding = new building(){id = "999", buildingName = "ALL", buildingCode = "ALL" };
-                    logggedUser.buildings.Add(dummyBuilding);
                      break;
                 default: break;
             }

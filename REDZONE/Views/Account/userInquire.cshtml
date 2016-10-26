@@ -64,12 +64,7 @@
         </div>
     </div>
 }
-@if (Session["userRole"] != null)
-{
-    <div>
-        User Session Roles are: @Session["userRole"].ToString()
-    </div>
-}
+
 
 <div style="text-align:left; width:80%">
     <br /><br />
@@ -79,6 +74,16 @@
     <div><button id="btnSubmit">AD Logon TEST</button></div>
 </div>
 
+<br />
+<hr />
+@if (Session["userRole"] != null)
+{
+    <div>
+        <span style="color:blue">ROLES: </span>
+        User Session Roles are: @Session["userRole"].ToString()
+    </div>
+}
+<br />
 <div>
     Check If I have this role:
     <input type="text" id="txtRole" />
@@ -90,6 +95,69 @@
     <input type="text" id="txtBuilding" />
     <input type="button" id="b2" value="Check Building" />
 </div>
+
+
+<br /><br /><br />
+
+@if (User.IsInRole("ADMIN"))
+{
+    <div class="bordered-round">
+        This section Should be visible for ADMIN ONLY!<br />
+        Some Admin Stuff here.
+    </div>
+}
+<br />@if (User.IsInRole("MANAGER"))
+{
+    <div class="bordered-round">
+        This section Should be visible for MANAGERS ONLY!
+        <br />
+        Some Manager Stuff here.
+    </div>
+}
+<br />
+@if (User.IsInRole("RZ_ADMIN"))
+{
+    <div class="bordered-round">
+        This section Should be visible for RZ_ADMIN ONLY!<br />
+        Some Red Zone Stuff here.
+    </div>
+}
+<br />
+@*@if (Session["userRoles"].ToString().Contains("|999|"))
+{
+    <div class="bordered-round">
+        Session User Buildings: @Session["userRoles"]
+    </div>
+}*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
     $(document).ready(function () {

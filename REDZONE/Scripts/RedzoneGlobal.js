@@ -83,8 +83,9 @@ function getUserBuildings() {
 function hasRole(someRole) {
     if (someRole == null || someRole == "") { return false; }
     var roles = localStorage.getItem("userRole");
+    //alert("Current Roles:" + roles);
     if (roles == null) { return false; }
-    return (roles.indexOf(someRole.toUpperCase()) !== -1);
+    return (roles.indexOf( '|' + someRole.toUpperCase() + '|' ) !== -1);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
@@ -92,7 +93,7 @@ function hasBuilding(someBuilding) {
     if (someBuilding == null || someBuilding == "") { return false; }
     var buildingList = localStorage.getItem("userBuildings");
     if (buildingList == null) { return false; }
-    return (buildingList.indexOf(someBuilding.toUpperCase()) !== -1);
+    return (buildingList.indexOf(('|' + someBuilding.toUpperCase() + '|') ) !== -1);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
@@ -126,14 +127,14 @@ function usrLogOff() {
 
 //================= REDZONE APPLICATION WIDE RELATED JAVASCRIPT and FUNCTIONS =================================\
 //----- Javascript to Execute before any HTML Page is even rendered or displayed ------------------------------
-function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pId, pTurnOff) {
+function resetUserInfo(pFName, pLName, pLoginName, pEmail, pRole, pBuildings, pId, pTurnOff) {
     $.ajax({
         //url: '@Url.Action("getNewCAMid", "cognosUtils")',
         url: '/Account/resetUserInfo',
         method: "POST",
         cache: false,
         dataType: "text",
-        data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, uId:pId, turnOff: pTurnOff },
+        data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, uBuildings: pBuildings, uId: pId, turnOff: pTurnOff },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Ajax Failed: " + errorThrown);
             localStorage.clear();

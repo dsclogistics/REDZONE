@@ -58,18 +58,18 @@ namespace REDZONE
                 return;
             }
 
-            //     ======================= SET UP THE USER ROLES ================================
+            //  ===================== SET UP THE USER CURRENT CONTEXT USER with ROLES ====================================
             //This logic will force the Application Authorization Request to retrieve the "User Data" from the authTicket 
             // split it into an array of 'Roles' that will be assigned as the current Logged on "User Identity Roles"
             if (Context.User != null) {
                 //// retrieve roles from "UserData"  portion of the authTicket
-                string[] roles = authTicket.UserData.Split(';');
+                string[] roles = authTicket.UserData.Split(new string[] {"|"},StringSplitOptions.RemoveEmptyEntries);
                 if (roles.Length == 0 || roles[0] == "") { roles = new string[] { "NONE" }; }
                 //    Context.User = new GenericPrincipal(Context.User.Identity, roles);
                 HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(
                       new System.Security.Principal.GenericIdentity(Context.User.Identity.Name, "Forms"), roles);
                 ////Valid Roles are: "Admin", "Super User", "Editor", "Viewer"   (This will change)
-            }  //   ================= FINISHED SETTING UP THE USER ROLES ============================
+            }  // ================= FINISHED SETTING UP THE CONTEXT USER with ROLES ===================================================
         }
 
         protected void Application_Error(Object sender, EventArgs e)

@@ -53,6 +53,7 @@ namespace REDZONE.Models
         public void loadUserDetails(string SSO, string uPassword=""){
           // This function will retrieve the user information and load all roles,building, user info, etc if found.
           // If a password is specified, then it will also perform authentication
+            SSO = SSO.ToUpper();
             string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword);
             try      // -------- Try Parsing the User Data properties --------
             {
@@ -140,6 +141,21 @@ namespace REDZONE.Models
                             buildings.Add(userBuilding);
                         }
                     }
+
+
+                    //-------- Section to be Used during Development --------------------------------\
+                    //Retrieve the User information for Developers
+                    switch (SSO)
+                    {
+                        case "DELGADO_FELICIANO":
+                            building dummyBuilding = new building() { id = "999", buildingName = "ALL", buildingCode = "ALL" };
+                            buildings.Add(dummyBuilding);
+                        break;
+                        default: break;
+                    }
+                    //-------- END of Section to be Used during Development -------------------------/
+
+
                     isValidUser = true;
                     isAuthenticated = String.IsNullOrEmpty(uPassword) ? false : true;
                     userStatusMsg = "User Information Loaded Successfully";
@@ -185,7 +201,7 @@ namespace REDZONE.Models
         public string getUserRoles()
         {
             //return String.Join(";", roles.OrderBy(x => x.roleName).Select(x => x.roleName).ToList());
-            return String.Join(";", roles.Select(x => x.roleName).ToList());
+            return "|" + String.Join("|", roles.Select(x => x.roleName).ToList()) + "|";
         } // Reuturns roles as a ";" separated string
         public void addRole(string roleName, string roleProduct) {
             if ( !roles.Any(p => p.roleName.ToUpper() == roleName.ToUpper()))
