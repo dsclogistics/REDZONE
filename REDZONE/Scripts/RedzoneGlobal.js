@@ -89,11 +89,11 @@ function hasRole(someRole) {
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.
-function hasBuilding(someBuilding) {
-    if (someBuilding == null || someBuilding == "" || someBuilding == "undefined") { return false; }
+function hasBuilding(someBuildingId) {
+    if (someBuildingId == null || someBuildingId == "" || someBuildingId == "undefined") { return false; }
     var buildingList = localStorage.getItem("userBuildings");
     if (buildingList == null || buildingList == "") { return false; }
-    return (buildingList.indexOf(('|' + someBuilding.toUpperCase() + '|') ) !== -1);
+    return (buildingList.indexOf(('|' + someBuildingId.toUpperCase() + '|')) !== -1);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Use this function only after the validity of the token has been Stablised.

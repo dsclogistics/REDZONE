@@ -143,16 +143,9 @@ namespace REDZONE.Controllers
 
             try {
                 //Model State is Valid. Check Password                
-                if (isLogonValid(loginModel))
-                {  // Is password is Valid, set the Authorization cookie and redirect
-                    // the user to the link it came from (Or the Home page is no return URL was specified)
-
-
-                    //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
-                    registerUser(loginModel.Username, new string[] { "ADMIN", "OTHER" });
-
-
-                    //if (ReturnUrl.Equals("%2FAccount%2FLogOff")) { return RedirectToAction("Index", "Home"); }
+                if (logonUser(loginModel))
+                {  // Is User authentication is successful, redirect
+                   // the user to the link it came from (Or the Home page is no return URL was specified)
 
                     if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
                         && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
@@ -160,7 +153,7 @@ namespace REDZONE.Controllers
                     else { return RedirectToAction("Index", "Home"); }
                 }
                 else
-                {
+                { //Failed to authenticate user. Back to Login page with Validation errors
                     ViewBag.ReturnUrl = ReturnUrl;
                     ModelState.AddModelError("", "Failed to Logon User: " + ViewBag.errorMessage);
                     return View(loginModel);
@@ -490,7 +483,7 @@ namespace REDZONE.Controllers
 
         #region CustomHelpers
         //============= PRIVATE LOGIN HELPER METHODS ==================
-        private bool isLogonValid(LoginViewModel loginModel)
+        private bool logonUser(LoginViewModel loginModel)
         {
             dscUser logggedUser = new dscUser();
             bool isDeveloper = false;
@@ -521,6 +514,11 @@ namespace REDZONE.Controllers
                 Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
                 Session["userRole"] = logggedUser.getUserRoles();
                 Session["userBuildings"] = logggedUser.getUserBuildings();
+
+                //Register the User with the Server as an authenticated user
+                //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
+                registerUser(loginModel.Username, logggedUser.getUserRolesList());
+
                 return true;
             }
             else {
@@ -594,7 +592,8 @@ namespace REDZONE.Controllers
             //FormsAuthentication.SetAuthCookie(loginModel.Username, true);      //Simple Application User Registration without roles
 
             string userRoles = String.Empty;         // String.Join(";", roles);
-            userRoles = (Session["userRole"] == null) ? String.Join(";", roles) : Session["userRole"].ToString();
+            //userRoles = (Session["userRole"] == null) ? "|" + String.Join("|", roles) + "|" : Session["userRole"].ToString();
+            userRoles = "|" + String.Join("|", roles) + "|";
 
             var authTicket = new FormsAuthenticationTicket(
                  1,                             // version
@@ -602,7 +601,7 @@ namespace REDZONE.Controllers
                  DateTime.Now,                  // created
                  DateTime.Now.AddMinutes(60),   // expires
                  true,                          // persistent?
-                 userRoles              // User Data portion [can be used to store roles]
+                 userRoles                      // User Data portion [can be used to store roles as a string delimited field] 
               );
 
             string encryptedTicket = FormsAuthentication.Encrypt(authTicket);

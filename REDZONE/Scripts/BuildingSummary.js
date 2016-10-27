@@ -4,10 +4,10 @@ $(document).ready(function () {
     $("#mDashboard").addClass("menuSelected");
 
     //This function is exclusive for the Building Summary Page
-    function reviewerHasMetric(metricName) {        
+    function reviewerHasMetric(metricId) {        
         var reviewerMetrics = $('#reviewerMetrics').val().toUpperCase();
         //alert("Reviewer' Metrics are: " + reviewerMetrics);
-        return (reviewerMetrics.indexOf('|' + metricName.toUpperCase() + '|') !== -1);
+        return (reviewerMetrics.indexOf('|' + metricId.toUpperCase() + '|') !== -1);
     }    
 //======================== START OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=======================================
 //================== This section handles the Custom context Menu Capabilities==================================
@@ -94,13 +94,14 @@ function toggleMenuOn() {
     var hasReasons = $cellSelected.find('#hasReasons').val();
     var actionPlanSts = $cellSelected.find('#bamp_status').val();
     var hasBuildingAccess = hasBuilding($('#buildingId').val());
-    var cellMetricName = $cellSelected.parents('.buildingRow').first().find('#mName').html();
-    var hasMetricAssigned = reviewerHasMetric(cellMetricName);  //Check if the selected metric is assigned to the Current User as a Reviewer.
+    var cell_mpId = $cellSelected.find('#mpId').val();   //$cellSelected.parents('.buildingRow').first().find('#mName').html();
+    var hasMetricAssigned = reviewerHasMetric(cell_mpId);  //Check if the selected metric Period Id is assigned to the Current User as a Reviewer.
     var noItems = "";
     $('#li_NoOptions').hide();
     
     //alert("This User has building Access: " + hasBuildingAccess );
     //alert("Current Metric Name is: " + cellMetricName);
+    //alert("Current Metric Period Id is: " + cell_mpId + "\Assigned to User? " + hasMetricAssigned);
     if (hasReasons == "") {    //There are no Reasons assigned       
         //Before displaying the context menu, set the correct "Reason" Related options based on the status of the cell that was right clicked
         //Check if the current MPV Status Allows for reasons to be Added

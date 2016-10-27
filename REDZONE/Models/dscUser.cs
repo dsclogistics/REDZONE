@@ -195,14 +195,15 @@ namespace REDZONE.Models
 
             return DataRetrieval.executeAPI(endPoint, payload);
         }
-        public List<string> getUserRolesList() {
-            return roles.Select(x => x.roleName).ToList();
-        }
         public string getUserRoles()
         {
             //return String.Join(";", roles.OrderBy(x => x.roleName).Select(x => x.roleName).ToList());
             return "|" + String.Join("|", roles.Select(x => x.roleName).ToList()) + "|";
-        } // Reuturns roles as a ";" separated string
+        } // Returns roles as a "|" delimited string
+        public string[] getUserRolesList()
+        {
+            return roles.Select(x => x.roleName).ToArray();
+        } // Reuturns a list Of the User Roles Name
         public void addRole(string roleName, string roleProduct) {
             if ( !roles.Any(p => p.roleName.ToUpper() == roleName.ToUpper()))
             {//Role Name does not exist on the current list
@@ -217,11 +218,11 @@ namespace REDZONE.Models
         public string getUserBuildings() {
             return "|" + String.Join("|", buildings.Select(x => x.id).ToList()) + "|";
         }
-        public string getReviewerMetrics(){
+        public string getReviewerMetricIds(){
             //Retrieve the User Reviewer Roll (If any)
             userRole reviewerRole = roles.FirstOrDefault(x => x.roleName == "RZ_AP_REVIEWER");
             if (reviewerRole == null) { return "||"; }   //No Metrics assigned as a Reviewer
-            return "|" + reviewerRole.metrics + "|";
+            return "|" + reviewerRole.metricIds + "|";
         }
         #endregion
     }
@@ -232,12 +233,14 @@ namespace REDZONE.Models
         public string roleName { get; set; }
         public string roleDesc { get; set; }
         public List<roleMetric> roleMetrics = new List<roleMetric>();
-        public string metrics { get { return String.Join("|", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpName).ToList()); } }
+        public string metricIds { get { return String.Join("|", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpId).ToList()); } }
+        public string metricNames { get { return String.Join("|", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpName).ToList()); } }
     }
 
     public class roleMetric {
         public string mpId { get; set; }             //Metric Period
         public string mpName { get; set; }
+        public string mpDisplayName { get; set; }
     }
 
     public class building {
