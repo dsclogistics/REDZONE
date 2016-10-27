@@ -145,14 +145,14 @@ namespace REDZONE.Models
 
                     //-------- Section to be Used during Development --------------------------------\
                     //Retrieve the User information for Developers
-                    switch (SSO)
-                    {
-                        case "DELGADO_FELICIANO":
-                            building dummyBuilding = new building() { id = "999", buildingName = "ALL", buildingCode = "ALL" };
-                            buildings.Add(dummyBuilding);
-                        break;
-                        default: break;
-                    }
+                    //switch (SSO)
+                    //{
+                    //    case "DELGADO_FELICIANO":
+                    //        building dummyBuilding = new building() { id = "999", buildingName = "ALL", buildingCode = "ALL" };
+                    //        buildings.Add(dummyBuilding);
+                    //    break;
+                    //    default: break;
+                    //}
                     //-------- END of Section to be Used during Development -------------------------/
 
 
