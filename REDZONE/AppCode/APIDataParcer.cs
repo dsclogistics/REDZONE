@@ -418,7 +418,7 @@ namespace REDZONE.AppCode
             return eSummary;
         }
 
-        public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID)
+        public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID, string currentUserSSO)
         {
             const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
 
@@ -479,6 +479,8 @@ namespace REDZONE.AppCode
                                 temp.metricName = (string)m["Month"];
                                 temp.metricValue = String.Empty;
                                 temp.isViewable = showAllMonths ? true : false;
+                                temp.nextCellAction = "";
+                                temp.nextCellActionLink = "";
                                 row.entityMetricCells.Add(temp);
                                 if (rowHeader.entityMetricCells.Count < months.Count)
                                 {
@@ -545,8 +547,10 @@ namespace REDZONE.AppCode
                                             }
                                             //If value missed the Goal, increase the Missed Goals counter
                                             // ---- TO DO ----  ////
-                                            // <--- Finished increasing th Missed Goal Counter
+                                            // <--- Finished increasing the Missed Goal Counter
                                             tmp.isViewable = true;
+                                            tmp.nextCellAction = getMPV_NextAction(tmp.rz_bapm_status, tmp.mtrc_period_id, buildingID, currentUserSSO); 
+                                            tmp.nextCellActionLink = "New";          // ***** Add Logic Here to calculate the next action Link ******
                                         }
                                         if (String.IsNullOrEmpty(tmp.displayClass))
                                         {
@@ -640,6 +644,59 @@ namespace REDZONE.AppCode
                 bSummary.modelValidationMsg = e.Message;    //Log into the model itself Any error while parsing/populationg the model Data
             }
             return bSummary;
+        }
+
+        private string getMPV_NextAction(string ap_status, string mtrc_period_id, string building_ID, string currentUserSSO)
+        {
+            dscUser currentUser = new dscUser(currentUserSSO);  //Retrieve the currently Logged-on User Info
+            bool hasBuildingAccess = currentUser.hasBuilding(building_ID);
+            bool hasMetricAssigned = currentUser.hasReviewerMetric(mtrc_period_id);
+            string nextAction = "---";
+            
+            switch (ap_status) {
+                case "Not Started":
+                    //Check if User is Submitter for this building or Admin
+                    if(currentUser.hasRole("RZ_AP_SUBMITTER") ){
+                    
+                    }
+                    if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || currentUser.hasRole("RZ_ADMIN"))
+                { $("#li_StartAP").show(); }
+                else { $("#li_StartAP").hide(); }
+
+                    if (currentUser.hasRole("")) { 
+                    
+                    
+                    }
+                    nextAction = "Start AP";
+
+
+
+                    break;
+                case "WIP":
+                    nextAction = "Start AP";
+                    break;
+                case "Rejected":
+                    nextAction = "Start AP";
+                    break;
+                case "Ready for Review":
+                    nextAction = "Start AP";
+                    break;
+                case "Approved":
+                    nextAction = "Start AP";
+                    break;
+                default:
+                    nextAction = "N/A";
+                    break;
+            }
+            
+
+            //---- Test only to validate user class methods -----
+            //bool userIsUser = currentUser.hasRole("RZ_USER");
+            //bool userIsAdmin = currentUser.hasRole("RZ_ADMIN");
+            //bool userHasOT = currentUser.hasReviewerMetric("3");
+            //bool userHasVolume = currentUser.hasReviewerMetric("6");
+
+            throw new NotImplementedException();
         }
 
         private string getFormattedValue(string pValue, string pDataType, int valDecPlaces)

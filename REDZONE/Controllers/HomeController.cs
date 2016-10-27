@@ -74,7 +74,7 @@ namespace REDZONE.Controllers
 
         public ActionResult BuildingSummary(string year, string buildingID)
         {
-            BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID);
+            BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name);
 
             //Retrieve the Current Logged on User  Reviewer's metrics (If any)
             ViewBag.ReviewerMetrics = new dscUser(User.Identity.Name).getReviewerMetricIds();

@@ -177,7 +177,7 @@ $(document).ready(function () {
             //contentType: "application/json; charset=utf-8",
             //dataType: "json",
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Retrieve User credentials from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                alert("Failed to Retrieve User credentials from Server!!\n\nError: " + errorThrown + "\n\n");  //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (uData) {
             showPopupForm('User Credential Information', uData);

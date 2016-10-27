@@ -79,6 +79,8 @@ namespace REDZONE.Models
         public string rz_bapm_status { get; set; }   //Building Action Plan Metric Status
         public string metricOwner { get; set; }      // Metric Owner of this Metric Value
         public string metricLastUpdt { get; set; }
+        public string nextCellAction { get; set; }   //Next action to take Based on the Cell Metric Value Status and the Current User Authority
+        public string nextCellActionLink { get; set; }
 
         //-------- Empty Constructor -----------\
         public MeasuredCellEntity() { }

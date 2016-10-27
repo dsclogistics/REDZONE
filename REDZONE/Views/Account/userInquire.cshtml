@@ -36,8 +36,8 @@
                     <div style="text-align:left" title="@ur.roleDesc">
                         <span class="" style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
                         <span style="font-weight:bold">@ur.roleName</span>
-                        @if (!String.IsNullOrEmpty(ur.metrics)) {
-                            <span>(For: @ur.metrics)</span>
+                        @if (!String.IsNullOrEmpty(ur.metricNames)) {
+                            <span>(For: @ur.metricNames)</span>
                         }
                     </div>
                 }

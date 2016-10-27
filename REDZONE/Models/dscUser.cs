@@ -224,6 +224,21 @@ namespace REDZONE.Models
             if (reviewerRole == null) { return "||"; }   //No Metrics assigned as a Reviewer
             return "|" + reviewerRole.metricIds + "|";
         }
+        public bool hasRole(string roleName) { 
+            return roles.FirstOrDefault(x => x.roleName == roleName) == null ? false : true;
+        }
+        public bool hasReviewerMetric(string metricPeriodId)
+        {
+            //Retrieve the User Reviewer Roll (If any)
+            userRole reviewerRole = roles.FirstOrDefault(x => x.roleName == "RZ_AP_REVIEWER");
+            if (reviewerRole == null) { return false; }   //No Metrics assigned as a Reviewer
+            //roleMetric selectedMetric = reviewerRole.roleMetrics.FirstOrDefault(x => x.mpId == metricPeriodId);
+
+            return reviewerRole.roleMetrics.FirstOrDefault(x => x.mpId == metricPeriodId) == null ? false : true;
+        }
+        public bool hasBuilding(string building_Id) {
+            return (buildings.FirstOrDefault(x => x.id == building_Id) == null) ? false : true;
+        }
         #endregion
     }
 

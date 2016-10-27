@@ -7,7 +7,7 @@
     <div class="row" style="margin-bottom:3px">
         <div class="col-xs-8">
             <div class="input-group" style="margin-left:15px;">
-                <span class="input-group-addon" style="width:120px;">Email:</span>
+                <span class="input-group-addon" style="width:120px; text-align:right">Email:</span>
                 <input type="text" class="form-control" readonly="readonly" value="@Html.DisplayFor(model => model.emailAddress)" style="width:450px">
             </div>
         </div>
@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-xs-8">
             <div class="input-group" style="margin-left:15px;">
-                <span class="input-group-addon" style="width:120px;">User SSO:</span>
+                <span class="input-group-addon" style="width:120px; text-align:right">User SSO:</span>
                 <input type="text" class="form-control" readonly="readonly" value="@Html.DisplayFor(model => model.SSO)" style="width:450px">
             </div>
         </div>
@@ -39,19 +39,24 @@
                 {
                     foreach (REDZONE.Models.userRole ur in Model.roles)
                     {
-                <div style="text-align:left; margin-left:10px;" title="@ur.roleDesc">
-                    <span class="" style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
-                    <span style="font-weight:bold">@ur.roleName</span>
-                    @if (!String.IsNullOrEmpty(ur.metrics))
-                            {
-                            <span>(For: @ur.metrics)</span>
-                            }
-                </div>
+                        <div class="row " style="text-align:left; margin:0;" title="@ur.roleDesc">
+                            <div class="col-xs-2" style="margin:0; padding:0; padding-left:10px">
+                                <span style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
+                            </div>
+                            <div class="col-xs-9" style="margin-left:5px">
+                                <span style="font-weight:bold">@ur.roleName</span>
+                                @if (!String.IsNullOrEmpty(ur.metricIds))
+                                {
+                                    <br /><span style="color:blue; font-weight:bold">For: </span><span>@ur.metricNames.Replace("|",", ")</span>
+                                }
+                            </div>
+                            
+                        </div>
                     }
                 }
                 else
                 {
-                <div style="color:red">There are no Roles defined for this user</div>
+                    <div style="color:red">There are no Roles defined for this user</div>
                 }
             </div>
             <div class="col-xs-6">
@@ -60,14 +65,14 @@
                 {
                     foreach (REDZONE.Models.building ub in Model.buildings)
                     {
-                <div>
-                    @ub.buildingName
-                </div>
+                        <div>
+                            @ub.buildingName
+                        </div>
                     }
                 }
                 else
                 {
-                <div style="color:red">There are no Buildings Assigned to this user</div>
+                    <div style="color:red">There are no Buildings Assigned to this user</div>
                 }
             </div>
         </div>
@@ -83,10 +88,10 @@
 
 <br />
 @*<div>
-    Is Admin: @User.IsInRole("ADMIN")
-    <br />
-    Is Manager: @User.IsInRole("MANAGER")
-</div>*@
+        Is Admin: @User.IsInRole("ADMIN")
+        <br />
+        Is Manager: @User.IsInRole("MANAGER")
+    </div>*@
 
 <script>
     $(document).ready(function () {
