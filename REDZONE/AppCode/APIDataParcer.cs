@@ -550,7 +550,15 @@ namespace REDZONE.AppCode
                                             // <--- Finished increasing the Missed Goal Counter
                                             tmp.isViewable = true;
                                             tmp.nextCellAction = getMPV_NextAction(tmp.rz_bapm_status, tmp.mtrc_period_id, buildingID, currentUserSSO); 
-                                            tmp.nextCellActionLink = "New";          // ***** Add Logic Here to calculate the next action Link ******
+                                            
+                                            
+                                            // *********************************************************
+                                            if (tmp.nextCellAction.Equals("View AP")) { tmp.nextCellActionLink = "blue"; }
+                                            else                                      { tmp.nextCellActionLink = "red";  }
+
+                                            //tmp.nextCellActionLink = "";          // ***** Add Logic Here to calculate the next action Link ******
+                                            // *********************************************************
+
                                         }
                                         if (String.IsNullOrEmpty(tmp.displayClass))
                                         {
@@ -657,35 +665,40 @@ namespace REDZONE.AppCode
                 case "Not Started":
                     //Check if User is Submitter for this building or Admin
                     if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || currentUser.hasRole("RZ_ADMIN"))
-                {}
-                else { }
-
-                    if (currentUser.hasRole("")) { 
-                    
-                    
-                    }
-                    nextAction = "Start AP";
-
-
-
+                    {  nextAction = "Start AP";  }
                     break;
-                case "WIP":
-                    nextAction = "Start AP";
-                    break;
+                case "WIP":         //Same as Rejected
                 case "Rejected":
-                    nextAction = "Start AP";
+                    if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN"))
+                    {  nextAction = "Continue AP"; }
+                    else
+                        if (currentUser.hasRole("RZ_BLDG_USER") && hasBuildingAccess) {
+                            nextAction = "View AP";
+                        }
+                        else if ((ap_status == "Rejected" && currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
+                        {
+                            nextAction = "View AP";
+                        }
                     break;
                 case "Ready for Review":
-                    nextAction = "Start AP";
+                    if ((currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned) || currentUser.hasRole("RZ_ADMIN"))
+                    {
+                        nextAction = "Review AP";
+                    }
+                    else if  ((currentUser.hasRole("RZ_BLDG_USER") || currentUser.hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess )   {
+                        nextAction = "View AP";
+                    }
                     break;
                 case "Approved":
-                    nextAction = "Start AP";
+                    if (((currentUser.hasRole("RZ_BLDG_USER") || currentUser.hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN") || (currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
+                    {
+                        nextAction = "View AP";
+                    }
                     break;
                 default:
                     nextAction = "N/A";
                     break;
             }
-            
 
             //---- Test only to validate user class methods -----
             //bool userIsUser = currentUser.hasRole("RZ_USER");
@@ -693,9 +706,34 @@ namespace REDZONE.AppCode
             //bool userHasOT = currentUser.hasReviewerMetric("3");
             //bool userHasVolume = currentUser.hasReviewerMetric("6");
 
-            throw new NotImplementedException();
+            return nextAction;
         }
-
+        private string getMPV_NextActionLink(string nextAction) {
+            string nextActionLink = String.Empty;
+            //switch (nextAction)
+            //{
+            //    case "Start AP":
+            //        //When Clicked:
+            //        //localStorage.setItem("mpvStatus", "Not Started");
+            //        //localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
+            //        nextActionLink = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;;
+            //        break;
+            //    case "Review AP":
+            //        nextActionLink = "";
+            //        break;
+            //    case "Continue AP":  //Same as View AP
+            //    case "View AP":
+            //                localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
+            //               var bapmId = $cellClicked.find('#bapm_id').val();
+            //               window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + bapmId;
+       
+            //               nextActionLink = "";
+            //        break;
+            //    default:
+            //        break;
+            //}
+            return nextActionLink;
+        }
         private string getFormattedValue(string pValue, string pDataType, int valDecPlaces)
         {
             //Data types are "str", "char", "int", "dec", "cur", "pct"

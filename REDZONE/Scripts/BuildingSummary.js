@@ -322,62 +322,67 @@ function menuItemListener(link) {
 
     toggleMenuOff();
     cacheMetricValueVariables($cellClicked);        // All Cell values that might need to be accessed after page navigation are cached to Local Storage
-    if (contextMenuOption == "Manage" || contextMenuOption == "Add") {
-        localStorage.setItem("mpvStatus", "");   //Reset "Status" Local Storage Value 
-        //If user is Managing or adding Reasons
-        //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
-        //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
-        window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
-    }
-    else if (contextMenuOption == "View") {
-        //Reset the Popup Details as to not display older Data
-        $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
-        // Populate via Ajax the partial View that will be displayed in the pop up Form
-        //Parameters to pass:  "id" (Metric Period Value Id) 
-        $.ajax({
-            url: '/MPVReasons/viewReasons',
-            method: "POST",
-            cache: false,
-            //type: "POST",
-            //data: payload,
-            data: { id: mpvId },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to retrieve Reasons Data from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+
+    switch (contextMenuOption) {
+        case "Manage":   //Same as 'Add'
+        case "Add":
+            localStorage.setItem("mpvStatus", "");   //Reset "Status" Local Storage Value 
+            //If user is Managing or adding Reasons
+            //alert("Submitting '" + contextMenuOption + "' Action for:\n\n" + getMetricValueVariablesMessage());
+            //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
+            break;
+        case "View":
+            //Reset the Popup Details as to not display older Data
+            $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
+            // Populate via Ajax the partial View that will be displayed in the pop up Form
+            //Parameters to pass:  "id" (Metric Period Value Id) 
+            $.ajax({
+                url: '/MPVReasons/viewReasons',
+                method: "POST",
+                cache: false,
+                //type: "POST",
+                //data: payload,
+                data: { id: mpvId },
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to retrieve Reasons Data from Server!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                $("#reasonsViewContainer").html(d);
+            });
+
+            //Display the popup Form After correctly populated by Ajax call
+            $('#popupViewReasons').modal('show');
+            break;
+        case "StartAP":
+            //RedirectUSer to the Reason Management Page to Start by editing/Adding Reasons
+            localStorage.setItem("mpvStatus", "Not Started");
+            localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
+            break;
+        case "ViewAP":            //Same as 'ContinueAP'
+        case "ContinueAP":
+            localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
+            var bapmId = $cellClicked.find('#bapm_id').val();
+            var errorMessage = "";
+
+            if (bapmId == null || bapmId == "") { errorMessage = "The Action Plan for Metric Id can't be resolved.\n"; }
+            //if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
+            if (errorMessage != "") { alert(errorMessage); }
+            else {
+                //window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + bapmId + "&mtrc_period_val_id=" + mpvId; //+ "&returnUrl=" + backUrl;
+                window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + bapmId;
+                // + $('#buildingId').val()
+                //
+                // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
             }
-        }).done(function (d) {
-            $("#reasonsViewContainer").html(d);
-        });
-
-        //Display the popup Form After correctly populated by Ajax call
-        $('#popupViewReasons').modal('show');
-    }
-    else if (contextMenuOption == "StartAP") {
-        //RedirectUSer to the Reason Management Page to Start by editing/Adding Reasons
-        localStorage.setItem("mpvStatus", "Not Started");
-        localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
-        window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + getMPid() + "&returnUrl=" + backUrl;
-    }
-    else if (contextMenuOption == "ViewAP" || contextMenuOption == "ContinueAP") {
-        localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
-        var bapmId = $cellClicked.find('#bapm_id').val();
-        var errorMessage = "";
-
-        if (bapmId == null || bapmId == "") { errorMessage = "The Action Plan for Metric Id can't be resolved.\n"; }
-        //if (mpvId == null || mpvId == "") { errorMessage += "The Metric Period Value Id can't be resolved.\nPlease refresh your browser and try again."; }
-        if (errorMessage != "") { alert(errorMessage); }
-        else {
-            //window.location.href = "/ActionPlan/viewEdit/?" + "bapm_id=" + bapmId + "&mtrc_period_val_id=" + mpvId; //+ "&returnUrl=" + backUrl;
-            window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + bapmId;
-            // + $('#buildingId').val()
-            //
-            // http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
-        }
-        //alert("Back URL is: " + backUrl);
-    }
-    else {
-        alert("This menu option is not yet Enabled.");
+            //alert("Back URL is: " + backUrl);
+            break;
+        default:
+            alert("This menu option is not yet Enabled.");
+            break;
     }
 }
 //======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
@@ -451,6 +456,9 @@ $(".collapse").on('shown.bs.collapse', function () {
     $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly Expanded Section
 });
 
+$('.lnkGotoAP').click(function () {
+    alert("Under Maintenance...");
+});
 
 //$(".collapse").on('hidden.bs.collapse', function () {
 //    alert('The collapsible content is now hidden.');

@@ -9,10 +9,10 @@
 <script src="~/Scripts/aes-ctr.js"></script>
 <script src="~/Scripts/BuildingSummary.js"></script>
 <style>
-  .divCell {
-      display: table-cell;
-      vertical-align: middle;      
-  }
+    .divCell {
+        display: table-cell;
+        vertical-align: middle;
+    }
 </style>
 
 <div class="row" style="font-family:Arial; margin-top: 5px">
@@ -106,9 +106,8 @@
                                 Goals Missed
                             </td>
                         </tr>  <!-- END OF HEADERS/TITLES ROW -->
-
-                 <!-- =========================================================================================================== -->
-                 <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
+                        <!-- =========================================================================================================== -->
+                        <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
                         @foreach (var buildingRow in Model.metricRows)
                         {
                             colCounter = 0;
@@ -190,43 +189,43 @@
                             <td style="text-align:left">@ViewBag.ReviewerMetrics</td>
                         </tr>
                         @*<tr>
-                            <td class="" style="border:none; text-align:left">
-                                <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span>
-                                <span style="margin-left:5px; float:right; margin-right:30px">Right Click any cell to Add/Edit Reasons and Action Plans</span>
-                            </td>
-                        </tr>*@
+                                <td class="" style="border:none; text-align:left">
+                                    <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span>
+                                    <span style="margin-left:5px; float:right; margin-right:30px">Right Click any cell to Add/Edit Reasons and Action Plans</span>
+                                </td>
+                            </tr>*@
                         @*<tr class="" style="border:none">
-                            
-                            <td class="" style="width:25%; border:none; text-align:left">
-                                <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span><br />
-                                <span style="margin-left:5px;">Right Click any cell to Add/Edit Reasons and Action Plans</span>
-                            </td>
-                            @{colCounter = 0;}
-                            @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
-                            {
-                                <td class="" style="border:none; width: @Model.metricColWidth">
+
+                                <td class="" style="width:25%; border:none; text-align:left">
+                                    <span style="color:red; margin-left:5px">*</span><span style="font-weight:bold"> Metrics for this month have not been finalized</span><br />
+                                    <span style="margin-left:5px;">Right Click any cell to Add/Edit Reasons and Action Plans</span>
+                                </td>
+                                @{colCounter = 0;}
+                                @foreach (REDZONE.Models.MeasuredCellEntity actionCell in Model.buildingActionsRow.entityMetricCells)
+                                {
+                                    <td class="" style="border:none; width: @Model.metricColWidth">
+                                        <br />
+                                    </td>
+
+                                    bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
+                                        if (cellIsViewable)
+                                        {
+                                            <td class="" style="border:none; width:@Model.metricColWidth">
+                                                @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
+                                                { <br /> }
+                                                else
+                                                {
+                                                    <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
+                                                    <text>Total Closed: @actionCell.score</text>
+                                                }
+                                            </td>
+                                        }
+                                        colCounter++;
+                                }
+                                <td class="" style="width:8.33%; border:none">
                                     <br />
                                 </td>
-
-                                bool cellIsViewable = Model.buildingHeadings.entityMetricCells[colCounter].isViewable;
-                                    if (cellIsViewable)
-                                    {
-                                        <td class="" style="border:none; width:@Model.metricColWidth">
-                                            @if (String.IsNullOrEmpty(@actionCell.metricValue) || !actionCell.isViewable || Model.buildingScoreRow.entityMetricCells[colCounter].score < 3)
-                                            { <br /> }
-                                            else
-                                            {
-                                                <a href="@actionCell.cellValueURL" target="_blank" style="color:red;" title="Click to open Google Action Form on a new Browser Tab">Action Required<br />[ Click Here ]</a>
-                                                <text>Total Closed: @actionCell.score</text>
-                                            }
-                                        </td>
-                                    }
-                                    colCounter++;
-                            }
-                            <td class="" style="width:8.33%; border:none">
-                                <br />
-                            </td>
-                        </tr>*@ <!-- ACTIONS ROW END -->
+                            </tr>*@ <!-- ACTIONS ROW END -->
                     </table>
                 </div> <!-- End of Actions Row -->
                 @*<div class="row" style="border:none; margin: 0; padding:0; text-align:left">
@@ -234,14 +233,14 @@
                         <br /><br />
                     </div>*@
                 <br />
-                
+
  <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
                 <div id="APhistory" style="max-width:1000px; margin:0 auto">
                     @*Draw a Section for each Month in Reverse Order*@
                     @{
-                        colCounter = 0;
-                        bool isFirstMonth = true;
-                      }
+                            colCounter = 0;
+                            bool isFirstMonth = true;
+                    }
                     @for (int mIndex = Model.buildingHeadings.entityMetricCells.Count() - 1; mIndex >= 0; mIndex--)
                     {
                         REDZONE.Models.MeasuredCellEntity dscBldngHdr = Model.buildingHeadings.entityMetricCells[mIndex];
@@ -270,7 +269,7 @@
                                                         {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
                                                     </span>
                                                     @*@if (isFirstMonth)
-                                                    {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
+                                                        {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
                                                 </div>
                                             </td>
                                             <td style="width:35%">
@@ -304,26 +303,15 @@
                                                         <td style="width:25%; font-weight:bold">@buildingRow.rowName</td>
                                                         <td style="width:20%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
                                                         <td style="width:13%">
-                                                            @{
-                                                    switch (buildingRow.entityMetricCells[mIndex].rz_bapm_status)
-                                                    {
-                                                        case "Not Started":
-                                                            <a href="#" style="color:red">Start AP</a>
-                                                            break;
-                                                        case "WIP":
-                                                        case "Rejected":
-                                                            <a href="#" style="color:red">Continue</a>
-                                                            break;
-                                                        case "Approved":
-                                                            <a href="#" style="color:blue">View</a>
-                                                            break;
-                                                        case "Ready For Review":
-                                                            <a href="#" style="color:red">Review</a>
-                                                            break;
-                                                        default:
-                                                            <span>[ Undefined ]</span>
-                                                            break;
-                                                                }
+                                                            @if (@buildingRow.entityMetricCells[mIndex].nextCellAction.Equals("---"))
+                                                            {
+                                                                <span >@buildingRow.entityMetricCells[mIndex].nextCellAction</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="lnkGotoAP" href="#" style="color:@buildingRow.entityMetricCells[mIndex].nextCellActionLink">
+                                                                    @buildingRow.entityMetricCells[mIndex].nextCellAction
+                                                                </a>
                                                             }
                                                         </td>
                                                         <td style="width:12%">N/A</td>
@@ -336,77 +324,77 @@
                                     </table>
                                 </div>
                             </div>
-                            isFirstMonth = false;
+                                            isFirstMonth = false;
                         }
                         colCounter++;
                     }
                 </div>
                 <br />
-                
+
  <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
                 @*<div class="row" style="margin:10px 0px;">
-                    <div class="col-sm-7">
-                        <div class="row actions-th" style="background-color:#f5f5f5">
-                            Meeting Date and Times
+                        <div class="col-sm-7">
+                            <div class="row actions-th" style="background-color:#f5f5f5">
+                                Meeting Date and Times
+                            </div>
+                            <div class="row" style="margin: 8px 10px 0px 10px; ">
+                                <table class="bordered table-bordered" style="margin:0; width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center; width:20%">Metric</th>
+                                            <th style="text-align:center; width:20%">Corporate Resource</th>
+                                            <th style="text-align:center; width:20%">Meeting Date</th>
+                                            <th style="text-align:center; width:40%">Meeting Time (CST)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="padding:0">
+                                            <td style="width:20%">POP/Net FTE</td>
+                                            <td style="width:20%">Christina Dempsey</td>
+                                            <td style="width:20%"></td>
+                                            <td style="width:40%"></td>
+                                        </tr>
+                                        <tr class="bordered-r">
+                                            <td>Turnover</td>
+                                            <td>Mona Mounts</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>OT</td>
+                                            <td>Christina Dempsey</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trainees</td>
+                                            <td>Mona Mounts</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Safety</td>
+                                            <td>Joe Smiesko</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>IT Tickets</td>
+                                            <td>Pete Kuranchie</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Financial</td>
+                                            <td>Steve Pignataro</td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="row" style="margin: 8px 10px 0px 10px; ">
-                            <table class="bordered table-bordered" style="margin:0; width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:center; width:20%">Metric</th>
-                                        <th style="text-align:center; width:20%">Corporate Resource</th>
-                                        <th style="text-align:center; width:20%">Meeting Date</th>
-                                        <th style="text-align:center; width:40%">Meeting Time (CST)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr style="padding:0">
-                                        <td style="width:20%">POP/Net FTE</td>
-                                        <td style="width:20%">Christina Dempsey</td>
-                                        <td style="width:20%"></td>
-                                        <td style="width:40%"></td>
-                                    </tr>
-                                    <tr class="bordered-r">
-                                        <td>Turnover</td>
-                                        <td>Mona Mounts</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>OT</td>
-                                        <td>Christina Dempsey</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trainees</td>
-                                        <td>Mona Mounts</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Safety</td>
-                                        <td>Joe Smiesko</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>IT Tickets</td>
-                                        <td>Pete Kuranchie</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Financial</td>
-                                        <td>Steve Pignataro</td>
-                                        <td>N/A</td>
-                                        <td>N/A</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>*@ <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
+                    </div>*@ <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
 
             }
             else
@@ -419,10 +407,6 @@
         </div> <!-- END OF PANEL BODY -->
     </div><!-- END OF PANEL -->
 </div> <!-- ROW END -->
-
-
-
-
 <!--  ************************************* START OF RIGHT CLICK CONTEXT MENU **************************************** -->
 <nav id="context-menu" class="context-menu" style="border: 3px double gray">
     <ul id="cMenu" class="context-menu__items " style="padding:0; margin:0; color:darkgray">
@@ -474,7 +458,6 @@
             </li>*@
     </ul>
 </nav>  <!-- END OF RIGHT CLICK CONTEXT MENU -->
-
 <!-- START OF RIGHT CLICK POPUP REASONS DISPLAY  -->
 <div id="popupViewReasons" class="modal fade" role="dialog">
     <div class="modal-dialog" style="width:50%; min-width:670px">
@@ -502,4 +485,3 @@
     </div>
 </div>
 <!-- END OF RIGHT CLICK POPUP REASONS DISPLAY  -->
-
