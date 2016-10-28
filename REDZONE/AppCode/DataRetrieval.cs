@@ -753,6 +753,28 @@ namespace REDZONE.AppCode
             }
         }
 
+        //Get list of action plans from prior months
+        //WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP
+        public string lookUpActionPlans(string productname, string bapm_id, string begmonth, string begyear, string endmonth, string endyear, string metric_period_id, string dsc_mtrc_lc_bldg_id, string status)
+        {
+            string method = "POST";
+            string endPoint = "lookupap";
+            string parsedContent = "{\"productname\":\"" + productname + "\"";
+
+            if (bapm_id != null)
+            {
+                parsedContent = ", \"rz_bapm_id\":\"" + bapm_id + "\"";
+            }
+            else if(bapm_id == null)
+            {
+
+            }
+
+            parsedContent = parsedContent + "}";
+
+            return submitAPIPost(method, endPoint, parsedContent);
+        }
+
         //Submit Existing/New Action Plan
         public string submitActionPlan(string raw_json)
         {
@@ -841,6 +863,41 @@ namespace REDZONE.AppCode
             {
                 return e.Message;
             }
+        }
+
+        //----------------------------------------------------------------------------------------------
+        //-------------------------------------HELPER FUNCTIONS-----------------------------------------
+        //----------------------------------------------------------------------------------------------
+        private string submitAPIPost(string method, string endPoint, string parsedContent)
+        {
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = method;
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string JsonString = String.Empty;
+
+            try
+            {
+                if(method == "POST")
+                {
+                    Byte[] bytes = encoding.GetBytes(parsedContent);
+                    Stream newStream = request.GetRequestStream();
+                    newStream.Write(bytes, 0, bytes.Length);
+                    newStream.Close();
+                }
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
         }
 
     }
