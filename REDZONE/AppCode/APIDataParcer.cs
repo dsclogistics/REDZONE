@@ -656,12 +656,9 @@ namespace REDZONE.AppCode
             switch (ap_status) {
                 case "Not Started":
                     //Check if User is Submitter for this building or Admin
-                    if(currentUser.hasRole("RZ_AP_SUBMITTER") ){
-                    
-                    }
                     if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || currentUser.hasRole("RZ_ADMIN"))
-                { $("#li_StartAP").show(); }
-                else { $("#li_StartAP").hide(); }
+                {}
+                else { }
 
                     if (currentUser.hasRole("")) { 
                     
