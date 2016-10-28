@@ -106,6 +106,9 @@
                                 Goals Missed
                             </td>
                         </tr>  <!-- END OF HEADERS/TITLES ROW -->
+
+
+
                         <!-- =========================================================================================================== -->
                         <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
                         @foreach (var buildingRow in Model.metricRows)
@@ -305,12 +308,15 @@
                                                         <td style="width:13%">
                                                             @if (@buildingRow.entityMetricCells[mIndex].nextCellAction.Equals("---"))
                                                             {
-                                                                <span >@buildingRow.entityMetricCells[mIndex].nextCellAction</span>
+                                                                <span>@buildingRow.entityMetricCells[mIndex].nextCellAction</span>
                                                             }
                                                             else
                                                             {
                                                                 <a class="lnkGotoAP" href="#" style="color:@buildingRow.entityMetricCells[mIndex].nextCellActionLink">
                                                                     @buildingRow.entityMetricCells[mIndex].nextCellAction
+                                                                    <input id="bapm_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].rz_bapm_id" />
+                                                                    <input id="mpv_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].cellValueId" />
+                                                                    <input id="mp_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].mtrc_period_id" />
                                                                 </a>
                                                             }
                                                         </td>
