@@ -660,8 +660,8 @@ namespace REDZONE.AppCode
                     
                     }
                     if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || currentUser.hasRole("RZ_ADMIN"))
-                { $("#li_StartAP").show(); }
-                else { $("#li_StartAP").hide(); }
+                {  }
+                else {  }
 
                     if (currentUser.hasRole("")) { 
                     
