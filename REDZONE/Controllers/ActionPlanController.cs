@@ -28,9 +28,6 @@ namespace REDZONE.Controllers
             int intMpId = mp_id ?? 0;
             string productName = "Red Zone";
 
-            ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
-            ViewBag.bapmId = bapmId;
-
             //-------------------------------
             //Populate Action Plan View Model
             //-------------------------------
@@ -41,6 +38,45 @@ namespace REDZONE.Controllers
             apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
 
             apViewModel.actionPlanList = apViewModel.actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
+
+            apViewModel.canAccessAP = false;
+            apViewModel.canEditReasons = false;
+            apViewModel.canViewAP = false;
+            apViewModel.canSubmitAP = false;
+            apViewModel.canReviewAP = false;
+
+            //Check User Authorization
+            dscUser actionPlanUser = new dscUser(User.Identity.Name);
+            if ((actionPlanUser.hasRole("RZ_AP_SUBMITTER") || 
+                actionPlanUser.hasRole("RZ_BLDG_USER")) && 
+                actionPlanUser.hasBuilding(intBldgId.ToString()))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canEditReasons = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
+                apViewModel.canViewAP = true;
+                apViewModel.canSubmitAP = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
+            }
+            else if (actionPlanUser.hasRole("RZ_AP_REVIEWER") && actionPlanUser.hasReviewerMetric(intMpId.ToString()))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canReviewAP = true;
+            }
+            else if (actionPlanUser.hasRole("RZ_ADMIN"))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canEditReasons = true;
+                apViewModel.canViewAP = true;
+                apViewModel.canSubmitAP = true;
+                apViewModel.canReviewAP = true;
+            }
+            else
+            {
+
+            }
+
+            ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
+            ViewBag.bapmId = bapmId;
+
 
             //Add List of Reasons 
             //-------------------
