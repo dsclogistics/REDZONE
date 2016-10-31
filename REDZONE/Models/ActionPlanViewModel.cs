@@ -7,11 +7,15 @@ namespace REDZONE.Models
 {
     public class ActionPlanViewModel
     {
+        //User Authorization
         public bool canAccessAP { get; set; }
         public bool canEditReasons { get; set; }
-        public bool canViewAP { get; set; }
+        public bool canViewFinishedAP { get; set; }
+        public bool canViewWipAP { get; set; }
         public bool canSubmitAP { get; set; }
         public bool canReviewAP { get; set; }
+
+        //Model
         public List<MPReason> reasonList { get; set; }
         public string bapm_id { get; set; }
         public string bapmStatus { get; set; }
@@ -25,6 +29,12 @@ namespace REDZONE.Models
 
         public ActionPlanViewModel()
         {
+            canAccessAP = false;
+            canEditReasons = false;
+            canViewFinishedAP = false;
+            canViewWipAP = false;
+            canSubmitAP = false;
+            canReviewAP = false;
             reasonList = new List<MPReason>();
             actionPlanList = new List<ActionPlan>();
             priorActionPlanList = new List<PriorActionPlan>();

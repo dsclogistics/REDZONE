@@ -45,6 +45,7 @@ namespace REDZONE.Models
         public string submittedBy { get; set; }
         public string approvedBy { get; set; }
         public List<MPReason> priorAPReasonList { get; set; }
+        public string priorAPStatusColor { get; set; }
     }
 
 }

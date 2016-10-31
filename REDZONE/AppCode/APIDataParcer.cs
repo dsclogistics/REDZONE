@@ -1359,6 +1359,7 @@ namespace REDZONE.AppCode
                     }
 
                     tempPriorActionPlan.priorAPReasonList = reasonList;
+                    tempPriorActionPlan.priorAPStatusColor = "green";
 
                     if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMonth)) tempPriorActionPlan.priorAPMonth = "";
                     if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPYear)) tempPriorActionPlan.priorAPYear = "";
@@ -1378,6 +1379,104 @@ namespace REDZONE.AppCode
 
             }
             return priorActionPlanList;
+        }
+
+        //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, and status.
+        public PriorActionPlan getBapmId(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear, string status)
+        {
+            PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
+            List<MPReason> reasonList = new List<MPReason>();
+            MPReason tempMPReason = new MPReason();
+
+            string raw_data = api.lookUpActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, status);
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jPriorActionPlanList = (JArray)parsed_result["actionplans"];
+
+                var res = jPriorActionPlanList[0];
+
+                tempPriorActionPlan = new Models.PriorActionPlan();
+                reasonList = new List<MPReason>();
+                tempPriorActionPlan.apd_id = "";
+                tempPriorActionPlan.bapm_id = (string)res["rz_bapm_id"];
+                tempPriorActionPlan.mtrc_period_val_id = (string)res["mtrc_period_val_id"];
+                tempPriorActionPlan.mtrc_period_id = (string)res["mtrc_period_id"];
+                tempPriorActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
+                tempPriorActionPlan.priorAPMonth = intToMonth((int)res["month"]);
+                tempPriorActionPlan.priorAPYear = (string)res["year"];
+                tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                tempPriorActionPlan.priorAPMetricValue = (string)res["mtrc_period_val_value"];
+                tempPriorActionPlan.priorAPStatus = (string)res["rz_bapm_status"];
+                tempPriorActionPlan.priorAPText = "";
+                tempPriorActionPlan.priorAPReviewText = "";
+                tempPriorActionPlan.submittedBy = "";
+                tempPriorActionPlan.approvedBy = "";
+
+                JArray jPriorReasonList = (JArray)res["assignedreasons"];
+
+                foreach (var rawReason in jPriorReasonList)
+                {
+                    tempMPReason = new Models.MPReason();
+
+                    tempMPReason.val_reason_id = (string)rawReason["mpvr_id"];
+                    tempMPReason.reason_id = (string)rawReason["mpr_id"];
+                    tempMPReason.reason_text = (string)rawReason["mpr_display_text"];
+                    tempMPReason.mpvr_Comment = (string)rawReason["mpvr_comment"];
+
+                    if (String.IsNullOrEmpty(tempMPReason.reason_text)) tempMPReason.reason_text = "";
+                    if (String.IsNullOrEmpty(tempMPReason.mpvr_Comment)) tempMPReason.mpvr_Comment = "";
+
+                    reasonList.Add(tempMPReason);
+                }
+
+                tempPriorActionPlan.priorAPReasonList = reasonList;
+
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMonth)) tempPriorActionPlan.priorAPMonth = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPYear)) tempPriorActionPlan.priorAPYear = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMetricGoalText)) tempPriorActionPlan.priorAPMetricGoalText = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMetricValue)) tempPriorActionPlan.priorAPMetricValue = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPStatus)) tempPriorActionPlan.priorAPStatus = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPText)) tempPriorActionPlan.priorAPText = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPReviewText)) tempPriorActionPlan.priorAPReviewText = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.submittedBy)) tempPriorActionPlan.submittedBy = "";
+                if (String.IsNullOrEmpty(tempPriorActionPlan.approvedBy)) tempPriorActionPlan.approvedBy = "";
+
+                //Assign status color
+                switch (tempPriorActionPlan.priorAPStatus)
+                {
+                    case "Not Started":
+                        tempPriorActionPlan.priorAPStatusColor = "orange";
+                        break;
+                    case "WIP":
+                        tempPriorActionPlan.priorAPStatusColor = "orange";
+                        break;
+                    case "Ready For Review":
+                        tempPriorActionPlan.priorAPStatusColor = "orange";
+                        break;
+                    case "Rejected":
+                        tempPriorActionPlan.priorAPStatusColor = "red";
+                        break;
+                    case "Rejected New":
+                        tempPriorActionPlan.priorAPStatusColor = "red";
+                        break;
+                    case "Approved":
+                        tempPriorActionPlan.priorAPStatusColor = "green";
+                        break;
+                    default:
+                        tempPriorActionPlan.priorAPStatusColor = "green";
+                        break;
+                }
+
+
+            }
+            catch
+            {
+
+            }
+            return tempPriorActionPlan;
         }
 
         // ====================== HELPER FUNCTIONS ================================

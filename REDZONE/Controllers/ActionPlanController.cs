@@ -39,44 +39,8 @@ namespace REDZONE.Controllers
 
             apViewModel.actionPlanList = apViewModel.actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
 
-            apViewModel.canAccessAP = false;
-            apViewModel.canEditReasons = false;
-            apViewModel.canViewAP = false;
-            apViewModel.canSubmitAP = false;
-            apViewModel.canReviewAP = false;
-
-            //Check User Authorization
-            dscUser actionPlanUser = new dscUser(User.Identity.Name);
-            if ((actionPlanUser.hasRole("RZ_AP_SUBMITTER") || 
-                actionPlanUser.hasRole("RZ_BLDG_USER")) && 
-                actionPlanUser.hasBuilding(intBldgId.ToString()))
-            {
-                apViewModel.canAccessAP = true;
-                apViewModel.canEditReasons = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
-                apViewModel.canViewAP = true;
-                apViewModel.canSubmitAP = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
-            }
-            else if (actionPlanUser.hasRole("RZ_AP_REVIEWER") && actionPlanUser.hasReviewerMetric(intMpId.ToString()))
-            {
-                apViewModel.canAccessAP = true;
-                apViewModel.canReviewAP = true;
-            }
-            else if (actionPlanUser.hasRole("RZ_ADMIN"))
-            {
-                apViewModel.canAccessAP = true;
-                apViewModel.canEditReasons = true;
-                apViewModel.canViewAP = true;
-                apViewModel.canSubmitAP = true;
-                apViewModel.canReviewAP = true;
-            }
-            else
-            {
-
-            }
-
-            ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
+            //ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
             ViewBag.bapmId = bapmId;
-
 
             //Add List of Reasons 
             //-------------------
@@ -100,7 +64,12 @@ namespace REDZONE.Controllers
 
             recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
-            foreach(PriorActionPlan priorAP in recentAPList)
+            PriorActionPlan currentAP = dataParcer.getBapmId(productName, mpId, bldgId, DateTime.Now.AddMonths(-1).Month.ToString(), endyear, 
+                                                            DateTime.Now.AddMonths(-1).Month.ToString(), endyear, "Not Started,WIP,Ready For Review,Rejected");
+
+            recentAPList.Add(currentAP);
+
+            foreach (PriorActionPlan priorAP in recentAPList)
             {
                 if(bapmId.ToString() == priorAP.bapm_id)
                 {
@@ -110,7 +79,7 @@ namespace REDZONE.Controllers
                 }
             }
 
-            apViewModel.priorActionPlanList = recentAPList;
+            apViewModel.priorActionPlanList = recentAPList.OrderByDescending(x => dataParcer.monthToInt(x.priorAPMonth)).ThenByDescending(x => x.priorAPYear).ToList();
 
 
             //-----------
@@ -157,6 +126,36 @@ namespace REDZONE.Controllers
                 newActionPlan.reviewerComments = "";
                 apViewModel.actionPlanList.Add(newActionPlan);
                 apViewModel.bapmStatus = "";
+            }
+
+            //----------------------
+            //Set User Authorization
+            //----------------------           
+            dscUser actionPlanUser = new dscUser(User.Identity.Name);
+
+            if ((actionPlanUser.hasRole("RZ_AP_SUBMITTER") || actionPlanUser.hasRole("RZ_BLDG_USER")) 
+                && actionPlanUser.hasBuilding(intBldgId.ToString()))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canEditReasons = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
+                apViewModel.canViewFinishedAP = true;
+                apViewModel.canViewWipAP = true;
+                apViewModel.canSubmitAP = (actionPlanUser.hasRole("RZ_BLDG_USER")) ? false : true;
+            }
+            else if (actionPlanUser.hasRole("RZ_AP_REVIEWER") && actionPlanUser.hasReviewerMetric(intMpId.ToString()))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canViewFinishedAP = true;
+                apViewModel.canReviewAP = true;
+            }
+            else if (actionPlanUser.hasRole("RZ_ADMIN"))
+            {
+                apViewModel.canAccessAP = true;
+                apViewModel.canEditReasons = true;
+                apViewModel.canViewFinishedAP = true;
+                apViewModel.canViewWipAP = true;
+                apViewModel.canSubmitAP = true;
+                apViewModel.canReviewAP = true;
             }
 
             return View(apViewModel);

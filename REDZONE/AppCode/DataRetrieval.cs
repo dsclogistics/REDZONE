@@ -754,25 +754,33 @@ namespace REDZONE.AppCode
         }
 
         //Get list of action plans from prior months
-        //WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP
-        public string lookUpActionPlans(string productname, string bapm_id, string begmonth, string begyear, string endmonth, string endyear, string metric_period_id, string dsc_mtrc_lc_bldg_id, string status)
+        public string lookUpActionPlans(string productname, string metric_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear, string status)
         {
-            string method = "POST";
             string endPoint = "lookupap";
-            string parsedContent = "{\"productname\":\"" + productname + "\"";
-
-            if (bapm_id != null)
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = "{\"productname\":\"" + productname + "\", \"mtrc_period_id\":\"" + metric_period_id + "\", \"dsc_mtrc_lc_bldg_id\":\"" + dsc_mtrc_lc_bldg_id + "\", \"begmonth\":\"" + begmonth + "\", \"begyear\":\"" + begyear + "\", \"endmonth\":\"" + endmonth + "\", \"endyear\":\"" + endyear + "\", \"status\":\"" + status + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
             {
-                parsedContent = ", \"rz_bapm_id\":\"" + bapm_id + "\"";
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
             }
-            else if(bapm_id == null)
+            catch (Exception e)
             {
-
+                return e.Message;
             }
-
-            parsedContent = parsedContent + "}";
-
-            return submitAPIPost(method, endPoint, parsedContent);
         }
 
         //Submit Existing/New Action Plan
@@ -863,41 +871,6 @@ namespace REDZONE.AppCode
             {
                 return e.Message;
             }
-        }
-
-        //----------------------------------------------------------------------------------------------
-        //-------------------------------------HELPER FUNCTIONS-----------------------------------------
-        //----------------------------------------------------------------------------------------------
-        private string submitAPIPost(string method, string endPoint, string parsedContent)
-        {
-            WebRequest request = WebRequest.Create(api_url + endPoint);
-            request.Method = method;
-            request.ContentType = "application/json";
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string JsonString = String.Empty;
-
-            try
-            {
-                if(method == "POST")
-                {
-                    Byte[] bytes = encoding.GetBytes(parsedContent);
-                    Stream newStream = request.GetRequestStream();
-                    newStream.Write(bytes, 0, bytes.Length);
-                    newStream.Close();
-                }
-                WebResponse response = request.GetResponse();
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
-                    JsonString = reader.ReadToEnd();
-                    return JsonString;
-                }
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
-
         }
 
     }
