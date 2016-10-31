@@ -680,7 +680,7 @@ namespace REDZONE.AppCode
                             nextAction = "View AP";
                         }
                     break;
-                case "Ready for Review":
+                case "Ready For Review":
                     if ((currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned) || currentUser.hasRole("RZ_ADMIN"))
                     {
                         nextAction = "Review AP";

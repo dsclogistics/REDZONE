@@ -364,6 +364,7 @@ function menuItemListener(link) {
             break;
         case "ViewAP":            //Same as 'ContinueAP'
         case "ContinueAP":
+        case "ReviewAP":
             localStorage.setItem("bapmId", $cellClicked.find('#bapm_id').val());
             var bapmId = $cellClicked.find('#bapm_id').val();
             var errorMessage = "";
@@ -457,7 +458,28 @@ $(".collapse").on('shown.bs.collapse', function () {
 });
 
 $('.lnkGotoAP').click(function () {
-    alert("Under Maintenance...");
+    var currentAction = $.trim($(this).html());
+    var bapm_id = $(this).find('#bapm_id').val();
+    var mpvId = $(this).find('#mpv_id').val();
+    var mp_id = $(this).find('#mp_id').val();
+
+    var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+
+    localStorage.setItem("bapmId", bapm_id);     // Reset the Local Storage value before redirection
+
+    switch (currentAction) {
+        case "Start AP":
+            localStorage.setItem("mpvStatus", "Not Started");
+
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mp_id + "&returnUrl=" + backUrl;
+            //alert("Great! You are ready to Start your action plan for:\n bapm_id :" + bapm_id + "\n mpvId :" + mpvId + "\n MP Id :" + mp_id );
+            break;
+        default:
+            window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + mp_id + "&bldg_id=" + getBuildingId() + "&bapm_id=" + bapm_id;
+            //alert("Redirecting you to View/Continue your action plan for:\nMP Id :" + mp_id + "\nBuilding Id :" + getBuildingId() + "\nbapm_id :" + bapm_id);
+            break;
+    }
+
 });
 
 //$(".collapse").on('hidden.bs.collapse', function () {
