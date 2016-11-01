@@ -64,10 +64,10 @@ namespace REDZONE.Controllers
 
             recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
-            PriorActionPlan currentAP = dataParcer.getBapmId(productName, mpId, bldgId, DateTime.Now.AddMonths(-1).Month.ToString(), endyear, 
-                                                            DateTime.Now.AddMonths(-1).Month.ToString(), endyear, "Not Started,WIP,Ready For Review,Rejected");
+            PriorActionPlan currentAP = dataParcer.getMostRecentAP(productName, mpId, bldgId, DateTime.Now.AddMonths(-11).Month.ToString(), DateTime.Now.AddMonths(-11).Year.ToString(), 
+                                                            DateTime.Now.AddMonths(-1).Month.ToString(), DateTime.Now.AddMonths(-1).Year.ToString());
 
-            recentAPList.Add(currentAP);
+            if (currentAP.bapm_id != null && currentAP.priorAPStatus != "Approved") { recentAPList.Add(currentAP); } 
 
             foreach (PriorActionPlan priorAP in recentAPList)
             {
@@ -161,99 +161,19 @@ namespace REDZONE.Controllers
             return View(apViewModel);
         }
 
-
-
-        // GET: ActionPlan
-        //public ActionResult viewEdit2(int? bapm_id, int? mtrc_period_val_id)
+        //[HttpPost]
+        //// POST: _priorActionPlans
+        //public ActionResult _priorActionPlans(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         //{
-        //    //Valid Action Pan Status values are:
-        //    // [rz_bapm_status] = 'Not Started'  OR 'WIP' OR 'Ready For Review' OR 'Approved' OR 'Rejected'
+        //    List<PriorActionPlan> priorAPList = new List<PriorActionPlan>();
 
-        //    // Testing: http://localhost:56551/ActionPlan/viewEdit/?bapm_id=3&mtrc_period_val_id=3422
+        //    priorAPList = dataParcer.getPriorActionPlanList(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
 
-        //    // The "id" received as a parameter is the Building Action Plan Metric id ('bapm_id'). We will pass that to the API to get the data
-        //    int bapmId = bapm_id ?? 0;
-        //    int mpvId = mtrc_period_val_id ?? 0;
-        //    string productName = "Red Zone";
-
-        //    ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
-        //    ViewBag.bapmId = bapmId;
-
-        //    //-------------------------------
-        //    //Populate Action Plan View Model
-        //    //-------------------------------
-        //    //List of Action Plans starting with the current as first item of the list
-        //    ActionPlanViewModel apViewModel = new ActionPlanViewModel();
-        //    apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
-        //    apViewModel.actionPlanList = apViewModel.actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
-
-        //    //Add List of Reasons 
-        //    List<MPReason> mpReasonList = new List<MPReason>();
-        //    mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpvId.ToString());
-        //    apViewModel.reasonList = mpReasonList;
-
-
-        //    //-----------
-        //    //Model logic
-        //    //-----------
-        //    if (apViewModel.actionPlanList.Count > 0)
-        //    {
-        //        if (apViewModel.actionPlanList.First().apStatus == "Rejected")
-        //        {
-        //            //When action plan list is NOT empty, but most recent version status is Rejected, pass in "empty" model
-        //            ActionPlan newActionPlan = new ActionPlan();
-        //            newActionPlan.apd_id = "";
-        //            newActionPlan.apVersion = (Int32.Parse(apViewModel.actionPlanList.First().apVersion) + 1).ToString();
-        //            newActionPlan.apStatus = "Rejected New";
-        //            newActionPlan.actionPlanAction = "";
-        //            newActionPlan.reviewerComments = "";
-        //            apViewModel.actionPlanList.Insert(0, newActionPlan);
-        //        }
-        //        else
-        //        {
-        //            //When action plan list is NOT empty, and most recent version status is 'WIP', 'Ready for Review', or 'Approved', pass model as is.
-        //        }
-
-        //    }
-        //    else if (apViewModel.actionPlanList.Count == 0 && apViewModel.bapmStatus == "Not Started")
-        //    {
-        //        //When action plan list is empty, pass in "empty" model
-        //        ActionPlan newActionPlan = new ActionPlan();
-        //        newActionPlan.apd_id = "";
-        //        newActionPlan.apVersion = "1";
-        //        newActionPlan.apStatus = "Not Started";
-        //        newActionPlan.actionPlanAction = "";
-        //        newActionPlan.reviewerComments = "";
-        //        apViewModel.actionPlanList.Add(newActionPlan);
-        //    }
-        //    else
-        //    {
-        //        //When action plan list is empty, pass in "empty" model
-        //        ActionPlan newActionPlan = new ActionPlan();
-        //        newActionPlan.apd_id = "";
-        //        newActionPlan.apVersion = "1";
-        //        newActionPlan.apStatus = "";
-        //        newActionPlan.actionPlanAction = "";
-        //        newActionPlan.reviewerComments = "";
-        //        apViewModel.actionPlanList.Add(newActionPlan);
-        //    }
-
-        //    return View(apViewModel);
+        //    return PartialView(priorAPList);
         //}
-
-        [HttpPost]
-        // POST: _priorActionPlans
-        public ActionResult _priorActionPlans(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
-        {
-            List<PriorActionPlan> priorAPList = new List<PriorActionPlan>();
-
-            priorAPList = dataParcer.getPriorActionPlanList(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
-
-            return PartialView(priorAPList);
-        }
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            //POST: /ActionPlan/submitActionPlan
+        //POST: /ActionPlan/submitActionPlan
         [HttpPost]
         public string submitActionPlan(string raw_json)
         {

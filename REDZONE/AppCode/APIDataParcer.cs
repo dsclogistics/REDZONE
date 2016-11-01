@@ -1382,13 +1382,13 @@ namespace REDZONE.AppCode
         }
 
         //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, and status.
-        public PriorActionPlan getBapmId(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear, string status)
+        public PriorActionPlan getMostRecentAP(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         {
             PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
             List<MPReason> reasonList = new List<MPReason>();
             MPReason tempMPReason = new MPReason();
 
-            string raw_data = api.lookUpActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, status);
+            string raw_data = api.lookUpActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
 
             try
             {
@@ -1396,7 +1396,10 @@ namespace REDZONE.AppCode
 
                 JArray jPriorActionPlanList = (JArray)parsed_result["actionplans"];
 
-                var res = jPriorActionPlanList[0];
+                //var temp = jPriorActionPlanList.OrderByDescending(x => ((int)x["month"]).ToString("00") + (string)x["year"]).ToArray();
+
+                var res = jPriorActionPlanList.OrderByDescending(x => ((int)x["month"]).ToString("00") + (string)x["year"]).ToArray()[0];
+                //string temp2 = ((int)res["month"]).ToString("00") + (string)res["year"];
 
                 tempPriorActionPlan = new Models.PriorActionPlan();
                 reasonList = new List<MPReason>();
