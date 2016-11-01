@@ -138,6 +138,26 @@ namespace REDZONE.Controllers
             
             return PartialView(RZMenu);
         }
+
+        // GET: Tasks Menu
+        [ChildActionOnly]
+        public ActionResult _RZTask_MenuItems()
+        {
+            dscUser user = new Models.dscUser(User.Identity.Name);
+
+            RZTaskCounts rzTaskCounts = new RZTaskCounts();
+
+            try
+            {
+                rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
+            }
+            catch (Exception e)
+            {
+                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+            }
+
+            return PartialView(rzTaskCounts);
+        }
     }
 
     public class RZMetricMenu

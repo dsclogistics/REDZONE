@@ -214,6 +214,27 @@ namespace REDZONE.AppCode
                 return JsonString;
             }
         }
+        public string getUserTasksCount(string app_user_id)
+        {
+            string endPoint = "gettaskscount";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = "{\"app_user_id\":\"" + app_user_id + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            Stream newStream = request.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            WebResponse response = request.GetResponse();
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                JsonString = reader.ReadToEnd();
+                return JsonString;
+            }
+        }
         public string getExecSummary(string productName, string tptName, string mtrcid, string calmonth, string calyear, string buildingID)
         {
             // {"productname":"Red Zone", "tptname":"Month","mtrcid":3,"calmonth":"June","calyear":2016}

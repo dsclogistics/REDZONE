@@ -1097,6 +1097,25 @@ namespace REDZONE.AppCode
             return authMetrics;
         }
 
+        //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
+        public RZTaskCounts getUserTasksCount(string app_user_id)
+        {
+            RZTaskCounts tempTaskCounts = new RZTaskCounts();
+            JObject parsed_result = JObject.Parse(api.getUserTasksCount(app_user_id));
+
+            try
+            {
+                tempTaskCounts.mtrcCount = (int)parsed_result["act_plan_count"];
+                tempTaskCounts.actPlanCount = (int)parsed_result["mtrc_count"];
+            }
+            catch
+            {
+
+            }
+
+            return tempTaskCounts;
+        }
+
         //This is a HELPER method that should determine what the next and prev url for metric summary.
         //It returns an array of 2 records. [0]=prev url, [1]=next url
         public string[] getPrevNextMetricsUrl(string year, string metricID)

@@ -199,6 +199,7 @@
     <Compile Include="Controllers\MPVreasonsController.cs" />
     <Compile Include="Models\ActionPlanViewModel.cs" />
     <Compile Include="Models\dscUser.cs" />
+    <Compile Include="Models\TasksViewModel.cs" />
     <Compile Include="ModelViews\dropDownItem.cs" />
     <Compile Include="ModelViews\NonStdrReasonViewModel.cs" />
     <Compile Include="Controllers\ReasonMgmtController.cs" />
@@ -454,6 +455,7 @@
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
     <Content Include="Views\Account\userInquire.cshtml" />
     <Content Include="Views\Account\_UserInfo.cshtml" />
+    <Content Include="Views\Home\_RZTask_MenuItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
