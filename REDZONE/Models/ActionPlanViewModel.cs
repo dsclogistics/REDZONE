@@ -21,6 +21,7 @@ namespace REDZONE.Models
         public string bapmStatus { get; set; }
         public string mpv_id { get; set; }
         public string bldgName { get; set; }
+        public string bldgId { get; set; }
         public string mtrcDisplayText { get; set; }
         public string apMonth { get; set; }
         public string apYear { get; set; }

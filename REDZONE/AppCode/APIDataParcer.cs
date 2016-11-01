@@ -1197,6 +1197,8 @@ namespace REDZONE.AppCode
             return prevNext;
         }
                 
+        //Reasons
+        //
         public List<MPReason> getMPReasonList(string metricPeriodId)
         {
             List<MPReason> MPReasonList = new List<MPReason>();
@@ -1234,7 +1236,6 @@ namespace REDZONE.AppCode
             }
             return MPReasonList;
         }
-
         public List<MetricPeriod> getMetricPeriodList()
         {
             List<MetricPeriod> MetricPeriodList = new List<MetricPeriod>();
@@ -1267,9 +1268,11 @@ namespace REDZONE.AppCode
             return MetricPeriodList;
         }
 
-        //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
+        //ACTION PLANS
+        //
         public ActionPlanViewModel getActionPlanList(string productname, string rz_bapm_id)
         {
+            //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
             ActionPlanViewModel apViewModel = new ActionPlanViewModel();
             List<ActionPlan> actionPlanList = new List<ActionPlan>();
             ActionPlan tempActionPlan = new ActionPlan();
@@ -1324,10 +1327,9 @@ namespace REDZONE.AppCode
             }
             return apViewModel;
         }
-
-        //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, and endyear.
         public List<PriorActionPlan> getPriorActionPlanList(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         {
+            //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, and endyear.
             List<PriorActionPlan> priorActionPlanList = new List<PriorActionPlan>();
             PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
             List<MPReason> reasonList = new List<MPReason>();
@@ -1399,10 +1401,9 @@ namespace REDZONE.AppCode
             }
             return priorActionPlanList;
         }
-
-        //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, and status.
         public PriorActionPlan getMostRecentAP(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         {
+            //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, and status.
             PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
             List<MPReason> reasonList = new List<MPReason>();
             MPReason tempMPReason = new MPReason();
@@ -1436,6 +1437,16 @@ namespace REDZONE.AppCode
                 tempPriorActionPlan.priorAPReviewText = "";
                 tempPriorActionPlan.submittedBy = "";
                 tempPriorActionPlan.approvedBy = "";
+
+                JArray jPriorAPDetails = (JArray)res["details"];
+
+                var mostRecentAPDetail = jPriorAPDetails.OrderByDescending(x => (int)x["rz_apd_ap_ver"]).ToArray()[0];
+
+                tempPriorActionPlan.apd_id = (string)mostRecentAPDetail["rz_apd_id"];
+                tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
+                tempPriorActionPlan.priorAPReviewText = (string)mostRecentAPDetail["rz_apd_ap_review_text"];
+                tempPriorActionPlan.submittedBy = (string)mostRecentAPDetail["submittedby"];
+                tempPriorActionPlan.approvedBy = (string)mostRecentAPDetail["reviewedby"];
 
                 JArray jPriorReasonList = (JArray)res["assignedreasons"];
 

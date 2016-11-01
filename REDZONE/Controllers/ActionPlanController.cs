@@ -161,16 +161,6 @@ namespace REDZONE.Controllers
             return View(apViewModel);
         }
 
-        //[HttpPost]
-        //// POST: _priorActionPlans
-        //public ActionResult _priorActionPlans(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
-        //{
-        //    List<PriorActionPlan> priorAPList = new List<PriorActionPlan>();
-
-        //    priorAPList = dataParcer.getPriorActionPlanList(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
-
-        //    return PartialView(priorAPList);
-        //}
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         //POST: /ActionPlan/submitActionPlan

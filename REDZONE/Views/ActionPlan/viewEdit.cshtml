@@ -14,6 +14,7 @@
     <div>
         The supplied credentials do not allow you to view this action plan.
     </div>
+    @Html.ActionLink("Back", "Index", "Home")
     //Button - redirect to home index
 }
 else
@@ -29,6 +30,8 @@ else
         <span style="font-weight:bold; color: black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
         <span style="font-weight:bold; color: black" id="metricDate">@Model.apMonth @Model.apYear</span>
         <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
+        
+        <div class="row"></div>
     </div>
 
     <div class="panel-body padding2 ">
