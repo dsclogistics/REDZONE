@@ -1105,8 +1105,8 @@ namespace REDZONE.AppCode
 
             try
             {
-                tempTaskCounts.mtrcCount = (int)parsed_result["act_plan_count"];
-                tempTaskCounts.actPlanCount = (int)parsed_result["mtrc_count"];
+                tempTaskCounts.mtrcCount = (int)parsed_result["mtrc_count"];
+                tempTaskCounts.actPlanCount = (int)parsed_result["act_plan_count"];
             }
             catch
             {

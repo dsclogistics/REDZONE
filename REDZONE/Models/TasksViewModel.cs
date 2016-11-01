@@ -7,6 +7,7 @@ namespace REDZONE.Models
 {
     public class TasksViewModel
     {
+
     }
 
     public class RZTaskCounts
