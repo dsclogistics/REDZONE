@@ -17,11 +17,11 @@
         <ul class="dropdown-menu">
             @if (Model.mtrcCount > 0)
             {
-                <li><a href="">Metric Tasks (@Model.mtrcCount)</a></li>
+                <li><a href="/Tasks/Index/?display=mtrc">Metric Tasks (@Model.mtrcCount)</a></li>
             }
             @if (Model.actPlanCount > 0)
             {
-                <li><a href="">Action Plan Tasks (@Model.actPlanCount)</a></li>
+                <li><a href="/Tasks/Index/?display=ap">Action Plan Tasks (@Model.actPlanCount)</a></li>
             }
         </ul>
     </li>

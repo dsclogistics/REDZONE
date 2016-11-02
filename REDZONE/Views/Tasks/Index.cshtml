@@ -1,8 +1,56 @@
-﻿
+﻿@model REDZONE.Models.TasksViewModel
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
+    <div class="panel-heading padding2">
+        <h2>Tasks</h2>
+        <input type="hidden" id="hdnDisplay" value="@ViewBag.display"/>
+    </div>
 
+    <div class="panel-body padding2 ">
+        <div id="divSubmitterTasks">
+            @if(Model.apSubmitTaskList.Count() > 0)
+            {
+                <h4 style="text-align:left">Action Plan Submitter Tasks</h4>
+                <ul style="text-align:center">
+                    @foreach (var task in Model.apSubmitTaskList)
+                    {
+                        <li title="@task.rz_bapm_id" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
+                    }
+                </ul>
+            }
+
+
+        </div>
+        <div id="divReviewerTasks">
+            @if (Model.apReviewTaskList.Count() > 0)
+            {
+                <h4 style="text-align:left">Action Plan Reviewer Tasks</h4>
+                <ul style="text-align:center">
+                    @foreach (var task in Model.apReviewTaskList)
+                    {
+                        <li title="@task.rz_bapm_id" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
+                    }
+                </ul>
+            }
+
+        </div>
+        <div id="divCollectorTasks">
+            @if (Model.mtrcTaskList.Count() > 0)
+            {
+                <h4 style="text-align:left">Metric Collector Tasks</h4>
+                <ul style="text-align:center">
+                    @foreach (var task in Model.mtrcTaskList)
+                {
+                        <li title="@task.mtrc_period_name" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
+                    }
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>

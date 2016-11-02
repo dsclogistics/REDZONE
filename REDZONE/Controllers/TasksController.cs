@@ -3,15 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using REDZONE.Models;
+using REDZONE.AppCode;
+using Newtonsoft.Json.Linq;
 
 namespace REDZONE.Controllers
 {
     public class TasksController : Controller
     {
+        private DataRetrieval api = new DataRetrieval();
+        private APIDataParcer dataParcer = new APIDataParcer();
+
         // GET: Tasks
-        public ActionResult Index()
+        public ActionResult Index(string display)
         {
-            return View();
+            TasksViewModel tasksViewModel = new TasksViewModel();
+            dscUser actionPlanUser = new dscUser(User.Identity.Name);
+
+            tasksViewModel = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
+
+            ViewBag.display = display;
+
+            return View(tasksViewModel);
         }
 
 

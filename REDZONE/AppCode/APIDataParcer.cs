@@ -1115,6 +1115,81 @@ namespace REDZONE.AppCode
 
             return tempTaskCounts;
         }
+        //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
+        public TasksViewModel getUserTaskDetails(string app_user_id)
+        {
+            TasksViewModel tasksViewModel = new TasksViewModel();
+            JObject parsed_result = JObject.Parse(api.getUserTaskDetails(app_user_id));
+
+            try
+            {
+                JArray jSubmitterTasks = (JArray)parsed_result["submittertasks"];
+
+                foreach (var res in jSubmitterTasks)
+                {
+                    RZActionPlanTask tempAPTask = new RZActionPlanTask();
+
+                    tempAPTask.month = (string)res["month"];
+                    tempAPTask.year = (string)res["year"];
+                    tempAPTask.mtrc_period_name = (string)res["period"];
+                    tempAPTask.bldg_name = (string)res["building"];
+                    tempAPTask.status = (string)res["status"];
+                    tempAPTask.rz_bapm_id = (string)res["rz_bapm_id"];
+                    if (String.IsNullOrEmpty(tempAPTask.month)) tempAPTask.month = "";
+                    if (String.IsNullOrEmpty(tempAPTask.year)) tempAPTask.year = "";
+                    if (String.IsNullOrEmpty(tempAPTask.mtrc_period_name)) tempAPTask.mtrc_period_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.bldg_name)) tempAPTask.bldg_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.status)) tempAPTask.status = "";
+                    if (String.IsNullOrEmpty(tempAPTask.rz_bapm_id)) tempAPTask.rz_bapm_id = "";
+
+                    tasksViewModel.apSubmitTaskList.Add(tempAPTask);
+                }
+
+                JArray jReviewerTasks = (JArray)parsed_result["reviewertasks"];
+                foreach (var res in jReviewerTasks)
+                {
+                    RZActionPlanTask tempAPTask = new RZActionPlanTask();
+
+                    tempAPTask.month = (string)res["month"];
+                    tempAPTask.year = (string)res["year"];
+                    tempAPTask.mtrc_period_name = (string)res["period"];
+                    tempAPTask.bldg_name = (string)res["building"];
+                    tempAPTask.status = (string)res["status"];
+                    tempAPTask.rz_bapm_id = (string)res["rz_bapm_id"];
+                    if (String.IsNullOrEmpty(tempAPTask.month)) tempAPTask.month = "";
+                    if (String.IsNullOrEmpty(tempAPTask.year)) tempAPTask.year = "";
+                    if (String.IsNullOrEmpty(tempAPTask.mtrc_period_name)) tempAPTask.mtrc_period_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.bldg_name)) tempAPTask.bldg_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.status)) tempAPTask.status = "";
+                    if (String.IsNullOrEmpty(tempAPTask.rz_bapm_id)) tempAPTask.rz_bapm_id = "";
+
+                    tasksViewModel.apReviewTaskList.Add(tempAPTask);
+                }
+
+                JArray jDataCollectorTasks = (JArray)parsed_result["datacollectortasks"];
+                foreach (var res in jDataCollectorTasks)
+                {
+                    RZMetricTask tempMetricTask = new RZMetricTask();
+
+                    tempMetricTask.month = (string)res["month"];
+                    tempMetricTask.year = (string)res["year"];
+                    tempMetricTask.mtrc_period_name = (string)res["period"];
+                    if (String.IsNullOrEmpty(tempMetricTask.month)) tempMetricTask.month = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.year)) tempMetricTask.year = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.mtrc_period_name)) tempMetricTask.mtrc_period_name = "";
+
+                    tasksViewModel.mtrcTaskList.Add(tempMetricTask);
+                }
+
+            }
+            catch
+            {
+
+            }
+
+            return tasksViewModel;
+        }
+
 
         //This is a HELPER method that should determine what the next and prev url for metric summary.
         //It returns an array of 2 records. [0]=prev url, [1]=next url
