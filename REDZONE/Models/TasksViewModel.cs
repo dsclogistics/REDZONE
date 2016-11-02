@@ -10,6 +10,16 @@ namespace REDZONE.Models
 
     }
 
+    public class RZActionPlanTask
+    {
+
+    }
+
+    public class RZMetricTask
+    {
+
+    }
+
     public class RZTaskCounts
     {
         public int mtrcCount { get; set; }

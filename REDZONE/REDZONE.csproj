@@ -197,6 +197,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
     <Compile Include="Controllers\MPVreasonsController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Models\ActionPlanViewModel.cs" />
     <Compile Include="Models\dscUser.cs" />
     <Compile Include="Models\TasksViewModel.cs" />
@@ -455,6 +456,7 @@
     <Content Include="Views\Account\userInquire.cshtml" />
     <Content Include="Views\Account\_UserInfo.cshtml" />
     <Content Include="Views\Home\_RZTask_MenuItems.cshtml" />
+    <Content Include="Views\Tasks\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

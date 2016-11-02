@@ -110,72 +110,6 @@ $(document).ready(function () {
 //------------------------------------------------------------------------------------------------
 //-------------------------------------------FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------------------------
-
-function displayPriorActionPlans() {
-
-    var res = getMetricDate().split(" ", 2);
-    var month = monthToInt(res[0]);
-    var year = res[1];
-    var begmonth
-    var begyear
-    var endmonth
-    var endyear
-
-    var productname = "Red Zone";
-    var mtrc_period_id = getMPid();
-    var dsc_mtrc_lc_bldg_id = getBuildingId();
-
-    if (month >= 1 && month <= 12) {
-        begmonth = month;
-        begyear = year - 1;
-    }
-    else {
-        begmonth = "";
-        begyear = "";
-    }
-
-    if (month == 1) {
-        endmonth = 12;
-        endyear = year - 1;
-    } else if (month >= 2 && month <= 12) {
-        endmonth = month - 1;
-        endyear = year;
-    } else {
-        endmonth = "";
-        endyear = "";
-    }
-
-    var formData = {
-        productname: productname,
-        mtrc_period_id: mtrc_period_id,
-        dsc_mtrc_lc_bldg_id: dsc_mtrc_lc_bldg_id,
-        begmonth: begmonth,
-        begyear: begyear,
-        endmonth: endmonth,
-        endyear: endyear
-    };
-
-    $.ajax({
-        url: '/ActionPlan/_priorActionPlans',
-        //url: 'http://dscapidev/dscmtrc/api/v1/metric/getpriorap',
-        method: "POST",
-        cache: false,
-        //type: "POST",
-        //data: payload,
-        data: formData,
-        //contentType: "application/json; charset=utf-8",
-        //dataType: "json",
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
-        }
-    }).done(function (d) {
-        $("#divPriorActionPlans").html(d);
-        $(".mNameCell").text(getMetricName());
-    });
-}
-
-
-//------------------------------------------------------------------------------------------------
 function validateActionPlanSubmit() {
     var rz_apd_ap_text = $('#apText').val();
 
@@ -188,7 +122,7 @@ function buildSubmitActionPlanJSON() {
     var productname = "Red Zone";
     var rz_bapm_id = $('#bapmId').val();
     var rz_apd_ap_ver = $('#apVersion').val();
-    var rz_apd_subm_app_user_id = "1";
+    var rz_apd_subm_app_user_id = $('#userId').val();
     var rz_apd_id = $('#apDetailId').val();
     var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
@@ -228,7 +162,7 @@ function buildSaveActionPlanJSON() {
     var productname = "Red Zone";
     var rz_bapm_id = $('#bapmId').val();
     var rz_apd_ap_ver = $('#apVersion').val();
-    var rz_apd_subm_app_user_id = "1";
+    var rz_apd_subm_app_user_id = $('#userId').val();
     var rz_apd_id = $('#apDetailId').val();
     var rz_apd_ap_text = $('#apText').val().replace('\n', '\\n');
 
@@ -266,7 +200,7 @@ function saveActionPlan() {
 
 function buildSubmitAPReviewJSON(status) {
     var productname = "Red Zone";
-    var rz_apd_subm_app_user_id = "2";
+    var rz_apd_subm_app_user_id = $('#userId').val();
     var rz_apd_id = $('#apDetailId').val();
     var rz_apd_ap_review_text = $('#apReviewComment').val();
     var rz_apd_ap_status = status;

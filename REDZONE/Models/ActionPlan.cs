@@ -26,6 +26,11 @@ namespace REDZONE.Models
         public string apBuilding { get; set; }
         public string apMonth { get; set; }
         public List<ActionPlan> metricActPlans = new List<ActionPlan>();
+
+        public monthActionPlan()
+        {
+            metricActPlans = new List<ActionPlan>();
+        }
     }
 
     public class PriorActionPlan
@@ -46,6 +51,11 @@ namespace REDZONE.Models
         public string approvedBy { get; set; }
         public List<MPReason> priorAPReasonList { get; set; }
         public string priorAPStatusColor { get; set; }
+
+        public PriorActionPlan()
+        {
+            priorAPReasonList = new List<MPReason>();
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 ﻿@model REDZONE.Models.ActionPlanViewModel
-@{ ViewBag.Title = "viewEdit"; }
+@{ ViewBag.Title = "viewEdit";
+    string uId = Session["emp_id"].ToString();
+    }
 
 <style>
     .headerCell {
@@ -15,12 +17,12 @@
         The supplied credentials do not allow you to view this action plan.
     </div>
     @Html.ActionLink("Back", "Index", "Home")
-    //Button - redirect to home index
 }
 else
 {
 <div id="globalVariables">
     @*<input type="hidden" id="userRole" value="@userRole" />*@
+    <input type="hidden" id="userId" value="@uId" />
 </div>
 
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
