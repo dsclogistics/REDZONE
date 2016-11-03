@@ -1539,8 +1539,6 @@ namespace REDZONE.AppCode
                 var mostRecentAPDetail = jPriorAPDetails.OrderByDescending(x => (int)x["rz_apd_ap_ver"]).ToArray()[0];
 
                 tempPriorActionPlan.apd_id = (string)mostRecentAPDetail["rz_apd_id"];
-                tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
-                tempPriorActionPlan.priorAPReviewText = (string)mostRecentAPDetail["rz_apd_ap_review_text"];
                 tempPriorActionPlan.submittedBy = (string)mostRecentAPDetail["submittedby"];
                 tempPriorActionPlan.approvedBy = (string)mostRecentAPDetail["reviewedby"];
 
@@ -1584,21 +1582,25 @@ namespace REDZONE.AppCode
                         break;
                     case "Ready For Review":
                         tempPriorActionPlan.priorAPStatusColor = "orange";
+                        tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
                         break;
                     case "Rejected":
                         tempPriorActionPlan.priorAPStatusColor = "red";
+                        tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
+                        tempPriorActionPlan.priorAPReviewText = (string)mostRecentAPDetail["rz_apd_ap_review_text"];
                         break;
                     case "Rejected New":
                         tempPriorActionPlan.priorAPStatusColor = "red";
                         break;
                     case "Approved":
                         tempPriorActionPlan.priorAPStatusColor = "green";
+                        tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
+                        tempPriorActionPlan.priorAPReviewText = (string)mostRecentAPDetail["rz_apd_ap_review_text"];
                         break;
                     default:
                         tempPriorActionPlan.priorAPStatusColor = "green";
                         break;
                 }
-
 
             }
             catch
