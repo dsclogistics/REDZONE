@@ -1,6 +1,8 @@
 ﻿@model REDZONE.Models.ActionPlanViewModel
 @{ ViewBag.Title = "viewEdit";
     string uId = Session["emp_id"].ToString();
+    int counter = 0;
+    string mostRecentApOpen = "";
     }
 
 <style>
@@ -95,9 +97,9 @@ else
                     <div class="col-md-6" id="divCurrentStatus">
                         <h4 style="text-align:left; color:@displayColor">Action Plan Status: @displayStatus</h4>
                     </div>
-                    <div class="col-md-6" id="divBackToCurrentAP" style="text-align:right">
+                    @*<div class="col-md-6" id="divBackToCurrentAP" style="text-align:right">
                         <input type="button" class="btn btn-primary" id="btnBackToCurrentAP" value="Back" />
-                    </div>
+                    </div>*@
                 </div>
 
                 //SECTION: REASONS
@@ -195,7 +197,8 @@ else
                 </div>
 
                 //SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN
-                <br />
+                <br />                
+
                 foreach (REDZONE.Models.ActionPlan actionPlan in Model.actionPlanList.Where(x => x.apVersion != Model.actionPlanList.First().apVersion))
                 {
                     <div class="btn-toolbar">
@@ -241,6 +244,9 @@ else
 
             @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
             {
+                counter = counter + 1;
+                mostRecentApOpen = (counter == 1) ? "in" : "";
+
                 <div class="btn-toolbar">
                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
@@ -252,7 +258,7 @@ else
                     </div>
                 </div>
 
-                <div class="collapse" style="margin-left:40px">
+                <div class="collapse @mostRecentApOpen" style="margin-left:40px">
                     <br />
                     @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
                     <div>
