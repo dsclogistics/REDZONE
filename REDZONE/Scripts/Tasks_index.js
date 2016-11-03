@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    setDisplay();
 
     $('.btn-toolbar').on('click', '.btn', function (e) {
         var $target = $(this).parentsUntil('btn-toolbar').next('.collapse');
@@ -15,13 +14,3 @@
 //------------------------------------------------------------------------------------------------
 //-------------------------------------------FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------------------------
-function setDisplay() {
-    var display = $('#hdnDisplay').val();
-
-    if (display == 'ap') {
-        $('#divSubmitterTasks').find('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
-    }
-    else if(display == 'mtrc') {
-
-    }
-}
