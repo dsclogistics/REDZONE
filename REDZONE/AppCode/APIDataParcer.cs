@@ -1116,9 +1116,9 @@ namespace REDZONE.AppCode
             return tempTaskCounts;
         }
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
-        public TasksViewModel getUserTaskDetails(string app_user_id)
+        public RZTaskDetailList getUserTaskDetails(string app_user_id)
         {
-            TasksViewModel tasksViewModel = new TasksViewModel();
+            RZTaskDetailList tasksViewModel = new RZTaskDetailList();
             JObject parsed_result = JObject.Parse(api.getUserTaskDetails(app_user_id));
 
             try
@@ -1131,13 +1131,19 @@ namespace REDZONE.AppCode
 
                     tempAPTask.month = (string)res["month"];
                     tempAPTask.year = (string)res["year"];
+                    tempAPTask.period_name = intToMonth((int)res["month"]) + " " + (string)res["year"];
                     tempAPTask.mtrc_period_name = (string)res["period"];
+                    tempAPTask.mtrc_prod_display_text = (string)res["mtrc_prod_display_text"];
+                    tempAPTask.mtrc_period_id = (int)res["mtrc_period_id"];
                     tempAPTask.bldg_name = (string)res["building"];
+                    tempAPTask.bldg_id = (int)res["dsc_mtrc_lc_bldg_id"];
                     tempAPTask.status = (string)res["status"];
                     tempAPTask.rz_bapm_id = (string)res["rz_bapm_id"];
                     if (String.IsNullOrEmpty(tempAPTask.month)) tempAPTask.month = "";
                     if (String.IsNullOrEmpty(tempAPTask.year)) tempAPTask.year = "";
+                    if (String.IsNullOrEmpty(tempAPTask.period_name)) tempAPTask.period_name = "";
                     if (String.IsNullOrEmpty(tempAPTask.mtrc_period_name)) tempAPTask.mtrc_period_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.mtrc_prod_display_text)) tempAPTask.mtrc_prod_display_text = "";
                     if (String.IsNullOrEmpty(tempAPTask.bldg_name)) tempAPTask.bldg_name = "";
                     if (String.IsNullOrEmpty(tempAPTask.status)) tempAPTask.status = "";
                     if (String.IsNullOrEmpty(tempAPTask.rz_bapm_id)) tempAPTask.rz_bapm_id = "";
@@ -1152,13 +1158,19 @@ namespace REDZONE.AppCode
 
                     tempAPTask.month = (string)res["month"];
                     tempAPTask.year = (string)res["year"];
+                    tempAPTask.period_name = intToMonth((int)res["month"]) + " " + (string)res["year"];
                     tempAPTask.mtrc_period_name = (string)res["period"];
+                    tempAPTask.mtrc_prod_display_text = (string)res["mtrc_prod_display_text"];
+                    tempAPTask.mtrc_period_id = (int)res["mtrc_period_id"];
                     tempAPTask.bldg_name = (string)res["building"];
+                    tempAPTask.bldg_id = (int)res["dsc_mtrc_lc_bldg_id"];
                     tempAPTask.status = (string)res["status"];
                     tempAPTask.rz_bapm_id = (string)res["rz_bapm_id"];
                     if (String.IsNullOrEmpty(tempAPTask.month)) tempAPTask.month = "";
                     if (String.IsNullOrEmpty(tempAPTask.year)) tempAPTask.year = "";
+                    if (String.IsNullOrEmpty(tempAPTask.period_name)) tempAPTask.period_name = "";
                     if (String.IsNullOrEmpty(tempAPTask.mtrc_period_name)) tempAPTask.mtrc_period_name = "";
+                    if (String.IsNullOrEmpty(tempAPTask.mtrc_prod_display_text)) tempAPTask.mtrc_prod_display_text = "";
                     if (String.IsNullOrEmpty(tempAPTask.bldg_name)) tempAPTask.bldg_name = "";
                     if (String.IsNullOrEmpty(tempAPTask.status)) tempAPTask.status = "";
                     if (String.IsNullOrEmpty(tempAPTask.rz_bapm_id)) tempAPTask.rz_bapm_id = "";
@@ -1173,10 +1185,19 @@ namespace REDZONE.AppCode
 
                     tempMetricTask.month = (string)res["month"];
                     tempMetricTask.year = (string)res["year"];
+                    tempMetricTask.month_name = intToMonth((int)res["month"]);
+                    tempMetricTask.period_name = intToMonth((int)res["month"]) + " " + (string)res["year"];
                     tempMetricTask.mtrc_period_name = (string)res["period"];
+                    tempMetricTask.mtrc_prod_display_text = (string)res["mtrc_prod_display_text"];
+                    tempMetricTask.mtrc_id = (int)res["mtrc_id"];
+                    tempMetricTask.status = (string)res["status"];
                     if (String.IsNullOrEmpty(tempMetricTask.month)) tempMetricTask.month = "";
                     if (String.IsNullOrEmpty(tempMetricTask.year)) tempMetricTask.year = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.month_name)) tempMetricTask.month_name = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.period_name)) tempMetricTask.period_name = "";
                     if (String.IsNullOrEmpty(tempMetricTask.mtrc_period_name)) tempMetricTask.mtrc_period_name = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.mtrc_prod_display_text)) tempMetricTask.mtrc_prod_display_text = "";
+                    if (String.IsNullOrEmpty(tempMetricTask.status)) tempMetricTask.status = "";
 
                     tasksViewModel.mtrcTaskList.Add(tempMetricTask);
                 }

@@ -1,9 +1,27 @@
-﻿@model REDZONE.Models.TasksViewModel
+﻿@model REDZONE.Models.RZTaskDetailList
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string apTaskDisplay = "";
+    string mtrcTaskDisplay = "";
+    string apTaskGlyph = "glyphicon-chevron-right";
+    string mtrcTaskGlyph = "glyphicon-chevron-right";
+
+    if (ViewBag.display == "ap")
+    {
+        apTaskDisplay = "in";
+        apTaskGlyph = "glyphicon-chevron-down";
+    }
+    else if(ViewBag.display == "mtrc")
+    {
+        mtrcTaskDisplay = "in";
+        mtrcTaskGlyph = "glyphicon-chevron-down";
+    }
+
 }
+
+<script src="~/Scripts/Tasks_index.js"></script>
 
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
@@ -12,43 +30,196 @@
     </div>
 
     <div class="panel-body padding2 ">
-        <div id="divSubmitterTasks">
-            @if(Model.apSubmitTaskList.Count() > 0)
+        <div class="row" id="divSubmitterTasks" style="margin-left:5px; margin-right:5px">
+            @if (Model.apSubmitTaskList.Count() > 0)
             {
-                <h4 style="text-align:left">Action Plan Submitter Tasks</h4>
-                <ul style="text-align:center">
-                    @foreach (var task in Model.apSubmitTaskList)
-                    {
-                        <li title="@task.rz_bapm_id" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
-                    }
-                </ul>
+                <div class="btn-toolbar">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                            <span class="glyphicon @apTaskGlyph"></span>
+                        </button>
+                    </div>
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Tasks</h4>
+                    </div>
+                </div>
+
+                <div class="collapse @apTaskDisplay" style="margin-left:40px">
+                    <table class="table table-condensed table-hover" id="tblAPTasks">
+
+                            <tr>
+                                <th style="text-align:center;">
+                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().bldg_name)
+                                </th>
+                                <th style="text-align:center;">
+                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().period_name)
+                                </th>
+                                <th style="text-align:center;">
+                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().mtrc_prod_display_text)
+                                </th>
+                                <th style="text-align:center;">
+                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().status)
+                                </th>
+                                <th style="text-align:center;">
+                                    Action
+                                </th>
+                                <th style="text-align:center;">
+                                    Due By
+                                </th>
+                            </tr>
+
+                            @foreach (var task in Model.apSubmitTaskList)
+                            {
+                                <tr>
+                                    <td style="text-align:center">
+                                        @Html.DisplayFor(modelItem => task.bldg_name)
+                                    </td>
+                                    <td style="text-align:center">
+                                        @Html.DisplayFor(modelItem => task.period_name)
+                                    </td>
+                                    <td style="text-align:center">
+                                        @Html.DisplayFor(modelItem => task.mtrc_prod_display_text)
+                                    </td>
+                                    <td style="text-align:center">
+                                        @Html.DisplayFor(modelItem => task.status)
+                                    </td>
+                                    <td style="text-align:center">
+                                        @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + task.mtrc_period_id + "&bldg_id=" + task.bldg_id + "&bapm_id=" + task.rz_bapm_id;}
+                                        <a href="@apUrl">Go to Action Plan</a>
+                                    </td>
+                                    <td style="text-align:center">
+                                        TBD
+                                    </td>
+                                </tr>
+                            }
+                    </table>
+                </div>
             }
-
-
         </div>
-        <div id="divReviewerTasks">
+        <div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.apReviewTaskList.Count() > 0)
             {
-                <h4 style="text-align:left">Action Plan Reviewer Tasks</h4>
-                <ul style="text-align:center">
-                    @foreach (var task in Model.apReviewTaskList)
-                    {
-                        <li title="@task.rz_bapm_id" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
-                    }
-                </ul>
-            }
+                <div class="btn-toolbar">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                            <span class="glyphicon @apTaskGlyph"></span>
+                        </button>
+                    </div>
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
+                    </div>
+                </div>
 
+                <div class="collapse @apTaskDisplay" style="margin-left:40px">
+                    <table class="table table-condensed table-hover" id="tblAPTasks">
+
+                        <tr>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().bldg_name)
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().period_name)
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().mtrc_prod_display_text)
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().status)
+                            </th>
+                            <th style="text-align:center;">
+                                Action
+                            </th>
+                            <th style="text-align:center;">
+                                Due By
+                            </th>
+                        </tr>
+
+                        @foreach (var task in Model.apReviewTaskList)
+                        {
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.bldg_name)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.period_name)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.mtrc_prod_display_text)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.status)
+                                </td>
+                                <td style="text-align:center">
+                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + task.mtrc_period_id + "&bldg_id=" + task.bldg_id + "&bapm_id=" + task.rz_bapm_id;}
+                                    <a href="@apUrl">Review Action Plan</a>
+                                </td>
+                                <td style="text-align:center">
+                                    @task.month/18/@task.year
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
         </div>
-        <div id="divCollectorTasks">
+        <div class="row" id="divCollectorTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.mtrcTaskList.Count() > 0)
             {
-                <h4 style="text-align:left">Metric Collector Tasks</h4>
-                <ul style="text-align:center">
-                    @foreach (var task in Model.mtrcTaskList)
-                {
-                        <li title="@task.mtrc_period_name" style="text-align:left">@task.month @task.year @task.mtrc_period_name</li>
-                    }
-                </ul>
+                <div class="btn-toolbar">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                            <span class="glyphicon @mtrcTaskGlyph"></span>
+                        </button>
+                    </div>
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
+                    </div>
+                </div>
+
+                <div class="collapse @mtrcTaskDisplay" style="margin-left:40px">
+                    <table class="table table-condensed table-hover" id="tblAPTasks">
+
+                        <tr>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().period_name)
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrc_prod_display_text)
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().status)
+                            </th>
+                            <th style="text-align:center;">
+                                Action
+                            </th>
+                            <th style="text-align:center;">
+                                Due By
+                            </th>
+                        </tr>
+
+                        @foreach (var task in Model.mtrcTaskList)
+                        {
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.period_name)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.mtrc_prod_display_text)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => task.status)
+                                </td>
+                                <td style="text-align:center">
+                                    @{string mtrcUrl = "/Metric/EditView/" + task.mtrc_id + "?month=" + task.month_name + "&year=" + task.year;}
+                                    <a href="@mtrcUrl">View Metric</a>
+                                </td>
+                                <td style="text-align:center">
+                                    @task.month/18/@task.year
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
             }
 
         </div>

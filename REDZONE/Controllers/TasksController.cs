@@ -17,10 +17,24 @@ namespace REDZONE.Controllers
         // GET: Tasks
         public ActionResult Index(string display)
         {
-            TasksViewModel tasksViewModel = new TasksViewModel();
+            RZTaskDetailList tasksViewModel = new RZTaskDetailList();
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
 
             tasksViewModel = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
+
+            tasksViewModel.apSubmitTaskList = tasksViewModel.apSubmitTaskList.OrderBy(x => x.bldg_name)
+                                                                             .ThenBy(x => x.year)
+                                                                             .ThenBy(x => x.month)
+                                                                             .ThenBy(x => x.mtrc_prod_display_text).ToList();
+
+            tasksViewModel.apReviewTaskList = tasksViewModel.apReviewTaskList.OrderBy(x => x.bldg_name)
+                                                                 .ThenBy(x => x.year)
+                                                                 .ThenBy(x => x.month)
+                                                                 .ThenBy(x => x.mtrc_prod_display_text).ToList();
+
+            tasksViewModel.mtrcTaskList = tasksViewModel.mtrcTaskList.OrderBy(x => x.year)
+                                                                 .ThenBy(x => x.month)
+                                                                 .ThenBy(x => x.mtrc_prod_display_text).ToList();
 
             ViewBag.display = display;
 
