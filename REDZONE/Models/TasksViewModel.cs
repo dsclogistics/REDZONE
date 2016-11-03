@@ -40,5 +40,6 @@ namespace REDZONE.Models
     {
         public int mtrcCount { get; set; }
         public int actPlanCount { get; set; }
+        public int totalTasks   { get { return mtrcCount + actPlanCount; } }
     }
 }
