@@ -31,18 +31,19 @@
                 <li><a class="menuFont" href="\Home\Index">DASHBOARD</a></li>
             </ul>
             @Html.Action("_RZDM_MenuItems", "MenuBar")
-            <ul class="nav navbar-nav menuItem" id="mActionPlans">
+
+            @*<ul class="nav navbar-nav menuItem" id="mActionPlans">
                 <li class="dropdown ">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         ACTION PLANS
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        @*<li>@Html.ActionLink("Find Observation", "Index", "Observation")</li>*@
                         <li class="disabled"><a href="#">Coming Q1 2017</a></li>
                     </ul>
                 </li>
-            </ul>
+            </ul>*@
+
             @if (isAdmin)      //////////////////  NEEDS TO BE IMPLEMENTED !!!!!!!!!!
             {
                 <ul class="nav navbar-nav menuItem" id="mAdmin">

@@ -21,6 +21,12 @@
 
 }
 
+<style>
+    .overdue {
+        color:red;
+        font-weight:bold;
+    }
+</style>
 <script src="~/Scripts/Tasks_index.js"></script>
 
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
@@ -136,6 +142,7 @@
 
                         @foreach (var task in Model.apReviewTaskList)
                         {
+                            string overdueClass = (new DateTime(Int32.Parse(task.year), Int32.Parse(task.month), 18) < DateTime.Today) ? "overdue" : "";
                             <tr>
                                 <td style="text-align:center">
                                     @Html.DisplayFor(modelItem => task.bldg_name)
@@ -153,7 +160,7 @@
                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + task.mtrc_period_id + "&bldg_id=" + task.bldg_id + "&bapm_id=" + task.rz_bapm_id;}
                                     <a href="@apUrl">Review Action Plan</a>
                                 </td>
-                                <td style="text-align:center">
+                                <td class="@overdueClass" style="text-align:center">
                                     @task.month/18/@task.year
                                 </td>
                             </tr>

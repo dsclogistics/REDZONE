@@ -33,17 +33,17 @@
     {
         <br />
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-6 " style="padding:0px 3px;">
                 <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER ROLES</div>
                 @if (Model.roles.Count() > 0)
                 {
                     foreach (REDZONE.Models.userRole ur in Model.roles)
                     {
-                        <div class="row " style="text-align:left; margin:0;" title="@ur.roleDesc">
-                            <div class="col-xs-2" style="margin:0; padding:0; padding-left:10px">
-                                <span style="color:darkgreen;display:inline-block; min-width:85px">[@ur.appProduct]</span>
+                        <div class="row " style="text-align:left; margin:0; padding:0" title="@ur.roleDesc">
+                            <div class="col-xs-3" style="margin:0; padding:0; padding-left:10px">
+                                <span style="color:darkgreen;display:inline-block; min-width:200px">[@ur.appProduct]</span>
                             </div>
-                            <div class="col-xs-9" style="margin-left:5px">
+                            <div class="col-xs-8" style="margin-left:5px">
                                 <span style="font-weight:bold">@ur.roleName</span>
                                 @if (!String.IsNullOrEmpty(ur.metricIds))
                                 {
@@ -59,7 +59,7 @@
                     <div style="color:red">There are no Roles defined for this user</div>
                 }
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="padding:0px 3px;">
                 <div class="bordered-round" style="font-weight:bold; background-color: #ededed">USER BUILDINGS</div>
                 @if (Model.buildings.Count() > 0)
                 {

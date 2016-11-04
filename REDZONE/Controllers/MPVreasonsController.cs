@@ -19,8 +19,8 @@ namespace REDZONE.Controllers
         //=================================================================
 
 
-
-        public PartialViewResult viewReasons(int? id)
+        [HttpPost]
+        public PartialViewResult viewReasons(int? id, string buildingId, string mpId)
         {
             int mtrc_period_val_id = id ?? 0;
             List<MPReason> MPAssignedReasons;
@@ -36,7 +36,22 @@ namespace REDZONE.Controllers
             //reason1 = new MetricValueReason("Second Reason", "No Comments", true);
             //MPReasons.Add(reason1);
             //=======================================================
-
+            dscUser currentUser = new dscUser(User.Identity.Name);
+            //The Reason Comments can be viewed only if the user is one of these:
+                //RZ_AP_SUBMITTER or RZ_BLDG_USER with correct building access 
+                //RZ_AP_REVIEWER with correct metric access
+                //RZ_ADMIN
+            if (((currentUser.hasRole("RZ_AP_SUBMITTER") || currentUser.hasRole("RZ_BLDG_USER")) && currentUser.hasBuilding(buildingId)) || currentUser.hasRole("RZ_ADMIN"))
+            {
+                Session["viewComments"] = "Y";
+            }
+            else
+                if (currentUser.hasRole("RZ_AP_REVIEWER") && currentUser.hasReviewerMetric(mpId))
+                {
+                    Session["viewComments"] = "Y";
+                }
+                else { Session["viewComments"] = "N";  }
+           
             return PartialView(MPAssignedReasons);
         }     
 
@@ -134,7 +149,7 @@ namespace REDZONE.Controllers
             return raw_data;
         }
 
-
+        [HttpPost]
         public string modifyMPVReasons(string addList, string deleteList, string updateList)
         {//The order of the parameters on each list is ""
             // DELETE:  rMPValueReasonId [,]
@@ -208,7 +223,7 @@ namespace REDZONE.Controllers
                 counter = 0;
                 foreach (string item in addReasonList)
                 { //Process each new reason to add
-                    string[] reasonData = item.Split(',');
+                    string[] reasonData = item.Split('^');
                     //Array order is:  rMPValueId , rMPReasonId , rMPValueReasonComment
                     mtrc_period_val_id = reasonData[0];
                     mpr_id = reasonData[1];
@@ -247,43 +262,50 @@ namespace REDZONE.Controllers
             updateResults = "UPDATE Operation:  --> ";
             if (!String.IsNullOrEmpty(updateList))
             {
-                counter = 0;
-                string[] updateReasonList = updateList.Split('~');
-                string jSonResponses = "";
                 string actionMsg = "";
-                foreach (string item in updateReasonList)
-                { //Process each reason to Update
-                    string[] reasonData = item.Split(',');
-                    //Array order is:  rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment
-                    mpvr_id = reasonData[0];
-                    mtrc_period_val_id = reasonData[1];
-                    mpr_id = reasonData[2];
-                    mpvr_comment = reasonData[3];
+                try {
+                    counter = 0;
+                    string[] updateReasonList = updateList.Split('~');
+                    string jSonResponses = "";
+                    
+                    foreach (string item in updateReasonList)
+                    { //Process each reason to Update
+                        string[] reasonData = item.Split('^');
+                        //Array order is:  rMPValueReasonId , rMPValueId , rMPReasonId , rMPValueReasonComment
+                        mpvr_id = reasonData[0];
+                        mtrc_period_val_id = reasonData[1];
+                        mpr_id = reasonData[2];
+                        mpvr_comment = reasonData[3];
 
-                    string jPayload = "{\"assignedreasons\":[{" +
-                            "\"mpvr_id\":\"" + mpvr_id + "\"," +
-                            "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
-                            "\"mpr_id\":\"" + mpr_id + "\"," +
-                            "\"user_id\":\"" + user_id + "\"," +
-                            "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
+                        string jPayload = "{\"assignedreasons\":[{" +
+                                "\"mpvr_id\":\"" + mpvr_id + "\"," +
+                                "\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"," +
+                                "\"mpr_id\":\"" + mpr_id + "\"," +
+                                "\"user_id\":\"" + user_id + "\"," +
+                                "\"mpvr_comment\":\"" + mpvr_comment + "\" }]}";
 
-                    string raw_data = api.addUpdateMPVReasons(jPayload);
+                        string raw_data = api.addUpdateMPVReasons(jPayload);
 
-                    jSonResponses += raw_data;
-                    counter++;
+                        jSonResponses += raw_data;
+                        counter++;
 
-                    JObject parsed_result = JObject.Parse(raw_data);
-                    if (((string)parsed_result["result"]).ToUpper().Equals("SUCCESS"))
-                    {
-                        actionMsg += "<span style=\"color:blue\">Reason ID '" + mpr_id + "' Was Updated Successfully </span>" + Environment.NewLine;
+                        JObject parsed_result = JObject.Parse(raw_data);
+                        if (((string)parsed_result["result"]).ToUpper().Equals("SUCCESS"))
+                        {
+                            actionMsg += "<span style=\"color:blue\">Reason ID '" + mpr_id + "' Was Updated Successfully </span>" + Environment.NewLine;
+                        }
+                        else
+                        {
+                            actionMsg += "<span style=\"color:red\">Reason ID '" + mpr_id + "' could not be updated: " + (string)parsed_result["result"] + "</span>" + Environment.NewLine;
+                        }
+
                     }
-                    else
-                    {
-                        actionMsg += "<span style=\"color:red\">Reason ID '" + mpr_id + "' could not be updated: " + (string)parsed_result["result"] + "</span>" + Environment.NewLine;
-                    }
-
+                    updateResults += "  [ " + counter + " Assigned Reason to updated Found ]" + Environment.NewLine + actionMsg; // jSonResponses + Environment.NewLine;
                 }
-                updateResults += "  [ " + counter + " Assigned Reason to updated Found ]" + Environment.NewLine + actionMsg; // jSonResponses + Environment.NewLine;
+                catch (Exception ex) {
+                    actionMsg += "<span style=\"color:red\">Failed to Update Reasons: " + ex.Message + " </span>" + Environment.NewLine;
+                    updateResults += "  [ " + counter + " Assigned Reasons were updated ]" + Environment.NewLine + actionMsg; // jSonResponses + Environment.NewLine;
+                }
             }
             else
             {  //Else bypass the process, there is nothing in the list.

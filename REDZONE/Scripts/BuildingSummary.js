@@ -336,14 +336,18 @@ function menuItemListener(link) {
             //Reset the Popup Details as to not display older Data
             $("#reasonsViewContainer").html('<div><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br /></div>');
             // Populate via Ajax the partial View that will be displayed in the pop up Form
-            //Parameters to pass:  "id" (Metric Period Value Id) 
+            //Parameters to pass:  "id" (Metric Period Value Id), "buildingId" and "metricId"
+            var bldngId = $('#buildingId').val();
+            var cell_mpId = $cellClicked.find('#mpId').val();
+            //alert("Parameters submitted are:\nBuilding id: " + bldngId + "\nMPid: " + cell_mpId);
+            //var cell_mpId = taskItemInContext.find('#mpId').val();            
             $.ajax({
                 url: '/MPVReasons/viewReasons',
                 method: "POST",
                 cache: false,
                 //type: "POST",
                 //data: payload,
-                data: { id: mpvId },
+                data: { id: mpvId, buildingId: bldngId, mpId: cell_mpId },
                 //contentType: "application/json; charset=utf-8",
                 //dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
