@@ -3,7 +3,9 @@
     string uId = Session["emp_id"].ToString();
     int counter = 0;
     string mostRecentApOpen = "";
-    }
+    bool isValidActionPlanModel = (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "") ? true : false;
+    
+ }
 
 <style>
     .headerCell {
@@ -28,14 +30,22 @@ else
 </div>
 
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
-    <div class="panel-heading padding2">       
-        <span style="font-weight:bold; font-size:20px" id="metricName">@Model.mtrcDisplayText</span>
-        <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
-        <span style="font-weight:bold; color: black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
-        <span style="font-weight:bold; color: black" id="metricDate">@Model.apMonth @Model.apYear</span>
-        <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
-        
-        <div class="row"></div>
+    <div class="panel-heading padding2" style="padding:0">
+        <div class="row" style="padding:0; margin:0">
+            <div class="col-xs-3 " style="padding:3px" >
+                <div class="bordered-g">
+                    STATUS
+                </div>
+            </div>
+            <div class="col-xs-6 bordered" style="padding:5px">
+                <span style="font-weight:bold; font-size:20px" id="metricName">@Model.mtrcDisplayText</span>
+                <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
+                <span style="font-weight:bold; color: black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
+                <span style="font-weight:bold; color: black" id="metricDate">@Model.apMonth @Model.apYear</span>
+                <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
+            </div>
+            <div class="col-xs-3 bordered"></div>
+        </div>
     </div>
 
     <div class="panel-body padding2 ">

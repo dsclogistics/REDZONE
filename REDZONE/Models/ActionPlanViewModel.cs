@@ -25,8 +25,25 @@ namespace REDZONE.Models
         public string mtrcDisplayText { get; set; }
         public string apMonth { get; set; }
         public string apYear { get; set; }
+
+
         public List<ActionPlan> actionPlanList { get; set; }
         public List<PriorActionPlan> priorActionPlanList { get; set; }
+
+        public string currentAPVersion {
+            get {
+                if (actionPlanList.Count > 0) { return actionPlanList.First().apVersion; }
+                else                          { return ""; }            
+            }
+        }
+        public string currentAPStatus {
+            get{
+                if (actionPlanList.Count > 0) { return actionPlanList.First().apStatus; }
+                else { return ""; }
+            }
+        }
+        public string displayStatus { get; set; }
+        public string displayColor { get; set; }
 
         public ActionPlanViewModel()
         {

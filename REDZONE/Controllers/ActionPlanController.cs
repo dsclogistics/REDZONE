@@ -14,6 +14,7 @@ namespace REDZONE.Controllers
         private DataRetrieval api = new DataRetrieval();
         private APIDataParcer dataParcer = new APIDataParcer();
 
+        [HttpGet]
         public ActionResult viewEdit(int? mp_id, int? bldg_id, int? bapm_id)
         {
             //Valid Action Pan Status values are:
@@ -44,12 +45,8 @@ namespace REDZONE.Controllers
             //Add List of Reasons 
             //-------------------
             int mpv_id = 0;
-            Int32.TryParse(apViewModel.mpv_id, out mpv_id);
-            List<MPReason> mpReasonList = new List<MPReason>();
-
-            mpReasonList = dataParcer.getAssignedMetricPeriodReasons(mpv_id.ToString());
-
-            apViewModel.reasonList = mpReasonList;
+            if (!Int32.TryParse(apViewModel.mpv_id, out mpv_id)) { mpv_id = 0; };
+            apViewModel.reasonList = dataParcer.getAssignedMetricPeriodReasons(mpv_id.ToString());
 
             //Add List of Recent Action Plans
             //-------------------------------
