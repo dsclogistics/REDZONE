@@ -37,7 +37,6 @@ namespace REDZONE.Controllers
 
             apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
 
-            apViewModel.actionPlanList = apViewModel.actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
 
             //ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
             ViewBag.bapmId = bapmId;

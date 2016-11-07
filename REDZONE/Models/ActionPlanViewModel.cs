@@ -30,20 +30,12 @@ namespace REDZONE.Models
         public List<ActionPlan> actionPlanList { get; set; }
         public List<PriorActionPlan> priorActionPlanList { get; set; }
 
-        public string currentAPVersion {
-            get {
-                if (actionPlanList.Count > 0) { return actionPlanList.First().apVersion; }
-                else                          { return ""; }            
-            }
-        }
-        public string currentAPStatus {
-            get{
-                if (actionPlanList.Count > 0) { return actionPlanList.First().apStatus; }
-                else { return ""; }
-            }
-        }
+        public string currentAPVersion { get; set; }
+        public string currentAPStatus { get; set; }
         public string displayStatus { get; set; }
         public string displayColor { get; set; }
+        public string AP_EditableStatus { get; set; }
+        public string review_EditableStatus { get; set; }
 
         public ActionPlanViewModel()
         {

@@ -3,8 +3,7 @@
     string uId = Session["emp_id"].ToString();
     int counter = 0;
     string mostRecentApOpen = "";
-    bool isValidActionPlanModel = (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "") ? true : false;
-    
+    bool isValidActionPlanModel = (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "") ? true : false;    
  }
 
 <style>
@@ -54,62 +53,10 @@ else
 
             @if (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "")
             {
-                string currentAPVersion = Model.actionPlanList.First().apVersion;
-                string currentAPStatus = Model.actionPlanList.First().apStatus;
-                string apEditable = "disabled";
-                string reviewEditable = "disabled";
-                string displayStatus = "";
-                string displayColor = "green";
-                switch (currentAPStatus)
-                {
-                    case "Not Started":
-                        displayStatus = "New";
-                        displayColor = "orange";
-                        apEditable = (Model.canSubmitAP) ? "" : "disabled";
-                        reviewEditable = "disabled";
-                        break;
-                    case "WIP":
-                        displayStatus = "In Process";
-                        displayColor = "orange";
-                        apEditable = (Model.canSubmitAP) ? "" : "disabled";
-                        reviewEditable = "disabled";
-                        break;
-                    case "Ready For Review":
-                        displayStatus = "Ready For Review";
-                        apEditable = "disabled";
-                        reviewEditable = (Model.canReviewAP) ? "" : "disabled";
-                        displayColor = "orange";
-                        break;
-                    case "Rejected":
-                        displayStatus = "Rejected";
-                        apEditable = "disabled";
-                        reviewEditable = "disabled";
-                        displayColor = "red";
-                        break;
-                    case "Rejected New":
-                        displayStatus = "Rejected (New Plan Required)";
-                        apEditable = (Model.canSubmitAP) ? "" : "disabled";
-                        reviewEditable = "disabled";
-                        displayColor = "red";
-                        break;
-                    case "Approved":
-                        displayStatus = "Approved";
-                        apEditable = "disabled";
-                        reviewEditable = "disabled";
-                        displayColor = "green";
-                        break;
-                    default:
-                        displayStatus = currentAPStatus;
-                        break;
-                }
-
                 <div class="row">
                     <div class="col-md-6" id="divCurrentStatus">
-                        <h4 style="text-align:left; color:@displayColor">Action Plan Status: @displayStatus</h4>
+                        <h4 style="text-align:left; color:@Model.displayColor">Action Plan Status: @Model.displayStatus</h4>
                     </div>
-                    @*<div class="col-md-6" id="divBackToCurrentAP" style="text-align:right">
-                        <input type="button" class="btn btn-primary" id="btnBackToCurrentAP" value="Back" />
-                    </div>*@
                 </div>
 
                 //SECTION: REASONS
@@ -131,7 +78,7 @@ else
 
                         </ul>
                     </div>
-                    @if (!(currentAPStatus == "Ready For Review" || currentAPStatus == "Approved") && Model.canEditReasons)
+                    @if (!(Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved") && Model.canEditReasons)
                     {
                         <div id="btnsReasons" style="text-align:right; margin-top:5px">
                             <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
@@ -143,17 +90,15 @@ else
 
                 //SECTION: CURRENT ACTION PLAN SECTION
                 <div id="divCurrentActionPlan">
-                    <h4 style="text-align:left">Action Plan - Version @currentAPVersion</h4>
-                    <input type="hidden" id="apVersion" value=@currentAPVersion />
+                    <h4 style="text-align:left">Action Plan - Version @Model.currentAPVersion</h4>
+                    <input type="hidden" id="apVersion" value=@Model.currentAPVersion/>
 
                     @*-----------*@
                     @*Action Plan*@
                     @*-----------*@
-                    @if (Model.canViewWipAP || (Model.canViewFinishedAP && (currentAPStatus == "Ready For Review" || currentAPStatus == "Approved" || currentAPStatus == "Rejected")))
+                    @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected")))
                     {
-                        <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @apEditable>@Model.actionPlanList.First().actionPlanAction</textarea>
-                        @*<div id="apText" class="bordered" contenteditable="@apEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().actionPlanAction</div>*@
-
+                        <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
                         <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
                         <div id="apTextChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
                         <br />
@@ -161,7 +106,7 @@ else
                         <div id="btnsActionPlan" style="text-align:right">
                             
                             <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
-                            @if (Model.canSubmitAP && apEditable == "")
+                            @if (Model.canSubmitAP && Model.AP_EditableStatus == "")
                             {
                                 <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
                                 <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
@@ -183,19 +128,17 @@ else
                     @*--------------*@
                     @*Approve/Reject*@
                     @*--------------*@
-                    @if ((Model.canReviewAP && reviewEditable == "") || (Model.canViewFinishedAP && currentAPStatus == "Approved"))
+                    @if ((Model.canReviewAP && Model.review_EditableStatus == "") || (Model.canViewFinishedAP && Model.currentAPStatus == "Approved"))
                     {
                         <h4 style="text-align:left">Reviewer Comments</h4>
-                        <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @reviewEditable>@Model.actionPlanList.First().reviewerComments</textarea>
-                        //<div id="apReviewComment" class="bordered" contenteditable="@reviewEditable" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray; min-height:100px">@Model.First().reviewerComments</div>
-
+                        <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
                         <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
                         <div id="apReviewChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
                         <br />
                         <div id="btnsReviewAP" style="text-align:right">
                             <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
                             <input type="hidden" id="apDetailId" value=@Model.actionPlanList.First().apd_id />
-                            @if (reviewEditable == "")
+                            @if (Model.review_EditableStatus == "")
                             {
                                 <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
                                 <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
@@ -233,7 +176,6 @@ else
                     </div>
                     <br />
                 }
-
             }
             else
             {
