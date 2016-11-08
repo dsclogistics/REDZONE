@@ -6,41 +6,108 @@ using System.Web;
 
 namespace REDZONE.Models
 { 
-    public class TasksViewModel
+    public class RZTasksViewModel
     {
-        public List<RZActionPlanTask> apSubmitTaskList { get; set; }
-        public List<RZActionPlanTask> apReviewTaskList { get; set; }
-        public List<RZMetricTask> mtrcTaskList { get; set; }
+        public List<RzApTaskBldg> apSubmitTaskList { get; set; }
+        public List<RzApTaskMtrc> apReviewTaskList { get; set; }
+        public List<RzMtrcTaskPeriod> mtrcTaskList { get; set; }
 
-        public TasksViewModel()
+        public RZTasksViewModel()
         {
-            apSubmitTaskList = new List<RZActionPlanTask>();
-            apReviewTaskList = new List<RZActionPlanTask>();
-            mtrcTaskList = new List<RZMetricTask>();
+            apSubmitTaskList = new List<RzApTaskBldg>();
+            apReviewTaskList = new List<RzApTaskMtrc>();
+            mtrcTaskList = new List<RzMtrcTaskPeriod>();
         }
     }
 
-    //ViewModel WIP
-    public class RZActionPlanTaskBldg
+    //Action Plan Submitter Task ViewModel
+    public class RzApTaskBldg
     {
-        public List<RZActionPlanTaskBldgPeriod> periodList { get; set; }
+        [Display(Name = "Building")]
+        public string bldgName { get; set; }
+        public List<RzApTaskBldgPeriod> periodList { get; set; }
 
-        public RZActionPlanTaskBldg()
+        public RzApTaskBldg()
         {
-            periodList = new List<RZActionPlanTaskBldgPeriod>();
+            periodList = new List<RzApTaskBldgPeriod>();
         }
     }
-
-    public class RZActionPlanTaskBldgPeriod
+    public class RzApTaskBldgPeriod
     {
-        public List<RZActionPlanTaskBldgPeriodMtrc> mtrcList { get; set; }
+        [Display(Name = "Time Period")]
+        public string periodName { get; set; }
+        public List<RzApTaskBldgPeriodMtrc> mtrcList { get; set; }
+        public RzApTaskBldgPeriod()
+        {
+            mtrcList = new List<RzApTaskBldgPeriodMtrc>();
+        }
+    }
+    public class RzApTaskBldgPeriodMtrc
+    {
+        [Display(Name = "Metric")]
+        public string mtrc_prod_display_text { get; set; }
+        [Display(Name = "Status")]
+        public string status { get; set; }
+        public int mtrc_period_id { get; set; }
+        public int bldg_id { get; set; }
+        public string rz_bapm_id { get; set; }
     }
 
-    public class RZActionPlanTaskBldgPeriodMtrc
+    //Action Plan Reviewer Task ViewModel
+    public class RzApTaskMtrc
     {
+        [Display(Name = "Metric")]
+        public string mtrc_prod_display_text { get; set; }
 
+        public List<RzApTaskMtrcPeriod> periodList { get; set; }
+
+        public RzApTaskMtrc()
+        {
+            periodList = new List<RzApTaskMtrcPeriod>();
+        }
+    }
+    public class RzApTaskMtrcPeriod
+    {
+        [Display(Name = "Time Period")]
+        public string periodName { get; set; }
+        public List<RzApTaskMtrcPeriodBldg> bldgList { get; set; }
+
+        public RzApTaskMtrcPeriod()
+        {
+            bldgList = new List<RzApTaskMtrcPeriodBldg>();
+        }
+    }
+    public class RzApTaskMtrcPeriodBldg
+    {
+        [Display(Name = "Building")]
+        public string bldgName { get; set; }
+        [Display(Name = "Status")]
+        public string status { get; set; }
+        public int mtrc_period_id { get; set; }
+        public int bldg_id { get; set; }
+        public string rz_bapm_id { get; set; }
     }
 
+    //Metric Task ViewModel
+    public class RzMtrcTaskPeriod
+    {
+        [Display(Name = "Time Period")]
+        public string periodName { get; set; }
+        public List<RzMtrcTaskPeriodMtrc> periodList { get; set; }
+
+        public RzMtrcTaskPeriod()
+        {
+            periodList = new List<RzMtrcTaskPeriodMtrc>();
+        }
+    }
+    public class RzMtrcTaskPeriodMtrc
+    {
+        [Display(Name = "Metric")]
+        public string mtrc_prod_display_text { get; set; }
+        [Display(Name = "Status")]
+        public string status { get; set; }
+        public int mtrc_id { get; set; }
+    }
 
 
     //Model to parse Task Detail data from API
@@ -87,8 +154,8 @@ namespace REDZONE.Models
         public string mtrc_prod_display_text { get; set; }
         public string mtrc_period_name { get; set; }
         [Display(Name = "Status")]
-        public int mtrc_id { get; set; }
         public string status { get; set; }
+        public int mtrc_id { get; set; }
     }
 
     public class RZTaskCounts

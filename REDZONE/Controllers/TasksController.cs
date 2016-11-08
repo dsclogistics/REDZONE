@@ -17,24 +17,59 @@ namespace REDZONE.Controllers
         // GET: Tasks
         public ActionResult Index(string display)
         {
-            RZTaskDetailList tasksViewModel = new RZTaskDetailList();
+            RZTasksViewModel tasksViewModel = new RZTasksViewModel();
+            RZTaskDetailList tasksDetailList = new RZTaskDetailList();
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
 
-            tasksViewModel = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
+            if (actionPlanUser.dbUserId == null)
+            {
 
-            tasksViewModel.apSubmitTaskList = tasksViewModel.apSubmitTaskList.OrderBy(x => x.bldg_name)
-                                                                             .ThenBy(x => x.year)
-                                                                             .ThenBy(x => x.month)
-                                                                             .ThenBy(x => x.mtrc_prod_display_text).ToList();
+            }
+            else
+            {
+                tasksDetailList = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
 
-            tasksViewModel.apReviewTaskList = tasksViewModel.apReviewTaskList.OrderBy(x => x.bldg_name)
-                                                                 .ThenBy(x => x.year)
-                                                                 .ThenBy(x => x.month)
-                                                                 .ThenBy(x => x.mtrc_prod_display_text).ToList();
+                List<RzApTaskBldg> apSubmitList = (
+                    from a in tasksDetailList.apSubmitTaskList
+                    group a by new { a.bldg_name } into grouped
+                    select new RzApTaskBldg
+                    {
+                        bldgName = grouped.Key.bldg_name,
+                        periodList = (from b in grouped
+                                      group b by new { b.period_name } into grouped2
+                                      select new RzApTaskBldgPeriod
+                                      {
+                                          periodName = grouped2.Key.period_name,
+                                          mtrcList = (from c in grouped2
+                                                      select new RzApTaskBldgPeriodMtrc
+                                                      {
+                                                          mtrc_prod_display_text = c.mtrc_prod_display_text,
+                                                          status = c.status,
+                                                          mtrc_period_id = c.mtrc_period_id,
+                                                          bldg_id = c.bldg_id,
+                                                          rz_bapm_id = c.rz_bapm_id
+                                                      }).ToList()
+                                      }).ToList()
+                    }).ToList();
+            }
 
-            tasksViewModel.mtrcTaskList = tasksViewModel.mtrcTaskList.OrderBy(x => x.year)
-                                                                 .ThenBy(x => x.month)
-                                                                 .ThenBy(x => x.mtrc_prod_display_text).ToList();
+            
+
+
+
+            //tasksViewModel.apSubmitTaskList = tasksViewModel.apSubmitTaskList.OrderBy(x => x.bldg_name)
+            //                                                                 .ThenBy(x => x.year)
+            //                                                                 .ThenBy(x => x.month)
+            //                                                                 .ThenBy(x => x.mtrc_prod_display_text).ToList();
+
+            //tasksViewModel.apReviewTaskList = tasksViewModel.apReviewTaskList.OrderBy(x => x.bldg_name)
+            //                                                     .ThenBy(x => x.year)
+            //                                                     .ThenBy(x => x.month)
+            //                                                     .ThenBy(x => x.mtrc_prod_display_text).ToList();
+
+            //tasksViewModel.mtrcTaskList = tasksViewModel.mtrcTaskList.OrderBy(x => x.year)
+            //                                                     .ThenBy(x => x.month)
+            //                                                     .ThenBy(x => x.mtrc_prod_display_text).ToList();
 
             ViewBag.display = display;
 
