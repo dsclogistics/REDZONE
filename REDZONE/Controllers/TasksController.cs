@@ -51,6 +51,8 @@ namespace REDZONE.Controllers
                                                       }).ToList()
                                       }).ToList()
                     }).ToList();
+
+                tasksViewModel.apSubmitTaskList = apSubmitList;
             }
 
             
