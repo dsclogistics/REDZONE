@@ -472,9 +472,9 @@
     <Content Include="Views\ActionPlan\viewEdit.cshtml" />
     <Content Include="Views\Account\userInquire.cshtml" />
     <Content Include="Views\Account\_UserInfo.cshtml" />
-    <Content Include="Views\MenuBar\_RZTask_MenuItems.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Shared\NoAuth.cshtml" />
+    <Content Include="Views\MenuBar\_RZTask_MenuItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

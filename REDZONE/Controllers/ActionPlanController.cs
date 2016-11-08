@@ -92,12 +92,13 @@ namespace REDZONE.Controllers
                     newActionPlan.actionPlanAction = "";
                     newActionPlan.reviewerComments = "";
                     apViewModel.actionPlanList.Insert(0, newActionPlan);
+                    apViewModel.currentAPStatus = "Rejected New";
+                    apViewModel.currentAPVersion = newActionPlan.apVersion;
                 }
                 else
                 {
                     //When action plan list is NOT empty, and most recent version status is 'WIP', 'Ready for Review', or 'Approved', pass model as is.
                 }
-
             }
             else if (apViewModel.actionPlanList.Count == 0 && apViewModel.bapmStatus == "Not Started")
             {
@@ -109,6 +110,8 @@ namespace REDZONE.Controllers
                 newActionPlan.actionPlanAction = "";
                 newActionPlan.reviewerComments = "";
                 apViewModel.actionPlanList.Add(newActionPlan);
+                apViewModel.currentAPStatus = "Not Started";
+                apViewModel.currentAPVersion = newActionPlan.apVersion;
             }
             else
             {
@@ -151,6 +154,52 @@ namespace REDZONE.Controllers
                 apViewModel.canViewWipAP = true;
                 apViewModel.canSubmitAP = true;
                 apViewModel.canReviewAP = true;
+            }
+
+            switch (apViewModel.bapmStatus)
+            {
+                case "Not Started":
+                    apViewModel.displayStatus = "New";
+                    apViewModel.displayColor = "orange";
+                    apViewModel.AP_EditableStatus = apViewModel.canSubmitAP ? "" : "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
+                case "WIP":
+                    apViewModel.displayStatus = "In Process";
+                    apViewModel.displayColor = "orange";
+                    apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
+                case "Ready For Review":
+                    apViewModel.displayStatus = "Ready For Review";
+                    apViewModel.displayColor = "orange";
+                    apViewModel.AP_EditableStatus = "disabled";
+                    apViewModel.review_EditableStatus = (apViewModel.canReviewAP) ? "" : "disabled";
+                    break;
+                case "Rejected":
+                    apViewModel.displayStatus = "Rejected";
+                    apViewModel.displayColor = "red";
+                    apViewModel.AP_EditableStatus = "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
+                case "Rejected New":
+                    apViewModel.displayStatus = "Rejected (New Plan Required)";
+                    apViewModel.displayColor = "red";
+                    apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
+                case "Approved":
+                    apViewModel.displayStatus = "Approved";
+                    apViewModel.displayColor = "green";
+                    apViewModel.AP_EditableStatus = "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
+                default:
+                    apViewModel.displayStatus = apViewModel.currentAPStatus;
+                    apViewModel.displayColor = "green";
+                    apViewModel.AP_EditableStatus = "disabled";
+                    apViewModel.review_EditableStatus = "disabled";
+                    break;
             }
 
             if (!apViewModel.canAccessAP) { return View("NoAuth"); }

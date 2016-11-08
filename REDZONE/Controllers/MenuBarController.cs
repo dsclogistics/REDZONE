@@ -68,8 +68,6 @@ namespace REDZONE.Controllers
 
             return PartialView(rzTaskCounts);
         }
-
-    
     }
 
     public class RZMetricMenu
