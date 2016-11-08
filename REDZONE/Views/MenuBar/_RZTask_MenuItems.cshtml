@@ -1,0 +1,76 @@
+﻿@model REDZONE.Models.RZTaskCounts
+
+<style>
+    /* Define how each icon button should look like */
+    .taskButton {
+        color: white;
+        display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+        position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+        padding: 2px 5px; /* Add some padding so it looks nice */
+    }
+
+    /* Make the badge float in the top right corner of the button */
+    .button__badge {
+        background-color: #fa3e3e;
+        border-radius: 5px;
+        color: white;
+        padding: 0px 5px;
+        font-size: 11px;
+        position: absolute; /* Position the badge within the relatively positioned button */
+        top: 7px;
+        right: 1px;
+    }
+</style>
+
+<ul class="nav navbar-nav menuItem" id="myTasks" style="padding:0; font-family:Arial">
+    <li class="dropdown" style="padding:0; ">
+        <a class="dropdown-toggle taskButton" data-toggle="dropdown" href="#">
+            <span>My Tasks <i class="glyphicon glyphicon-flag"></i></span>
+            @if (Model.totalTasks > 0)
+            {
+                <span class="button__badge">@Model.totalTasks</span>
+            }
+            @*<span class="badge">My Tasks</span>
+                <span class="badge" style="color:blue">@Model.totalTasks</span>
+                <span class="glyphicon glyphicon-flag" style="color:green"></span>*@
+        </a>
+        <ul class="dropdown-menu">
+            @if (Model.totalTasks > 0)
+            {
+                if (Model.mtrcCount > 0)
+                {
+                    <li><a href="/Tasks/Index/?display=mtrc">Metric Tasks (@Model.mtrcCount)</a></li>
+                }
+
+                if (Model.actPlanCount > 0)
+                {
+                    <li><a href="/Tasks/Index/?display=ap">Action Plan Tasks (@Model.actPlanCount)</a></li>
+                }
+            }
+            else
+            {
+                <li>NO PENDING TASKS</li>
+            }
+        </ul>
+    </li>
+</ul>
+
+<script>
+    $(document).ready(function () {
+        //Hide or Display the "My Tasks" Menu Items according to the User Task Status
+        //alert("User is in role ADMIN is @User.IsInRole("ADMIN")");
+        if ("@User.IsInRole("RZ_AP_REVIEWER")" == "True" || "@User.IsInRole("RZ_AP_SUBMITTER")" == "True" || "@User.IsInRole("MTRC_COLLECTOR")" == "True") {
+            if ("@Model.totalTasks" == "0") {
+                $('#mMyTasks').hide();
+            }
+            else {
+                $('#mMyTasks').show();
+                if ("@Model.mtrcCount" == "0") { $('#menuTaskMetric').hide(); }
+                else { $('#menuTaskMetric').show(); }
+                if ("@Model.actPlanCount" == "0") { $('#menuTaskAP').hide(); }
+                else { $('#menuTaskAP').show(); }
+            }
+        }
+        else { $('#mMyTasks').hide(); }
+    });
+</script>
