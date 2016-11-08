@@ -7,9 +7,10 @@
 <link href="~/Content/ReasonMgmt.css" rel="stylesheet" />
 
 <style>
-  th{
-      text-align:center;
-  }
+    th {
+        text-align: center;
+    }
+
     .sortableRow {
         background-color: #92c6cb !important;
     }
@@ -24,7 +25,7 @@
         <div class="row " style="margin:0; margin-bottom:0px; margin-top:5px">
             <div class="col-sm-5" style="text-align:right; padding:0px 0px">
                 <span class="form-control" style="font-weight:bold; max-width:190px; float:right; border-top-right-radius:0px; border-bottom-right-radius:0px; background-color: rgb(51,122,183); color:white; border-color:rgb(51,122,183)">
-                    Select a Metric Period: 
+                    Select a Metric Period:
                 </span>
             </div>
             <div class="col-sm-5" style="text-align: left; padding-left: 0px">@Html.DropDownList("metric_period_sel_list", null, "--- Select Metric Period ---", htmlAttributes: new { @class = "form-control", style = "min-width:200px; max-width:350px; border-bottom-left-radius:0px; border-top-left-radius:0px;" })</div>
@@ -32,7 +33,6 @@
     </div>
 
     <div class="panel-body ">
-
         @if (ViewBag.id != 0)
         {
             <input type="hidden" id="MtrcPeriodId" value=@ViewBag.id />
@@ -41,19 +41,19 @@
                 //Reason LIST
                 <div class="row" id="divReasonList" style="border:0px double black; margin: 0px 0px">
                     @*<div class="row" style="border-bottom: 1px solid black; margin:0; text-align: center; padding:2px; font-size:large">
-                        <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
-                        <h3><span style="font-weight:normal">'</span></h3>
-                    </div>*@
+                            <span>Available Reasons for Metric Period "</span><span id="mpName"></span><span>"</span>
+                            <h3><span style="font-weight:normal">'</span></h3>
+                        </div>*@
                     <div class="row" id="divReasonListView" style="margin:0; margin-bottom:10px">
                         <div class="row" style="margin:0 auto; ">
-                        @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
+                            @*<div class="row" style="margin:0 auto; min-height:400px; max-height:400px; overflow-y:scroll; overflow-x:hidden; ">*@
 
                             <table class="table table-bordered table-condensed table-hover table-striped" id="sortTable">
                                 <thead>
                                     <tr style="background-color: rgb(51,122,183); color:white">
                                         @*<th>
-                                            @Html.DisplayNameFor(model => model.reason_id)
-                                        </th>*@
+                                                @Html.DisplayNameFor(model => model.reason_id)
+                                            </th>*@
                                         <th>
                                             @Html.DisplayNameFor(model => model.reason_text)
                                         </th>
@@ -78,7 +78,7 @@
                                 <tbody>
                                     @foreach (REDZONE.Models.MPReason item in Model)
                                     {
-                                        if(item.reason_std_yn == "Y")
+                                        if (item.reason_std_yn == "Y")
                                         {
                                             ViewBag.reasonRowClass = "stdReasonRow";
                                         }
@@ -123,7 +123,7 @@
                                             <td class="std-checkbox" align="center">
                                                 @Html.HiddenFor(modelItem => item.reason_std_yn, new { @class = "reason-list-edit-field" })
                                                 <label class="switch">
-                                                    <input class="switch-input" type="checkbox" @if (item.reason_std_yn == "Y") { <text>checked</text> } disabled/>
+                                                    <input class="switch-input" type="checkbox" @if (item.reason_std_yn == "Y") { <text> checked</text> } disabled />
                                                     <span class="switch-label" data-on="Y" data-off="N"></span>
                                                     <span class="switch-handle"></span>
                                                 </label>
@@ -135,8 +135,8 @@
                                             <td class="lastCol">
                                                 <input type="button" class="btnReasonEdit" value="Edit" />
                                                 @*<input type="button" class="btnReasonListSave" style="display:none" value="Save" />
-                                                <input type="button" class="btnReasonListRemove" style="display:none" value="Remove" />
-                                                <input type="button" class="btnReasonListCancel" style="display:none" value="Cancel" />*@
+                                                    <input type="button" class="btnReasonListRemove" style="display:none" value="Remove" />
+                                                    <input type="button" class="btnReasonListCancel" style="display:none" value="Cancel" />*@
                                                 <button type="button" class="btnReasonListSave" title="Save" style="display:none; border:none; background-color:transparent">
                                                     <span class="glyphicon glyphicon-floppy-disk"></span>
                                                 </button>
@@ -163,8 +163,8 @@
                             </div>
                             <div class="col-sm-6" id="btnsEdit" style="float:left; display:none">
                                 @*<button type="button" class="btn btn-primary" id="btnReasonListSave">Save Reason</button>
-                                <button type="button" class="btn btn-primary" id="btnReasonListRemove" style="margin-left:15px">Remove Reason</button>
-                                <button type="button" class="btn btn-warning" id="btnReasonListCancel" style="margin-left:15px">Cancel</button>*@
+                                    <button type="button" class="btn btn-primary" id="btnReasonListRemove" style="margin-left:15px">Remove Reason</button>
+                                    <button type="button" class="btn btn-warning" id="btnReasonListCancel" style="margin-left:15px">Cancel</button>*@
                             </div>
                             <div class="col-sm-6" id="btnsReordering" style="float:right; display:none">
                                 <button type="button" class="btn btn-primary" id="btnReorderSave">Save Order Sequence</button>
@@ -218,7 +218,7 @@
                 @*<input type="button" disabled class="btn btn-primary add-reason-hide" id="btnSaveReasonDetail" value="Save" />*@
                 <input type="button" disabled class="btn btn-primary" style="display:none" id="btnAddReasonDetail" value="Add" />
                 @*<input type="button" disabled class="btn btn-primary add-reason-hide" id="btnRemoveReason" value="Remove" />*@
-               <button type="button" class="btn btn-warning" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning" id="btnCancelReasonEdit" data-dismiss="modal">Cancel</button>
             </div>
         </div>
 

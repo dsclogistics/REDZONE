@@ -13,6 +13,12 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     //-----------------------------------------Initialize--------------------------------------------
     //-----------------------------------------------------------------------------------------------
+
+    $(".menuItem").removeClass("menuSelected");    // Reset Menu Selections
+    $('#mActionPlan').show();                      // Show a new Menu Item when this page is displayed
+    $("#mActionPlan").addClass("menuSelected");
+
+
     //$("#metricName").html(getMetricName());
     //$("#buildingName").html(getBuildingName());
     //$(".mNameCell").html(getMetricName());

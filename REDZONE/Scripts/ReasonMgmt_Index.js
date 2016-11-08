@@ -1,4 +1,5 @@
 ﻿//alert("Javascript file is connected");
+
 var fixHelper = function (e, ui) {
     ui.children().each(function () {
         $(this).width($(this).width());
