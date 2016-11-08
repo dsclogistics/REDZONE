@@ -59,8 +59,8 @@ namespace REDZONE.Controllers
 
             recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
-            PriorActionPlan currentAP = dataParcer.getMostRecentAP(productName, mpId, bldgId, DateTime.Now.AddMonths(-11).Month.ToString(), DateTime.Now.AddMonths(-11).Year.ToString(), 
-                                                            DateTime.Now.AddMonths(-1).Month.ToString(), DateTime.Now.AddMonths(-1).Year.ToString());
+            PriorActionPlan currentAP = dataParcer.getMostRecentAP(productName, mpId, bldgId, DateTime.Today.AddMonths(-11).Month.ToString(), DateTime.Today.AddMonths(-11).Year.ToString(), 
+                                                            DateTime.Today.AddMonths(-1).Month.ToString(), DateTime.Today.AddMonths(-1).Year.ToString());
 
             if (currentAP.bapm_id != null && currentAP.priorAPStatus != "Approved") { recentAPList.Add(currentAP); } 
 
@@ -153,6 +153,7 @@ namespace REDZONE.Controllers
                 apViewModel.canReviewAP = true;
             }
 
+            if (!apViewModel.canAccessAP) { return View("NoAuth"); }
             return View(apViewModel);
         }
 

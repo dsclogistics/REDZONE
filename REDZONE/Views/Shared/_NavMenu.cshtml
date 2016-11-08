@@ -41,10 +41,24 @@
             </ul>
 
             <ul class="nav navbar-nav menuItem" id="mDashboard">
-                <li><a class="menuFont" href="/Home/Index">DASHBOARD</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        DASHBOARDS
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Home/Index">Monthly Executive Summary</a></li>
+                        <li><a href="/Home/BuildingSummary">Monthly Building Summary</a></li>
+                        <li><a href="/Home/MetricSummary">Monthly Metric Summary</a></li>
+                    </ul>
+                </li>
             </ul>
 
             @Html.Action("_RZDM_MenuItems", "MenuBar")
+
+            <ul class="nav navbar-nav menuItem" id="mReason" style="display:none">
+                <li><a href="#">REASON MANAGEMENT</a></li>
+            </ul>
 
             @*<ul class="nav navbar-nav menuItem" id="mActionPlans">
                 <li class="dropdown ">

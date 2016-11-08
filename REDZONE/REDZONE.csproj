@@ -474,6 +474,7 @@
     <Content Include="Views\Account\_UserInfo.cshtml" />
     <Content Include="Views\MenuBar\_RZTask_MenuItems.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\Shared\NoAuth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

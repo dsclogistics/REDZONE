@@ -74,19 +74,39 @@ namespace REDZONE.Controllers
 
         public ActionResult BuildingSummary(string year, string buildingID)
         {
+            const string DFLT_BUILDING = "1";
+            dscUser currentUser = new dscUser(User.Identity.Name);
+
+            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.Year.ToString(); }  //Default to the current year
+            if (String.IsNullOrEmpty(buildingID)) {    //Retrieve The current User list of building and select it's first                
+                if (currentUser.buildings.Count > 0) { buildingID = currentUser.buildings[0].id; }
+                else { buildingID = DFLT_BUILDING; }                
+            }
             BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name);
 
-            //Retrieve the Current Logged on User  Reviewer's metrics (If any)
-            ViewBag.ReviewerMetrics = new dscUser(User.Identity.Name).getReviewerMetricIds();
+            //Retrieve the Current Logged on User Reviewer's metrics (If any)
+            ViewBag.ReviewerMetrics = currentUser.getReviewerMetricIds();
             return View(bldngSummary);
         }
 
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
-           // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
+            const string DFLT_MPID = "3";
 
+           // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
+            // ------ SET DEFAULT VALUES ------
+            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.Year.ToString(); }  //Default to the current year
+            if (String.IsNullOrEmpty(metricID))
+            {    //Retrieve The current User list of Reviewer Met5rics and select it's first
+                //dscUser currentUser = new dscUser(User.Identity.Name);
+                //userRole reviewerRole = currentUser.roles.FirstOrDefault(x => x.roleName == "RZ_AP_REVIEWER");
+                //if (reviewerRole == null || reviewerRole.roleMetrics.Count == 0) { metricID = DFLT_MPID; }
+                //else { metricID = reviewerRole.roleMetrics[0].mpId; }
+                metricID = DFLT_MPID;
+            }
             if (String.IsNullOrEmpty(sortDir)) { sortDir = "ASC"; }
             if (String.IsNullOrEmpty(sortMonth)) { sortMonth = "Building"; }
+            //------- Done setting up default values ------
 
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
 
