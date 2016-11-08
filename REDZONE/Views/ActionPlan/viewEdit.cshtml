@@ -1,10 +1,10 @@
 ﻿@model REDZONE.Models.ActionPlanViewModel
 @{ ViewBag.Title = "viewEdit";
-    string uId = Session["emp_id"].ToString();
-    int counter = 0;
-    string mostRecentApOpen = "";
-    bool isValidActionPlanModel = (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "") ? true : false;    
- }
+ string uId = Session["emp_id"].ToString();
+ int counter = 0;
+ string mostRecentApOpen = "";
+ bool isValidActionPlanModel = (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "") ? true : false;
+}
 
 <style>
     .headerCell {
@@ -23,137 +23,182 @@
 }
 else
 {
-<div id="globalVariables">
-    @*<input type="hidden" id="userRole" value="@userRole" />*@
-    <input type="hidden" id="userId" value="@uId" />
-</div>
-
-<div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
-    <div class="panel-heading padding2" style="padding:0">
-        <div class="row" style="padding:0; margin:0">
-            <div class="col-xs-3 " style="padding:3px" >
-                <div class="bordered-g">
-                    STATUS
-                </div>
-            </div>
-            <div class="col-xs-6 bordered" style="padding:5px">
-                <span style="font-weight:bold; font-size:20px" id="metricName">@Model.mtrcDisplayText</span>
-                <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
-                <span style="font-weight:bold; color: black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
-                <span style="font-weight:bold; color: black" id="metricDate">@Model.apMonth @Model.apYear</span>
-                <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
-            </div>
-            <div class="col-xs-3 bordered"></div>
-        </div>
+    <div id="globalVariables">
+        @*<input type="hidden" id="userRole" value="@userRole" />*@
+        <input type="hidden" id="userId" value="@uId" />
     </div>
 
-    <div class="panel-body padding2 ">
-
-        <div id="currentActionPlanDetail">
-
-            @if (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "")
-            {
-                <div class="row">
-                    <div class="col-md-6" id="divCurrentStatus">
-                        <h4 style="text-align:left; color:@Model.displayColor">Action Plan Status: @Model.displayStatus</h4>
+    <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
+        <div class="panel-heading padding2" style="padding:0">
+            <div class="row" style="padding:0; margin:0">
+                <div class="col-xs-3 " style="padding:3px;">
+                    <div class="" style="margin-top:15px; margin-left:5px; max-width: 310px; font-size:18px; text-align:left; padding-left:3px">
+                        <span>Action Plan Status: </span>
+                        <span style="padding-left:3px; text-align:left; font-weight:bold; color:@Model.displayColor">@Model.displayStatus</span>
                     </div>
                 </div>
+                <div class="col-xs-6" style="padding:5px">
+                    <span style="font-weight:bold; font-size:20px" id="metricName">@Model.mtrcDisplayText</span>
+                    <span style="font-weight:bold; font-size:20px" id="showTable"> Metric Action Planning</span><br />
+                    <span style="font-weight:bold; color: black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
+                    <span style="font-weight:bold; color: black" id="metricDate">@Model.apMonth @Model.apYear</span>
+                    <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
+                </div>
+                <div class="col-xs-3"></div>
+            </div>
+        </div>
 
-                //SECTION: REASONS
-                <div id="divReasonSummary">
-                    <h4 style="text-align:left">Reason Summary</h4>
-                    <div class="bordered" style="padding:10px; padding-bottom:0px; border-radius:4px; border-color:darkgray ">
-                        <ul style="text-align:center">
+        <div class="panel-body padding2 ">
+
+            <div id="currentActionPlanDetail">
+
+                @if (Model.actionPlanList.Count() > 0 && Model.bapmStatus != "")
+                {
+                    @*<div class="row">
+                            <div class="col-md-6" id="divCurrentStatus">
+                                <h4 style="text-align:left; color:@Model.displayColor">Action Plan Status: @Model.displayStatus</h4>
+                            </div>
+                        </div>*@
+
+                    //SECTION: REASONS
+                    <div id="divReasonSummary">
+                        <div class="" style="text-align:left; font-size:18px">Reason Summary</div>
+                        <div class="bordered" style="padding:10px; padding-bottom:10px; border-radius:4px; border-color:darkgray; text-align:left ">
                             @if (Model.reasonList.Count() > 0)
                             {
                                 foreach (var reason in Model.reasonList)
                                 {
-                                    <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
+                                    <div class="" title="@reason.mpvr_Comment" style="text-align:left; padding:2px; ">
+                                        <span class="glaphicon glyphicon-asterisk"></span>
+                                        <span style="margin-left:5px">@reason.reason_text</span>
+                                    </div>
                                 }
                             }
                             else
                             {
-                                <li>There are no reasons to display.</li>
+                                <div style="color:red; ">There are no Asigned Reasons for the current Metric Action Plan</div>
                             }
+                        </div>
+                        @if (!(Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved") && Model.canEditReasons)
+                        {
+                            <div id="btnsReasons" style="text-align:right; margin-top:5px">
+                                <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
+                            </div>
+                        }
 
-                        </ul>
                     </div>
-                    @if (!(Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved") && Model.canEditReasons)
-                    {
-                        <div id="btnsReasons" style="text-align:right; margin-top:5px">
-                            <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
-                        </div>
-                    }
 
-                    <br />
-                </div>
+                        //SECTION: CURRENT ACTION PLAN SECTION
+                        <div id="divCurrentActionPlan">
+                            <div class="" style="text-align:left; font-size:18px">Action Plan - Version @Model.currentAPVersion</div>
+                            <input type="hidden" id="apVersion" value=@Model.currentAPVersion />
 
-                //SECTION: CURRENT ACTION PLAN SECTION
-                <div id="divCurrentActionPlan">
-                    <h4 style="text-align:left">Action Plan - Version @Model.currentAPVersion</h4>
-                    <input type="hidden" id="apVersion" value=@Model.currentAPVersion/>
-
-                    @*-----------*@
-                    @*Action Plan*@
-                    @*-----------*@
-                    @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected")))
-                    {
-                        <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
-                        <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
-                        <div id="apTextChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
-                        <br />
-
-                        <div id="btnsActionPlan" style="text-align:right">
-                            
-                            <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
-                            @if (Model.canSubmitAP && Model.AP_EditableStatus == "")
+                            @*-----------*@
+                            @*Action Plan*@
+                            @*-----------*@
+                            @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected")))
                             {
-                                <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
-                                <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
-                            }
-                        </div>
-                        <br />
-                    }
-                    else if (!Model.canViewWipAP && Model.canViewFinishedAP)
-                    {
-                        <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">The action plan is not yet ready for review.</div>
-                        <br />
-                    }
-                    else
-                    {
-                        <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">You cannot view this action plan.</div>
-                        <br />
-                    }
+                                <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
+                                <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
+                                <div id="apTextChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
+                                <br />
 
-                    @*--------------*@
-                    @*Approve/Reject*@
-                    @*--------------*@
-                    @if ((Model.canReviewAP && Model.review_EditableStatus == "") || (Model.canViewFinishedAP && Model.currentAPStatus == "Approved"))
-                    {
-                        <h4 style="text-align:left">Reviewer Comments</h4>
-                        <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
-                        <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
-                        <div id="apReviewChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
-                        <br />
-                        <div id="btnsReviewAP" style="text-align:right">
-                            <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
-                            <input type="hidden" id="apDetailId" value=@Model.actionPlanList.First().apd_id />
-                            @if (Model.review_EditableStatus == "")
+                                <div id="btnsActionPlan" style="text-align:right">
+
+                                    <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
+                                    @if (Model.canSubmitAP && Model.AP_EditableStatus == "")
+                                    {
+                                        <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
+                                        <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                                    }
+                                </div>
+                                <br />
+                            }
+                            else if (!Model.canViewWipAP && Model.canViewFinishedAP)
                             {
-                                <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
-                                <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
+                                <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">The action plan is not yet ready for review.</div>
+                                <br />
                             }
+                            else
+                            {
+                                <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">You cannot view this action plan.</div>
+                                <br />
+                            }
+
+                            @*--------------*@
+                            @*Approve/Reject*@
+                            @*--------------*@
+                            @if ((Model.canReviewAP && Model.review_EditableStatus == "") || (Model.canViewFinishedAP && Model.currentAPStatus == "Approved"))
+                            {
+                                <h4 style="text-align:left">Reviewer Comments</h4>
+                                <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
+                                <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
+                                <div id="apReviewChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
+                                <br />
+                                <div id="btnsReviewAP" style="text-align:right">
+                                    <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
+                                    <input type="hidden" id="apDetailId" value=@Model.actionPlanList.First().apd_id />
+                                    @if (Model.review_EditableStatus == "")
+                                    {
+                                        <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
+                                        <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
+                                    }
+                                </div>
+                                <br />
+                            }
+
+                        </div>
+
+                            //SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN
+                            <br />
+
+                    foreach (REDZONE.Models.ActionPlan actionPlan in Model.actionPlanList.Where(x => x.apVersion != Model.actionPlanList.First().apVersion))
+                    {
+                        <div class="btn-toolbar">
+                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                            </div>
+                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan - Version @actionPlan.apVersion</h4>
+                            </div>
+                        </div>
+
+                        <div class="collapse" style="margin-left:40px">
+                            <h4 style="text-align:left; color:red; margin-top:10px">Action Plan Status: @actionPlan.apStatus</h4>
+                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>
+                            <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
+
+                            <h4 style="text-align:left">Reviewer Comments</h4>
+                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>
+                            <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
                         </div>
                         <br />
                     }
-
-                </div>
-
-                //SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN
-                <br />                
-
-                foreach (REDZONE.Models.ActionPlan actionPlan in Model.actionPlanList.Where(x => x.apVersion != Model.actionPlanList.First().apVersion))
+                }
+                else
                 {
+                    <h4 style="text-align:left">Action Plan:</h4>
+                    <div class="bordered" style="padding:15px">
+                        <span>There is no action plan to display.</span>
+                    </div>
+                }
+
+            </div>
+
+
+            @*SECTION: RECENT MONTH ACTION PLANS*@
+            <div id="divPriorActionPlans">
+                <br />
+                <div class="bordered" style="border-color:darkgray; background-color:dimgray"><h4 style="font-weight:bold; color:white">Recent Action Plans</h4></div>
+                <br />
+
+                @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
+                {
+                    counter = counter + 1;
+                    mostRecentApOpen = (counter == 1) ? "in" : "";
+
                     <div class="btn-toolbar">
                         <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
                             <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
@@ -161,118 +206,73 @@ else
                             </button>
                         </div>
                         <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
-                            <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan - Version @actionPlan.apVersion</h4>
+                            <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@priorAP.priorAPMonth @priorAP.priorAPYear Action Plan <span style="color:@priorAP.priorAPStatusColor">(@priorAP.priorAPStatus)</span></h4>
                         </div>
                     </div>
 
-                    <div class="collapse" style="margin-left:40px">
-                        <h4 style="text-align:left; color:red; margin-top:10px">Action Plan Status: @actionPlan.apStatus</h4>
-                        <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>
-                        <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
+                    <div class="collapse @mostRecentApOpen" style="margin-left:40px">
+                        <br />
+                        @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
+                        <div>
+                            <div class="row">
+                                <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
+                                    <!-- Metric Period Header Information  -->
+                                    <div class="row" style="margin:0; font-weight:bold">
+                                        <div class="col-xs-2 headerCell" style="background-color:#f0eaea">Metric</div>
+                                        <div class="col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
+                                        <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@priorAP.priorAPMonth</span></div>
+                                    </div>
+                                    <div class="row" style="margin:0">
+                                        <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
+                                        <div class="col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@priorAP.priorAPMetricGoalText</span></div>
+                                        <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@priorAP.priorAPMetricValue</div>
+                                    </div>
+                                </div> <!-- END OF HEADER INFORMATION-->
 
-                        <h4 style="text-align:left">Reviewer Comments</h4>
-                        <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>
-                        <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
+                                <div class="col-md-6">
+                                    <div class="bordered" style="padding:10px; padding-bottom:0px; text-align:left; border-radius:4px; border-color:lightgray">
+                                        <ul style="text-align:center">
+                                            @if (priorAP.priorAPReasonList.Count() > 0)
+                                            {
+                                                foreach (var reason in priorAP.priorAPReasonList)
+                                                {
+                                                    <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li>There are no reasons to display.</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            @if (priorAP.priorAPText != "")
+                            {
+                                <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
+                            }
+                        </div>
+                        @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
+                        <br />
+
+                        <div class="btns-prior-ap-detail" style="text-align:left">
+                            <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
+                            <input type="hidden" id="priorMpvId" value=@priorAP.mtrc_period_val_id />
+                            <input type="hidden" id="priorMpId" value="@priorAP.mtrc_period_id" />
+                            <input type="hidden" id="priorBldgId" value="@priorAP.dsc_mtrc_lc_bldg_id" />
+                            <input type="hidden" id="priorMpGoal" value="@priorAP.priorAPMetricGoalText" />
+                            <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
+                            <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
+                            <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
+                            <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
+                        </div>
                     </div>
                     <br />
                 }
-            }
-            else
-            {
-                <h4 style="text-align:left">Action Plan:</h4>
-                <div class="bordered" style="padding:15px">
-                    <span>There is no action plan to display.</span>
-                </div>
-            }
+            </div>
 
         </div>
-
-
-        @*SECTION: RECENT MONTH ACTION PLANS*@
-        <div id="divPriorActionPlans">
-            <br />
-            <div class="bordered" style="border-color:darkgray; background-color:dimgray"><h4 style="font-weight:bold; color:white">Recent Action Plans</h4></div>
-            <br />
-
-            @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
-            {
-                counter = counter + 1;
-                mostRecentApOpen = (counter == 1) ? "in" : "";
-
-                <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
-                    </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@priorAP.priorAPMonth @priorAP.priorAPYear Action Plan <span style="color:@priorAP.priorAPStatusColor">(@priorAP.priorAPStatus)</span></h4>
-                    </div>
-                </div>
-
-                <div class="collapse @mostRecentApOpen" style="margin-left:40px">
-                    <br />
-                    @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
-                    <div>
-                        <div class="row">
-                            <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
-                                <!-- Metric Period Header Information  -->
-                                <div class="row" style="margin:0; font-weight:bold">
-                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea">Metric</div>
-                                    <div class="col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
-                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@priorAP.priorAPMonth</span></div>
-                                </div>
-                                <div class="row" style="margin:0">
-                                    <div class="col-xs-2 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
-                                    <div class="col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@priorAP.priorAPMetricGoalText</span></div>
-                                    <div class="col-xs-2 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@priorAP.priorAPMetricValue</div>
-                                </div>
-                            </div> <!-- END OF HEADER INFORMATION-->
-
-                            <div class="col-md-6">
-                                <div class="bordered" style="padding:10px; padding-bottom:0px; text-align:left; border-radius:4px; border-color:lightgray">
-                                    <ul style="text-align:center">
-                                        @if (priorAP.priorAPReasonList.Count() > 0)
-                                        {
-                                            foreach (var reason in priorAP.priorAPReasonList)
-                                            {
-                                                <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <li>There are no reasons to display.</li>
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-
-                        @if (priorAP.priorAPText != "")
-                        {
-                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
-                        }
-                    </div>
-                    @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
-                    <br />
-
-                    <div class="btns-prior-ap-detail" style="text-align:left">
-                        <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
-                        <input type="hidden" id="priorMpvId" value=@priorAP.mtrc_period_val_id />
-                        <input type="hidden" id="priorMpId" value="@priorAP.mtrc_period_id" />
-                        <input type="hidden" id="priorBldgId" value="@priorAP.dsc_mtrc_lc_bldg_id" />
-                        <input type="hidden" id="priorMpGoal" value="@priorAP.priorAPMetricGoalText" />
-                        <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
-                        <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
-                        <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
-                        <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
-                    </div>
-                </div>
-                <br />
-            }
-        </div>
-
     </div>
-</div>
 }

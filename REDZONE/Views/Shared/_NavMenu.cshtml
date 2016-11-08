@@ -18,18 +18,32 @@
     <a class="hidden-sm" style="position:fixed; top:0; left:0" href="/home">
         <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
     </a>
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+    <div class="navbar-header" >
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small">
-        <div class="col-md-7 col-md-offset-2">
-            <ul class="nav navbar-nav menuItem" id="mDashboard">
-                <li><a class="menuFont" href="\Home\Index">DASHBOARD</a></li>
+    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; ">
+        <div class="col-md-7 col-md-offset-2" style="text-align:left; margin-left:160px">
+            <ul class="nav navbar-nav menuItem" id="mMyTasks" style="display:none">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        MY TASKS
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li id="menuTaskMetric"><a href="/Tasks/Index/?display=mtrc">Metric Tasks </a></li>
+                        <li id="menuTaskAP"><a href="/Tasks/Index/?display=ap">Action Plan Tasks </a></li>
+                    </ul>
+                </li>
             </ul>
+
+            <ul class="nav navbar-nav menuItem" id="mDashboard">
+                <li><a class="menuFont" href="/Home/Index">DASHBOARD</a></li>
+            </ul>
+
             @Html.Action("_RZDM_MenuItems", "MenuBar")
 
             @*<ul class="nav navbar-nav menuItem" id="mActionPlans">
@@ -61,7 +75,7 @@
                         </ul>
                     </li>
                 </ul>
-            }           
+            }
 
 
             @*<ul class="nav navbar-nav menuItem" id="mTables">

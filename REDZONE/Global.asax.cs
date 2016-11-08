@@ -68,7 +68,6 @@ namespace REDZONE
                 //    Context.User = new GenericPrincipal(Context.User.Identity, roles);
                 HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(
                       new System.Security.Principal.GenericIdentity(Context.User.Identity.Name, "Forms"), roles);
-                ////Valid Roles are: "Admin", "Super User", "Editor", "Viewer"   (This will change)
             }  // ================= FINISHED SETTING UP THE CONTEXT USER with ROLES ===================================================
         }
 
