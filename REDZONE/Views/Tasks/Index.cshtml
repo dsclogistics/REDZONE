@@ -28,7 +28,7 @@
 </style>
 <script src="~/Scripts/Tasks_index.js"></script>
 
-<div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
+<div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:5px">
     <div class="panel-heading padding2">
         <h2>Tasks</h2>
         <input type="hidden" id="hdnDisplay" value="@ViewBag.display"/>
@@ -39,12 +39,12 @@
             @if (Model.apSubmitTaskList.Count() > 0)
             {
                 <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-width: .143em; border-left-width:1px">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Tasks</h4>
                     </div>
                 </div>
@@ -80,16 +80,16 @@
                                 <div class="collapse" style="margin-left:40px">
                                     <table class="table table-condensed table-hover" id="tblAPTasks">
                                         <tr>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().mtrc_prod_display_text)
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().status)
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 Action
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 Due By
                                             </th>
                                         </tr>
@@ -97,17 +97,17 @@
                                         @foreach (var mtrc in period.mtrcList)
                                         {
                                             <tr>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => mtrc.status)
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;}
                                                     <a href="@apUrl">@mtrc.action</a>
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     TBD
                                                 </td>
                                             </tr>
@@ -127,12 +127,12 @@
             @if (Model.apReviewTaskList.Count() > 0)
             {
                 <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-width: .143em; border-left-width:1px">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
                     </div>
                 </div>
@@ -168,16 +168,16 @@
                                 <div class="collapse" style="margin-left:40px">
                                     <table class="table table-condensed table-hover" id="tblAPTasks">
                                         <tr>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().status)
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 Action
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th style="text-align:center; width:25%">
                                                 Due By
                                             </th>
                                         </tr>
@@ -186,17 +186,17 @@
                                         {
                                             string overdueClass = (new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18) < DateTime.Today) ? "overdue" : "";
                                             <tr>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => bldg.bldgName)
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => bldg.status)
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:25%">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
                                                     <a href="@apUrl">@bldg.action</a>
                                                 </td>
-                                                <td class="@overdueClass" style="text-align:center">
+                                                <td class="@overdueClass" style="text-align:center; width:25%">
                                                     @bldg.month/18/@bldg.year
                                                 </td>
                                             </tr>
@@ -214,12 +214,12 @@
             @if (Model.mtrcTaskList.Count() > 0)
             {
                 <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @mtrcTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle;border-width: .143em; border-left-width:1px">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
                     </div>
                 </div>
@@ -241,16 +241,16 @@
                         <div class="collapse" style="margin-left:40px">
                             <table class="table table-condensed table-hover" id="tblAPTasks">
                                 <tr>
-                                    <th style="text-align:center;">
+                                    <th style="text-align:center; width:25%">
                                         @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
                                     </th>
-                                    <th style="text-align:center;">
+                                    <th style="text-align:center; width:25%">
                                         @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().status)
                                     </th>
-                                    <th style="text-align:center;">
+                                    <th style="text-align:center; width:25%">
                                         Action
                                     </th>
-                                    <th style="text-align:center;">
+                                    <th style="text-align:center; width:25%">
                                         Due By
                                     </th>
                                 </tr>
@@ -259,17 +259,17 @@
                                 {
                                     string overdueClass = (new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18) < DateTime.Today) ? "overdue" : "";
                                     <tr>
-                                        <td style="text-align:center">
+                                        <td style="text-align:center; width:25%">
                                             @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
                                         </td>
-                                        <td style="text-align:center">
+                                        <td style="text-align:center; width:25%">
                                             @Html.DisplayFor(modelItem => mtrc.status)
                                         </td>
-                                        <td style="text-align:center">
+                                        <td style="text-align:center; width:25%">
                                             @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
                                             <a href="@mtrcUrl">Manage Metric</a>
                                         </td>
-                                        <td class="@overdueClass" style="text-align:center">
+                                        <td class="@overdueClass" style="text-align:center; width:25%">
                                             @mtrc.month/18/@mtrc.year
                                         </td>
                                     </tr>
