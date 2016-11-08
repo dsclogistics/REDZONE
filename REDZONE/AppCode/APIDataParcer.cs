@@ -654,7 +654,7 @@ namespace REDZONE.AppCode
             return bSummary;
         }
 
-        private string getMPV_NextAction(string ap_status, string mtrc_period_id, string building_ID, string currentUserSSO)
+        public string getMPV_NextAction(string ap_status, string mtrc_period_id, string building_ID, string currentUserSSO)
         {
             dscUser currentUser = new dscUser(currentUserSSO);  //Retrieve the currently Logged-on User Info
             bool hasBuildingAccess = currentUser.hasBuilding(building_ID);

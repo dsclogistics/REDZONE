@@ -18,7 +18,6 @@
         mtrcTaskDisplay = "in";
         mtrcTaskGlyph = "glyphicon-chevron-down";
     }
-
 }
 
 <style>
@@ -106,7 +105,7 @@
                                                 </td>
                                                 <td style="text-align:center">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;}
-                                                    <a href="@apUrl">Go to Action Plan</a>
+                                                    <a href="@apUrl">@mtrc.action</a>
                                                 </td>
                                                 <td style="text-align:center">
                                                     TBD
@@ -124,7 +123,7 @@
                 </div>
             }
         </div>
-        @*<div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
+        <div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.apReviewTaskList.Count() > 0)
             {
                 <div class="btn-toolbar">
@@ -139,55 +138,75 @@
                 </div>
 
                 <div class="collapse @apTaskDisplay" style="margin-left:40px">
-                    <table class="table table-condensed table-hover" id="tblAPTasks">
+                    @foreach (var mtrc in Model.apReviewTaskList)
+                    {
+                        <div class="btn-toolbar">
+                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                            </div>
+                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@mtrc.mtrc_prod_display_text</h4>
+                            </div>
+                        </div>
 
-                        <tr>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().bldg_name)
-                            </th>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().period_name)
-                            </th>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().mtrc_prod_display_text)
-                            </th>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().status)
-                            </th>
-                            <th style="text-align:center;">
-                                Action
-                            </th>
-                            <th style="text-align:center;">
-                                Due By
-                            </th>
-                        </tr>
+                        <div class="collapse" style="margin-left:40px">
+                            @foreach (var period in mtrc.periodList)
+                            {
+                                <div class="btn-toolbar">
+                                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </button>
+                                    </div>
+                                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@period.periodName</h5>
+                                    </div>
+                                </div>
 
-                        @foreach (var task in Model.apReviewTaskList)
-                        {
-                            string overdueClass = (new DateTime(Int32.Parse(task.year), Int32.Parse(task.month), 18) < DateTime.Today) ? "overdue" : "";
-                            <tr>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.bldg_name)
-                                </td>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.period_name)
-                                </td>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.mtrc_prod_display_text)
-                                </td>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.status)
-                                </td>
-                                <td style="text-align:center">
-                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + task.mtrc_period_id + "&bldg_id=" + task.bldg_id + "&bapm_id=" + task.rz_bapm_id;}
-                                    <a href="@apUrl">Review Action Plan</a>
-                                </td>
-                                <td class="@overdueClass" style="text-align:center">
-                                    @task.month/18/@task.year
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                                <div class="collapse" style="margin-left:40px">
+                                    <table class="table table-condensed table-hover" id="tblAPTasks">
+                                        <tr>
+                                            <th style="text-align:center;">
+                                                @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
+                                            </th>
+                                            <th style="text-align:center;">
+                                                @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().status)
+                                            </th>
+                                            <th style="text-align:center;">
+                                                Action
+                                            </th>
+                                            <th style="text-align:center;">
+                                                Due By
+                                            </th>
+                                        </tr>
+
+                                        @foreach (var bldg in period.bldgList)
+                                        {
+                                            string overdueClass = (new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18) < DateTime.Today) ? "overdue" : "";
+                                            <tr>
+                                                <td style="text-align:center">
+                                                    @Html.DisplayFor(modelItem => bldg.bldgName)
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @Html.DisplayFor(modelItem => bldg.status)
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
+                                                    <a href="@apUrl">@bldg.action</a>
+                                                </td>
+                                                <td class="@overdueClass" style="text-align:center">
+                                                    @bldg.month/18/@bldg.year
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
             }
         </div>
@@ -206,51 +225,62 @@
                 </div>
 
                 <div class="collapse @mtrcTaskDisplay" style="margin-left:40px">
-                    <table class="table table-condensed table-hover" id="tblAPTasks">
+                    @foreach (var period in Model.mtrcTaskList)
+                    {
+                        <div class="btn-toolbar">
+                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
+                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                            </div>
+                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                                <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@period.periodName</h5>
+                            </div>
+                        </div>
 
-                        <tr>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().period_name)
-                            </th>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrc_prod_display_text)
-                            </th>
-                            <th style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.mtrcTaskList.First().status)
-                            </th>
-                            <th style="text-align:center;">
-                                Action
-                            </th>
-                            <th style="text-align:center;">
-                                Due By
-                            </th>
-                        </tr>
+                        <div class="collapse" style="margin-left:40px">
+                            <table class="table table-condensed table-hover" id="tblAPTasks">
+                                <tr>
+                                    <th style="text-align:center;">
+                                        @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
+                                    </th>
+                                    <th style="text-align:center;">
+                                        @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().status)
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Action
+                                    </th>
+                                    <th style="text-align:center;">
+                                        Due By
+                                    </th>
+                                </tr>
 
-                        @foreach (var task in Model.mtrcTaskList)
-                        {
-                            <tr>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.period_name)
-                                </td>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.mtrc_prod_display_text)
-                                </td>
-                                <td style="text-align:center">
-                                    @Html.DisplayFor(modelItem => task.status)
-                                </td>
-                                <td style="text-align:center">
-                                    @{string mtrcUrl = "/Metric/EditView/" + task.mtrc_id + "?month=" + task.month_name + "&year=" + task.year;}
-                                    <a href="@mtrcUrl">View Metric</a>
-                                </td>
-                                <td style="text-align:center">
-                                    @task.month/18/@task.year
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                                @foreach (var mtrc in period.mtrcList)
+                                {
+                                    string overdueClass = (new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18) < DateTime.Today) ? "overdue" : "";
+                                    <tr>
+                                        <td style="text-align:center">
+                                            @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
+                                        </td>
+                                        <td style="text-align:center">
+                                            @Html.DisplayFor(modelItem => mtrc.status)
+                                        </td>
+                                        <td style="text-align:center">
+                                            @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
+                                            <a href="@mtrcUrl">Manage Metric</a>
+                                        </td>
+                                        <td class="@overdueClass" style="text-align:center">
+                                            @mtrc.month/18/@mtrc.year
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+                        </div>
+                    }
                 </div>
             }
 
-        </div>*@
+        </div>
     </div>
 </div>

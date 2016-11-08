@@ -48,9 +48,13 @@ namespace REDZONE.Models
         public string mtrc_prod_display_text { get; set; }
         [Display(Name = "Status")]
         public string status { get; set; }
+        [Display(Name = "Action")]
+        public string action { get; set; }
         public int mtrc_period_id { get; set; }
         public int bldg_id { get; set; }
         public string rz_bapm_id { get; set; }
+        public string month { get; set; }
+        public string year { get; set; }
     }
 
     //Action Plan Reviewer Task ViewModel
@@ -83,9 +87,13 @@ namespace REDZONE.Models
         public string bldgName { get; set; }
         [Display(Name = "Status")]
         public string status { get; set; }
+        [Display(Name = "Action")]
+        public string action { get; set; }
         public int mtrc_period_id { get; set; }
         public int bldg_id { get; set; }
         public string rz_bapm_id { get; set; }
+        public string month { get; set; }
+        public string year { get; set; }
     }
 
     //Metric Task ViewModel
@@ -93,11 +101,11 @@ namespace REDZONE.Models
     {
         [Display(Name = "Time Period")]
         public string periodName { get; set; }
-        public List<RzMtrcTaskPeriodMtrc> periodList { get; set; }
+        public List<RzMtrcTaskPeriodMtrc> mtrcList { get; set; }
 
         public RzMtrcTaskPeriod()
         {
-            periodList = new List<RzMtrcTaskPeriodMtrc>();
+            mtrcList = new List<RzMtrcTaskPeriodMtrc>();
         }
     }
     public class RzMtrcTaskPeriodMtrc
@@ -106,7 +114,12 @@ namespace REDZONE.Models
         public string mtrc_prod_display_text { get; set; }
         [Display(Name = "Status")]
         public string status { get; set; }
+        [Display(Name = "Action")]
+        public string action { get; set; }
         public int mtrc_id { get; set; }
+        public string month { get; set; }
+        public string year { get; set; }
+        public string month_name { get; set; }
     }
 
 
@@ -142,7 +155,6 @@ namespace REDZONE.Models
         public string status { get; set; }
         public string rz_bapm_id { get; set; }
     }
-
     public class RZMetricTask
     {
         public string month { get; set; }
