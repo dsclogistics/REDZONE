@@ -79,57 +79,56 @@
                @*-         Action Plan        -*@
                @*------------------------------*@
                @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected")))
-                        {
-                            <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
-                            <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
-                            <div id="apTextChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
-                            <br />
+               {
+                     <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
+                     <div id="apSubmittedBy" class="col-md-6" style="text-align:left;color:gray">Submitted By: @Model.actionPlanList.First().submittedBy</div>
+                     <div id="apTextChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
+                     <br />
 
-                            <div id="btnsActionPlan" style="text-align:right">
+                     <div id="btnsActionPlan" style="text-align:right">
+                          <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
+                          @if (Model.canSubmitAP && Model.AP_EditableStatus == "")
+                          {
+                              <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
+                              <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
+                          }
+                     </div>
+                     <br />
+               }
+               else if (!Model.canViewWipAP && Model.canViewFinishedAP)
+               {
+                    <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">The action plan is not yet ready for review.</div>
+                    <br />
+               }
+               else
+               {
+                    <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">You cannot view this action plan.</div>
+                    <br />
+               }
 
-                                <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
-                                @if (Model.canSubmitAP && Model.AP_EditableStatus == "")
-                                {
-                                    <input type="button" class="btn btn-primary" id="btnSaveActionPlan" value="Save Plan" />
-                                    <input type="button" class="btn btn-primary" id="btnSubmitActionPlan" value="Submit Plan" />
-                                }
-                            </div>
-                            <br />
-                        }
-                        else if (!Model.canViewWipAP && Model.canViewFinishedAP)
+               @*--------------*@
+               @*Approve/Reject*@
+               @*--------------*@
+               @if ((Model.canReviewAP && Model.review_EditableStatus == "") || (Model.canViewFinishedAP && Model.currentAPStatus == "Approved"))
+               {
+                   <h4 style="text-align:left">Reviewer Comments</h4>
+                   <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
+                   <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
+                   <div id="apReviewChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
+                   <br />
+                   <div id="btnsReviewAP" style="text-align:right">
+                        <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
+                        <input type="hidden" id="apDetailId" value=@Model.actionPlanList.First().apd_id />
+                        @if (Model.review_EditableStatus == "")
                         {
-                            <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">The action plan is not yet ready for review.</div>
-                            <br />
+                            <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
+                            <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
                         }
-                        else
-                        {
-                            <div id="apText" class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; color:red">You cannot view this action plan.</div>
-                            <br />
-                        }
+                   </div>
+                   <br />
+               }
 
-                        @*--------------*@
-                        @*Approve/Reject*@
-                        @*--------------*@
-                        @if ((Model.canReviewAP && Model.review_EditableStatus == "") || (Model.canViewFinishedAP && Model.currentAPStatus == "Approved"))
-                        {
-                            <h4 style="text-align:left">Reviewer Comments</h4>
-                            <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
-                            <div id="apReviewedBy" class="col-md-6" style="text-align:left;color:gray">Reviewed By: @Model.actionPlanList.First().reviewedBy</div>
-                            <div id="apReviewChars" class="col-md-6" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
-                            <br />
-                            <div id="btnsReviewAP" style="text-align:right">
-                                <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
-                                <input type="hidden" id="apDetailId" value=@Model.actionPlanList.First().apd_id />
-                                @if (Model.review_EditableStatus == "")
-                                {
-                                    <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject Plan" />
-                                    <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve Plan" />
-                                }
-                            </div>
-                            <br />
-                        }
-
-                    </div>
+             </div>
 
            // ---------- SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN -----------------------------------
            <div id="divPreviousAPversions">
