@@ -1,6 +1,4 @@
-﻿@{
-    bool isAdmin = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("ADMIN");
-}
+﻿
 <style>
     .menuSelected {
         border-radius: 5px;
@@ -75,7 +73,7 @@
                 </li>
             </ul>*@
 
-            @if (isAdmin)      //////////////////  NEEDS TO BE IMPLEMENTED !!!!!!!!!!
+            @if (REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("RZ_ADMIN"))
             {
                 <ul class="nav navbar-nav menuItem" id="mAdmin">
                     <li class="dropdown">
@@ -111,8 +109,19 @@
                     </li>
                 </ul>*@
         </div>
-        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; ">
+        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; float:right">            
+            @Html.Action("_RZTask_MenuItems", "MenuBar")
+
             @Html.Partial("_LoginPartial");
+            @*<div class="col-xs-2 bordered-g" style="margin:0; padding:0; text-align:right">
+                @Html.Action("_RZTask_MenuItems", "MenuBar")
+            </div>
+            <div class="col-xs-9 bordered-r" style="margin:0; padding:0;">
+                @Html.Partial("_LoginPartial");
+            </div>
+            <div class="col-xs-1 bordered-r" style="margin:0; padding:0;">
+
+            </div>*@
         </div>
     </div>
     <br />

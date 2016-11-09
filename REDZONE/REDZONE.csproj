@@ -296,6 +296,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-dialog.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -402,6 +403,7 @@
     <Content Include="Scripts\aes_Security.js" />
     <Content Include="Scripts\Assignment_Reason.js" />
     <Content Include="Scripts\bootstrap-dialog.js" />
+    <Content Include="Scripts\bootstrap-notify.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\BuildingSummary.js" />

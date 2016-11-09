@@ -21,6 +21,7 @@
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/animate.css" rel="stylesheet" />
     <style>
         #foot {
             position: fixed !important;
@@ -47,6 +48,7 @@
     </style>
     @* ------- Load Jquery Libraries (Must be Before Bootstraps is Loaded) and other scripts ----------------*@
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/bootstrap-notify.js"></script>
     <script src="~/Scripts/RedzoneGlobal.js"></script>
     <script>
         // Verify that the session variables exist and have not been lost. Reset Them on the server via ajax if needed!

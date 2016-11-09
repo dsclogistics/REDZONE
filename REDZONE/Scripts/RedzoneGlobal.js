@@ -161,7 +161,39 @@ function showAlert(msg, msgStyle, reload) {
     $("#msgFormBodyData").html(msg);
     $('#msgForm').modal('show');
 }
+function notify(message, type) {
+    //Requires bootstrap-notify.js and animate.css references
+    switch (type) {
+        case "success":
+        case "danger":
+        case "warning":
+            break;
+        default:
+            type = "info";
+            break;
+    }
 
+    $.notify({
+        // options
+        message: message
+    }, {
+        // settings
+        type: type,
+        placement: {
+            from: "bottom",
+            align: "right"
+        },
+        offset: 60,
+        spacing: 100,
+        delay: 2000,
+        timer: 1000,
+        animate: {
+            enter: 'animated fadeInRight',
+            exit: 'animated fadeOutRight'
+        }
+
+    });
+}
 
 //----- Javascript to Execute only after the HTML Page has been fully rendered/displayed ----------------------
 $(document).ready(function () {
