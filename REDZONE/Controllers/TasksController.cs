@@ -112,6 +112,26 @@ namespace REDZONE.Controllers
             return View(tasksViewModel);
         }
 
+        [HttpPost] [OutputCache (Duration=5)]
+        public PartialViewResult _myTaskSummary() {
+
+            dscUser actionPlanUser = new dscUser(User.Identity.Name);
+            RZTaskDetailList tasksDetailList = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
+
+            if (!actionPlanUser.hasRole("RZ_AP_SUBMITTER")) {
+                tasksDetailList.apSubmitTaskList.Clear();
+            }
+            if (!actionPlanUser.hasRole("RZ_AP_REVIEWER"))
+            {
+                tasksDetailList.apReviewTaskList.Clear();
+            }
+            if (!actionPlanUser.hasRole("MTRC_COLLECTOR"))
+            {
+                tasksDetailList.mtrcTaskList.Clear();
+            }
+
+            return PartialView(tasksDetailList );
+        }
 
 
 

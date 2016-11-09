@@ -40,7 +40,6 @@
     display: block;
 }
 </style>
-
 <ul class="nav navbar-nav menuItem " id="myTasks" style="padding:0; font-family:Arial; margin-left:10px ">
     <li class="dropdown ddTask" style="padding:0; ">
         <a class="dropdown-toggle taskButton" data-toggle="dropdown" href="#">
@@ -74,9 +73,6 @@
         <div class="ddTask-content">
             <div style="background-color:black; color:white">PENDING TASKS</div>
             <div id="taskSummary" style="border:3px solid black; border-bottom-left-radius:4px; border-bottom-right-radius:4px; ">
-                <br /><br />
-                PLEASE WAIT WHILE DATA LOADS<br /><br />
-                <img src="/Images/ui-anim_basic_16x16.gif" /><br /><br />
             </div>
         </div>
     </li>
@@ -86,7 +82,6 @@
     $(document).ready(function () {
         //Hide or Display the "My Tasks" Menu Items according to the User Task Status
         //alert("User is in role RZ_AP_SUBMITTER is @@User.IsInRole("RZ_AP_SUBMITTER")");
-
         if ("@User.IsInRole("RZ_AP_REVIEWER")" == "True" || "@User.IsInRole("RZ_AP_SUBMITTER")" == "True" || "@User.IsInRole("MTRC_COLLECTOR")" == "True") {
             if ("@Model.totalTasks" == "0") {
                 $('#mMyTasks').hide();
@@ -107,5 +102,36 @@
             $('#myTasks').hide();
             //alert("You can't access alerts.");
         }
+
+        $('.ddTask').mouseenter(function () {
+            //When Task Icon is mouseovered, display a "wait" Message then call ajax to update again with the Server retrieved data
+            $('#taskSummary').html('<br /><br />PLEASE WAIT WHILE DATA LOADS<br /><br /><img src="/Images/ui-anim_basic_16x16.gif" /><br /><br />');
+            //alert('Loading data via ajax');
+            var cashData = false;
+            //if ($('#cacheTasksList').val() == "Y") {cashData = true; }
+            //else {
+            //    $('#cacheTasksList').val("Y");
+            //    cashData = false;
+            //}
+
+            $.ajax({
+                url: '/Tasks/_myTaskSummary',
+                method: "POST",
+                cache: cashData,
+                dataType: "text",
+                //data: { uFName: pFName, uLName: pLName, uLoginName: pLoginName, email: pEmail, uRole: pRole, uBuildings: pBuildings, uId: pId, turnOff: pTurnOff },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#taskSummary').html("ERROR: Failed to load data from server");
+                }
+            }).done(function (taskList) {
+                $('#taskSummary').html(taskList);
+            });
+
+        });
+
+        $('.ddTask').click(function () {
+            $('#cacheTasksList').val("N");
+        });
+
     });
 </script>

@@ -82,16 +82,19 @@
         }
 
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-    });
+        });
     </script>    
 </head>
 
 <body>
-
     @*if (String.IsNullOrEmpty(sessionActive)) { Html.Action("LogOff", "Account"); }*@
-    <div><input type="hidden" id="reloadPage" value="N" /></div>
+
+    <div id="RZ_Flags">
+        <input type="hidden" id="reloadPage" value="N" />
+        <input type="hidden" id="cacheTasksList" value="Y" />
+    </div>
     @if (!Request.IsAuthenticated)
     {
         try
