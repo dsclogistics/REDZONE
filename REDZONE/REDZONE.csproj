@@ -360,6 +360,7 @@
     <Content Include="Images\download_template.png" />
     <Content Include="Images\DSCHOME_Logo.png" />
     <Content Include="Images\iconNoAvatar.png" />
+    <Content Include="Images\icon_Warning.png" />
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\LoadingData.gif" />

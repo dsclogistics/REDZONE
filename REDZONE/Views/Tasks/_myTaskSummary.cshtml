@@ -1,5 +1,8 @@
 ﻿@model REDZONE.Models.RZTaskDetailList
-
+@{
+    int taskCounter = 0;
+    
+}
 <style>
     .taskItem:nth-child(even) {
         background-color: #eeeeee;
@@ -8,34 +11,53 @@
 <table class="table table-condensed table-hover table-striped" style="width:100%">
     @foreach (REDZONE.Models.RZActionPlanTask apReviewTask in Model.apReviewTaskList)
     {
-        <tr class="taskItem" style="text-align:left">
-            <td style="min-width:300px; text-align:left">
-                TEST!
-                <span class="glyphicon glyphicon-alert"></span>
-                <span style="min-width: 150px">[@apReviewTask.status] - </span>
-                <span>@apReviewTask.bldg_name @apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>                
-            </td>
-        </tr>
+        if (taskCounter < 10)
+        {
+            <tr class="taskItem" style="text-align:left">
+                <td style="min-width:300px; ">
+                    <span class="glyphicon glyphicon-alert"></span>
+                    <span style="min-width: 150px">[@apReviewTask.status] - </span>
+                    <span>@apReviewTask.bldg_name @apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>
+                </td>
+            </tr>
+        }
+        taskCounter++;
     }
     @foreach (REDZONE.Models.RZActionPlanTask apReviewTask in Model.apSubmitTaskList)
     {
-        <tr class="taskItem">
-            <td style="min-width:300px">
-                <span style="min-width: 150px">[@apReviewTask.status]</span>
-                <span>@apReviewTask.bldg_name @apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>
-                <span class="glyphicon glyphicon-alert"></span>
-            </td>
-        </tr>
+        if (taskCounter < 10)
+        {
+            <tr class="taskItem" style="text-align:left">
+                <td style="min-width:300px">
+                    <span class="glyphicon glyphicon-alert"></span>
+                    <span style="min-width: 150px">[@apReviewTask.status]</span>
+                    <span>@apReviewTask.bldg_name @apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>
+                </td>
+            </tr>
+        }
+        taskCounter++;
     }
     @foreach (REDZONE.Models.RZMetricTask apReviewTask in Model.mtrcTaskList)
     {
-        <tr class="taskItem">
-            <td style="min-width:300px">
-                <span style="min-width: 150px">[@apReviewTask.status]</span>
-                <span>@apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>
-                <span class="glyphicon glyphicon-alert"></span>
-            </td>
-        </tr>
+        if (taskCounter < 10)
+        {
+            <tr class="taskItem" style="text-align:left">
+                <td style="min-width:300px">
+                    <span class="glyphicon glyphicon-alert"></span>
+                    <span style="min-width: 150px">[@apReviewTask.status]</span>
+                    <span>@apReviewTask.mtrc_prod_display_text for @apReviewTask.period_name</span>
+                </td>
+            </tr>
+        }
+        taskCounter++;
+    }
+    
+    @if (Model.apReviewTaskList.Count() + Model.apSubmitTaskList.Count() + Model.mtrcTaskList.Count() > 10) { 
+      <tr class="bg-Primary-Gradient" style="color:white">
+          <td>
+              SHOW ALL TASKS ...
+          </td>
+      </tr>
     }
 
 </table>
