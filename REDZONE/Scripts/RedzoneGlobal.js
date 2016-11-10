@@ -240,6 +240,17 @@ $(document).ready(function () {
         }
     });
 
+    $('#appVersion').dblclick(function () {
+        //alert("Version Is: " + $(this).html());
+        if (localStorage.getItem("enableSummaryList") == "Y") {
+            localStorage.setItem("enableSummaryList", "N");
+            //alert("Server Task Summary View has been Disabled");
+        } else {
+            localStorage.setItem("enableSummaryList", "Y");
+            //alert("Server Task Summary View has been Enabled");
+        }
+    });
+
 });
 
 //============= END OF THE REDZONE APPLICATION WIDE RELATED JAVASCRIPT and FUNCTIONS ==========================/

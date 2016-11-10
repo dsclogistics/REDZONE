@@ -477,7 +477,7 @@
     <Content Include="Views\Account\_UserInfo.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Shared\NoAuth.cshtml" />
-    <Content Include="Views\MenuBar\_RZTask_MenuItems.cshtml" />
+    <Content Include="Views\MenuBar\_RZ_TasksFlag.cshtml" />
     <Content Include="Views\Tasks\_myTaskSummary.cshtml" />
     <Content Include="Views\Tasks\_quickReview.cshtml" />
   </ItemGroup>
