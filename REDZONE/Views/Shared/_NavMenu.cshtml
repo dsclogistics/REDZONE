@@ -25,19 +25,13 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; ">
         <div class="col-md-7 col-md-offset-2" style="text-align:left; margin-left:160px">
-            <ul class="nav navbar-nav menuItem" id="mMyTasks" style="display:none">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        MY TASKS
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li id="menuTaskMetric"><a href="/Tasks/Index/?display=mtrc">Metric Tasks </a></li>
-                        <li id="menuTaskAP"><a href="/Tasks/Index/?display=ap">Action Plan Tasks </a></li>
-                    </ul>
-                </li>
-            </ul>
 
+            @* ****** RENDER THE 'TASK' MENU ONLY IF THE USER ROLE REQUIRES IT ******* *@
+            @if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+            { 
+                @Html.Action("_RZ_MyTask_MenuItems", "MenuBar")
+            }
+            
             <ul class="nav navbar-nav menuItem" id="mDashboard">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -92,25 +86,13 @@
                 </ul>
             }
 
-
-            @*<ul class="nav navbar-nav menuItem" id="mTables">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            DB TABLES
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/DSC_CUST_ACCT">Customer Accounts</a></li>
-                            <li><a href="/DSC_LC">LCs</a></li>
-                            <li><a href="/DSC_MTRC_LC_BLDG">Buildings</a></li>
-                            <li><a href="/MTRC_PRODUCT">Metric Products</a></li>
-                            <li><a href="/MTRC_METRIC">Metric Cathegories</a></li>
-                        </ul>
-                    </li>
-                </ul>*@
         </div>
-        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; float:right">            
-            @Html.Action("_RZTask_MenuItems", "MenuBar")
+        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; float:right">
+            @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
+            @if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+            {
+                @Html.Action("_RZ_TasksFlag", "MenuBar")
+            }
 
             @Html.Partial("_LoginPartial");
             @*<div class="col-xs-2 bordered-g" style="margin:0; padding:0; text-align:right">
