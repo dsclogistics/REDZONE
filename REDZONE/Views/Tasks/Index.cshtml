@@ -38,48 +38,48 @@
         <div class="row" id="divSubmitterTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.apSubmitTaskList.Count() > 0)
             {
-                <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
+                <div class="btn-toolbar" style="margin-top:5px">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-width: .143em; border-left-width:1px">
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Tasks</h4>
                     </div>
                 </div>
 
-                <div class="collapse @apTaskDisplay" style="margin-left:40px">
+                <div class="collapse @apTaskDisplay" style="margin-left:42px">
                     @foreach (var bldg in Model.apSubmitTaskList)
                     {
-                        <div class="btn-toolbar">
+                        <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </button>
                             </div>
-                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
                                 <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@bldg.bldgName</h4>
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:40px">
+                        <div class="collapse" style="margin-left:42px">
                             @foreach (var period in bldg.periodList)
                             {
-                                <div class="btn-toolbar">
+                                <div class="btn-toolbar" style="margin-top:5px">
                                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                             <span class="glyphicon glyphicon-chevron-right"></span>
                                         </button>
                                     </div>
-                                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
                                         <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@period.periodName</h5>
                                     </div>
                                 </div>
 
                                 <div class="collapse" style="margin-left:40px">
-                                    <table class="table table-condensed table-hover" id="tblAPTasks">
-                                        <tr>
+                                    <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
+                                        <tr style="background-color:lightgray">
                                             <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().mtrc_prod_display_text)
                                             </th>
@@ -126,48 +126,48 @@
         <div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.apReviewTaskList.Count() > 0)
             {
-                <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
+                <div class="btn-toolbar" style="margin-top:5px">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-width: .143em; border-left-width:1px">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Action Plan Review Tasks</h4>
                     </div>
                 </div>
 
-                <div class="collapse @apTaskDisplay" style="margin-left:40px">
+                <div class="collapse @apTaskDisplay" style="margin-left:42px;">
                     @foreach (var mtrc in Model.apReviewTaskList)
                     {
-                        <div class="btn-toolbar">
+                        <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </button>
                             </div>
-                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
-                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@mtrc.mtrc_prod_display_text</h4>
+                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
+                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@mtrc.mtrc_prod_display_text</h4>
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:40px">
+                        <div class="collapse" style="margin-left:42px">
                             @foreach (var period in mtrc.periodList)
                             {
-                                <div class="btn-toolbar">
+                                <div class="btn-toolbar" style="margin-top:5px">
                                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                             <span class="glyphicon glyphicon-chevron-right"></span>
                                         </button>
                                     </div>
-                                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
-                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@period.periodName</h5>
+                                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
+                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@period.periodName</h5>
                                     </div>
                                 </div>
 
                                 <div class="collapse" style="margin-left:40px">
-                                    <table class="table table-condensed table-hover" id="tblAPTasks">
-                                        <tr>
+                                    <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
+                                        <tr style="background-color:lightgray">
                                             <th style="text-align:center; width:25%">
                                                 @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
                                             </th>
@@ -213,34 +213,34 @@
         <div class="row" id="divCollectorTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.mtrcTaskList.Count() > 0)
             {
-                <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-right:transparent; border-width: .143em">
+                <div class="btn-toolbar" style="margin-top:5px">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @mtrcTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle;border-width: .143em; border-left-width:1px">
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">Action Plan Review Tasks</h4>
                     </div>
                 </div>
 
-                <div class="collapse @mtrcTaskDisplay" style="margin-left:40px">
+                <div class="collapse @mtrcTaskDisplay" style="margin-left:42px">
                     @foreach (var period in Model.mtrcTaskList)
                     {
-                        <div class="btn-toolbar">
+                        <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </button>
                             </div>
-                            <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:transparent;">
+                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
                                 <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@period.periodName</h5>
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:40px">
-                            <table class="table table-condensed table-hover" id="tblAPTasks">
-                                <tr>
+                        <div class="collapse" style="margin-left:42px">
+                            <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
+                                <tr style="background-color:lightgray">
                                     <th style="text-align:center; width:25%">
                                         @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
                                     </th>
