@@ -58,4 +58,31 @@ namespace REDZONE.Models
         }
     }
 
+    public class QuickActionPlan
+    {
+        public string apd_id { get; set; }
+        public string bapm_id { get; set; }
+        public string mtrc_period_val_id { get; set; }
+        public string mtrc_period_id { get; set; }
+        public string mtrcDisplayText { get; set; }
+        public string dsc_mtrc_lc_bldg_id { get; set; }
+        public string bldgName { get; set; }
+        public string month { get; set; }
+        public string monthName { get; set; }
+        public string year { get; set; }
+        public string mtrcGoalText { get; set; }
+        public string mtrcValue { get; set; }
+        public string status { get; set; }
+        public string apText { get; set; }
+        public string apReviewText { get; set; }
+        public string submittedBy { get; set; }
+        public string approvedBy { get; set; }
+        public List<MPReason> reasonList { get; set; }
+
+        public QuickActionPlan()
+        {
+            reasonList = new List<MPReason>();
+        }
+    }
+
 }

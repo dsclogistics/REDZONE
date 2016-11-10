@@ -98,6 +98,7 @@ namespace REDZONE.Controllers
                 else
                 {
                     //When action plan list is NOT empty, and most recent version status is 'WIP', 'Ready for Review', or 'Approved', pass model as is.
+                    apViewModel.currentAPVersion = apViewModel.actionPlanList.First().apVersion;
                 }
             }
             else if (apViewModel.actionPlanList.Count == 0 && apViewModel.bapmStatus == "Not Started")

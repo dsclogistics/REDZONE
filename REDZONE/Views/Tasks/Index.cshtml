@@ -30,7 +30,7 @@
 
 <div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:5px">
     <div class="panel-heading padding2">
-        <h2>Tasks</h2>
+        <h2>My Tasks</h2>
         <input type="hidden" id="hdnDisplay" value="@ViewBag.display"/>
     </div>
 
@@ -190,7 +190,9 @@
 
                                         @foreach (var bldg in period.bldgList)
                                         {
-                                            string overdueClass = (new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18) < DateTime.Today) ? "overdue" : "";
+                                            string dueMonth = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Month.ToString();
+                                            string dueYear = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Year.ToString();
+                                            string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
                                             <tr>
                                                 <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => bldg.bldgName)
@@ -198,12 +200,13 @@
                                                 <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => bldg.status)
                                                 </td>
-                                                <td style="text-align:center; width:25%">
+                                                <td class="cellQuickReview" style="text-align:center; width:25%">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
-                                                    <a href="@apUrl">@bldg.action</a>
+                                                    <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
+                                                    <a class="lnkQuickReview" href="#" onclick="return false; ">Quick Review</a>
                                                 </td>
-                                                <td class="@overdueClass" style="text-align:center; width:25%">
-                                                    @bldg.month/18/@bldg.year
+                                                <td style="text-align:center; width:25%">
+                                                    TBD
                                                 </td>
                                             </tr>
                                         }
@@ -229,7 +232,7 @@
                         </button>
                     </div>
                     <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Action Plan Review Tasks</h4>
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Metric Collector Tasks</h4>
                     </div>
                 </div>
 
@@ -249,7 +252,7 @@
 
                         <div class="collapse" style="margin-left:42px">
                             <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                <tr style="background-color:lightgray">
+                                <tr style="background-color:lightgray; max-height:10px">
                                     <th style="text-align:center; width:25%">
                                         @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
                                     </th>
@@ -266,7 +269,9 @@
 
                                 @foreach (var mtrc in period.mtrcList)
                                 {
-                                    string overdueClass = (new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18) < DateTime.Today) ? "overdue" : "";
+                                    string dueMonth = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Month.ToString();
+                                    string dueYear = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Year.ToString();
+                                    string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
                                     <tr>
                                         <td style="text-align:center; width:25%">
                                             @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
@@ -279,7 +284,7 @@
                                             <a href="@mtrcUrl">Manage Metric</a>
                                         </td>
                                         <td class="@overdueClass" style="text-align:center; width:25%">
-                                            @mtrc.month/18/@mtrc.year
+                                            @dueMonth/18/@dueYear
                                         </td>
                                     </tr>
                                 }
@@ -296,20 +301,20 @@
 
 <!-- Quick Review Modal -->
 <div id="quickReviewForm" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="width:80%">
+    <div class="modal-dialog" style="width:60%">
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header" id="quickReviewHeader">
+            <div class="modal-header bg-Primary-Gradient">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Quick Action Plan Review</h4>
+                <h3 class="modal-title">Quick Action Plan Review</h3>
             </div>
             <div class="modal-body" id="quickReviewBody">
 
             </div>
             <div class="modal-footer" id="quickReviewFooter">
-                <input type="button" disabled class="btn btn-primary" id="btnApproveActionPlan" value="Add" />
-                <input type="button" disabled class="btn btn-primary" id="btnRejectActionPlan" value="Add" />
+                <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve" />
+                <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject" />
                 <button type="button" class="btn btn-warning" id="btnCancelReview" data-dismiss="modal">Cancel</button>
             </div>
         </div>

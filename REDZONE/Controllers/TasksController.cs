@@ -48,7 +48,7 @@ namespace REDZONE.Controllers
                                                       month = c.month,
                                                       year = c.year
                                                   }).OrderBy(x => x.mtrc_prod_display_text).ToList()
-                                  }).OrderBy(x => x.mtrcList.First().year).ThenBy(x => x.mtrcList.First().month).ToList()
+                                  }).OrderByDescending(x => Int32.Parse(x.mtrcList.First().year)).ThenByDescending(x => Int32.Parse(x.mtrcList.First().month)).ToList()
                 }).OrderBy(x => x.bldgName).ToList();
 
             tasksViewModel.apSubmitTaskList = apSubmitList;
@@ -77,7 +77,7 @@ namespace REDZONE.Controllers
                                                       month = c.month,
                                                       year = c.year
                                                   }).OrderBy(x => x.bldgName).ToList()
-                                  }).OrderBy(x => x.bldgList.First().year).ThenBy(x => x.bldgList.First().month).ToList()
+                                  }).OrderByDescending(x => Int32.Parse(x.bldgList.First().year)).ThenByDescending(x => Int32.Parse(x.bldgList.First().month)).ToList()
                 }).OrderBy(x => x.mtrc_prod_display_text).ToList();
 
             tasksViewModel.apReviewTaskList = apReviewList;
@@ -99,7 +99,7 @@ namespace REDZONE.Controllers
                                     year = b.year,
                                     month_name = b.month_name
                                 }).OrderBy(x => x.mtrc_prod_display_text).ToList()
-                }).OrderBy(x => x.mtrcList.First().year).ThenBy(x => x.mtrcList.First().month).ToList();
+                }).OrderByDescending(x => Int32.Parse(x.mtrcList.First().year)).ThenByDescending(x => Int32.Parse(x.mtrcList.First().month)).ToList();
 
             tasksViewModel.mtrcTaskList = mtrcCollectList;
 
@@ -134,6 +134,31 @@ namespace REDZONE.Controllers
         }
 
 
+        [HttpPost]
+        public PartialViewResult _quickReview(string productname, int? rz_bapm_id)
+        {
+            dscUser actionPlanUser = new dscUser(User.Identity.Name);
+
+            QuickActionPlan quickActionPlan = new QuickActionPlan();
+
+            int rzBapmId = rz_bapm_id ?? 0;
+            ViewBag.authorized = false;
+
+            if(rzBapmId > 0)
+            {
+                quickActionPlan = dataParcer.getActionPlanById(productname, rzBapmId.ToString());
+                if (actionPlanUser.hasRole("RZ_AP_REVIEWER") && actionPlanUser.hasReviewerMetric(quickActionPlan.mtrc_period_id.ToString()))
+                {
+                    ViewBag.authorized = true;
+                }
+                else if (actionPlanUser.hasRole("RZ_ADMIN"))
+                {
+                    ViewBag.authorized = true;
+                }
+            }
+                
+            return PartialView(quickActionPlan);
+        }
 
         // ========================== Auto Generated ==========================
         // GET: Tasks/Details/5

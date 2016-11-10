@@ -1610,6 +1610,86 @@ namespace REDZONE.AppCode
             }
             return tempPriorActionPlan;
         }
+        public QuickActionPlan getActionPlanById(string productname, string rz_bapm_id)
+        {
+            //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, and status.
+            QuickActionPlan tempActionPlan = new QuickActionPlan();
+            List<MPReason> reasonList = new List<MPReason>();
+            MPReason tempMPReason = new MPReason();
+
+            string raw_data = api.lookUpActionPlans(productname, rz_bapm_id);
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jActionPlanList = (JArray)parsed_result["actionplans"];
+
+                var res = jActionPlanList.First();
+
+                tempActionPlan.bapm_id = (string)res["rz_bapm_id"];
+                tempActionPlan.mtrc_period_val_id = (string)res["mtrc_period_val_id"];
+                tempActionPlan.mtrc_period_id = (string)res["mtrc_period_id"];
+                tempActionPlan.mtrcDisplayText = (string)res["mtrc_prod_display_text"];
+                tempActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
+                tempActionPlan.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                tempActionPlan.month = (string)res["month"];
+                tempActionPlan.monthName = intToMonth((int)res["month"]);
+                tempActionPlan.year = (string)res["year"];
+                tempActionPlan.mtrcGoalText = (string)res["goal_txt"];
+                tempActionPlan.mtrcValue = (string)res["mtrc_period_val_value"];
+                tempActionPlan.status = (string)res["rz_bapm_status"];
+
+                JArray jActionPlanDetails = (JArray)res["details"];
+
+                var apDetail = jActionPlanDetails.OrderByDescending(x => (int)x["rz_apd_ap_ver"]).ToArray()[0];
+
+                tempActionPlan.apd_id = (string)apDetail["rz_apd_id"];
+                tempActionPlan.apText = (string)apDetail["rz_apd_ap_text"];
+                tempActionPlan.apReviewText = (string)apDetail["rz_apd_ap_review_text"];
+                tempActionPlan.submittedBy = (string)apDetail["submittedby"];
+                tempActionPlan.approvedBy = (string)apDetail["reviewedby"];
+
+                JArray jPriorReasonList = (JArray)res["assignedreasons"];
+
+                foreach (var rawReason in jPriorReasonList)
+                {
+                    tempMPReason = new Models.MPReason();
+
+                    tempMPReason.val_reason_id = (string)rawReason["mpvr_id"];
+                    tempMPReason.reason_id = (string)rawReason["mpr_id"];
+                    tempMPReason.reason_text = (string)rawReason["mpr_display_text"];
+                    tempMPReason.mpvr_Comment = (string)rawReason["mpvr_comment"];
+
+                    if (String.IsNullOrEmpty(tempMPReason.reason_text)) tempMPReason.reason_text = "";
+                    if (String.IsNullOrEmpty(tempMPReason.mpvr_Comment)) tempMPReason.mpvr_Comment = "";
+
+                    reasonList.Add(tempMPReason);
+                }
+
+                tempActionPlan.reasonList = reasonList;
+
+                if (String.IsNullOrEmpty(tempActionPlan.mtrcDisplayText)) tempActionPlan.mtrcDisplayText = "";
+                if (String.IsNullOrEmpty(tempActionPlan.bldgName)) tempActionPlan.bldgName = "";
+                if (String.IsNullOrEmpty(tempActionPlan.month)) tempActionPlan.month = "";
+                if (String.IsNullOrEmpty(tempActionPlan.monthName)) tempActionPlan.monthName = "";
+                if (String.IsNullOrEmpty(tempActionPlan.year)) tempActionPlan.year = "";
+                if (String.IsNullOrEmpty(tempActionPlan.mtrcGoalText)) tempActionPlan.mtrcGoalText = "";
+                if (String.IsNullOrEmpty(tempActionPlan.mtrcValue)) tempActionPlan.mtrcValue = "";
+                if (String.IsNullOrEmpty(tempActionPlan.status)) tempActionPlan.status = "";
+                if (String.IsNullOrEmpty(tempActionPlan.apText)) tempActionPlan.apText = "";
+                if (String.IsNullOrEmpty(tempActionPlan.apReviewText)) tempActionPlan.apReviewText = "";
+                if (String.IsNullOrEmpty(tempActionPlan.submittedBy)) tempActionPlan.submittedBy = "";
+                if (String.IsNullOrEmpty(tempActionPlan.approvedBy)) tempActionPlan.approvedBy = "";
+
+            }
+            catch
+            {
+
+            }
+            return tempActionPlan;
+        }
+
 
         // ====================== HELPER FUNCTIONS ================================
         public static string intToMonth(int monthNo)
