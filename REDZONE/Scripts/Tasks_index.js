@@ -51,9 +51,13 @@
 
     $('#quickReviewForm').on('click', '#btnRejectActionPlan', function () {
         var status = 'Rejected';
-
-        //buildSubmitAPReviewJSON(status);
-        submitAPReview(status);
+        
+        if ($('#quickReviewComment').text().length > 0) {
+            submitAPReview(status);
+        }
+        else {
+            showAlert("Reviewer comments are required when rejecting an action plan.", "");
+        }
     });
 
 
@@ -89,38 +93,35 @@ function buildSubmitAPReviewJSON(status) {
 function submitAPReview(status) {
     var payload = buildSubmitAPReviewJSON(status);
     var bapmId = $('#hdnWipBapmId').val();
-    alert(payload);
+    //alert(payload);
 
-    $('.hdnBapmId').each(function (index) {
-        if ($(this).val() == bapmId) {
-            $(this).parent().find('.lnkQuickReview').text('Review Complete');
-            $(this).parent().find('.lnkQuickReview').removeClass('lnkQuickReview');
-            $('#quickReviewForm').modal('hide');
-            showAlert("Action Plan Review Submitted!", "");
-            return false;
+    $.ajax({
+        url: '/ActionPlan/submitActionPlanReview',
+        //url: 'http://dscapidev/dscmtrc/api/v1/metric/submitactionplanreview',
+        method: "POST",
+        cache: false,
+        //type: "POST",
+        //data: payload,
+        data: { raw_json: payload },
+        //contentType: "application/json; charset=utf-8",
+        //dataType: "json",
+        error: function (jqXHR, textStatus, errorThrown) {
+            showAlert("Failed to Save Data. Ajax Failed!!<br/>Error:" + textStatus + "," + errorThrown, "danger"); //<-- Trap and alert of any errors if they occurred
+        }
+    }).done(function (d) {
+        if (d == "Success") {
+            $('.hdnBapmId').each(function (index) {
+                if ($(this).val() == bapmId) {
+                    $(this).parent().find('.lnkQuickReview').text('Review Complete');
+                    $(this).parent().find('.lnkQuickReview').removeClass('lnkQuickReview');
+                    $('#quickReviewForm').modal('hide');
+                    showAlert("Action Plan Review Submitted!", "");
+                    return false;
+                }
+            });
+            //location.reload();
+        } else {
+            alert("Error Saving the data!\n" + JSON.stringify(d));
         }
     });
-    
-
-    //$.ajax({
-    //    url: '/ActionPlan/submitActionPlanReview',
-    //    //url: 'http://dscapidev/dscmtrc/api/v1/metric/submitactionplanreview',
-    //    method: "POST",
-    //    cache: false,
-    //    //type: "POST",
-    //    //data: payload,
-    //    data: { raw_json: payload },
-    //    //contentType: "application/json; charset=utf-8",
-    //    //dataType: "json",
-    //    error: function (jqXHR, textStatus, errorThrown) {
-    //        showAlert("Failed to Save Data. Ajax Failed!!<br/>Error:" + textStatus + "," + errorThrown, "danger"); //<-- Trap and alert of any errors if they occurred
-    //    }
-    //}).done(function (d) {
-    //    if (d == "Success") {
-    //        showAlert("Action Plan Review Submitted!", "", "Y");
-    //        //location.reload();
-    //    } else {
-    //        alert("Error Saving the data!\n" + JSON.stringify(d));
-    //    }
-    //});
 }
