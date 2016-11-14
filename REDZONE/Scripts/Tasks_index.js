@@ -51,8 +51,8 @@
 
     $('#quickReviewForm').on('click', '#btnRejectActionPlan', function () {
         var status = 'Rejected';
-        
-        if ($('#quickReviewComment').text().length > 0) {
+
+        if ($('#quickReviewComment').val().trim().length > 0) {
             submitAPReview(status);
         }
         else {
@@ -113,7 +113,17 @@ function submitAPReview(status) {
             $('.hdnBapmId').each(function (index) {
                 if ($(this).val() == bapmId) {
                     $(this).parent().find('.lnkQuickReview').text('Review Complete');
-                    $(this).parent().find('.lnkQuickReview').removeClass('lnkQuickReview');
+                    $(this).parent().find('.lnkQuickReview').contents().unwrap();
+                    //$(this).parent().find('.lnkQuickReview').removeClass('lnkQuickReview');
+                    $(this).parent().siblings('.cellAPStatus').text(status);
+                    
+                    if (status == 'Rejected') {
+                        $(this).parent().siblings('.cellAPStatus').css('color', 'red');
+                    }
+                    else if (status == 'Approved') {
+                        $(this).parent().siblings('.cellAPStatus').css('color', 'green');
+                    }
+
                     $('#quickReviewForm').modal('hide');
                     showAlert("Action Plan Review Submitted!", "");
                     return false;
