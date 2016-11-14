@@ -9,7 +9,7 @@ namespace REDZONE.Models
 {
     public class dscUser
     {
-        private const string AUTHORIZATION_END_POINT = "getmockuserroles";
+        private const string AUTHORIZATION_END_POINT = "getuserroles";
         private const string AUTHENTICATION_END_POINT = "loginrzuser";
         public string dbUserId { get; set; }
         public bool isValidUser { get; set; }
