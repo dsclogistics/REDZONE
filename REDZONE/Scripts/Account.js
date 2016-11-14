@@ -53,6 +53,7 @@ $(document).ready(function () {
     //});
     $("#frmLogin").keypress(function (e) {
         if (e.which == 13) {
+            $('#btnRZLogin').prop("disabled", true);
             //submit the Login Credentials
             submitEncry();
         }        

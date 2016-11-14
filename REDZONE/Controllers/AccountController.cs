@@ -40,7 +40,6 @@ namespace REDZONE.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.errorMessage = "";
-            Session["errorMessage"] = "";
             //Reset all authentication cookies and session variables (To prevent orphan authentication cookie and users getting locked out in some rare instance where new version of the app is deployed and an usser is signon)
             FormsAuthentication.SignOut();
             Session.Remove("emp_id");    //Session["emp_id"] = null;
@@ -110,16 +109,18 @@ namespace REDZONE.Controllers
         // This is a new Login Page Using Modal View (POST)
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult login(LoginViewModel loginModel, string uPWD, string ReturnUrl)
         {
             //--------------------- Decryption and Input Validation Section ----------------------------------
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
-            string decryptToken = Session["loginToken"].ToString();
-            Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
+            string decryptToken = "";
+            Session["errorMessage"] = "";
             //Session["loginToken"] = null;
             try
             {  //try to decrypt the password
+                decryptToken = Session["loginToken"].ToString();
+                Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
 
                 loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(uPWD, decryptToken);
                 if (loginModel.Password.Equals("keyError"))
@@ -130,13 +131,17 @@ namespace REDZONE.Controllers
                 }
             }
             catch (Exception ex) {
-                Session["errorMessage"] = ex.Message;
+                Session["errorMessage"] = "LOGIN FAILED: " + ex.Message;
                 return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
                 //ModelState.AddModelError("", "ERROR: " + ex.Message);             
             }
             //-------- END of the Decryption and Input Validation Section ----------------------------------
 
-            if (!ModelState.IsValid) { return View(loginModel); }
+            if (!ModelState.IsValid) {
+                Session["errorMessage"] = "LOGIN FAILED: " + ModelState.ToString();
+                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                //return View(loginModel); 
+            }
 
             // ----- Reset/Remove the Authorization Cookie and other related session variables if any -----
             FormsAuthentication.SignOut();   
@@ -161,16 +166,18 @@ namespace REDZONE.Controllers
                 }
                 else
                 { //Failed to authenticate user. Back to Login page with Validation errors
-                    ViewBag.ReturnUrl = ReturnUrl;
-                    ModelState.AddModelError("", "Failed to Logon User: " + ViewBag.errorMessage);
-                    return View(loginModel);
+                    return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                    //ViewBag.ReturnUrl = ReturnUrl;
+                    //ModelState.AddModelError("", "Failed to Logon User: " + ViewBag.errorMessage);
+                    //return View(loginModel);
                 }
             }
             catch(Exception ex) {
-                ViewBag.errorMessage = ex.Message + "\nContact the Service Desk for assistance.";
-                return View(loginModel);
+                Session["errorMessage"] = ex.Message + "\nContact the Service Desk for assistance.";
+                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                //ViewBag.errorMessage = ex.Message + "\nContact the Service Desk for assistance.";
+                //return View(loginModel);
             }
-
         }
         //--------------------------------------------------------------------------------------------------------------\\
         // GET: /Account/LogOff
@@ -529,6 +536,7 @@ namespace REDZONE.Controllers
                 return true;
             }
             else {
+                Session["errorMessage"] = "LOGIN FAILED: " + logggedUser.userStatusMsg;
                 ViewBag.errorMessage = logggedUser.userStatusMsg;
                 return false;
             }
