@@ -1,5 +1,7 @@
 ﻿@model REDZONE.Models.LoginViewModel
-@{   Layout = null; }
+@{   Layout = null;
+     string errorMessage = (Session["errorMessage"] == null) ? "" : Session["errorMessage"].ToString();
+ }
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,7 +78,8 @@
                                 </div>
                             </div>
                             <div style="color:#ff0000; text-align:center;">
-                                @ViewBag.errorMessage
+                                @ViewBag.errorMessage 
+                                @errorMessage
                             </div>
                             <br />
                             <button id="btnRZLogin" type="button" class="btn btn-block" style="background-color:#8B0000; color:white">
