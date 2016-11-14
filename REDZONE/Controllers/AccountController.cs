@@ -40,6 +40,7 @@ namespace REDZONE.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.errorMessage = "";
+            Session["errorMessage"] = "";
             //Reset all authentication cookies and session variables (To prevent orphan authentication cookie and users getting locked out in some rare instance where new version of the app is deployed and an usser is signon)
             FormsAuthentication.SignOut();
             Session.Remove("emp_id");    //Session["emp_id"] = null;
@@ -123,10 +124,16 @@ namespace REDZONE.Controllers
                 loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(uPWD, decryptToken);
                 if (loginModel.Password.Equals("keyError"))
                 {
-                    ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
+                    Session["errorMessage"] = "Failed to decrypt credentials. Try again or contact Support if the problem persist";
+                    return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                    //ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
                 }
             }
-            catch (Exception ex) { ModelState.AddModelError("", "ERROR: " + ex.Message); }
+            catch (Exception ex) {
+                Session["errorMessage"] = ex.Message;
+                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                //ModelState.AddModelError("", "ERROR: " + ex.Message);             
+            }
             //-------- END of the Decryption and Input Validation Section ----------------------------------
 
             if (!ModelState.IsValid) { return View(loginModel); }
