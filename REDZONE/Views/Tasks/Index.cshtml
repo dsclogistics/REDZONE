@@ -29,8 +29,10 @@
 <script src="~/Scripts/Tasks_index.js"></script>
 
 <div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:5px">
-    <div class="panel-heading padding2">
-        <h2>My Tasks</h2>
+    <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
+        <div class="row ">
+            <span style="font-size:x-large; font-weight:bold; color:darkblue">My Tasks</span>
+        </div>
         <input type="hidden" id="hdnDisplay" value="@ViewBag.display"/>
     </div>
 
@@ -41,14 +43,14 @@
         <div class="row" id="divSubmitterTasks" style="margin-left:5px; margin-right:5px">
             @if (Model.apSubmitTaskList.Count() > 0)
             {
-                <div class="btn-toolbar" style="margin-top:5px">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                <div class="btn-toolbar" style="margin-top:5px; ">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray">
+                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-top-right-radius:0px; border-bottom-right-radius:0px; border-color: transparent">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Action Plan Tasks</h4>
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
+                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold ">Action Plan Tasks</h4>
                     </div>
                 </div>
 
@@ -58,21 +60,24 @@
                         <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="glyphicon @apTaskGlyph"></span>
                                 </button>
                             </div>
                             <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@bldg.bldgName</h4>
+                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
+                                    @{string url = "/Home/BuildingSummary/?year=" + bldg.periodList.First().mtrcList.First().year + "&bldg_id=" + bldg.periodList.First().mtrcList.First().bldg_id ;}
+                                    <a href="@url">@bldg.bldgName</a>
+                                </h4>
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:42px">
+                        <div class="collapse @apTaskDisplay" style="margin-left:42px">
                             @foreach (var period in bldg.periodList)
                             {
                                 <div class="btn-toolbar" style="margin-top:5px">
                                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                            <span class="glyphicon @apTaskGlyph"></span>
                                         </button>
                                     </div>
                                     <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
@@ -80,7 +85,7 @@
                                     </div>
                                 </div>
 
-                                <div class="collapse" style="margin-left:40px">
+                                <div class="collapse @apTaskDisplay" style="margin-left:40px">
                                     <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
                                         <tr style="background-color:lightgray">
                                             <th style="text-align:center; width:25%">
@@ -133,12 +138,12 @@
             @if (Model.apReviewTaskList.Count() > 0)
             {
                 <div class="btn-toolbar" style="margin-top:5px">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @apTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Action Plan Review Tasks</h4>
                     </div>
                 </div>
@@ -149,7 +154,7 @@
                         <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="glyphicon @apTaskGlyph"></span>
                                 </button>
                             </div>
                             <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
@@ -157,13 +162,13 @@
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:42px">
+                        <div class="collapse @apTaskDisplay" style="margin-left:42px">
                             @foreach (var period in mtrc.periodList)
                             {
                                 <div class="btn-toolbar" style="margin-top:5px">
                                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                            <span class="glyphicon @apTaskGlyph"></span>
                                         </button>
                                     </div>
                                     <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
@@ -171,7 +176,7 @@
                                     </div>
                                 </div>
 
-                                <div class="collapse" style="margin-left:40px">
+                                <div class="collapse @apTaskDisplay" style="margin-left:40px">
                                     <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
                                         <tr style="background-color:lightgray">
                                             <th style="text-align:center; width:25%">
@@ -226,12 +231,12 @@
             @if (Model.mtrcTaskList.Count() > 0)
             {
                 <div class="btn-toolbar" style="margin-top:5px">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color: transparent; border-right:transparent; ">
+                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray ">
                         <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                             <span class="glyphicon @mtrcTaskGlyph"></span>
                         </button>
                     </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
+                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
                         <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Metric Collector Tasks</h4>
                     </div>
                 </div>
@@ -242,7 +247,7 @@
                         <div class="btn-toolbar" style="margin-top:5px">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="glyphicon @mtrcTaskGlyph"></span>
                                 </button>
                             </div>
                             <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
@@ -250,7 +255,7 @@
                             </div>
                         </div>
 
-                        <div class="collapse" style="margin-left:42px">
+                        <div class="collapse @mtrcTaskDisplay" style="margin-left:42px">
                             <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
                                 <tr style="background-color:lightgray; max-height:10px">
                                     <th style="text-align:center; width:25%">
