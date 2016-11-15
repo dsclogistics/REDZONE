@@ -83,6 +83,7 @@ namespace REDZONE.Controllers
                 else { buildingID = DFLT_BUILDING; }                
             }
             BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name);
+            
 
             //Retrieve the Current Logged on User Reviewer's metrics (If any)
             ViewBag.ReviewerMetrics = currentUser.getReviewerMetricIds();
@@ -91,6 +92,10 @@ namespace REDZONE.Controllers
 
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
+            dscUser currentUser = new dscUser(User.Identity.Name);
+
+            //currentUser.buildings;
+
             const string DFLT_MPID = "3";
 
            // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
@@ -109,6 +114,20 @@ namespace REDZONE.Controllers
             //------- Done setting up default values ------
 
             MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
+            dashBoard.canFilterRows = (currentUser.buildings.Count > 0) ? true : false;
+            if (dashBoard.canFilterRows) {
+                //If the User Role allows Building Rows to be filtered, mark those that belong to the User
+                foreach (MeasuredRowEntity buildingRow in dashBoard.metricRows)
+                {
+                    if (currentUser.buildings.Find(x => x.id == buildingRow.rowMeasuredId) != null)
+                    { //This building is in the list of building that are assing to the Current user
+                        buildingRow.rowOwner = "MyBuilding";
+                    }
+                    else {
+                        buildingRow.rowOwner = "NotMyBuilding";
+                    }
+                }
+            }
 
             if (!String.IsNullOrEmpty(sortMonth)) {
                 if (sortMonth.Equals("Building"))

@@ -61,32 +61,38 @@ else
         <div class="panel panel-default" style="margin-bottom:0px; ">
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-2">
+
+                    </div>
+                    <div class="col-sm-8">
                         <div class="row ">
-                            <div class="col-sm-1">
-                                <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" /></a>
-                            </div>
-                            <div class="col-sm-10">
-                                <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Summary</span>
-                            </div>
-                            <div class="col-sm-1">
-                            </div>
+                            <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Summary</span>
                         </div>
-                        <div class="row" style="margin-bottom:10px">
+                        <div class="row " style="margin-bottom:10px">
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
-                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMetric'" title="Navigate to Previous Building">
-                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px; height: 35px" onclick="location.href='@Model.urlPrevMetric'" title="Navigate to Previous Building">
+                                        <span class="glyphicon glyphicon-chevron-left" ></span>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" value="@Model.metricName @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                                <input type="text" class="form-control" value="@Model.metricName @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px; height:35px">
                                 <span class="input-group-btn">
-                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMetric'" title="Navigate to Next Building">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px; height: 35px" onclick="location.href='@Model.urlNextMetric'" title="Navigate to Next Building">
                                         <span class="glyphicon glyphicon-chevron-right"></span>
                                     </button>
                                 </span>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-2" style="padding-top:10px">
+                        @if (Model.canFilterRows)
+                        {
+                            <input type="hidden" id="isFiltered" value="N" />
+                            <button id="btnMyBuildings" style="box-shadow: inset 0px 1px 5px; border-radius:5px; float:right">
+                                <img src="~/images/mybuildings.png" style="width:80px;height:35px;" /><br />
+                                <span style="font-size:11px;">My Buildings Only</span>
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
@@ -192,8 +198,8 @@ else
                                 {
                                     colCounter = 0;
                                     bool allNAs = true;
-                                    <tr class="rHover" style="border-bottom: 1px solid #c6c4c4;">
-                                        <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; min-width:131px">
+                                    <tr class="rHover @buildingRow.rowOwner" style="border-bottom: 1px solid #c6c4c4;">
+                                        <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; min-width:131px" title="@buildingRow.rowOwner">
                                             <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                                         </td>
 
@@ -459,5 +465,21 @@ else
         else {
             $(".scroll-Offset").addClass('notIEScroll');
         }
+        //-----------------------------------------------
+        $('#btnMyBuildings').click(function () {
+            var isFilterd = $(this).siblings("#isFiltered").first().val() == "Y";
+            if (isFilterd) {
+                $('.NotMyBuilding').each(function () {
+                    $(this).show();
+                });
+                $(this).siblings("#isFiltered").first().val("N");
+            }
+            else {
+                $('.NotMyBuilding').each(function () {
+                    $(this).hide();
+                });
+                $(this).siblings("#isFiltered").first().val("Y");
+            } 
+        });
     });
 </script>
