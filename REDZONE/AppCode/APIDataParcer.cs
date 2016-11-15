@@ -1689,7 +1689,75 @@ namespace REDZONE.AppCode
             }
             return tempActionPlan;
         }
+        public ActionPlanViewModel getActionPlansById(string productname, string rz_bapm_id)
+        {
+            //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
+            ActionPlanViewModel apViewModel = new ActionPlanViewModel();
+            List<ActionPlan> actionPlanList = new List<ActionPlan>();
+            ActionPlan tempActionPlan = new ActionPlan();
 
+            string raw_data = api.getActionPlans(productname, rz_bapm_id);
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jActionPlanList = (JArray)parsed_result["actionplans"];
+
+                var res = jActionPlanList.First();
+
+                apViewModel.bapm_id = (string)res["rz_bapm_id"];
+                apViewModel.bapmStatus = (string)res["rz_bapm_status"];
+                apViewModel.mpv_id = (string)res["mtrc_period_val_id"];
+                apViewModel.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                apViewModel.mtrcDisplayText = (string)res["mtrc_prod_display_text"];
+                apViewModel.apMonth = (string)res["month"];
+                apViewModel.apMonthName = intToMonth((int)res["month"]);
+                apViewModel.apYear = (string)res["year"];
+                apViewModel.goalText = (string)res["goal_txt"];
+                apViewModel.mtrcPeriodValue = (string)res["mtrc_period_val_value"];
+
+                if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";
+                if (String.IsNullOrEmpty(apViewModel.bapmStatus)) apViewModel.bapmStatus = "";
+                if (String.IsNullOrEmpty(apViewModel.mpv_id)) apViewModel.mpv_id = "0";
+                if (String.IsNullOrEmpty(apViewModel.bldgName)) apViewModel.bldgName = "";
+                if (String.IsNullOrEmpty(apViewModel.mtrcDisplayText)) apViewModel.mtrcDisplayText = "";
+                if (String.IsNullOrEmpty(apViewModel.apMonth)) apViewModel.apMonth = "0";
+                if (String.IsNullOrEmpty(apViewModel.apMonthName)) apViewModel.apMonthName = "0";
+                if (String.IsNullOrEmpty(apViewModel.apYear)) apViewModel.apYear = "0";
+                if (String.IsNullOrEmpty(apViewModel.goalText)) apViewModel.goalText = "0";
+                if (String.IsNullOrEmpty(apViewModel.mtrcPeriodValue)) apViewModel.mtrcPeriodValue = "0";
+
+                JArray jDetailList = (JArray)parsed_result["details"];
+                foreach (var detail in jDetailList)
+                {
+                    tempActionPlan = new Models.ActionPlan();
+
+                    tempActionPlan.apd_id = (string)detail["rz_apd_id"];
+                    tempActionPlan.apVersion = (string)detail["rz_apd_ap_ver"];
+                    tempActionPlan.apStatus = (string)detail["rz_apd_ap_status"];
+                    tempActionPlan.actionPlanAction = (string)detail["rz_apd_ap_text"];
+                    tempActionPlan.reviewerComments = (string)detail["rz_apd_ap_review_text"];
+                    tempActionPlan.submittedBy = (string)detail["submittedby"];
+                    tempActionPlan.reviewedBy = (string)detail["reviewedby"];
+
+                    if (String.IsNullOrEmpty(tempActionPlan.reviewerComments)) tempActionPlan.reviewerComments = "";
+                    if (String.IsNullOrEmpty(tempActionPlan.submittedBy)) tempActionPlan.submittedBy = "";
+                    if (String.IsNullOrEmpty(tempActionPlan.reviewedBy)) tempActionPlan.reviewedBy = "";
+
+                    actionPlanList.Add(tempActionPlan);
+                }
+
+                actionPlanList = actionPlanList.OrderByDescending(x => Int32.Parse(x.apVersion)).ToList();
+
+                apViewModel.actionPlanList = actionPlanList;
+            }
+            catch
+            {
+
+            }
+            return apViewModel;
+        }
 
         // ====================== HELPER FUNCTIONS ================================
         public static string intToMonth(int monthNo)

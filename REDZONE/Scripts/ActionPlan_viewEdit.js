@@ -139,7 +139,7 @@ function buildSubmitActionPlanJSON() {
 
 function submitActionPlan() {
     var payload = buildSubmitActionPlanJSON();
-    //alert(payload);
+    alert(payload);
 
     $.ajax({
         url: '/ActionPlan/submitActionPlan',
@@ -179,7 +179,7 @@ function buildSaveActionPlanJSON() {
 
 function saveActionPlan() {
     var payload = buildSaveActionPlanJSON();
-    //alert(payload);
+    alert(payload);
 
     $.ajax({
         url: '/ActionPlan/saveActionPlan',
