@@ -17,6 +17,10 @@
         $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
     });
 
+    $('.panel-heading').on('click', '.glyph-link', function (e) {
+        $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    });
+
     //On Quick Review link click
     //------------------------------------------------------------------------
     $("#divReviewerTasks").on('click', '.lnkQuickReview', function () {
