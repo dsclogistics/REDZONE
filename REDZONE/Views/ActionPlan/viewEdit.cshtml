@@ -182,7 +182,8 @@
             @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
             {
                 counter = counter + 1;
-                mostRecentApOpen = (counter == 1) ? "in" : "";
+                //mostRecentApOpen = (counter == 1) ? "in" : "";
+                mostRecentApOpen = "";
 
                 <div class="btn-toolbar">
                     <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
