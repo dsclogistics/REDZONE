@@ -216,6 +216,11 @@ namespace REDZONE.AppCode
         }
         public string getUserTasksCount(string app_user_id)
         {
+            //try { 
+            //}
+            //catch (Exception ex) {
+            //    return ex.Message;
+            //}
             string endPoint = "gettaskscount";
             WebRequest request = WebRequest.Create(api_url + endPoint);
             request.Method = "POST";

@@ -480,6 +480,7 @@
     <Content Include="Views\MenuBar\_RZ_TasksFlag.cshtml" />
     <Content Include="Views\Tasks\_myTaskSummary.cshtml" />
     <Content Include="Views\Tasks\_quickReview.cshtml" />
+    <Content Include="Views\MenuBar\_RZ_MyTask_MenuItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

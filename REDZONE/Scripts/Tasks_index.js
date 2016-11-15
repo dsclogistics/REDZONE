@@ -1,4 +1,10 @@
 ﻿$(document).ready(function () {
+    //$('.btn-toolbar .btn').each(function () {
+    //    var $target = $(this).parentsUntil('btn-toolbar').next('.collapse');
+    //    $target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
+    //    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    //});
+
     $(".menuItem").removeClass("menuSelected");    // Reset Menu Selections
     $('#mMyTasks').show();                      // Show a new Menu Item when this page is displayed
     $("#mMyTasks").addClass("menuSelected");

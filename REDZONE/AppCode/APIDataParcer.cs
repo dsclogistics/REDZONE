@@ -310,7 +310,7 @@ namespace REDZONE.AppCode
                         MeasuredCellEntity goalMetric = new MeasuredCellEntity();
                         MeasuredCellEntity totalColMetric = new MeasuredCellEntity();
                         goalMetric.metricName = metricName.metricName;
-                        goalMetric.metricValue = (string)mtrValue["mpg_display_text"];
+                        goalMetric.metricValue = ((string)mtrValue["mpg_display_text"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                         totalColMetric.metricName = metricName.metricName;
                         eSummary.goalsRow.entityMetrics.Add(goalMetric);
                         totalColMetric.score = 0;
@@ -466,7 +466,7 @@ namespace REDZONE.AppCode
                         row.rowName = (string)mtr["mtrc_prod_display_text"];
                         //row.rowName = (string)mtr["mtrc_name"];
                         row.rowMeasuredId = (string)mtr["mtrc_id"];
-                        row.scoreGoal = (string)mtr["mpg_display_text"];
+                        row.scoreGoal = ((string)mtr["mpg_display_text"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         row.rowOwner = AppCode.Util.getMetricMeetingOwner(row.rowName);
                         if (months.HasValues)

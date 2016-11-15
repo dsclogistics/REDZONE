@@ -175,5 +175,9 @@ namespace REDZONE.Models
         public int mtrcCount { get; set; }
         public int actPlanCount { get; set; }
         public int totalTasks   { get { return mtrcCount + actPlanCount; } }
+        public RZTaskCounts() {
+            mtrcCount = 0;
+            actPlanCount = 0;
+        }
     }
 }
