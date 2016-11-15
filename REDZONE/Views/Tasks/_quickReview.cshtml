@@ -9,6 +9,32 @@ string uId = Session["emp_id"].ToString();
         border: 1px solid black;
         padding: 5px;
     }
+
+    .scroll-Table {
+        font-weight: bold;
+        font-size: small;
+        text-align: center;
+        width: 99%;
+    }
+
+    .scroll-Head {
+        padding: 0px;
+        background-color: #f0eaea;
+    }
+
+    .scroll-Body {
+        padding: 0px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .IEScroll{
+        width:17px;
+    }
+    .notIEScroll{
+        /*width:22px;*/
+        width:17px;
+    }
+
 </style>
 
 <div id="globalVariables">
@@ -28,44 +54,76 @@ string uId = Session["emp_id"].ToString();
             <input type="hidden" id="bapmId" value="@Model.bapm_id" />
         </div>
 
-        <div style="margin-left:10px; margin-right:10px">
+        <div class="row" style="margin-left:10px; margin-right:10px">
             <h4 style="text-align:left">Reason Summary</h4>
-            <div class="bordered" style="border-radius:4px; border-color:grey">
-                <div class="row" style="margin-left:10px; margin-right:10px">
-                    <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
-                        <!-- Metric Period Header Information  -->
-                        <div class="row" style="margin:0; font-weight:bold">
-                            <div class="col-md-4 headerCell" style="background-color:#f0eaea">Metric</div>
-                            <div class="col-md-4 headerCell" style="background-color:#bbedff">Goal</div>
-                            <div class="col-md-4 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@Model.monthName</span></div>
-                        </div>
-                        <div class="row" style="margin:0">
-                            <div class="col-md-4 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
-                            <div class="col-md-4 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@Model.mtrcGoalText</span></div>
-                            <div class="col-md-4 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@Model.mtrcValue</div>
-                        </div>
-                    </div> <!-- END OF HEADER INFORMATION-->
 
-                    <div class="col-md-6">
-                        <div style="padding:10px; padding-bottom:0px; text-align:left">
-                            <ul style="text-align:center">
-                                @if (Model.reasonList.Count() > 0)
-                                {
-                                    foreach (var reason in Model.reasonList)
-                                    {
-                                        <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
-                                    }
-                                }
-                                else
-                                {
-                                    <li>There are no reasons to display.</li>
-                                }
-                            </ul>
-                        </div>
+            <div style="margin-left:10px; margin-right:10px">
+                <div class="col-md-6 bordered" style="border-radius:4px; border-color:grey">
+                    <div style="padding:10px; padding-bottom:10px; text-align:left">
+                        @if (Model.reasonList.Count() > 0)
+                        {
+                            foreach (var reason in Model.reasonList)
+                            {
+                                <div class="" title="@reason.mpvr_Comment" style="text-align:left; padding:2px; ">
+                                    <span class="glaphicon glyphicon-asterisk"></span>
+                                    <span style="margin-left:5px">@reason.reason_text</span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="color:red; ">There are no Assigned Reasons for the current Metric Action Plan</div>
+                        }
                     </div>
                 </div>
-
             </div>
+
+            <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
+                <div class="panel panel-default scroll-Table hidden-xs">
+                    <div class="panel-heading scroll-Head ">
+                        <table style="margin:0; width:100%;">
+                            <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
+                                <td>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td class="col-md-4">Metric</td>
+                                            <td class="col-md-4" style="border-left: 1px solid #c6c4c4; background-color:#bbedff">Goal</td>
+                                            <td class="col-md-4" style="border-left: 1px solid #c6c4c4"><span id="metricDate1">@Model.monthName</span></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="panel-body scroll-Body">
+                        <div class="row" style="margin:0">
+                            <table style="width:100%">
+                                <tr class="rHover" style="border-bottom: 1px solid #c6c4c4;">
+                                    <td class="col-md-4" style="text-align:center; background-color:#f0eaea">@Model.mtrcDisplayText</td>
+                                    <td class="col-md-4" style="text-align:center; border-left: 1px solid #c6c4c4; background-color:#bbedff; color:blue; font-weight:bold;">@Model.mtrcGoalText</td>
+                                    <td class="col-md-4" style="text-align:center; border-left: 1px solid #c6c4c4; background-color:#ffbb8b">@Model.mtrcValue</td>
+                                </tr>
+                            </table>
+                        </div>  <!-- *********** END OF BUILDING ROW ************** -->
+
+                    </div>
+
+                </div>
+            
+                <!-- Metric Period Header Information  -->
+                @*<div class="row" style="margin:0; font-weight:bold">
+                    <div class="col-md-4 headerCell" style="background-color:#f0eaea">Metric</div>
+                    <div class="col-md-4 headerCell" style="background-color:#bbedff">Goal</div>
+                    <div class="col-md-4 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@Model.monthName</span></div>
+                </div>
+                <div class="row" style="margin:0">
+                    <div class="col-md-4 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
+                    <div class="col-md-4 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@Model.mtrcGoalText</span></div>
+                    <div class="col-md-4 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@Model.mtrcValue</div>
+                </div>*@
+            </div> <!-- END OF HEADER INFORMATION-->
+
         </div>
         <br />
 
