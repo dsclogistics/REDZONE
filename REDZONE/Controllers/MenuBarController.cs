@@ -53,19 +53,19 @@ namespace REDZONE.Controllers
         [ChildActionOnly]
         public ActionResult _RZ_MyTask_MenuItems()
         {
-            dscUser user = new Models.dscUser(User.Identity.Name);
-            RZTaskCounts rzTaskCounts = new RZTaskCounts();
+            //dscUser user = new Models.dscUser(User.Identity.Name);
+            //RZTaskCounts rzTaskCounts = new RZTaskCounts();
+            //try
+            //{
+            //    rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
+            //}
+            //catch (Exception e)
+            //{
+            //    Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+            //}
 
-            try
-            {
-                rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
-            }
-            catch (Exception e)
-            {
-                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
-            }
-
-            return PartialView(rzTaskCounts);
+            //return PartialView(rzTaskCounts);
+            return PartialView();
         }
 
         // GET: Tasks Menu

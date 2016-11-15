@@ -29,7 +29,7 @@
                 <div class="col-sm-12">
                     <div class="row ">
                         <div class="col-xs-1">
-                            <a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>
+                            @*<a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>*@
                         </div>
                         <div class="col-xs-10">
                             <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
@@ -119,7 +119,7 @@
                                     <a href="@buildingRow.rowURL" id="mName" title="Metric Owner: @buildingRow.rowOwner">@buildingRow.rowName</a>
                                 </td> <!-- Metric Name Column -->
                                 <td class="buildingCol" style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold;">
-                                    <span id="mGoal">@buildingRow.scoreGoal</span>
+                                    <span id="mGoal">@HttpUtility.HtmlDecode(buildingRow.scoreGoal)</span>
                                 </td> <!-- Goal Column -->
                                 @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                                 {
@@ -158,7 +158,7 @@
                             <td class="buildingCol " style="width:16.66%; padding:0; padding-top:4px">
                                 @*@Model.buildingScoreRow.rowName*@
                                 <span style="margin-top:10px; padding-top:10px">Building Score</span>
-                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="float:right; padding:0px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score">
+                                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="padding:0px; padding-left:5px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score">
                                     <span class="glyphicon glyphicon-question-sign" style="font-size:large;"></span>
                                 </button>
                             </td><!-- Metric Name Column -->

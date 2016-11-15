@@ -504,7 +504,7 @@ namespace REDZONE.Controllers
             
             //-------- Section to be Used during Development --------------------------------\
             //Retrieve the User information for Developers
-            switch (loginModel.Username.ToUpper()+loginModel.Password) { 
+            switch (loginModel.Username.ToUpper() + loginModel.Password) { 
                 case "DELGADO_FELICIANO~~":
                 case "ABDUGUEV_RASUL~~":
                      isDeveloper= true;

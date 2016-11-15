@@ -120,13 +120,13 @@
                                             <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
                                                 <span style="font-weight:bold"> @Model.goalsRow.BuildingName</span>
                                             </td>
-                                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
-                                            {
-                                        <td class="buildingCol" style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
-                                            @*class="col-sm-1 buildingCol headerCol"*@
-                                            @bldngMV.metricValue
-                                        </td>
-                                            }
+                                          @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
+                                          {
+                                            <td class="buildingCol" style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
+                                            @*class="col-sm-1 buildingCol headerCol"*@ 
+                                                @HttpUtility.HtmlDecode(bldngMV.metricValue)
+                                            </td>
+                                          }
                                             <td class="buildingCol " style="vertical-align:middle; width:11%;">
                                                 @*class="buildingCol scoreCol"*@
                                                 <br />
