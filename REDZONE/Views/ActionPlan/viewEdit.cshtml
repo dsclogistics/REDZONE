@@ -169,97 +169,99 @@
          </div>
        }
       </div>
+     
+   </div>
+</div>
 
 
+@* ================================ SECTION: RECENT MONTH ACTION PLANS ============================================ *@
+<div class="panel panel-default" id="divPriorActionPlans" style="margin-top:15px; font-family:Arial; ">
+    <div class="panel-heading padding2" style="padding:5px; background-color:gray">
+        <div >
+            <span style="font-weight:bold; color:white; font-size:18px">Recent Action Plans</span>
+        </div>
+    </div>
+    <div class="panel-body padding2 ">
+        @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
+        {
+            counter = counter + 1;
+            //mostRecentApOpen = (counter == 1) ? "in" : "";
+            mostRecentApOpen = "";
 
-
-      @* ======================= SECTION: RECENT MONTH ACTION PLANS ===================================== *@
-      <div id="divPriorActionPlans">
-            <br />
-            <div class="bordered" style="border-color:darkgray; background-color:dimgray"><h4 style="font-weight:bold; color:white">Recent Action Plans</h4></div>
-            <br />
-
-            @foreach (REDZONE.Models.PriorActionPlan priorAP in Model.priorActionPlanList)
-            {
-                counter = counter + 1;
-                //mostRecentApOpen = (counter == 1) ? "in" : "";
-                mostRecentApOpen = "";
-
-                <div class="btn-toolbar">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
-                    </div>
-                    <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@priorAP.priorAPMonth @priorAP.priorAPYear Action Plan <span style="color:@priorAP.priorAPStatusColor">(@priorAP.priorAPStatus)</span></h4>
-                    </div>
+            <div class="btn-toolbar">
+                <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
+                    <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
                 </div>
+                <div class="bordered" style="display:table-cell; width:100%; border-top-right-radius:4px; border-bottom-right-radius:4px; vertical-align:middle; border-color:darkgray;">
+                    <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:20px ">@priorAP.priorAPMonth @priorAP.priorAPYear Action Plan <span style="color:@priorAP.priorAPStatusColor">(@priorAP.priorAPStatus)</span></h4>
+                </div>
+            </div>
 
-                <div class="collapse @mostRecentApOpen" style="margin-left:40px">
-                    <br />
-                    @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
-                    <div>
-                        <div class="bordered"  style="border-radius:4px; border-color:lightgray">
-                            <div class="row" style="margin-left:10px; margin-right:10px">
-                                <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
-                                    <!-- Metric Period Header Information  -->
-                                    <div class="row" style="margin:0; font-weight:bold">
-                                        <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea">Metric</div>
-                                        <div class="col-md-4 col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
-                                        <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@priorAP.priorAPMonth</span></div>
-                                    </div>
-                                    <div class="row" style="margin:0">
-                                        <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
-                                        <div class="col-md-4 col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@priorAP.priorAPMetricGoalText</span></div>
-                                        <div class="col-md-4 col-xs-2 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@priorAP.priorAPMetricValue</div>
-                                    </div>
-                                </div> <!-- END OF HEADER INFORMATION-->
+            <div class="collapse @mostRecentApOpen" style="margin-left:40px">
+                <br />
+                @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
+                <div>
+                    <div class="bordered" style="border-radius:4px; border-color:lightgray">
+                        <div class="row" style="margin-left:10px; margin-right:10px">
+                            <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
+                                <!-- Metric Period Header Information  -->
+                                <div class="row" style="margin:0; font-weight:bold">
+                                    <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea">Metric</div>
+                                    <div class="col-md-4 col-xs-2 headerCell" style="background-color:#bbedff">Goal</div>
+                                    <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@priorAP.priorAPMonth</span></div>
+                                </div>
+                                <div class="row" style="margin:0">
+                                    <div class="col-md-4 col-xs-2 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrcDisplayText</span></div>
+                                    <div class="col-md-4 col-xs-2 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@priorAP.priorAPMetricGoalText</span></div>
+                                    <div class="col-md-4 col-xs-2 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@priorAP.priorAPMetricValue</div>
+                                </div>
+                            </div> <!-- END OF HEADER INFORMATION-->
 
-                                <div class="col-md-6">
-                                    <div class="bordered" style="padding:10px; padding-bottom:0px; text-align:left; border-radius:4px; border-color:transparent">
-                                        <ul style="text-align:center">
-                                            @if (priorAP.priorAPReasonList.Count() > 0)
+                            <div class="col-md-6">
+                                <div class="bordered" style="padding:10px; padding-bottom:0px; text-align:left; border-radius:4px; border-color:transparent">
+                                    <ul style="text-align:center">
+                                        @if (priorAP.priorAPReasonList.Count() > 0)
+                                        {
+                                            foreach (var reason in priorAP.priorAPReasonList)
                                             {
-                                                foreach (var reason in priorAP.priorAPReasonList)
-                                                {
-                                                    <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
-                                                }
+                                        <li title="@reason.mpvr_Comment" style="text-align:left">@reason.reason_text</li>
                                             }
-                                            else
-                                            {
-                                                <li>There are no reasons to display.</li>
-                                            }
-                                        </ul>
-                                    </div>
+                                        }
+                                        else
+                                        {
+                                        <li>There are no reasons to display.</li>
+                                        }
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <br />
-
-                        @if (priorAP.priorAPText != "")
-                        {
-                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
-                        }
                     </div>
-                    @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
                     <br />
 
-                    <div class="btns-prior-ap-detail" style="text-align:left">
-                        <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
-                        <input type="hidden" id="priorMpvId" value=@priorAP.mtrc_period_val_id />
-                        <input type="hidden" id="priorMpId" value="@priorAP.mtrc_period_id" />
-                        <input type="hidden" id="priorBldgId" value="@priorAP.dsc_mtrc_lc_bldg_id" />
-                        <input type="hidden" id="priorMpGoal" value="@priorAP.priorAPMetricGoalText" />
-                        <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
-                        <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
-                        <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
-                        <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
-                    </div>
+                    @if (priorAP.priorAPText != "")
+                    {
+                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
+                    }
                 </div>
+                @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
                 <br />
-            }
-        </div>
 
-   </div>
+                <div class="btns-prior-ap-detail" style="text-align:left">
+                    <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
+                    <input type="hidden" id="priorMpvId" value=@priorAP.mtrc_period_val_id />
+                    <input type="hidden" id="priorMpId" value="@priorAP.mtrc_period_id" />
+                    <input type="hidden" id="priorBldgId" value="@priorAP.dsc_mtrc_lc_bldg_id" />
+                    <input type="hidden" id="priorMpGoal" value="@priorAP.priorAPMetricGoalText" />
+                    <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
+                    <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
+                    <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
+                    <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
+                </div>
+            </div>
+            <br />
+        }
+
+    </div>
 </div>

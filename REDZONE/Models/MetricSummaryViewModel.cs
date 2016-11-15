@@ -9,9 +9,10 @@ namespace REDZONE.Models
     {
         public string metricID { get; set; }
         public string metricName { get; set; }
-        public string metricDescription { get; set; }        
-        public string year { get; set; }               
+        public string metricDescription { get; set; }
+        public string year { get; set; }
         public string metricGoal { get; set; }             //???
+        public bool canFilterRows { get; set; }
                
         public string urlNextMetric { get; set; }
         public string urlPrevMetric { get; set; }
