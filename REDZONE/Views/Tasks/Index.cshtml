@@ -544,7 +544,7 @@
                                                                         <td class="cellQuickReview" style="text-align:center; width:25%">
                                                                             @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
                                                                             <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
-                                                                            <a class="lnkQuickReview" href="#" onclick="return false; ">Quick Review</a>
+                                                                            <a class="lnkQuickReview" href="#" onclick="return false; " style="color:red">Quick Review</a>
                                                                         </td>
                                                                         <td style="text-align:center; width:25%">
                                                                             @dueDate.ToString("MM/dd/yyyy")
