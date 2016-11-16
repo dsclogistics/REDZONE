@@ -35,7 +35,7 @@ namespace REDZONE.Controllers
             //------------------------------------------------------------------------
             ActionPlanViewModel apViewModel = new ActionPlanViewModel();
 
-            apViewModel = dataParcer.getActionPlanList(productName, bapmId.ToString());
+            apViewModel = dataParcer.getActionPlansById(productName, bapmId.ToString());
 
 
             //ViewBag.curUserRole = REDZONE.AppCode.Util.getUserRoles(User.Identity.Name);
@@ -223,7 +223,7 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string submitActionPlan(string raw_json)
         {
-            string status = api.submitActionPlan(raw_json);
+            string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));
 
             return returnResultMessage(status);
         }

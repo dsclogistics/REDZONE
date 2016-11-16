@@ -1696,7 +1696,7 @@ namespace REDZONE.AppCode
             List<ActionPlan> actionPlanList = new List<ActionPlan>();
             ActionPlan tempActionPlan = new ActionPlan();
 
-            string raw_data = api.getActionPlans(productname, rz_bapm_id);
+            string raw_data = api.lookUpActionPlans(productname, rz_bapm_id);
 
             try
             {
@@ -1728,7 +1728,7 @@ namespace REDZONE.AppCode
                 if (String.IsNullOrEmpty(apViewModel.goalText)) apViewModel.goalText = "0";
                 if (String.IsNullOrEmpty(apViewModel.mtrcPeriodValue)) apViewModel.mtrcPeriodValue = "0";
 
-                JArray jDetailList = (JArray)parsed_result["details"];
+                JArray jDetailList = (JArray)res["details"];
                 foreach (var detail in jDetailList)
                 {
                     tempActionPlan = new Models.ActionPlan();
