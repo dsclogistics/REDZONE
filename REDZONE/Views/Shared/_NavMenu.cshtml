@@ -26,9 +26,13 @@
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; ">
         <div class="col-md-7 col-md-offset-2" style="text-align:left; margin-left:160px">
 
-            @* ****** RENDER THE 'TASK' MENU ONLY IF THE USER ROLE REQUIRES IT ******* *@
-            @if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+            @* ****** RENDER THE "My Team's Activities" OR the 'TASK' MENU OPTION ONLY IF THE USER ROLE REQUIRES IT ******* *@
+            @if (User.IsInRole("RZ_BLDG_USER"))
             { 
+                @Html.Action("_RZ_MyTeamACT_MenuItems", "MenuBar")
+            }
+            else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+            {
                 @Html.Action("_RZ_MyTask_MenuItems", "MenuBar")
             }
             
@@ -89,7 +93,11 @@
         </div>
         <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; float:right">
             @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
-            @if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+            @if (User.IsInRole("RZ_BLDG_USER"))
+            {
+                @Html.Action("_RZ_TasksFlag", "MenuBar")
+            }
+            else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
             {
                 @Html.Action("_RZ_TasksFlag", "MenuBar")
             }

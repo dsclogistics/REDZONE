@@ -1,0 +1,29 @@
+﻿@*@model REDZONE.Models.RZTaskCounts*@
+<ul class="nav navbar-nav menuItem" id="mMyTasks">
+    <li><a href="/Tasks/TeamActivities">MY TEAM'S ACTIVITIES</a></li>
+
+    @*<li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                MY TASKS
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                @if (Model.totalTasks > 0)
+                {
+                    if (Model.mtrcCount > 0)
+                    {
+                        <li ><a href="/Tasks/Index/?display=mtrc">Metric Tasks (@Model.mtrcCount)</a></li>
+                    }
+
+                    if (Model.actPlanCount > 0)
+                    {
+                        <li ><a href="/Tasks/Index/?display=ap">Action Plan Tasks (@Model.actPlanCount)</a></li>
+                    }
+                }
+                else
+                {
+                    <li>NO PENDING TASKS</li>
+                }
+            </ul>
+        </li>*@
+</ul>

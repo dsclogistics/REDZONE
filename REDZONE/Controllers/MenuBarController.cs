@@ -67,6 +67,27 @@ namespace REDZONE.Controllers
             //return PartialView(rzTaskCounts);
             return PartialView();
         }
+        
+        // GET: Tasks Menu
+        [ChildActionOnly]
+        public ActionResult _RZ_MyTeamACT_MenuItems()
+        { 
+            //dscUser user = new Models.dscUser(User.Identity.Name);
+            //RZTaskCounts rzTaskCounts = new RZTaskCounts();
+            //try
+            //{
+            //    rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
+            //}
+            //catch (Exception e)
+            //{
+            //    Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+            //}
+
+            //return PartialView(rzTaskCounts);
+            return PartialView();
+        }
+
+
 
         // GET: Tasks Menu
         [ChildActionOnly]
@@ -77,7 +98,13 @@ namespace REDZONE.Controllers
 
             try
             {
-                rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
+                if (user.hasRole("RZ_BLDG_USER"))
+                {
+                    rzTaskCounts = parcer.getUserTeamActCount(user.dbUserId);
+                }
+                else {
+                    rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
+                }                
             }
             catch (Exception e)
             {

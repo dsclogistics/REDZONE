@@ -1172,6 +1172,33 @@ namespace REDZONE.AppCode
 
             return tempTaskCounts;
         }
+
+        //This method returns the count of all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
+        public RZTaskCounts getUserTeamActCount(string app_user_id)
+        {
+            RZTaskCounts tempTaskCounts = new RZTaskCounts();
+            try
+            {
+                //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
+                string curYear = DateTime.Today.Year.ToString();
+                string curMonth = DateTime.Today.Month.ToString();
+
+                //string jsonPayload = String.Format("{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"{0}\",\"endmonth\":\"{1}\",\"endyear\":\"{0}\",\"app_user_id\":\"{2}\"}", curYear, curMonth, app_user_id);
+                //string jsonPayload = @"{""productname"":""Red Zone"",""begmonth"":""1"",""begyear"":""" + curYear + @""",""endmonth"":""" + curMonth + @""",""endyear"":""" + curYear+ @""",""app_user_id"":""" + curYear+ @"""}";
+                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
+                
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
+
+
+                tempTaskCounts.mtrcCount = 0;
+                tempTaskCounts.actPlanCount = ((JArray)parsed_result["actionplans"]).Count;
+            }
+            catch { }
+
+            return tempTaskCounts;
+        }
+
+
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
         public RZTaskDetailList getUserTaskDetails(string app_user_id)
         {
