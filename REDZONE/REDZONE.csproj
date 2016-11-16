@@ -307,6 +307,7 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\ReasonMgmt.css" />
     <Content Include="Content\RedZoneApp.css" />
+    <Content Include="Content\RZdashboard.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />

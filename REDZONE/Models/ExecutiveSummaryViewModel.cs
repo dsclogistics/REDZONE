@@ -16,6 +16,7 @@ namespace REDZONE.Models
         public string urlPrevMonth { get; set; }
         public string statusNextMonth { get; set; }
         public string statusPrevMonth { get; set; }
+        public bool canFilterBuildings { get; set; }
         public BuildingMetricEntity goalsRow = new BuildingMetricEntity();
         public BuildingMetricEntity goalsMissedRow = new BuildingMetricEntity();
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();

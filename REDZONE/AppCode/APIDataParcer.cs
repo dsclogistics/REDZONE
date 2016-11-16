@@ -259,7 +259,7 @@ namespace REDZONE.AppCode
             }
         }
 
-        public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID)
+        public ExecutiveSummaryViewModel getExcecutiveSummaryView(string metric_id, string month, string year, string buildingID, bool filterBuildings)
         {
             ExecutiveSummaryViewModel eSummary = new ExecutiveSummaryViewModel();
             List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
@@ -270,7 +270,19 @@ namespace REDZONE.AppCode
             eSummary.goalsRow.BuildingName = "Goal";
             eSummary.goalsMissedRow.BuildingName = "Goals Missed";
             eSummary.goalsMissedRow.scoreDisplayClass = "";
+            //Retrieve User Information and get alist of the buildings assigned to that user
 
+            dscUser currentUser = new dscUser(HttpContext.Current.User.Identity.Name);
+            List<string> userBuildings = new List<string>();
+            if (currentUser.buildings.Count == 0) {
+                eSummary.canFilterBuildings = false;
+                filterBuildings = false; 
+            }
+            else {
+                eSummary.canFilterBuildings = true;
+                userBuildings = currentUser.buildings.Select(x => x.id).ToList(); 
+            }
+                       
             string raw_data = String.Empty;
             try
             {
@@ -323,8 +335,9 @@ namespace REDZONE.AppCode
                 {
                     foreach (var bldg in apiBuidings)
                     {
-
-                        if (apiBuildingsMetrics.HasValues)
+                        string building_Id = (string)bldg["dsc_mtrc_lc_bldg_id"];
+                        //Apply Filter. Process the building only if it contains Metrics and there is no filter applied (or the builing Id is in the user's list of buildings)
+                        if (apiBuildingsMetrics.HasValues && (!filterBuildings || userBuildings.Contains(building_Id)) )
                         {
                             BuildingMetricEntity b = new BuildingMetricEntity();
                             b.scoreDisplayClass = "";
@@ -418,7 +431,7 @@ namespace REDZONE.AppCode
             return eSummary;
         }
 
-        public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID, string currentUserSSO)
+        public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID, string currentUserSSO, bool filterByBldng)
         {
             const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
 
@@ -429,6 +442,25 @@ namespace REDZONE.AppCode
             MeasuredRowEntity rowActions = new MeasuredRowEntity();               // Model Contains one Row with Link Actions
             List<MeasuredRowEntity> metricsRowList = new List<MeasuredRowEntity>();         // Building Metrics (Row) List
             List<MeasuredCellEntity> metricValueCellList = new List<MeasuredCellEntity>();  // RowCellColection
+
+
+            //-- User Building Filtering set up ---------------------
+            dscUser currentUser = new dscUser(currentUserSSO);
+            List<string> userBuildings = new List<string>();
+            if (currentUser.buildings.Count == 0)
+            {
+                bSummary.canFilterBuildings = false;
+                filterByBldng = false;
+            }
+            else
+            {
+                bSummary.canFilterBuildings = true;
+                if (filterByBldng) {
+                    userBuildings = currentUser.buildings.Select(x => x.id).ToList();     //Set the list of buildings for the user only if we need to apply selection filter by Building
+                }                
+            }
+            //-- End of User Building Filtering set up ----------------
+            
             bSummary.year = year;
             rowHeader.rowName = bSummary.bName;
             rowTotals.rowName = "Building Score";
@@ -449,7 +481,7 @@ namespace REDZONE.AppCode
                 JObject parsed_result = JObject.Parse(raw_data);
                 bSummary.bName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
                 bSummary.bId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
-                string[] prevNext = getPrevNextBuildingUrl(year, bSummary.bId);//prevNext[0]=prev url, prevNext[1]=next url
+                string[] prevNext = getPrevNextBuildingUrl(year, bSummary.bId, userBuildings);//prevNext[0]=prev url, prevNext[1]=next url
                 bSummary.statusPrevBuilding = prevNext[0] == "disabled" ? prevNext[0] : "";
                 bSummary.statusNextBuilding = prevNext[1] == "disabled" ? prevNext[1] : "";
                 bSummary.urlPrevBuilding = prevNext[0];
@@ -756,7 +788,6 @@ namespace REDZONE.AppCode
 
             return pValue;
         }
-
         private MeasuredCellEntity getActionDataforMonth(string actionMonth, string actionYear)
         {
             const string urlBase = "http://goo.gl/forms/";
@@ -817,12 +848,29 @@ namespace REDZONE.AppCode
             return actionCell;
         }
 
-        public MetricSummaryViewModel getMetricSummaryView(string year, string metricID, string sortDir)
+        public MetricSummaryViewModel getMetricSummaryView(string year, string metricID, string sortDir, bool filterByBldng)
         {
             MetricSummaryViewModel mSummary = new MetricSummaryViewModel();
             string raw_data = api.getMetricSummary("Red Zone", "Month", metricID, year);
             mSummary.metricName = "";
             mSummary.year = year;
+
+            //-- User Building Filtering set up ---------------------
+            dscUser currentUser = new dscUser(HttpContext.Current.User.Identity.Name);
+            List<string> userBuildings = new List<string>();
+            if (currentUser.buildings.Count == 0)
+            {
+                mSummary.canFilterRows = false;
+                filterByBldng = false;
+            }
+            else
+            {
+                mSummary.canFilterRows = true;
+                userBuildings = currentUser.buildings.Select(x => x.id).ToList();     //Set the list of buildings for the user only if we need to apply selection filter by Building
+            }
+            //-- End of User Building Filtering set up ----------------
+
+
             try
             {
                 JObject parsed_result = JObject.Parse(raw_data);
@@ -833,7 +881,7 @@ namespace REDZONE.AppCode
                 List<MeasuredCellEntity> allAvailableMetrics = new List<MeasuredCellEntity>();
                 mSummary.metricName = (string)parsed_result["mtrc_prod_display_text"];
                 mSummary.metricID = (string)parsed_result["mtrc_id"];
-                string mGoalText = (string)parsed_result["mpg_display_text"];
+                string mGoalText = ((string)parsed_result["mpg_display_text"]).Replace("<=","&le;").Replace(">=","&ge;");
                 string[] prevNext = getPrevNextMetricsUrl(year, mSummary.metricID);//prevNext[0]=prev url, prevNext[1]=next url
                 mSummary.statusPrevMetric = prevNext[0] == "disabled" ? prevNext[0] : "";
                 mSummary.statusNextMetric = prevNext[1] == "disabled" ? prevNext[1] : "";
@@ -849,101 +897,110 @@ namespace REDZONE.AppCode
                 {
                     foreach (var b in apiBuildings)
                     {
-                        MeasuredRowEntity row = new MeasuredRowEntity();
-                        row.rowName = (string)b["dsc_mtrc_lc_bldg_name"];
-                        row.rowMeasuredId = (string)b["dsc_mtrc_lc_bldg_id"];
-                        row.rowURL = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, row.rowMeasuredId);
-                        //row.displayClass = "cell-NoValue";
-                        if (months.HasValues)
+                        string building_Id = (string)b["dsc_mtrc_lc_bldg_id"];
+                        //Process/Save this building record only if No filter required or if the current builing Id is in the user's list of buildings
+                        if (!filterByBldng || userBuildings.Contains(building_Id))
                         {
-                            foreach (var m in months)
-                            {
-                                MeasuredCellEntity hdrCell = new MeasuredCellEntity();
-                                MeasuredCellEntity goalCell = new MeasuredCellEntity();
-                                MeasuredCellEntity buildingValCell = new MeasuredCellEntity();
-                                MeasuredCellEntity missedGoalCell = new MeasuredCellEntity();
-                                buildingValCell.metricName = (string)m["Month"];
-                                buildingValCell.metricValue = String.Empty;
-                                buildingValCell.displayClass = "cell-NoValue";
-                                buildingValCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
-                                buildingValCell.isViewable = false;
-                                row.entityMetricCells.Add(buildingValCell);
 
-                                hdrCell.metricName = (string)m["Month"];
-                                hdrCell.metricValue = String.Empty;
-                                hdrCell.displayClass = "";
-                                hdrCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
-                                hdrCell.isViewable = false;
-                                goalCell.metricMonth = (string)m["Month"];
-                                goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
-                                missedGoalCell.metricName = (string)m["Month"];
-                                missedGoalCell.score = 0;
-                                missedGoalCell.metricValue = "0";
-                                if (header.entityMetricCells.Count < months.Count)
-                                { header.entityMetricCells.Add(hdrCell); }
-                                if (goal.entityMetricCells.Count < months.Count)
-                                { goal.entityMetricCells.Add(goalCell); }
-                                if (mSummary.missedGoals.entityMetricCells.Count < months.Count)
+                            MeasuredRowEntity row = new MeasuredRowEntity();
+                            row.rowName = (string)b["dsc_mtrc_lc_bldg_name"];
+                            row.rowMeasuredId = (string)b["dsc_mtrc_lc_bldg_id"];
+                            row.rowURL = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, row.rowMeasuredId);
+                            //row.displayClass = "cell-NoValue";
+                            if (months.HasValues)
+                            {
+                                foreach (var m in months)
                                 {
-                                    mSummary.missedGoals.entityMetricCells.Add(missedGoalCell);
+                                    MeasuredCellEntity hdrCell = new MeasuredCellEntity();
+                                    MeasuredCellEntity goalCell = new MeasuredCellEntity();
+                                    MeasuredCellEntity buildingValCell = new MeasuredCellEntity();
+                                    MeasuredCellEntity missedGoalCell = new MeasuredCellEntity();
+                                    buildingValCell.metricName = (string)m["Month"];
+                                    buildingValCell.metricValue = String.Empty;
+                                    buildingValCell.displayClass = "cell-NoValue";
+                                    buildingValCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
+                                    buildingValCell.isViewable = false;
+                                    row.entityMetricCells.Add(buildingValCell);
+
+                                    hdrCell.metricName = (string)m["Month"];
+                                    hdrCell.metricValue = String.Empty;
+                                    hdrCell.displayClass = "";
+                                    hdrCell.metricDoubleValue = (sortDir == "ASC") ? 99999 : -99999;
+                                    hdrCell.isViewable = false;
+                                    goalCell.metricMonth = (string)m["Month"];
+                                    goalCell.metricValue = mGoalText;              //getMonthGoal((string)m["Month"]);
+                                    missedGoalCell.metricName = (string)m["Month"];
+                                    missedGoalCell.score = 0;
+                                    missedGoalCell.metricValue = "0";
+                                    if (header.entityMetricCells.Count < months.Count)
+                                    { header.entityMetricCells.Add(hdrCell); }
+                                    if (goal.entityMetricCells.Count < months.Count)
+                                    { goal.entityMetricCells.Add(goalCell); }
+                                    if (mSummary.missedGoals.entityMetricCells.Count < months.Count)
+                                    {
+                                        mSummary.missedGoals.entityMetricCells.Add(missedGoalCell);
+                                    }
                                 }
                             }
-                        }
-                        if (apiBuildingsMetrics.HasValues)
-                        {
-                            foreach (var apiCellValue in apiBuildingsMetrics)
+
+                            if (apiBuildingsMetrics.HasValues)
                             {
-                                if (row.rowMeasuredId == (string)apiCellValue["dsc_mtrc_lc_bldg_id"])
+                                foreach (var apiCellValue in apiBuildingsMetrics)
                                 {
-                                    //int tmpIndex = 0;      //To keep track of the Cell Index being processed by the 'foreach' loop
-                                    foreach (var tmp in row.entityMetricCells)
+                                    if (row.rowMeasuredId == (string)apiCellValue["dsc_mtrc_lc_bldg_id"])
                                     {
-                                        if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
+                                        //int tmpIndex = 0;      //To keep track of the Cell Index being processed by the 'foreach' loop
+                                        foreach (var tmp in row.entityMetricCells)
                                         {
-                                            tmp.displayClass = "cell-NoValue";
-                                            tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
-                                            if (tmp.metricValue == "N/A")
+                                            if (tmp.metricName.ToUpper() == ((string)apiCellValue["MonthName"]).ToUpper())
                                             {
-                                                if (sortDir == "ASC") { tmp.metricDoubleValue = 99998; }
+                                                tmp.displayClass = "cell-NoValue";
+                                                tmp.metricValue = (string)apiCellValue["mtrc_period_val_value"];
+                                                if (tmp.metricValue == "N/A")
+                                                {
+                                                    if (sortDir == "ASC") { tmp.metricDoubleValue = 99998; }
 
-                                                if (sortDir == "DESC") { tmp.metricDoubleValue = -99998; }
+                                                    if (sortDir == "DESC") { tmp.metricDoubleValue = -99998; }
 
-                                            }
-                                            else if (String.IsNullOrEmpty(tmp.metricValue))
-                                            {
-                                                tmp.metricDoubleValue = sortDir == "ASC" ? 99999 : -99999;
-                                            }
-                                            else
-                                            {
-                                                tmp.metricDoubleValue = Convert.ToDouble(tmp.metricValue);
-                                            }
-                                            tmp.isViewable = true;
-                                            tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
-                                            if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A" && !String.IsNullOrEmpty(tmp.metricValue))
-                                            {
-                                                tmp.metricValue = tmp.metricValue + "%";
-                                            }
-                                            //tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
-                                            tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
-                                            if (tmp.isGoalMet == "N")
-                                            {
-                                                mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
-                                                mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = mSummary.missedGoals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
+                                                }
+                                                else if (String.IsNullOrEmpty(tmp.metricValue))
+                                                {
+                                                    tmp.metricDoubleValue = sortDir == "ASC" ? 99999 : -99999;
+                                                }
+                                                else
+                                                {
+                                                    tmp.metricDoubleValue = Convert.ToDouble(tmp.metricValue);
+                                                }
+                                                tmp.isViewable = true;
+                                                tmp.isGoalMet = (string)apiCellValue["mpg_mtrc_passyn"];
+                                                if ((string)apiCellValue["data_type_token"] == "pct" && tmp.metricValue != "N/A" && !String.IsNullOrEmpty(tmp.metricValue))
+                                                {
+                                                    tmp.metricValue = tmp.metricValue + "%";
+                                                }
+                                                //tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                                tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
+                                                if (tmp.isGoalMet == "N")
+                                                {
+                                                    mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).score++;
+                                                    mSummary.missedGoals.entityMetricCells.Single(x => x.metricName.ToUpper() == tmp.metricName.ToUpper()).metricValue = mSummary.missedGoals.entityMetricCells.Single(x => x.metricName == tmp.metricName).score.ToString();
 
-                                                //mSummary.missedGoals.entityMetricCells[tmpIndex].score++;
-                                                row.redTotals++;
+                                                    //mSummary.missedGoals.entityMetricCells[tmpIndex].score++;
+                                                    row.redTotals++;
+                                                }
                                             }
                                         }
                                     }
+                                    //Set the correponding month column Goal as viewable, since there is data for that column
+                                    var goalRow = goal.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]);
+                                    header.entityMetricCells.Single(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
+                                    goalRow.isViewable = true;
                                 }
-                                //Set the correponding month column Goal as viewable, since there is data for that column
-                                var goalRow = goal.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]);
-                                header.entityMetricCells.Single(x => x.metricName == (string)apiCellValue["MonthName"]).isViewable = true;
-                                goalRow.isViewable = true;
                             }
+                            rowMetrics.Add(row);                                              
                         }
-                        rowMetrics.Add(row);
-                    }
+                        //Finished Processing one instance of the "apiBuildings" array
+                    } //--- Foreach() ENDS
+
                     mSummary.rowGoal = goal;
                     //Before Assigning the Header Information to the model, switch the month display names to Short Names
                     int columnIndex = 0;
@@ -966,7 +1023,7 @@ namespace REDZONE.AppCode
                     mSummary.rowHeadings = header;
                     mSummary.viewableColumns = mSummary.rowHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     mSummary.metricRows = rowMetrics;
-                }
+                }  // End of statement:  if(apiBuildings.HasValues)
             }
             catch (Exception e)
             { string error = e.Message; }
@@ -1256,9 +1313,46 @@ namespace REDZONE.AppCode
 
         //This is a HELPER method that should determine what the next and prev url for building summary.
         //It returns an array of 2 records. [0]=prev url, [1]=next url
-        public string[] getPrevNextBuildingUrl(string year, string buildingID)
+        public string[] getPrevNextBuildingUrl(string year, string buildingID, List<string> usrBldgList)
         {
             string[] prevNext = new string[] { "disabled", "disabled" };
+            //If usrBldgList is empty, then no filters will need to be applied
+            try {
+                if (usrBldgList.Count > 0)
+                {   //Apply Building filters
+                    if (usrBldgList.Count == 1) { return prevNext; }  //No previous nor next building exist
+                    else
+                    {  //There are at least Two building associated to the Current User
+                        //Search for the current Building Id in the usrBldList and set the previous and next Building URLs
+                        int curIndex = usrBldgList.FindIndex(x => x == buildingID);  //get the Index in the list of the current Building 
+
+                        if (curIndex == (usrBldgList.Count - 1)) {   //This is the last element
+                            prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex - 1]);
+                            prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[0]);
+                            return prevNext;
+                        }
+                        
+                        switch (curIndex) {
+                            case -1:    //Element not found
+                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[0]);
+                                prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[0]);
+                                break;
+                            case 0:   //This is the first element of the list
+                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[usrBldgList.Count - 1]);
+                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
+                                break;
+                            default:    //Not first nor last element
+                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex - 1]);
+                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
+                                break;                        
+                        }
+                        return prevNext;
+                    }
+                }
+            }
+            catch { }
+
+            
             try
             {
                 JObject parsed_result = JObject.Parse(api.getAllBuildings("Red Zone", "Month", year));
@@ -1277,7 +1371,6 @@ namespace REDZONE.AppCode
                     {
                         next = current.Next;
                         prev = apiBuildings.Last;
-
                     }
                     else
                     {

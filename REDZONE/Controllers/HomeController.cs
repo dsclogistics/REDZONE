@@ -22,11 +22,27 @@ namespace REDZONE.Controllers
         {
             //ExecutiveSummaryViewModel dashBoard = new ExecutiveSummaryViewModel();
             DateTime defaultDate = DateTime.Today.AddMonths(-1);
+            bool filterByBuilding = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? true : false;
             string curMonth = REDZONE.AppCode.Util.intToMonth(defaultDate.Month);
             string curYear = defaultDate.Year.ToString();
             month = String.IsNullOrEmpty(month) ? curMonth : month;
             year = String.IsNullOrEmpty(year) ? curYear : year;
-            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null);
+            ExecutiveSummaryViewModel dashBoard = parcer.getExcecutiveSummaryView(null, month, year,null, filterByBuilding);
+            
+            //dscUser currentUser = new dscUser(User.Identity.Name);
+            //string[] userBuildingIdList ;
+            //if(currentUser.buildings.Count > 0 && filterByBuilding){
+            //    //The user has buildings assigned and the "filter by building" flag is turned on
+            //    userBuildingIdList = currentUser.buildings.Select(x => x.id).ToArray();
+
+            //    //Do an inner join of the Building list with the int list of building Ids assigned to the user to get the new Building list
+            //    dashBoard.buildings = dashBoard.buildings.Join(userBuildingIdList, x => x.buildingId, id => id, (x, id) => x).ToList();
+            //    //dashBoard.buildings = dashBoard.buildings.Where(x => userBuildingIdList.Contains(x.buildingId)).ToList();
+            //}
+            
+            
+            
+            
 
             switch (sortOrder)
             {
@@ -74,15 +90,23 @@ namespace REDZONE.Controllers
 
         public ActionResult BuildingSummary(string year, string buildingID)
         {
+            bool filterByBuilding = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? true : false;
+
             const string DFLT_BUILDING = "1";
             dscUser currentUser = new dscUser(User.Identity.Name);
+            if (filterByBuilding && currentUser.buildings.Count == 0) { filterByBuilding = false; } //User does not have any buildings. Cannot apply filter
+
+            if (filterByBuilding && currentUser.buildings.FirstOrDefault(x => x.id == buildingID) == null) { 
+               //The requested Building is not in the user list of Building and we need to filter by the user buildings. Default to the first Building in the user list
+                buildingID = currentUser.buildings[0].id;   //Exists at least one building. Default to the first one
+            }
 
             if (String.IsNullOrEmpty(year)) { year = DateTime.Today.Year.ToString(); }  //Default to the current year
             if (String.IsNullOrEmpty(buildingID)) {    //Retrieve The current User list of building and select it's first                
                 if (currentUser.buildings.Count > 0) { buildingID = currentUser.buildings[0].id; }
                 else { buildingID = DFLT_BUILDING; }                
             }
-            BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name);
+            BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name, filterByBuilding);
             
 
             //Retrieve the Current Logged on User Reviewer's metrics (If any)
@@ -92,9 +116,7 @@ namespace REDZONE.Controllers
 
         public ActionResult MetricSummary(string year, string metricID, string sortMonth, string sortDir)
         {
-            dscUser currentUser = new dscUser(User.Identity.Name);
-
-            //currentUser.buildings;
+            bool filterByBuilding = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? true : false;
 
             const string DFLT_MPID = "3";
 
@@ -113,21 +135,7 @@ namespace REDZONE.Controllers
             if (String.IsNullOrEmpty(sortMonth)) { sortMonth = "Building"; }
             //------- Done setting up default values ------
 
-            MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir);
-            dashBoard.canFilterRows = (currentUser.buildings.Count > 0) ? true : false;
-            if (dashBoard.canFilterRows) {
-                //If the User Role allows Building Rows to be filtered, mark those that belong to the User
-                foreach (MeasuredRowEntity buildingRow in dashBoard.metricRows)
-                {
-                    if (currentUser.buildings.Find(x => x.id == buildingRow.rowMeasuredId) != null)
-                    { //This building is in the list of building that are assing to the Current user
-                        buildingRow.rowOwner = "MyBuilding";
-                    }
-                    else {
-                        buildingRow.rowOwner = "NotMyBuilding";
-                    }
-                }
-            }
+            MetricSummaryViewModel dashBoard = parcer.getMetricSummaryView(year, metricID, sortDir, filterByBuilding);
 
             if (!String.IsNullOrEmpty(sortMonth)) {
                 if (sortMonth.Equals("Building"))
@@ -146,9 +154,6 @@ namespace REDZONE.Controllers
             }
             return View(dashBoard);
         }
-
-
     }
-
 
 }

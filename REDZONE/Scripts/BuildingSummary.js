@@ -1,8 +1,9 @@
 ﻿
 $(document).ready(function () {
     $(".menuItem").removeClass("menuSelected");
+    //------------------------------------------------------------------------------------
     $("#mDashboard").addClass("menuSelected");
-
+    //------------------------------------------------------------------------------------
     //This function is exclusive for the Building Summary Page
     function reviewerHasMetric(metricId) {        
         var reviewerMetrics = $('#reviewerMetrics').val().toUpperCase();
@@ -390,7 +391,9 @@ function menuItemListener(link) {
             break;
     }
 }
-//======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY=================
+//\======================== END OF THE CUSTOM CONTEXT MENU FUNCTIONALITY================================/
+
+
 function cacheMetricValueVariables($cellClicked) {
     //alert("Inside caching method for Cell Id: " + $cellClicked.prop("id"));
     var mpId = $cellClicked.find("#mpId").first().val();
@@ -448,19 +451,19 @@ function resetMetricValueVariables() {
 //    //$target.attr("aria-expanded") ? $target.collapse('toggle') : $target.collapse();
 //    $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
 //})
-
+//------------------------------------------------------------------------------------
 $('#APhistory').on('click', '.btnVieAP', function () {
     $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
 });
-
+//------------------------------------------------------------------------------------
 $('#btnActionsRequired').click(function () {
     showPopupForm("SCORE REQUIRED ACTIONS", scoreActionContent, "N");
 });
-
+//------------------------------------------------------------------------------------
 $(".collapse").on('shown.bs.collapse', function () {
     $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly Expanded Section
 });
-
+//------------------------------------------------------------------------------------
 $('.lnkGotoAP').click(function () {
     var currentAction = $.trim($(this).html());
     var bapm_id = $(this).find('#bapm_id').val();
@@ -485,6 +488,31 @@ $('.lnkGotoAP').click(function () {
     }
 
 });
+//------------------------------------------------------------------------------------
+$('#chkMyBuildingsOnly').change(function () {
+    var filter = ($(this).prop("checked") ? "Y" : "N");
+
+    $.ajax({
+        url: '/Account/setUserBuildingFilter',
+        method: "POST",
+        cache: false,
+        data: { bFilter: filter },
+        //contentType: "application/json; charset=utf-8",
+        //dataType: "json",
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Failed to Set the User Building Filter.\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+        }
+    }).done(function (d) {
+        if (d == "Success") {
+            //alert("Filter was successfully set to '" + filter + "' on the Server Side");
+            location.reload();
+        } else {
+            alert("Failed to set the Server Filter Flag:" + d);
+        }
+    });
+});
+//------------------------------------------------------------------------------------
+
 
 //$(".collapse").on('hidden.bs.collapse', function () {
 //    alert('The collapsible content is now hidden.');
