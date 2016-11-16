@@ -23,9 +23,9 @@
     }
     .scroll-Body {
         padding: 0px;
-        height: 560px;
+        height: 500px;
         overflow-y: auto;
-        overflow-x: hidden;
+        /*overflow-x: hidden;*/
     }
     .IEScroll{
         width:17px;
@@ -64,7 +64,7 @@ else
             <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
                 <div class="row">
                     <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
-                    @if (Model.canFilterRows)
+                        @if (Model.canFilterRows)
                     {
                         <div class="checkbox" style="">
                             <label class="" style="text-align:left; padding:0; font-size: .8em">
@@ -83,7 +83,7 @@ else
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
                                     <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px; height: 35px" onclick="location.href='@Model.urlPrevMetric'" title="Navigate to Previous Building">
-                                        <span class="glyphicon glyphicon-chevron-left" ></span>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
                                     </button>
                                 </span>
                                 <input type="text" class="form-control" value="@Model.metricName @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px; height:35px">
@@ -97,189 +97,224 @@ else
                     </div>
                     <div class="col-sm-2" style="padding-top:10px">
                         @*@if (Model.canFilterRows)
-                        {
-                            <input type="hidden" id="isFiltered" value="N" />
-                            <button id="btnMyBuildings" style="box-shadow: inset 0px 1px 5px; border-radius:5px; float:right">
-                                <img src="~/images/mybuildings.png" style="width:80px;height:35px;" /><br />
-                                <span style="font-size:11px;">My Buildings Only</span>
-                            </button>
-                        }*@
+                            {
+                                <input type="hidden" id="isFiltered" value="N" />
+                                <button id="btnMyBuildings" style="box-shadow: inset 0px 1px 5px; border-radius:5px; float:right">
+                                    <img src="~/images/mybuildings.png" style="width:80px;height:35px;" /><br />
+                                    <span style="font-size:11px;">My Buildings Only</span>
+                                </button>
+                            }*@
                     </div>
                 </div>
             </div>
             <div class="panel-body" style="margin:2px; padding:5px; background-color: #fefefe">
 
 
-                <!-- DIV to Hold the Main Body Metric Building Table -->
-                <div class="panel panel-default scroll-Table @*hidden-xs*@">
-                    <!-- INNER PANEL WITH METRIC BUILDING INFORMATION -->
-                    <div class="panel-heading scroll-Head ">
-                        <table style="margin:0; width:100%;">
-                            <!-- ******************* TABLE HEADER ROW ********************** -->
-                            <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
-                                <td>
-                                    <table style="width:100%">
-                                        <tr>
-                                            <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold;">
-                                                @*class="col-sm-2 buildingCol headerCol"*@
-                                                <input type="hidden" id="sortMonth" value="Building" />
-                                                <input type="hidden" id="sortOrder" value=@Model.rowHeadings.displayClass />
-                                                <span style="font-weight:bold;"> @Model.rowHeadings.rowName</span>
-                                                <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
-                                                    <span class="glyphicon @sortIcon" aria-hidden="true"></span>
-                                                </button>
-                                            </td>
-                                            @*@foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
-                                                {
-                                                    dscBldngHdr.isViewable = true;   //Set (Hardcode) all the available Month Headers as Viewable
-                                                }*@
-                                            @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
+
+
+
+
+
+
+
+
+
+
+                <!-- *********************** DIV to Hold the Main Body Metric Building DATA TABLE ************************ -->
+                <div class="panel panel-default scroll-Table" style="margin:0; padding:0">
+                
+                    <!-- (((((((((((  HEADERS ROW "TITLES" and "GOASL" ROWS ))))))))))))))) -->
+                    <div class="panel-heading scroll-Head " style="margin:0; padding:0">
+                        <div class="row " style="margin:0; padding:0">
+                            <table style="margin:0; width:100%;">
+                                <!-- ******************* TABLE HEADER ROW ********************** -->
+                                <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
+                                    <td>
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold;">
+                                                    @*class="col-sm-2 buildingCol headerCol"*@
+                                                    <input type="hidden" id="sortMonth" value="Building" />
+                                                    <input type="hidden" id="sortOrder" value=@Model.rowHeadings.displayClass />
+                                                    <span style="font-weight:bold;"> @Model.rowHeadings.rowName</span>
+                                                    <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                                        <span class="glyphicon @sortIcon" aria-hidden="true"></span>
+                                                    </button>
+                                                </td>
+                                                @*@foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
+                                    {
+                                        dscBldngHdr.isViewable = true;   //Set (Hardcode) all the available Month Headers as Viewable
+                                    }*@
+                                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                             {
                                                 sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
                                                 btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
                                                 if (dscBldngHdr.isViewable || true)
                                                 {  //Always Display Column
-                                                    <td class="buildingCol " @*monthCol*@ style="min-width:70px; width:@strColWidth; ">
-                                                        <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
-                                                        <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
-                                                        <span style="font-weight:bold">@dscBldngHdr.metricMonth</span>
-                                                        @if (dscBldngHdr.score > 0)
+                                                <td class="buildingCol " @*monthCol*@ style="min-width:70px; width:@strColWidth; ">
+                                                    <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
+                                                    <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
+                                                    <span style="font-weight:bold">@dscBldngHdr.metricMonth</span>
+                                                    @if (dscBldngHdr.score > 0)
                                                         {
-                                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
-                                                                <span class="glyphicon @sortIcon" aria-hidden="true"></span>
-                                                            </button>
+                                                        <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                                            <span class="glyphicon @sortIcon" aria-hidden="true"></span>
+                                                        </button>
                                                         }
-                                                    </td>
+                                                </td>
                                                 }
                                                 colCounter++;
                                             }
-                                            <td class="buildingCol " style="vertical-align:middle; width:11%;">
-                                                @*class="buildingCol scoreCol"*@
-                                                Goals Missed
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td class="scroll-Offset"></td>
-                            </tr> <!-- ---------- END OF HEADER TITLES ROW -----------------    -->
+                                                <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                                    @*class="buildingCol scoreCol"*@
+                                                    Goals Missed
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="scroll-Offset"></td>
+                                </tr> <!-- ---------- END OF HEADER TITLES ROW -----------------    -->
 
-                            <tr class="" style="border-bottom: 1px solid black; background-color: #bbedff; width:100%">
-                                <td>
-                                    <table style="width:100%">
-                                        <tr>
-                                            <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold; ">
-                                                @*class="col-sm-2 buildingCol headerCol"*@
-                                                @Model.rowGoal.rowName
-                                            </td>
-                                            @{colCounter = 0;}
-                                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
+                                <tr class="" style="border-bottom: 1px solid black; background-color: #bbedff; width:100%">
+                                    <td>
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold; ">
+                                                    @*class="col-sm-2 buildingCol headerCol"*@
+                                                    @Model.rowGoal.rowName
+                                                </td>
+                                                @{colCounter = 0;}
+                                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.rowGoal.entityMetricCells)
                                             {
                                                 bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
                                                 cellIsViewable = true;  //Always Display Column
                                                 //if (bldngMV.isViewable)
                                                 if (cellIsViewable)
                                                 {
-                                                    <td class="buildingCol " style="color:blue; font-weight:bold; vertical-align:middle; min-width:70px; width: @strColWidth;">
-                                                        @*class=monthCol*@
-                                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                            <td class="buildingCol " style="color:blue; font-weight:bold; vertical-align:middle; min-width:70px; width: @strColWidth;">
+                                                @*class=monthCol*@
+                                                @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                                         { <br /> }
                                                         else
                                                         { @HttpUtility.HtmlDecode(bldngMV.metricValue) }
-                                                    </td>
+                                            </td>
                                                 }
                                                 colCounter++;
                                             }
 
-                                            <td class="buildingCol " style="vertical-align:middle; width:11%;">
-                                                @*class="buildingCol scoreCol"*@
-                                                <br />
-                                            </td>
-                                        </tr>  <!-- ---------------- Enf of ROW for Months Titles -----------------------  -->
-                                    </table>
-                                </td>
-                                <td class="scroll-Offset"></td>
-                            </tr> <!-- ------------------- METRIC GOALS ROW END ----------------- -->
-                        </table>
+                                                <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                                    @*class="buildingCol scoreCol"*@
+                                                    <br />
+                                                </td>
+                                            </tr>  <!-- ---------------- Enf of ROW for Months Titles -----------------------  -->
+                                        </table>
+                                    </td>
+                                    <td class="scroll-Offset"></td>
+                                </tr> <!-- ------------------- METRIC GOALS ROW END ----------------- -->
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="panel-body scroll-Body">
+                    <!-- (((((((((((  SCROLLABLE BUILDING ROWS DETAIL PANEL ))))))))))))))) -->
+                    <div class="panel-body scroll-Body" style="margin:0; padding:0">
                         <!-- BUILDING DATA ARRAY ROWS -->
-                        <div class="row " style="margin:0">
-                            <table style="width:100%">
+                        <div class="row " style="margin:0; padding:0">
+                            <table style="width:100%; margin:0">
                                 @foreach (REDZONE.Models.MeasuredRowEntity buildingRow in Model.metricRows)
                                 {
                                     colCounter = 0;
                                     bool allNAs = true;
-                                    <tr class="rHover" style="border-bottom: 1px solid #c6c4c4; width:100%">
-                                        <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%;" title="@buildingRow.rowOwner">
-                                            <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
-                                        </td>
+                                <tr class="rHover" style="border-bottom: 1px solid #c6c4c4; width:100%">
+                                    <td style="vertical-align:middle; min-width:220px; max-width:220px; width:220px;" title="@buildingRow.rowOwner">
+                                        <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
+                                    </td>
 
-                                        @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
+                                    @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
                                         {
                                             bool cellIsViewable = Model.rowHeadings.entityMetricCells[colCounter].isViewable;
                                             if (cellIsViewable || true)
                                             {   //Always Display Column
-                                                <td class="buildingCol valueCell @buildingCell.displayClass" style="vertical-align:middle; min-width:70px; width:@strColWidth;">
-                                                    @if (String.IsNullOrEmpty(@buildingCell.metricValue))
+                                        <td class="buildingCol valueCell @buildingCell.displayClass" style="vertical-align:middle; min-width:70px; width:@strColWidth;">
+                                            @if (String.IsNullOrEmpty(@buildingCell.metricValue))
                                                     { <br /> }
                                                     else
                                                     {
                                                         if (!buildingCell.metricValue.Equals("N/A")) { allNAs = false; }
-                                                        @buildingCell.metricValue
+                                                    @buildingCell.metricValue
                                                     }
-                                                </td>
+                                        </td>
                                             }
                                             colCounter++;
                                         }
-                                        <td class="buildingCol scoreCol" style=" vertical-align:middle; width:11%;">
-                                            @if (allNAs)
+                                    <td class="buildingCol scoreCol" style=" vertical-align:middle;">
+                                        @if (allNAs)
                                             { <text>---</text>}
                                             else
                                             { @buildingRow.redTotals }
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 }
                             </table>
-                        </div>  <!-- ---------- END OF BUILDING ROW ------------------- -->
+                        </div><!-- ---------- END OF BUILDINGS SCROLLABLE PANEL ------------------- -->
                     </div>
-                    <div class="panel-footer totalsRow" style="">
-                        <table style="margin:0; width:100%;">
-                            <tr>
-                                <td>
-                                    <table style="width:100%">
-                                        <tr class="totalsRow">
-                                            <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; min-width:183px; max-width:183px; width:17%;">
-                                                <span>@Model.missedGoals.rowName</span>
-                                            </td>
+                
+                    <!-- (((((((((((  FOOTER/TOTALS ROW ))))))))))))))) -->
+                    <div class="panel-footer totalsRow" style="margin:0; padding:0">
+                        <div class="row " style="margin:0; padding:0">
+                            <table style="margin:0; width:100%;">
+                                <tr>
+                                    <td>
+                                        <table style="width:100%">
+                                            <tr class="totalsRow">
+                                                <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; min-width:183px; max-width:183px; width:17%;">
+                                                    <span>@Model.missedGoals.rowName</span>
+                                                </td>
 
-                                            @{colCounter = 0;}
-                                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in @Model.missedGoals.entityMetricCells)
-                                            {
-                                                if (Model.rowHeadings.entityMetricCells[colCounter].isViewable || true)
+                                                @{colCounter = 0;}
+                                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in @Model.missedGoals.entityMetricCells)
                                                 {
-                                                    //Always
-                                                    <td class="buildingCol monthCol" style="vertical-align:middle; width:@strColWidth; min-width:60px">
-                                                        @*width:@Model.metricColWidth;*@
-                                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue) || Model.rowHeadings.entityMetricCells[colCounter].score == 0)
-                                                        { <br /> }
-                                                        else
-                                                        { @bldngMV.metricValue }
-                                                    </td>
+                                                    if (Model.rowHeadings.entityMetricCells[colCounter].isViewable || true)
+                                                    {
+                                                        //Always
+                                                        <td class="buildingCol monthCol" style="vertical-align:middle; width:@strColWidth; min-width:60px">
+                                                            @*width:@Model.metricColWidth;*@
+                                                            @if (String.IsNullOrEmpty(@bldngMV.metricValue) || Model.rowHeadings.entityMetricCells[colCounter].score == 0)
+                                                            { <br /> }
+                                                            else
+                                                            { @bldngMV.metricValue }
+                                                        </td>
+                                                    }
+                                                    colCounter++;
                                                 }
-                                                colCounter++;
-                                            }
-                                            <td class="buildingCol " style="vertical-align:middle; width:11%;">
-                                                <br />
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td class="scroll-Offset"></td>
-                            </tr> <!-- ------------------- METRIC GOALS NOT MET TOTAL ROW END ----------------- -->
-                        </table>
+                                                <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                                    <br />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="scroll-Offset"></td>
+                                </tr> <!-- ------------------- METRIC GOALS NOT MET TOTAL ROW END ----------------- -->
+                            </table>
+                        </div>
+
                     </div>  <!-- ----------- END OF FOOTER ROW (ROW TOTALS) -----------------  -->
                 </div> <!-- ------- END of Metric Data Table -------- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 @*<div class="row" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; ">
                         <!-- Table -->
                         <!-- ROWS -->

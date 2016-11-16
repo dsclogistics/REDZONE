@@ -162,6 +162,8 @@ namespace REDZONE.Controllers
 
         public ActionResult TeamActivities()
         {
+            // FD Nov16,2016
+            //CODE TO MODIFY!!!!!!! - THIS WAS COPIED FROM "INDEX" action, so we can replace with new code!!!!!!!!!
             RZTasksViewModel tasksViewModel = new RZTasksViewModel();
             RZTaskDetailList tasksDetailList = new RZTaskDetailList();
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
