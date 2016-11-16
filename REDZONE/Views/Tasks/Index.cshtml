@@ -322,78 +322,93 @@
 <div class="row" id="divSubmitterTasks" style="margin-left:5px; margin-right:5px">
     @if (Model.apSubmitTaskList.Count() > 0)
     {
-        <div class="panel-group" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
-            <div class="panel panel-info">
+        <div class="panel panel-info" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
 
-                <div class="panel-heading" style="text-align:left">
-                    <a class="glyph-link" data-toggle="collapse" href="#collapse-ap-tasks"><span class="glyphicon @apTaskGlyph"></span></a>
+            <div class="panel-heading" style="text-align:left">
+                <a class="glyph-link" data-toggle="collapse" href="#collapse-ap-tasks" style="text-decoration:none">
+                    <span class="glyphicon @apTaskGlyph"></span>
                     <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold ">
                         Action Plan Tasks
-                        <span>(@Model.apSubmitTaskList.SelectMany(x => x.periodList).SelectMany(x => x.mtrcList).Count())</span>
+                        <span>(@Model.apSubmitTaskList.SelectMany(x => x.periodList).SelectMany(x => x.mtrcList).Count() Tasks)</span>
                     </h4>
-                </div>
+                </a>
+            </div>
 
-                <div id="collapse-ap-tasks" class="panel-collapse collapse @apTaskDisplay">
-                    <div class="panel-body">
+            <div id="collapse-ap-tasks" class="panel-collapse collapse @apTaskDisplay">
+                <div class="panel-body">
 
-                        @foreach (var bldg in Model.apSubmitTaskList)
-                        {
-                            <div class="panel-group">
-                                <div class="panel panel-default">
+                    @***********@
+                    @*Buildings*@
+                    @***********@
+                    @foreach (var bldg in Model.apSubmitTaskList)
+                    {
+                        <div class="panel panel-default">
                             
-                                    <div class="panel-heading" style="text-align:left">
-                                        <a class="glyph-link" data-toggle="collapse" href="#collapse-@bldg.bldgName.Replace(" ", "")"><span class="glyphicon @apTaskGlyph" style="font-size:10px"></span></a>
-                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold">
-                                            @{string url = "/Home/BuildingSummary/?year=" + bldg.periodList.First().mtrcList.First().year + "&bldg_id=" + bldg.periodList.First().mtrcList.First().bldg_id;}
-                                            <a href="@url">
+                            <div class="panel-heading" style="text-align:left; background-color:lightgrey">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a class="glyph-link" data-toggle="collapse" href="#collapse-@bldg.bldgName.Replace(" ", "")" style="text-decoration:none">
+                                            <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
+                                            <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold">
                                                 @bldg.bldgName
-                                                <span>(@bldg.periodList.SelectMany(x => x.mtrcList).Count())</span>
-                                            </a>
-                                        </h5>
+                                                <span>(@bldg.periodList.SelectMany(x => x.mtrcList).Count() Tasks)</span>
+                                            </h5>
+                                        </a>
                                     </div>
+                                    <div class="col-md-6" style="text-align:right">
+                                        @{string url = "/Home/BuildingSummary/?year=" + bldg.periodList.First().mtrcList.First().year + "&bldg_id=" + bldg.periodList.First().mtrcList.First().bldg_id;}
+                                        <a href="@url">To Building Summary</a>
+                                    </div>
+                                </div>
+                            </div>
 
-                                    <div id="collapse-@bldg.bldgName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                        <div class="panel-body">
+                            <div id="collapse-@bldg.bldgName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
+                                <div class="panel-body">
 
-                                            <div style="margin-left:30px">
-                                                @foreach (var period in bldg.periodList)
-                                                {
+                                    @*********@
+                                    @*Periods*@
+                                    @*********@
+                                    <div class="panel-group" style="margin-left:30px">
+                                        @foreach (var period in bldg.periodList)
+                                        {
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="text-align:left">
+                                                    <a class="glyph-link" data-toggle="collapse" href="#collapse-@bldg.bldgName.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
+                                                        <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
+                                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
+                                                            @period.periodName
+                                                        </h5>
+                                                    </a>
+                                                </div>
 
+                                                <div id="collapse-@bldg.bldgName.Replace(" ", "")-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
+                                                    <div class="panel-body">
 
-
-                                                    <div class="btn-toolbar" style="margin-top:5px">
-                                                        <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:grey; border-right:transparent">
-                                                            <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                                                <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:grey; border-top-right-radius:4px; border-bottom-right-radius:4px">
-                                                            <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
-                                                                @period.periodName
-                                                                <span>(@period.mtrcList.Count())</span>
-                                                            </h5>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="collapse @apTaskDisplay" style="margin-left:40px">
-                                                        <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                                            <tr style="background-color:lightgray">
-                                                                <th style="text-align:center; width:25%">
-                                                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().mtrc_prod_display_text)
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().status)
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    Action
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    Due By
-                                                                </th>
-                                                            </tr>
+                                                        @*********@
+                                                        @*Metrics*@
+                                                        @*********@
+                                                        <table class="table table-condensed table-hover table-responsive" id="tblAPTasks">
+                                                            <thead>
+                                                                <tr style="background-color:transparent">
+                                                                    <th style="text-align:center; width:25%">
+                                                                        @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().mtrc_prod_display_text)
+                                                                    </th>
+                                                                    <th style="text-align:center; width:25%">
+                                                                        @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().status)
+                                                                    </th>
+                                                                    <th style="text-align:center; width:25%">
+                                                                        Action
+                                                                    </th>
+                                                                    <th style="text-align:center; width:25%">
+                                                                        Due By
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
 
                                                             @foreach (var mtrc in period.mtrcList)
                                                             {
+                                                                DateTime dueDate = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 1).AddMonths(2).AddDays(-1).Date;
+                                                                string overdueClass = (dueDate < DateTime.Today) ? "overdue" : "";
                                                                 string backgroundColor = (mtrc.status == "Rejected") ? "#ffbb8b" : "white";
                                                                 <tr style="background-color:@backgroundColor">
                                                                     <td style="text-align:center; width:25%">
@@ -407,26 +422,29 @@
                                                                         <a href="@apUrl" style="color:red">@mtrc.action</a>
                                                                     </td>
                                                                     <td style="text-align:center; width:25%">
-                                                                        TBD
+                                                                        @dueDate.ToString("MM/dd/yyyy")
                                                                     </td>
                                                                 </tr>
                                                             }
                                                         </table>
-                                                    </div>
-                                                }
-                                            </div>
-                                    
-                                        </div>
-                                    </div>
 
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        }
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        }
 
-                    </div>
+                        </div>
+                    }
+
                 </div>
-
             </div>
+
         </div>
     }
 </div>
@@ -437,108 +455,120 @@
 <div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
     @if (Model.apReviewTaskList.Count() > 0)
     {
-        <div class="panel-group" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
-            <div class="panel panel-info">
+        <div class="panel panel-info" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
 
-                <div class="panel-heading" style="text-align:left">
-                    <a class="glyph-link" data-toggle="collapse" href="#collapse-ap-review-tasks"><span class="glyphicon @apTaskGlyph"></span></a>
+            <div class="panel-heading" style="text-align:left">
+                <a class="glyph-link" data-toggle="collapse" href="#collapse-ap-review-tasks" style="text-decoration:none">
+                    <span class="glyphicon @apTaskGlyph"></span>
                     <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold ">
                         Action Plan Review Tasks
-                        <span>(@Model.apReviewTaskList.SelectMany(x => x.periodList).SelectMany(x => x.bldgList).Count())</span>
+                        <span>(@Model.apReviewTaskList.SelectMany(x => x.periodList).SelectMany(x => x.bldgList).Count() Tasks)</span>
                     </h4>
-                </div>
+                </a>
+            </div>
 
-                <div id="collapse-ap-review-tasks" class="panel-collapse collapse @apTaskDisplay">
-                    <div class="panel-body">
+            <div id="collapse-ap-review-tasks" class="panel-collapse collapse @apTaskDisplay">
+                <div class="panel-body">
 
-                        @foreach (var mtrc in Model.apReviewTaskList)
-                        {
-                            <div class="panel-group">
-                                <div class="panel panel-default">
+                    @*********@
+                    @*Metrics*@
+                    @*********@
+                    @foreach (var mtrc in Model.apReviewTaskList)
+                    {
+                            <div class="panel panel-default">
 
-                                    <div class="panel-heading" style="text-align:left">
-                                        <a class="glyph-link" data-toggle="collapse" href="#collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")"><span class="glyphicon @apTaskGlyph" style="font-size:10px"></span></a>
+                                <div class="panel-heading" style="text-align:left; background-color:lightgrey">
+                                    <a class="glyph-link" data-toggle="collapse" href="#collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")" style="text-decoration:none">
+                                        <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
                                         <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold">
                                             @mtrc.mtrc_prod_display_text
-                                            <span>(@mtrc.periodList.SelectMany(x => x.bldgList).Count())</span>
+                                            <span>(@mtrc.periodList.SelectMany(x => x.bldgList).Count() Tasks)</span>
                                         </h5>
-                                    </div>
+                                    </a>
+                                </div>
 
-                                    <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                        <div class="panel-body">
+                                <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
+                                    <div class="panel-body">
 
-                                            <div style="margin-left:30px">
-                                                @foreach (var period in mtrc.periodList)
-                                                {
-                                                    <div class="btn-toolbar" style="margin-top:5px">
-                                                        <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:grey; border-right:transparent">
-                                                            <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                                                <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:grey; border-top-right-radius:4px; border-bottom-right-radius:4px">
+                                        @*********@
+                                        @*Periods*@
+                                        @*********@
+                                        <div class="panel-group" style="margin-left:30px">
+                                            @foreach (var period in mtrc.periodList)
+                                            {
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" style="text-align:left">
+                                                        <a class="glyph-link" data-toggle="collapse" href="#collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
+                                                            <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
                                                             <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
                                                                 @period.periodName
-                                                                <span>(@period.bldgList.Count())</span>
                                                             </h5>
+                                                        </a>
+                                                    </div>
+
+                                                    <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
+                                                        <div class="panel-body">
+
+                                                            @***********@
+                                                            @*Buildings*@
+                                                            @***********@
+                                                            <table class="table table-condensed table-hover table-responsive" id="tblAPTasks">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="text-align:center; width:25%">
+                                                                            @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
+                                                                        </th>
+                                                                        <th style="text-align:center; width:25%">
+                                                                            @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().status)
+                                                                        </th>
+                                                                        <th style="text-align:center; width:25%">
+                                                                            Action
+                                                                        </th>
+                                                                        <th style="text-align:center; width:25%">
+                                                                            Due By
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                @foreach (var bldg in period.bldgList)
+                                                                {
+                                                                    DateTime dueDate = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 1).AddMonths(2).AddDays(-1).Date;
+                                                                    string overdueClass = (dueDate < DateTime.Today) ? "overdue" : "";
+                                                                    <tr>
+                                                                        <td style="text-align:center; width:25%">
+                                                                            @Html.DisplayFor(modelItem => bldg.bldgName)
+                                                                        </td>
+                                                                        <td class="cellAPStatus" style="text-align:center; width:25%">
+                                                                            @Html.DisplayFor(modelItem => bldg.status)
+                                                                        </td>
+                                                                        <td class="cellQuickReview" style="text-align:center; width:25%">
+                                                                            @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
+                                                                            <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
+                                                                            <a class="lnkQuickReview" href="#" onclick="return false; ">Quick Review</a>
+                                                                        </td>
+                                                                        <td style="text-align:center; width:25%">
+                                                                            @dueDate.ToString("MM/dd/yyyy")
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+
                                                         </div>
                                                     </div>
 
-                                                    <div class="collapse @apTaskDisplay" style="margin-left:40px">
-                                                        <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                                            <tr style="background-color:lightgray">
-                                                                <th style="text-align:center; width:25%">
-                                                                    @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().status)
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    Action
-                                                                </th>
-                                                                <th style="text-align:center; width:25%">
-                                                                    Due By
-                                                                </th>
-                                                            </tr>
-
-                                                            @foreach (var bldg in period.bldgList)
-                                                            {
-                                                                string dueMonth = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Month.ToString();
-                                                                string dueYear = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Year.ToString();
-                                                                string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
-                                                                <tr>
-                                                                    <td style="text-align:center; width:25%">
-                                                                        @Html.DisplayFor(modelItem => bldg.bldgName)
-                                                                    </td>
-                                                                    <td class="cellAPStatus" style="text-align:center; width:25%">
-                                                                        @Html.DisplayFor(modelItem => bldg.status)
-                                                                    </td>
-                                                                    <td class="cellQuickReview" style="text-align:center; width:25%">
-                                                                        @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
-                                                                        <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
-                                                                        <a class="lnkQuickReview" href="#" onclick="return false; ">Quick Review</a>
-                                                                    </td>
-                                                                    <td style="text-align:center; width:25%">
-                                                                        TBD
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </table>
-                                                    </div>
-                                                }
-                                            </div>
-
+                                                </div>
+                                            }
                                         </div>
+
                                     </div>
-
                                 </div>
+
                             </div>
-                        }
+                    }
 
-                    </div>
                 </div>
-
             </div>
+
         </div>
     }
 </div>
@@ -549,81 +579,90 @@
 <div class="row" id="divCollectorTasks" style="margin-left:5px; margin-right:5px">
     @if (Model.mtrcTaskList.Count() > 0)
     {
-        <div class="panel-group" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
-            <div class="panel panel-info">
+        <div class="panel panel-info" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
 
-                <div class="panel-heading" style="text-align:left">
-                    <a class="glyph-link" data-toggle="collapse" href="#collapse-mtrc-tasks"><span class="glyphicon @mtrcTaskGlyph"></span></a>
+            <div class="panel-heading" style="text-align:left">
+                <a class="glyph-link" data-toggle="collapse" href="#collapse-mtrc-tasks" style="text-decoration:none">
+                    <span class="glyphicon @mtrcTaskGlyph" style="text-decoration:none"></span>
                     <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold ">
                         Metric Collector Tasks
-                        <span>(@Model.mtrcTaskList.SelectMany(x => x.mtrcList).Count())</span>
+                        <span>(@Model.mtrcTaskList.SelectMany(x => x.mtrcList).Count() Tasks)</span>
                     </h4>
-                </div>
+                </a>
+            </div>
 
-                <div id="collapse-mtrc-tasks" class="panel-collapse collapse @mtrcTaskDisplay">
-                    <div class="panel-body">
+            <div id="collapse-mtrc-tasks" class="panel-collapse collapse @mtrcTaskDisplay">
+                <div class="panel-body">
 
-                        @foreach (var period in Model.mtrcTaskList)
-                        {
-                            <div class="btn-toolbar" style="margin-top:5px">
-                                <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:grey; border-right:transparent">
-                                    <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                        <span class="glyphicon @mtrcTaskGlyph" style="font-size:10px"></span>
-                                    </button>
-                                </div>
-                                <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:grey; border-top-right-radius:4px; border-bottom-right-radius:4px">
+                    @*********@
+                    @*Periods*@
+                    @*********@
+                    @foreach (var period in Model.mtrcTaskList)
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="text-align:left">
+                                <a class="glyph-link" data-toggle="collapse" href="#collapse-@period.periodName.Replace(" ", "")" style="text-decoration:none">
+                                    <span class="glyphicon @mtrcTaskGlyph" style="font-size:10px"></span>
                                     <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
                                         @period.periodName
-                                        <span>(@period.mtrcList.Count())</span>
                                     </h5>
+                                </a>
+                            </div>
+
+                            <div id="collapse-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @mtrcTaskDisplay">
+                                <div class="panel-body">
+
+                                    @*********@
+                                    @*Metrics*@
+                                    @*********@
+                                    <table class="table table-condensed table-hover table-responsive" id="tblAPTasks">
+                                        <thead>
+                                            <tr max-height:10px">
+                                                <th style="text-align:center; width:25%">
+                                                    @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
+                                                </th>
+                                                <th style="text-align:center; width:25%">
+                                                    @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().status)
+                                                </th>
+                                                <th style="text-align:center; width:25%">
+                                                    Action
+                                                </th>
+                                                <th style="text-align:center; width:25%">
+                                                    Due By
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var mtrc in period.mtrcList)
+                                        {
+                                            string dueMonth = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Month.ToString();
+                                            string dueYear = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Year.ToString();
+                                            string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
+                                            <tr>
+                                                <td style="text-align:center; width:25%">
+                                                    @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
+                                                </td>
+                                                <td style="text-align:center; width:25%">
+                                                    @Html.DisplayFor(modelItem => mtrc.status)
+                                                </td>
+                                                <td style="text-align:center; width:25%">
+                                                    @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
+                                                    <a href="@mtrcUrl">Manage Metric</a>
+                                                </td>
+                                                <td class="@overdueClass" style="text-align:center; width:25%">
+                                                    @dueMonth/18/@dueYear
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
                                 </div>
                             </div>
 
-                            <div class="collapse @mtrcTaskDisplay" style="margin-left:40px">
-                                <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                    <tr style="background-color:lightgray; max-height:10px">
-                                        <th style="text-align:center; width:25%">
-                                            @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
-                                        </th>
-                                        <th style="text-align:center; width:25%">
-                                            @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().status)
-                                        </th>
-                                        <th style="text-align:center; width:25%">
-                                            Action
-                                        </th>
-                                        <th style="text-align:center; width:25%">
-                                            Due By
-                                        </th>
-                                    </tr>
-
-                                    @foreach (var mtrc in period.mtrcList)
-                                    {
-                                        string dueMonth = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Month.ToString();
-                                        string dueYear = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Year.ToString();
-                                        string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
-                                        <tr>
-                                            <td style="text-align:center; width:25%">
-                                                @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
-                                            </td>
-                                            <td style="text-align:center; width:25%">
-                                                @Html.DisplayFor(modelItem => mtrc.status)
-                                            </td>
-                                            <td style="text-align:center; width:25%">
-                                                @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
-                                                <a href="@mtrcUrl">Manage Metric</a>
-                                            </td>
-                                            <td class="@overdueClass" style="text-align:center; width:25%">
-                                                @dueMonth/18/@dueYear
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
-
             </div>
+
         </div>
     }
 </div>
