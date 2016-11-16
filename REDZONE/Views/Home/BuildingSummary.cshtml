@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Building Summary";
     int colCounter = 0;
+    string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <link href="~/Content/BuildingSummary.css" rel="stylesheet" />
@@ -26,17 +27,22 @@
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
+                    @*<a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>*@
+                    @if (Model.canFilterBuildings)
+                    {
+                        <div class="checkbox" style="">
+                            <label class="" style="text-align:left; padding:0; font-size: .8em">
+                                <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
+                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
+                                <span id="chkText" style="font-size:12px">View my Buildings Only</span>
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-8">
                     <div class="row ">
-                        <div class="col-xs-1">
-                            @*<a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>*@
-                        </div>
-                        <div class="col-xs-10">
-                            <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
-                        </div>
-                        <div class="col-xs-1">
-                            @*<input type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">*@
-                        </div>
+                        <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
                     </div>
                     <div class="row" style="margin-bottom:3px">
                         <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
@@ -69,6 +75,9 @@
                             </span>
                         </div>
                     </div>@* <----------- Navigation Field by Year *@
+                </div>
+                <div class="col-sm-2">
+                     @*<input type="image" src="~/Images/BackToDashboard.png" width="80" height="35" style="float:right" onclick="javascript:location('/Home/Index')">*@
                 </div>
             </div>
         </div> <!-- END OF PANEL HEADER -->
@@ -127,7 +136,8 @@
                                     if (cellIsViewable)
                                     {
                                         string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
-                                        string APstatusFlag = (buildingCell.rz_bapm_status != "") ? "*" : "";
+                                        //string APstatusFlag = (buildingCell.rz_bapm_status != "") ? "*" : "";
+                                        string APstatusFlag = (buildingCell.rz_bapm_status != "") ? "" : "";
                                         <td id="@buildingCell.cellValueId" class="buildingCol valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="Right Click any cell to Add/Edit Reasons and Action Plans [STS: @buildingCell.cellStatus - @buildingCell.rz_bapm_status]">
                                             <div class="@hasReasonsClass mvCell" style="margin:0; padding:4px; ">
                                                 <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />

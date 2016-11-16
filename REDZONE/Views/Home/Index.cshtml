@@ -9,8 +9,10 @@
     string strColWidth = colWidth.ToString("00.00%");
     string btnClassBldng = (ViewData["bntClassB"] == null) ? "" : ViewData["bntClassB"].ToString();
     string btnClassScore = (ViewData["bntClassS"] == null) ? "" : ViewData["bntClassS"].ToString();
+    string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
 }
 
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <style>
     .scroll-Table {
@@ -38,29 +40,45 @@
         /*width:22px;*/
         width:17px;
     }
-
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px; ">  <!-- MAIN SCREEN PANEL -->
     <div class="panel panel-default" style="margin-bottom:0px; ">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
             <div class="row">
-                <div class="row ">
-                    <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
-                </div>
-                <div class="row" style="margin-bottom:10px">
-                    <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
-                        <span class="input-group-btn">
-                            <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Month" @Model.statusPrevMonth>
-                                <span class="glyphicon glyphicon-chevron-left"></span>
-                            </button>
-                        </span>
-                        <input type="text" class="form-control" value="@Model.month @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
-                        <span class="input-group-btn">
-                            <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMonth'" title="Navigate to Next Month" @Model.statusNextMonth>
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </button>
-                        </span>
+                <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
+                @if (Model.canFilterBuildings)
+                {
+                    <div class="checkbox" style="">
+                        <label class="" style="text-align:left; padding:0; font-size: .8em">
+                            <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
+                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
+                            <span id="chkText" style="font-size:12px">View my Buildings Only</span>
+                        </label>
                     </div>
+                }                    
+                </div>
+                <div class="col-sm-8">
+                    <div class="row ">
+                        <span style="font-size:x-large; font-weight:bold; color:darkblue">Executive Monthly Summary</span>
+                    </div>
+                    <div class="row" style="margin-bottom:10px">
+                        <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
+                            <span class="input-group-btn">
+                                <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMonth'" title="Navigate to Previous Month" @Model.statusPrevMonth>
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </button>
+                            </span>
+                            <input type="text" class="form-control" value="@Model.month @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
+                            <span class="input-group-btn">
+                                <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMonth'" title="Navigate to Next Month" @Model.statusNextMonth>
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+
                 </div>
             </div>
         </div>
@@ -84,7 +102,7 @@
                         <table style="margin:0; width:100%;">
                             <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
                                 <td>
-                                    <table style="width:100%">
+                                    <table style="width:100%;">
                                         <tr>
                                             <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; width:17%; ">
                                                 <input class="sortOrder" type="hidden" id="bSortOrder" value="@ViewData["bOrder"]" />
@@ -348,6 +366,38 @@
             var gotoURL = "/Home/Index/" + url_parameters + "sortOrder=" + sort_param;
             //alert(gotoURL);
             location.href = gotoURL;
+        });
+
+        $('#chkMyBuildingsOnly').change(function () {
+            var filter = ($(this).prop("checked") ? "Y" : "N");
+
+            $.ajax({
+                url: '/Account/setUserBuildingFilter',
+                method: "POST",
+                cache: false,
+                data: { bFilter: filter },
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to Set the User Building Filter.\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {                
+                if (d == "Success") {
+                    //alert("Filter was successfully set to '" + filter + "' on the Server Side");
+                    location.reload();
+                } else {
+                    alert("Failed to set the Server Filter Flag:" + d);
+                }
+            });
+
+
+            //if (filter == "Y") {
+            //    alert("Checked!");
+            //}
+            //else {
+            //    alert("Unchecked...");
+            //}
+            //location.href = "/Home/Index?filter=" + filter;
         });
 
         function getURLParameter(name) {

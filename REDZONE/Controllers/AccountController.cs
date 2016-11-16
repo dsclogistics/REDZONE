@@ -116,6 +116,7 @@ namespace REDZONE.Controllers
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
             string decryptToken = "";
             Session["errorMessage"] = "";
+            Session["buildingFilter"] = "N";        //Initial Building Filter Status for user is set to "N"
             //Session["loginToken"] = null;
             try
             {  //try to decrypt the password
@@ -277,6 +278,17 @@ namespace REDZONE.Controllers
             dscUser appUser = new dscUser(User.Identity.Name);
             return PartialView(appUser);
         }
+
+        [HttpPost]
+        public string setUserBuildingFilter(string bFilter)
+        {
+            if (bFilter == "Y") { Session["buildingFilter"] = "Y"; }
+            else                { Session["buildingFilter"] = "N"; }
+
+            return "Success";
+        }
+
+
         //--------------------------------------------------------------------------------------------------------------\\
         #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)
@@ -637,6 +649,7 @@ namespace REDZONE.Controllers
 
             return uRoles;
         }
+
         #endregion
     }
 }
