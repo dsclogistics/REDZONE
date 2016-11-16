@@ -48,37 +48,41 @@ string uId = Session["emp_id"].ToString();
     if (Model.apd_id != null)
     {
         <div class="row">
-            <span style="font-weight:bold; font-size:20px" id="metricName">@Model.mtrcDisplayText</span>&nbsp;-&nbsp;
-            <span style="font-weight:bold; font-size:20px" color black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
-            <span style="font-weight:bold; font-size:20px" color black" id="metricDate">@Model.monthName @Model.year</span>
+            <span style="font-weight:bold; font-size:18px" id="metricName">@Model.mtrcDisplayText</span>&nbsp;-&nbsp;
+            <span style="font-weight:bold; font-size:18px" color black" id="buildingName">@Model.bldgName</span>&nbsp;-&nbsp;
+            <span style="font-weight:bold; font-size:18px" color black" id="metricDate">@Model.monthName @Model.year</span>
             <input type="hidden" id="bapmId" value="@Model.bapm_id" />
         </div>
 
+        //-----------------------------
+        //Reason Summary And Goal Table
+        //-----------------------------
         <div class="row" style="margin-left:10px; margin-right:10px">
             <h4 style="text-align:left">Reason Summary</h4>
 
-            <div style="margin-left:10px; margin-right:10px">
+            <div style="margin-right:10px">
                 <div class="col-md-6 bordered" style="border-radius:4px; border-color:grey">
-                    <div style="padding:10px; padding-bottom:10px; text-align:left">
+                    <div style="padding:10px; padding-bottom:5px; text-align:left">
                         @if (Model.reasonList.Count() > 0)
                         {
-                            foreach (var reason in Model.reasonList)
-                            {
-                                <div class="" title="@reason.mpvr_Comment" style="text-align:left; padding:2px; ">
-                                    <span class="glaphicon glyphicon-asterisk"></span>
-                                    <span style="margin-left:5px">@reason.reason_text</span>
-                                </div>
-                            }
+                            <ul style="text-align:center">
+                                @foreach (var reason in Model.reasonList)
+                                {
+                                    <li title="@reason.mpvr_Comment" style="text-align:left;">
+                                        @reason.reason_text
+                                    </li>
+                                }
+                            </ul>
                         }
                         else
                         {
-                            <div style="color:red; ">There are no Assigned Reasons for the current Metric Action Plan</div>
+                            <div style="color:red; padding-bottom:5px; ">There are no Assigned Reasons for the current Metric Action Plan</div>
                         }
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6" style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px">
+            <div class="col-md-6" style="margin:0 auto; text-align:center;">
                 <div class="panel panel-default scroll-Table hidden-xs">
                     <div class="panel-heading scroll-Head ">
                         <table style="margin:0; width:100%;">
@@ -105,7 +109,7 @@ string uId = Session["emp_id"].ToString();
                                     <td class="col-md-4" style="text-align:center; border-left: 1px solid #c6c4c4; background-color:#ffbb8b">@Model.mtrcValue</td>
                                 </tr>
                             </table>
-                        </div>  <!-- *********** END OF BUILDING ROW ************** -->
+                        </div> 
 
                     </div>
 
@@ -122,24 +126,26 @@ string uId = Session["emp_id"].ToString();
                     <div class="col-md-4 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@Model.mtrcGoalText</span></div>
                     <div class="col-md-4 headerCell" id="mValueCell" style="font-weight:normal; background-color:red">@Model.mtrcValue</div>
                 </div>*@
-            </div> <!-- END OF HEADER INFORMATION-->
+            </div>
 
         </div>
-        <br />
 
-        <div style="margin-left:10px; margin-right:10px">
+        //-----------
+        //Action Plan
+        //-----------
+        <div style="margin-left:10px; margin-right:10px; margin-top:5px">
             <div class="row">
                 <div class="col-md-6"><h4 style="text-align:left">Action Plan</h4></div>
-                <div class="col-md-6" style="text-align:right">
+                <div class="col-md-6" style="text-align:right; margin-top:10px">
                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + Model.mtrc_period_id + "&bldg_id=" + Model.dsc_mtrc_lc_bldg_id + "&bapm_id=" + Model.bapm_id;}
-                    <a href="@apUrl">Go to Action Plan Page</a>
+                    <a href="@apUrl">See Action Plan Details</a>
                 </div>
             </div>
-            <div class="bordered" style="padding:15px; text-align:left; vertical-align:text-bottom; border-radius:4px; border-color:grey;">@Model.apText</div>
+            @*<div class="bordered" style="padding:15px; text-align:left; vertical-align:text-bottom; border-radius:4px; border-color:grey;">@Model.apText</div>*@
+            <textarea id="quickAPComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px; border-color:grey" readonly>@Model.apText</textarea>
         </div>
-        <br />
 
-        <div style="margin-left:10px; margin-right:10px">
+        <div style="margin-left:10px; margin-right:10px; margin-top:5px">
             <h4 style="text-align:left">Comments</h4>
             <textarea id="quickReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px; border-color:grey" maxlength="2000">@Model.apReviewText</textarea>
         </div>

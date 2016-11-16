@@ -24,8 +24,10 @@ namespace REDZONE.Models
         public string bldgId { get; set; }
         public string mtrcDisplayText { get; set; }
         public string apMonth { get; set; }
+        public string apMonthName { get; set; }
         public string apYear { get; set; }
-
+        public string goalText { get; set; }
+        public string mtrcPeriodValue { get; set; }
 
         public List<ActionPlan> actionPlanList { get; set; }
         public List<PriorActionPlan> priorActionPlanList { get; set; }
