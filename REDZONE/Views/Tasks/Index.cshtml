@@ -28,8 +28,12 @@
 }
 
 <style>
-    .overdue {
-        color:red;
+    .overdue-10 {
+        background-color:#f9f97f;
+        font-weight:bold;
+    }
+    .overdue-5 {
+        background-color:#f75643;
         font-weight:bold;
     }
 </style>
@@ -357,22 +361,22 @@
                                     </div>
                                     <div class="col-md-6" style="text-align:right">
                                         @{string url = "/Home/BuildingSummary/?year=" + bldg.periodList.First().mtrcList.First().year + "&bldg_id=" + bldg.periodList.First().mtrcList.First().bldg_id;}
-                                        <a href="@url">To Building Summary</a>
+                                        <a href="@url">View Building Summary</a>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="collapse-@bldg.bldgName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                <div class="panel-body">
+                                <div class="panel-body" style="padding-bottom:0">
 
                                     @*********@
                                     @*Periods*@
                                     @*********@
-                                    <div class="panel-group" style="margin-left:30px">
+                                    <div class="panel-group">
                                         @foreach (var period in bldg.periodList)
                                         {
                                             <div class="panel panel-default">
-                                                <div class="panel-heading" style="text-align:left">
+                                                <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px ">
                                                     <a class="glyph-link" data-toggle="collapse" href="#collapse-@bldg.bldgName.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                                         <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
                                                         <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
@@ -382,12 +386,12 @@
                                                 </div>
 
                                                 <div id="collapse-@bldg.bldgName.Replace(" ", "")-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                                    <div class="panel-body">
+                                                    @*<div class="panel-body">*@
 
                                                         @*********@
                                                         @*Metrics*@
                                                         @*********@
-                                                        <table class="table table-condensed table-hover table-responsive" id="tblAPTasks">
+                                                        <table class="table table-condensed table-hover" id="tblAPTasks">
                                                             <thead>
                                                                 <tr style="background-color:transparent">
                                                                     <th style="text-align:center; width:25%">
@@ -408,9 +412,17 @@
                                                             @foreach (var mtrc in period.mtrcList)
                                                             {
                                                                 DateTime dueDate = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 1).AddMonths(2).AddDays(-1).Date;
-                                                                string overdueClass = (dueDate < DateTime.Today) ? "overdue" : "";
-                                                                string backgroundColor = (mtrc.status == "Rejected") ? "#ffbb8b" : "white";
-                                                                <tr style="background-color:@backgroundColor">
+                                                                string overdueClass = "";
+                                                                if (dueDate < DateTime.Today.AddDays(5))
+                                                                {
+                                                                    overdueClass = "overdue-5";
+                                                                }
+                                                                else if(dueDate < DateTime.Today.AddDays(10))
+                                                                {
+                                                                    overdueClass = "overdue-10";
+                                                                }
+                                                                //string backgroundColor = (mtrc.status == "Rejected") ? "#ffbb8b" : "white";
+                                                                <tr>
                                                                     <td style="text-align:center; width:25%">
                                                                         @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
                                                                     </td>
@@ -419,16 +431,16 @@
                                                                     </td>
                                                                     <td style="text-align:center; width:25%">
                                                                         @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;}
-                                                                        <a href="@apUrl" style="color:red">@mtrc.action</a>
+                                                                        <a href="@apUrl" style="text-decoration:underline">@mtrc.action</a>
                                                                     </td>
-                                                                    <td style="text-align:center; width:25%">
+                                                                    <td class="@overdueClass" style="text-align:center; width:25%">
                                                                         @dueDate.ToString("MM/dd/yyyy")
                                                                     </td>
                                                                 </tr>
                                                             }
                                                         </table>
 
-                                                    </div>
+                                                    @*</div>*@
                                                 </div>
 
                                             </div>
@@ -488,16 +500,16 @@
                                 </div>
 
                                 <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="padding-bottom:0">
 
                                         @*********@
                                         @*Periods*@
                                         @*********@
-                                        <div class="panel-group" style="margin-left:30px">
+                                        <div class="panel-group">
                                             @foreach (var period in mtrc.periodList)
                                             {
                                                 <div class="panel panel-default">
-                                                    <div class="panel-heading" style="text-align:left">
+                                                    <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px">
                                                         <a class="glyph-link" data-toggle="collapse" href="#collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                                             <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
                                                             <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
@@ -507,7 +519,7 @@
                                                     </div>
 
                                                     <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                                        <div class="panel-body">
+                                                        @*<div class="panel-body">*@
 
                                                             @***********@
                                                             @*Buildings*@
@@ -533,7 +545,15 @@
                                                                 @foreach (var bldg in period.bldgList)
                                                                 {
                                                                     DateTime dueDate = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 1).AddMonths(2).AddDays(-1).Date;
-                                                                    string overdueClass = (dueDate < DateTime.Today) ? "overdue" : "";
+                                                                    string overdueClass = "";
+                                                                    if (dueDate < DateTime.Today.AddDays(5))
+                                                                    {
+                                                                        overdueClass = "overdue-5";
+                                                                    }
+                                                                    else if (dueDate < DateTime.Today.AddDays(10))
+                                                                    {
+                                                                        overdueClass = "overdue-10";
+                                                                    }
                                                                     <tr>
                                                                         <td style="text-align:center; width:25%">
                                                                             @Html.DisplayFor(modelItem => bldg.bldgName)
@@ -544,16 +564,16 @@
                                                                         <td class="cellQuickReview" style="text-align:center; width:25%">
                                                                             @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
                                                                             <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
-                                                                            <a class="lnkQuickReview" href="#" onclick="return false; " style="color:red">Quick Review</a>
+                                                                            <a class="lnkQuickReview" href="#" onclick="return false; " style="text-decoration:underline">Quick Review</a>
                                                                         </td>
-                                                                        <td style="text-align:center; width:25%">
+                                                                        <td class="@overdueClass" style="text-align:center; width:25%">
                                                                             @dueDate.ToString("MM/dd/yyyy")
                                                                         </td>
                                                                     </tr>
                                                                 }
                                                             </table>
 
-                                                        </div>
+                                                        @*</div>*@
                                                     </div>
 
                                                 </div>
@@ -592,7 +612,7 @@
             </div>
 
             <div id="collapse-mtrc-tasks" class="panel-collapse collapse @mtrcTaskDisplay">
-                <div class="panel-body">
+                <div class="panel-body" style="padding-bottom:0">
 
                     @*********@
                     @*Periods*@
@@ -600,7 +620,7 @@
                     @foreach (var period in Model.mtrcTaskList)
                     {
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="text-align:left">
+                            <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px">
                                 <a class="glyph-link" data-toggle="collapse" href="#collapse-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                     <span class="glyphicon @mtrcTaskGlyph" style="font-size:10px"></span>
                                     <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
@@ -610,7 +630,7 @@
                             </div>
 
                             <div id="collapse-@period.periodName.Replace(" ", "")" class="panel-collapse collapse @mtrcTaskDisplay">
-                                <div class="panel-body">
+                                @*<div class="panel-body">*@
 
                                     @*********@
                                     @*Metrics*@
@@ -635,9 +655,16 @@
 
                                         @foreach (var mtrc in period.mtrcList)
                                         {
-                                            string dueMonth = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Month.ToString();
-                                            string dueYear = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Year.ToString();
-                                            string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
+                                            DateTime dueDate = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Date;
+                                            string overdueClass = "";
+                                            if (dueDate < DateTime.Today.AddDays(5))
+                                            {
+                                                overdueClass = "overdue-5";
+                                            }
+                                            else if (dueDate < DateTime.Today.AddDays(10))
+                                            {
+                                                overdueClass = "overdue-10";
+                                            }
                                             <tr>
                                                 <td style="text-align:center; width:25%">
                                                     @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
@@ -647,15 +674,15 @@
                                                 </td>
                                                 <td style="text-align:center; width:25%">
                                                     @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
-                                                    <a href="@mtrcUrl" style="color:red">Manage Metric</a>
+                                                    <a href="@mtrcUrl" style="text-decoration:underline">Manage Metric</a>
                                                 </td>
                                                 <td class="@overdueClass" style="text-align:center; width:25%">
-                                                    @dueMonth/18/@dueYear
+                                                    @dueDate.ToString("MM/dd/yyyy")
                                                 </td>
                                             </tr>
                                         }
                                     </table>
-                                </div>
+                                @*</div>*@
                             </div>
 
                         </div>
@@ -673,18 +700,14 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header bg-Primary-Gradient">
+            <div class="modal-header bg-Primary-Gradient" style="padding-top:5px; padding-bottom:5px">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3 class="modal-title">Action Plan Review</h3>
             </div>
             <div class="modal-body" id="quickReviewBody">
 
             </div>
-            <div class="modal-footer" id="quickReviewFooter">
-                <input type="button" class="btn btn-primary" id="btnApproveActionPlan" value="Approve" />
-                <input type="button" class="btn btn-primary" id="btnRejectActionPlan" value="Reject" />
-                <button type="button" class="btn btn-warning" id="btnCancelReview" data-dismiss="modal">Cancel</button>
-            </div>
+            @*<div class="modal-footer" id="quickReviewFooter"></div>*@
         </div>
 
     </div>

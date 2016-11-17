@@ -214,6 +214,7 @@
     <Compile Include="Models\ActionPlanViewModel.cs" />
     <Compile Include="Models\dscUser.cs" />
     <Compile Include="Models\TasksViewModel.cs" />
+    <Compile Include="Models\TeamActivitiesViewModel.cs" />
     <Compile Include="ModelViews\dropDownItem.cs" />
     <Compile Include="ModelViews\NonStdrReasonViewModel.cs" />
     <Compile Include="Controllers\ReasonMgmtController.cs" />

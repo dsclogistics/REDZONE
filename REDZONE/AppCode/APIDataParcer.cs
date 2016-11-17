@@ -1203,6 +1203,13 @@ namespace REDZONE.AppCode
         {
             try
             {
+                //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
+                string curYear = DateTime.Today.Year.ToString();
+                string curMonth = DateTime.Today.Month.ToString();
+
+                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
+
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
 
             }
             catch { }
@@ -1582,7 +1589,8 @@ namespace REDZONE.AppCode
                     tempPriorActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
                     tempPriorActionPlan.priorAPMonth = intToMonth((int)res["month"]);
                     tempPriorActionPlan.priorAPYear = (string)res["year"];
-                    tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                    //tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                    tempPriorActionPlan.priorAPMetricGoalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                     tempPriorActionPlan.priorAPMetricValue = (string)res["mtrc_period_val_value"];
                     tempPriorActionPlan.priorAPStatus = (string)res["rz_apd_ap_status"];
                     tempPriorActionPlan.priorAPText = (string)res["rz_apd_ap_text"];
@@ -1767,7 +1775,8 @@ namespace REDZONE.AppCode
                 tempActionPlan.month = (string)res["month"];
                 tempActionPlan.monthName = intToMonth((int)res["month"]);
                 tempActionPlan.year = (string)res["year"];
-                tempActionPlan.mtrcGoalText = (string)res["goal_txt"];
+                //tempActionPlan.mtrcGoalText = (string)res["goal_txt"];
+                tempActionPlan.mtrcGoalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                 tempActionPlan.mtrcValue = (string)res["mtrc_period_val_value"];
                 tempActionPlan.status = (string)res["rz_bapm_status"];
 
@@ -1845,7 +1854,8 @@ namespace REDZONE.AppCode
                 apViewModel.apMonth = (string)res["month"];
                 apViewModel.apMonthName = intToMonth((int)res["month"]);
                 apViewModel.apYear = (string)res["year"];
-                apViewModel.goalText = (string)res["goal_txt"];
+                //apViewModel.goalText = (string)res["goal_txt"];
+                apViewModel.goalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                 apViewModel.mtrcPeriodValue = (string)res["mtrc_period_val_value"];
 
                 if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";
