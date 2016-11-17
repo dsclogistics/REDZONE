@@ -1198,6 +1198,17 @@ namespace REDZONE.AppCode
             return tempTaskCounts;
         }
 
+        //This method returns all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
+        public string getUserTeamActivities(string app_user_id)
+        {
+            try
+            {
+
+            }
+            catch { }
+
+            return "";
+        }
 
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
         public RZTaskDetailList getUserTaskDetails(string app_user_id)
