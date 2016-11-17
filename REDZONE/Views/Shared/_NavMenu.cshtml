@@ -14,7 +14,8 @@
             <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
         </a>*@
     <a class="hidden-sm" style="position:fixed; top:0; left:0" href="/home">
-        <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
+        @*<img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />*@
+        <img class="img-responsive" src="~/Images/RedZoneLogo.png" />
     </a>
     <div class="navbar-header" >
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
@@ -71,7 +72,8 @@
                 </li>
             </ul>*@
 
-            @if (REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("RZ_ADMIN"))
+            @*@if (REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("RZ_ADMIN"))*@
+            @if(User.IsInRole("RZ_ADMIN"))
             {
                 <ul class="nav navbar-nav menuItem" id="mAdmin">
                     <li class="dropdown">

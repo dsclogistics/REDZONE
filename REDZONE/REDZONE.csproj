@@ -368,6 +368,7 @@
     <Content Include="Images\LoadingData.gif" />
     <Content Include="Images\locked.gif" />
     <Content Include="Images\myBuildings.png" />
+    <Content Include="Images\RedZoneLogo.png" />
     <Content Include="Images\stripeNA.png" />
     <Content Include="Images\ui-anim_basic_16x16.gif" />
     <EntityDeploy Include="Models\DSCREDZONE_ENTITY.edmx">
