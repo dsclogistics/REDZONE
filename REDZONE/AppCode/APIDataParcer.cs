@@ -1199,8 +1199,10 @@ namespace REDZONE.AppCode
         }
 
         //This method returns all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
-        public string getUserTeamActivities(string app_user_id)
+        public List<TeamActivity> getUserTeamActivities(string app_user_id)
         {
+            List<TeamActivity> teamActivityList = new List<TeamActivity>();
+
             try
             {
                 //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
@@ -1210,11 +1212,30 @@ namespace REDZONE.AppCode
                 string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
 
                 JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
+                JArray jActionPlans = (JArray)parsed_result["actionplans"];
+
+                foreach(var res in jActionPlans)
+                {
+                    TeamActivity tempTeamActivity = new TeamActivity();
+
+                    tempTeamActivity.month = (string)res["month"];
+                    tempTeamActivity.monthName = intToMonth((int)res["month"]);
+                    tempTeamActivity.year = (string)res["year"];
+                    tempTeamActivity.periodName = intToMonth((int)res["month"]) + " " + (string)res["year"];
+                    tempTeamActivity.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                    tempTeamActivity.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
+                    tempTeamActivity.mtrcName = (string)res["mtrc_prod_display_text"];
+                    tempTeamActivity.mtrcPeriodId = (string)res["mtrc_period_id"];
+                    tempTeamActivity.rzBapmId = (string)res["rz_bapm_id"];
+                    tempTeamActivity.rzBapmStatus = (string)res["rz_bapm_status"];
+
+                    teamActivityList.Add(tempTeamActivity);
+                }
 
             }
             catch { }
 
-            return "";
+            return teamActivityList;
         }
 
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)

@@ -1,4 +1,6 @@
-﻿<div class="" style="margin-top:50px; border:4px double blue; border-radius:4px;">
+﻿@model IEnumerable<REDZONE.Models.TeamActivity> 
+
+@*<div class="" style="margin-top:50px; border:4px double blue; border-radius:4px;">
     <br /><br /><br />
     <div>
         THERE ARE NO DEFINED ACTIVIES FOR YOUR TEAM
@@ -7,4 +9,59 @@
         PAGE IS STILL UNDER CONSTRUCTION. PLEASE CHECK AGAIN LATER
     </div>
     <br /><br /><br />
+</div>*@
+
+<div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:5px">
+    <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
+        <div class="row">
+            <span style="font-size:x-large; font-weight:bold; color:darkblue">My Team's Activities</span>
+        </div>
+    </div>
+
+    <div class="panel-body padding2 " style="display:none">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr style="background-color:transparent">
+                    <th style="text-align:center; width:20%">
+                        @Html.DisplayNameFor(model => model.First().bldgName)
+                    </th>
+                    <th style="text-align:center; width:20%">
+                        @Html.DisplayNameFor(model => model.First().mtrcName)
+                    </th>
+                    <th style="text-align:center; width:20%">
+                        @Html.DisplayNameFor(model => model.First().periodName)
+                    </th>
+                    <th style="text-align:center; width:20%">
+                        @Html.DisplayNameFor(model => model.First().rzBapmStatus)
+                    </th>
+                    <th style="text-align:center; width:20%">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td style="text-align:center; width:20%">
+                        @Html.DisplayFor(modelItem => activity.bldgName)
+                    </td>
+                    <td style="text-align:center; width:20%">
+                        @Html.DisplayFor(modelItem => activity.mtrcName)
+                    </td>
+                    <td style="text-align:center; width:20%">
+                        @Html.DisplayFor(modelItem => activity.periodName)
+                    </td>
+                    <td style="text-align:center; width:20%">
+                        @Html.DisplayFor(modelItem => activity.rzBapmStatus)
+                    </td>
+                    <td style="text-align:center; width:20%">
+                        @Html.DisplayFor(modelItem => activity.rzBapmId)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>
+
+
