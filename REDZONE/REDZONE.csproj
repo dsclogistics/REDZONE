@@ -361,6 +361,7 @@
     <Content Include="Images\dashboard.png" />
     <Content Include="Images\download_template.png" />
     <Content Include="Images\DSCHOME_Logo.png" />
+    <Content Include="Images\DSCRedZone2.png" />
     <Content Include="Images\iconNoAvatar.png" />
     <Content Include="Images\icon_Warning.png" />
     <Content Include="Images\KPogany.jpg" />
@@ -487,6 +488,7 @@
     <Content Include="Views\MenuBar\_RZ_MyTask_MenuItems.cshtml" />
     <Content Include="Views\MenuBar\_RZ_MyTeamACT_MenuItems.cshtml" />
     <Content Include="Views\Tasks\TeamActivities.cshtml" />
+    <Content Include="Views\MenuBar\_RZ_TeamsFlag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />

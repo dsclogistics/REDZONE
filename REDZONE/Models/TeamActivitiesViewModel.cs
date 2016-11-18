@@ -46,4 +46,23 @@ namespace REDZONE.Models
         public string rzBapmStatus { get; set; }
         public string rzBapmStartDate { get; set; }
     }
+
+    //COUNT MODEL
+    public class TeamActivityCount
+    {
+        public List<TeamActivityBuildingCount> buildingActivityList { get; set; }
+        public int totalTasks { get { return buildingActivityList.Sum(x => x.submitCount) + buildingActivityList.Sum(x => x.reviewCount); } }
+        public TeamActivityCount()
+        {
+            buildingActivityList = new List<TeamActivityBuildingCount>();
+        }
+    }
+
+    public class TeamActivityBuildingCount
+    {
+        public string bldgId { get; set; }
+        public string bldgName { get; set; }
+        public int submitCount { get; set; }
+        public int reviewCount { get; set; }
+    }
 }

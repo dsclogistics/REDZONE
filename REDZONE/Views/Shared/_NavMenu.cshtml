@@ -15,7 +15,7 @@
         </a>*@
     <a class="hidden-sm" style="position:fixed; top:0; left:0" href="/home">
         @*<img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />*@
-        <img class="img-responsive" src="~/Images/RedZoneLogo.png" />
+        <img class="img-responsive" src="~/Images/DSCRedZone2.png" />
     </a>
     <div class="navbar-header" >
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
@@ -97,7 +97,7 @@
             @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
             @if (User.IsInRole("RZ_BLDG_USER"))
             {
-                @Html.Action("_RZ_TasksFlag", "MenuBar")
+                @Html.Action("_RZ_TeamsFlag", "MenuBar")
             }
             else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
             {

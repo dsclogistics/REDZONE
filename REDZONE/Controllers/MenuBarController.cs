@@ -98,13 +98,13 @@ namespace REDZONE.Controllers
 
             try
             {
-                if (user.hasRole("RZ_BLDG_USER"))
-                {
-                    rzTaskCounts = parcer.getUserTeamActCount(user.dbUserId);
-                }
-                else {
+                //if (user.hasRole("RZ_BLDG_USER"))
+                //{
+                //    rzTaskCounts = parcer.getUserTeamActCount(user.dbUserId);
+                //}
+                //else {
                     rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
-                }                
+                //}                
             }
             catch (Exception e)
             {
@@ -112,6 +112,25 @@ namespace REDZONE.Controllers
             }
 
             return PartialView(rzTaskCounts);
+        }
+
+        // GET: Teams Menu
+        [ChildActionOnly]
+        public ActionResult _RZ_TeamsFlag()
+        {
+            dscUser user = new Models.dscUser(User.Identity.Name);
+            TeamActivityCount teamActivityCount = new TeamActivityCount();
+
+            try
+            {
+                teamActivityCount = parcer.getUserTeamActCount(user.dbUserId);
+            }
+            catch (Exception e)
+            {
+                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+            }
+
+            return PartialView(teamActivityCount);
         }
     }
 

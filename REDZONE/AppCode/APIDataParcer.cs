@@ -1186,9 +1186,9 @@ namespace REDZONE.AppCode
         }
 
         //This method returns the count of all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
-        public RZTaskCounts getUserTeamActCount(string app_user_id)
+        public TeamActivityCount getUserTeamActCount(string app_user_id)
         {
-            RZTaskCounts tempTaskCounts = new RZTaskCounts();
+            TeamActivityCount tempActivityCount = new TeamActivityCount();
             try
             {
                 //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
@@ -1199,15 +1199,25 @@ namespace REDZONE.AppCode
                 //string jsonPayload = @"{""productname"":""Red Zone"",""begmonth"":""1"",""begyear"":""" + curYear + @""",""endmonth"":""" + curMonth + @""",""endyear"":""" + curYear+ @""",""app_user_id"":""" + curYear+ @"""}";
                 string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
                 
-                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamtaskscount", jsonPayload));
 
+                JArray jActivities = (JArray)parsed_result["tasks"];
 
-                tempTaskCounts.mtrcCount = 0;
-                tempTaskCounts.actPlanCount = ((JArray)parsed_result["actionplans"]).Count;
+                foreach(var res in jActivities)
+                {
+                    TeamActivityBuildingCount tempActivityBuildingCount = new TeamActivityBuildingCount();
+
+                    tempActivityBuildingCount.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
+                    tempActivityBuildingCount.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                    tempActivityBuildingCount.submitCount = (int)res["submit_count"];
+                    tempActivityBuildingCount.reviewCount = (int)res["review_count"];
+
+                    tempActivityCount.buildingActivityList.Add(tempActivityBuildingCount);
+                }
             }
             catch { }
 
-            return tempTaskCounts;
+            return tempActivityCount;
         }
 
         //This method returns all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)

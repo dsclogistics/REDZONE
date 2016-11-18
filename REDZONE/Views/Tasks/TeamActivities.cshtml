@@ -25,93 +25,93 @@
 
     <div class="panel-body padding2">       
         
-                    @*********@
-                    @*Periods*@
-                    @*********@
-                    @foreach (var period in Model.periodList)
-                    {
-                        <div class="panel panel-default">
+        @*********@
+        @*Periods*@
+        @*********@
+        @foreach (var period in Model.periodList)
+        {
+            <div class="panel panel-default">
                             
-                            <div class="panel-heading" style="text-align:left; background-color:lightgrey">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <a class="glyph-link" data-toggle="collapse" href="#collapse-@period.periodName.Replace(" ", "")" style="text-decoration:none">
-                                            <span class="glyphicon glyphicon-chevron-down" style="font-size:10px"></span>
-                                            <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold">
-                                                @period.periodName
-                                                <span>(@period.periodActivityList.Count() Tasks)</span>
-                                            </h5>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            @************@
-                            @*Activities*@
-                            @************@
-                            <div id="collapse-@period.periodName.Replace(" ", "")" class="panel-collapse collapse in">
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                        <tr style="background-color:transparent">
-                                            <th style="text-align:center">
-                                                @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().bldgName)
-                                            </th>
-                                            <th style="text-align:center">
-                                                @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().mtrcName)
-                                            </th>
-                                            <th style="text-align:center">
-                                                Finished?
-                                            </th>
-                                            <th style="text-align:center">
-                                                @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().rzBapmStatus)
-                                            </th>
-                                            <th style="text-align:center">
-                                                Action
-                                            </th>
-                                            <th style="text-align:center">
-                                                Due Date
-                                            </th>
-                                            <th style="text-align:center">
-                                                Start Date
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    @foreach (var activity in period.periodActivityList)
-                                    {
-                                        DateTime dueDate = new DateTime(Int32.Parse(activity.year), Int32.Parse(activity.month), 1).AddMonths(2).AddDays(-1).Date;
-                                        string outstanding = (activity.rzBapmStatus == "Approved") ? "Yes" : "No";
-                                        string outstandingColor = (activity.rzBapmStatus == "Approved") ? "green" : "red";
-                                        <tr>
-                                            <td style="text-align:center">
-                                                @Html.DisplayFor(modelItem => activity.bldgName)
-                                            </td>
-                                            <td style="text-align:center">
-                                                @Html.DisplayFor(modelItem => activity.mtrcName)
-                                            </td>
-                                            <td style="text-align:center; color:@outstandingColor">
-                                                @outstanding
-                                            </td>
-                                            <td style="text-align:center">
-                                                @Html.DisplayFor(modelItem => activity.rzBapmStatus)
-                                            </td>
-                                            <td style="text-align:center">
-                                                @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + activity.mtrcPeriodId + "&bldg_id=" + activity.bldgId + "&bapm_id=" + activity.rzBapmId;}
-                                                <a href="@apUrl" style="text-decoration:underline">View Action Plan</a>
-                                            </td>
-                                            <td style="text-align:center">
-                                                @dueDate.ToString("MM/dd/yyyy")
-                                            </td>
-                                            <td style="text-align:center">
-                                                
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-
+                <div class="panel-heading" style="text-align:left; background-color:lightgrey">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="glyph-link" data-toggle="collapse" href="#collapse-@period.periodName.Replace(" ", "")" style="text-decoration:none">
+                                <span class="glyphicon glyphicon-chevron-down" style="font-size:10px"></span>
+                                <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold">
+                                    @period.periodName
+                                    <span>(@period.periodActivityList.Count() Tasks)</span>
+                                </h5>
+                            </a>
                         </div>
-                    }
+                    </div>
+                </div>
+                            
+                @************@
+                @*Activities*@
+                @************@
+                <div id="collapse-@period.periodName.Replace(" ", "")" class="panel-collapse collapse in">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr style="background-color:transparent">
+                                <th style="text-align:center">
+                                    @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().bldgName)
+                                </th>
+                                <th style="text-align:center">
+                                    @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().mtrcName)
+                                </th>
+                                <th style="text-align:center">
+                                    Finished?
+                                </th>
+                                <th style="text-align:center">
+                                    @Html.DisplayNameFor(model => model.periodList.First().periodActivityList.First().rzBapmStatus)
+                                </th>
+                                <th style="text-align:center">
+                                    Action
+                                </th>
+                                <th style="text-align:center">
+                                    Due Date
+                                </th>
+                                <th style="text-align:center">
+                                    Start Date
+                                </th>
+                            </tr>
+                        </thead>
+
+                        @foreach (var activity in period.periodActivityList)
+                        {
+                            DateTime dueDate = new DateTime(Int32.Parse(activity.year), Int32.Parse(activity.month), 1).AddMonths(2).AddDays(-1).Date;
+                            string outstanding = (activity.rzBapmStatus == "Approved") ? "Yes" : "No";
+                            string outstandingColor = (activity.rzBapmStatus == "Approved") ? "green" : "red";
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => activity.bldgName)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => activity.mtrcName)
+                                </td>
+                                <td style="text-align:center; color:@outstandingColor">
+                                    @outstanding
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => activity.rzBapmStatus)
+                                </td>
+                                <td style="text-align:center">
+                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + activity.mtrcPeriodId + "&bldg_id=" + activity.bldgId + "&bapm_id=" + activity.rzBapmId;}
+                                    <a href="@apUrl" style="text-decoration:underline">View Action Plan</a>
+                                </td>
+                                <td style="text-align:center">
+                                    @dueDate.ToString("MM/dd/yyyy")
+                                </td>
+                                <td style="text-align:center">
+                                                
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            </div>
+        }
 
     </div>
 </div>
