@@ -8,10 +8,23 @@ namespace REDZONE.Models
 {
     public class TeamActivitiesViewModel
     {
-        public List<TeamActivity> teamActivityList { get; set; }
+        public List<TeamActivityPeriod> periodList { get; set; }
         public TeamActivitiesViewModel()
         {
-            teamActivityList = new List<TeamActivity>();
+            periodList = new List<TeamActivityPeriod>();
+        }
+    }
+
+    public class TeamActivityPeriod
+    {
+        public string month { get; set; }
+        public string monthName { get; set; }
+        public string year { get; set; }
+        public string periodName { get; set; }
+        public List<TeamActivity> periodActivityList { get; set; }
+        public TeamActivityPeriod()
+        {
+            periodActivityList = new List<TeamActivity>();
         }
     }
 
@@ -31,5 +44,6 @@ namespace REDZONE.Models
         public string rzBapmId { get; set; }
         [Display(Name = "Status")]
         public string rzBapmStatus { get; set; }
+        public string rzBapmStartDate { get; set; }
     }
 }

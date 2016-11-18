@@ -700,9 +700,21 @@ namespace REDZONE.AppCode
                     {  nextAction = "Start AP";  }
                     break;
                 case "WIP":         //Same as Rejected
+                    if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN"))
+                    { nextAction = "Continue AP"; }
+                    else
+                    if (currentUser.hasRole("RZ_BLDG_USER") && hasBuildingAccess)
+                    {
+                        nextAction = "View AP";
+                    }
+                    else if ((ap_status == "Rejected" && currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
+                    {
+                        nextAction = "View AP";
+                    }
+                    break;
                 case "Rejected":
                     if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN"))
-                    {  nextAction = "Continue AP"; }
+                    {  nextAction = "Rework AP"; }
                     else
                         if (currentUser.hasRole("RZ_BLDG_USER") && hasBuildingAccess) {
                             nextAction = "View AP";
@@ -1228,6 +1240,19 @@ namespace REDZONE.AppCode
                     tempTeamActivity.mtrcPeriodId = (string)res["mtrc_period_id"];
                     tempTeamActivity.rzBapmId = (string)res["rz_bapm_id"];
                     tempTeamActivity.rzBapmStatus = (string)res["rz_bapm_status"];
+                    tempTeamActivity.rzBapmStartDate = (string)res["rz_apd_ap_created_on_dtm"];
+
+                    if (String.IsNullOrEmpty(tempTeamActivity.month)) tempTeamActivity.month = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.monthName)) tempTeamActivity.monthName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.year)) tempTeamActivity.year = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.periodName)) tempTeamActivity.periodName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.bldgName)) tempTeamActivity.bldgName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.bldgId)) tempTeamActivity.bldgId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.mtrcName)) tempTeamActivity.mtrcName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.mtrcPeriodId)) tempTeamActivity.mtrcPeriodId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmId)) tempTeamActivity.rzBapmId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStatus)) tempTeamActivity.rzBapmStatus = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStartDate)) tempTeamActivity.rzBapmStartDate = "";
 
                     teamActivityList.Add(tempTeamActivity);
                 }

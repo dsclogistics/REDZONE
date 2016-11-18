@@ -367,7 +367,7 @@
                             </div>
 
                             <div id="collapse-@bldg.bldgName.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                <div class="panel-body" style="padding-bottom:0">
+                                <div class="panel-body" style="padding-bottom:0; padding-top:0">
 
                                     @*********@
                                     @*Periods*@
@@ -375,7 +375,7 @@
                                     <div class="panel-group">
                                         @foreach (var period in bldg.periodList)
                                         {
-                                            <div class="panel panel-default">
+                                            <div class="panel panel-default" style="margin-top:15px">
                                                 <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px ">
                                                     <a class="glyph-link" data-toggle="collapse" href="#collapse-@bldg.bldgName.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                                         <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
@@ -500,7 +500,7 @@
                                 </div>
 
                                 <div id="collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")" class="panel-collapse collapse @apTaskDisplay">
-                                    <div class="panel-body" style="padding-bottom:0">
+                                    <div class="panel-body" style="padding-bottom:0; padding-top:0">
 
                                         @*********@
                                         @*Periods*@
@@ -508,7 +508,7 @@
                                         <div class="panel-group">
                                             @foreach (var period in mtrc.periodList)
                                             {
-                                                <div class="panel panel-default">
+                                                <div class="panel panel-default" style="margin-top:15px">
                                                     <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px">
                                                         <a class="glyph-link" data-toggle="collapse" href="#collapse-@mtrc.mtrc_prod_display_text.Replace(" ", "")-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                                             <span class="glyphicon @apTaskGlyph" style="font-size:10px"></span>
@@ -612,14 +612,14 @@
             </div>
 
             <div id="collapse-mtrc-tasks" class="panel-collapse collapse @mtrcTaskDisplay">
-                <div class="panel-body" style="padding-bottom:0">
+                <div class="panel-body" style="padding-bottom:0; padding-top:0">
 
                     @*********@
                     @*Periods*@
                     @*********@
                     @foreach (var period in Model.mtrcTaskList)
                     {
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" style="margin-top:15px">
                             <div class="panel-heading" style="text-align:left; padding-top:3px; padding-bottom:3px">
                                 <a class="glyph-link" data-toggle="collapse" href="#collapse-@period.periodName.Replace(" ", "")" style="text-decoration:none">
                                     <span class="glyphicon @mtrcTaskGlyph" style="font-size:10px"></span>

@@ -164,12 +164,54 @@ namespace REDZONE.Controllers
         {
             // FD Nov16,2016
             //CODE TO MODIFY!!!!!!! - THIS WAS COPIED FROM "INDEX" action, so we can replace with new code!!!!!!!!!
+            TeamActivitiesViewModel teamActivitiesViewModel = new TeamActivitiesViewModel();
             List<TeamActivity> teamActivityList = new List<TeamActivity>();
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
 
             teamActivityList = dataParcer.getUserTeamActivities(actionPlanUser.dbUserId);
 
-            return View(teamActivityList);
+            //Convert Action Plan submitter task list to nested list for view model
+            //List<TeamActivityPeriod> periodList = (
+            //    from a in teamActivityList
+            //    group a by new { a.month, a.monthName, a.year, a.periodName } into grouped
+            //    select new TeamActivityPeriod
+            //    {
+            //        month = grouped.Key.month,
+            //        monthName = grouped.Key.monthName,
+            //        year = grouped.Key.year,
+            //        periodName = grouped.Key.periodName,
+            //        periodActivityList = (from b in grouped
+            //                              select new TeamActivity
+            //                              {
+            //                                  month = b.month,
+            //                                  monthName = b.monthName,
+            //                                  year = b.year,
+            //                                  periodName = b.periodName,
+            //                                  bldgName = b.bldgName,
+            //                                  bldgId = b.bldgId,
+            //                                  mtrcName = b.mtrcName,
+            //                                  mtrcPeriodId = b.mtrcPeriodId,
+            //                                  rzBapmId = b.rzBapmId,
+            //                                  rzBapmStatus = b.rzBapmStatus
+            //                              }).OrderBy(x => x.bldgName).ThenBy(x => x.mtrcName).ToList()
+            //    }).OrderByDescending(x => Int32.Parse(x.year)).ThenByDescending(x => Int32.Parse(x.month)).ToList();
+
+            List<TeamActivityPeriod> periodList = (
+                from a in teamActivityList
+                group a by new { a.month, a.monthName, a.year, a.periodName } into grouped
+                select new TeamActivityPeriod
+                {
+                    month = grouped.Key.month,
+                    monthName = grouped.Key.monthName,
+                    year = grouped.Key.year,
+                    periodName = grouped.Key.periodName,
+                    periodActivityList = (from b in grouped
+                                          select b).OrderBy(x => x.bldgName).ThenBy(x => x.mtrcName).ToList()
+                }).OrderByDescending(x => Int32.Parse(x.year)).ThenByDescending(x => Int32.Parse(x.month)).ToList();
+
+            teamActivitiesViewModel.periodList = periodList;
+
+            return View(teamActivitiesViewModel);
         }
 
 
