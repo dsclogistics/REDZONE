@@ -21,10 +21,21 @@ namespace REDZONE.Models
         public string monthName { get; set; }
         public string year { get; set; }
         public string periodName { get; set; }
-        public List<TeamActivity> periodActivityList { get; set; }
+        public List<TeamActivityPeriodBuilding> periodBldgList { get; set; }
         public TeamActivityPeriod()
         {
-            periodActivityList = new List<TeamActivity>();
+            periodBldgList = new List<TeamActivityPeriodBuilding>();
+        }
+    }
+
+    public class TeamActivityPeriodBuilding
+    {
+        public string bldgName { get; set; }
+        public string bldgId { get; set; }
+        public List<TeamActivity> activityList { get; set; }
+        public TeamActivityPeriodBuilding()
+        {
+            activityList = new List<TeamActivity>();
         }
     }
 
