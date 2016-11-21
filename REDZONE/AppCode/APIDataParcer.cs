@@ -1186,18 +1186,18 @@ namespace REDZONE.AppCode
         }
 
         //This method returns the count of all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
-        public TeamActivityCount getUserTeamActCount(string app_user_id)
+        public TeamActivityCount getUserTeamActCount(string app_user_id, string begmonth, string begyear, string endmonth, string endyear)
         {
             TeamActivityCount tempActivityCount = new TeamActivityCount();
             try
             {
                 //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
-                string curYear = DateTime.Today.Year.ToString();
-                string curMonth = DateTime.Today.Month.ToString();
+                //string curYear = DateTime.Today.Year.ToString();
+                //string curMonth = DateTime.Today.Month.ToString();
 
                 //string jsonPayload = String.Format("{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"{0}\",\"endmonth\":\"{1}\",\"endyear\":\"{0}\",\"app_user_id\":\"{2}\"}", curYear, curMonth, app_user_id);
                 //string jsonPayload = @"{""productname"":""Red Zone"",""begmonth"":""1"",""begyear"":""" + curYear + @""",""endmonth"":""" + curMonth + @""",""endyear"":""" + curYear+ @""",""app_user_id"":""" + curYear+ @"""}";
-                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
+                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"" + begmonth + "\",\"begyear\":\"" + begyear + "\",\"endmonth\":\"" + endmonth + "\",\"endyear\":\"" + endyear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
                 
                 JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamtaskscount", jsonPayload));
 
@@ -1221,17 +1221,17 @@ namespace REDZONE.AppCode
         }
 
         //This method returns all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
-        public List<TeamActivity> getUserTeamActivities(string app_user_id)
+        public List<TeamActivity> getUserTeamActivities(string app_user_id, string begmonth, string begyear, string endmonth, string endyear)
         {
             List<TeamActivity> teamActivityList = new List<TeamActivity>();
 
             try
             {
                 //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
-                string curYear = DateTime.Today.Year.ToString();
-                string curMonth = DateTime.Today.Month.ToString();
+                //string curYear = DateTime.Today.Year.ToString();
+                //string curMonth = DateTime.Today.Month.ToString();
 
-                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
+                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"" + begmonth + " \",\"begyear\":\"" + begyear + "\",\"endmonth\":\"" + endmonth + "\",\"endyear\":\"" + endyear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
 
                 JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
                 JArray jActionPlans = (JArray)parsed_result["actionplans"];

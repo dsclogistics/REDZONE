@@ -123,7 +123,12 @@ namespace REDZONE.Controllers
 
             try
             {
-                teamActivityCount = parcer.getUserTeamActCount(user.dbUserId);
+                string begYear = DateTime.Today.AddMonths(-3).Year.ToString();
+                string begMonth = DateTime.Today.AddMonths(-3).Month.ToString();
+                string endYear = DateTime.Today.Year.ToString();
+                string endMonth = DateTime.Today.Month.ToString();
+
+                teamActivityCount = parcer.getUserTeamActCount(user.dbUserId, begMonth, begYear, endMonth, endYear);
             }
             catch (Exception e)
             {
