@@ -1,4 +1,4 @@
-﻿@model REDZONE.Models.RZTaskCounts
+﻿@model REDZONE.Models.TeamActivityCount
 @{
     string alertBGColor = (Model.totalTasks > 0) ? "#fa3e3e" : "green";
 
@@ -76,23 +76,13 @@
                 <table class="table table-condensed" style="width:100%">
                     @if (Model.totalTasks > 0)
                     {
-                        if (Model.mtrcCount > 0)
+                        foreach (var bldg in Model.buildingActivityList)
                         {
+                            string bldgCount = (bldg.submitCount + bldg.reviewCount).ToString();
                             <tr class="taskItem" style="text-align:left; color:black;">
                                 <td @*style="min-width:350px; "*@>
                                     <div style="margin:0; padding:0;">
-                                        <a href="/Tasks/Index/?display=mtrc">Metric Tasks (@Model.mtrcCount)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-
-                        if (Model.actPlanCount > 0)
-                        {
-                            <tr class="taskItem" style="text-align:left; color:black;">
-                                <td >
-                                    <div style="margin:0; padding:0;">
-                                        <a href="/Tasks/Index/?display=ap">Action Plan Tasks (@Model.actPlanCount)</a>
+                                        <a href="/Tasks/TeamActivities">@bldg.bldgName (@bldgCount)</a>
                                     </div>
                                 </td>
                             </tr>
@@ -101,7 +91,7 @@
                     else
                     {
                         <tr class="taskItem" style="text-align:left; color:green;">
-                            <td >
+                            <td>
                                 <div style="margin:0; padding:0;">
                                     <span>NO PENDING TASKS</span>
                                 </div>

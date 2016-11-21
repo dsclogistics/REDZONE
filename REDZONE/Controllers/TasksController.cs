@@ -164,93 +164,54 @@ namespace REDZONE.Controllers
         {
             // FD Nov16,2016
             //CODE TO MODIFY!!!!!!! - THIS WAS COPIED FROM "INDEX" action, so we can replace with new code!!!!!!!!!
-            RZTasksViewModel tasksViewModel = new RZTasksViewModel();
-            RZTaskDetailList tasksDetailList = new RZTaskDetailList();
+            TeamActivitiesViewModel teamActivitiesViewModel = new TeamActivitiesViewModel();
+            List<TeamActivity> teamActivityList = new List<TeamActivity>();
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
 
-
-            tasksDetailList = dataParcer.getUserTaskDetails(actionPlanUser.dbUserId);
+            teamActivityList = dataParcer.getUserTeamActivities(actionPlanUser.dbUserId);
 
             //Convert Action Plan submitter task list to nested list for view model
-            List<RzApTaskBldg> apSubmitList = (
-                from a in tasksDetailList.apSubmitTaskList
-                group a by new { a.bldg_name } into grouped
-                select new RzApTaskBldg
+            //List<TeamActivityPeriod> periodList = (
+            //    from a in teamActivityList
+            //    group a by new { a.month, a.monthName, a.year, a.periodName } into grouped
+            //    select new TeamActivityPeriod
+            //    {
+            //        month = grouped.Key.month,
+            //        monthName = grouped.Key.monthName,
+            //        year = grouped.Key.year,
+            //        periodName = grouped.Key.periodName,
+            //        periodActivityList = (from b in grouped
+            //                              select new TeamActivity
+            //                              {
+            //                                  month = b.month,
+            //                                  monthName = b.monthName,
+            //                                  year = b.year,
+            //                                  periodName = b.periodName,
+            //                                  bldgName = b.bldgName,
+            //                                  bldgId = b.bldgId,
+            //                                  mtrcName = b.mtrcName,
+            //                                  mtrcPeriodId = b.mtrcPeriodId,
+            //                                  rzBapmId = b.rzBapmId,
+            //                                  rzBapmStatus = b.rzBapmStatus
+            //                              }).OrderBy(x => x.bldgName).ThenBy(x => x.mtrcName).ToList()
+            //    }).OrderByDescending(x => Int32.Parse(x.year)).ThenByDescending(x => Int32.Parse(x.month)).ToList();
+
+            List<TeamActivityPeriod> periodList = (
+                from a in teamActivityList
+                group a by new { a.month, a.monthName, a.year, a.periodName } into grouped
+                select new TeamActivityPeriod
                 {
-                    bldgName = grouped.Key.bldg_name,
-                    periodList = (from b in grouped
-                                  group b by new { b.period_name } into grouped2
-                                  select new RzApTaskBldgPeriod
-                                  {
-                                      periodName = grouped2.Key.period_name,
-                                      mtrcList = (from c in grouped2
-                                                  select new RzApTaskBldgPeriodMtrc
-                                                  {
-                                                      mtrc_prod_display_text = c.mtrc_prod_display_text,
-                                                      status = c.status,
-                                                      action = dataParcer.getMPV_NextAction(c.status, c.mtrc_period_id.ToString(), c.bldg_id.ToString(), actionPlanUser.SSO),
-                                                      mtrc_period_id = c.mtrc_period_id,
-                                                      bldg_id = c.bldg_id,
-                                                      rz_bapm_id = c.rz_bapm_id,
-                                                      month = c.month,
-                                                      year = c.year
-                                                  }).OrderBy(x => x.mtrc_prod_display_text).ToList()
-                                  }).OrderByDescending(x => Int32.Parse(x.mtrcList.First().year)).ThenByDescending(x => Int32.Parse(x.mtrcList.First().month)).ToList()
-                }).OrderBy(x => x.bldgName).ToList();
+                    month = grouped.Key.month,
+                    monthName = grouped.Key.monthName,
+                    year = grouped.Key.year,
+                    periodName = grouped.Key.periodName,
+                    periodActivityList = (from b in grouped
+                                          select b).OrderBy(x => x.bldgName).ThenBy(x => x.mtrcName).ToList()
+                }).OrderByDescending(x => Int32.Parse(x.year)).ThenByDescending(x => Int32.Parse(x.month)).ToList();
 
-            tasksViewModel.apSubmitTaskList = apSubmitList;
+            teamActivitiesViewModel.periodList = periodList;
 
-            //Convert Action Plan reviewer task list to nested list for view model
-            List<RzApTaskMtrc> apReviewList = (
-                from a in tasksDetailList.apReviewTaskList
-                group a by new { a.mtrc_prod_display_text } into grouped
-                select new RzApTaskMtrc
-                {
-                    mtrc_prod_display_text = grouped.Key.mtrc_prod_display_text,
-                    periodList = (from b in grouped
-                                  group b by new { b.period_name } into grouped2
-                                  select new RzApTaskMtrcPeriod
-                                  {
-                                      periodName = grouped2.Key.period_name,
-                                      bldgList = (from c in grouped2
-                                                  select new RzApTaskMtrcPeriodBldg
-                                                  {
-                                                      bldgName = c.bldg_name,
-                                                      status = c.status,
-                                                      action = dataParcer.getMPV_NextAction(c.status, c.mtrc_period_id.ToString(), c.bldg_id.ToString(), actionPlanUser.SSO),
-                                                      mtrc_period_id = c.mtrc_period_id,
-                                                      bldg_id = c.bldg_id,
-                                                      rz_bapm_id = c.rz_bapm_id,
-                                                      month = c.month,
-                                                      year = c.year
-                                                  }).OrderBy(x => x.bldgName).ToList()
-                                  }).OrderByDescending(x => Int32.Parse(x.bldgList.First().year)).ThenByDescending(x => Int32.Parse(x.bldgList.First().month)).ToList()
-                }).OrderBy(x => x.mtrc_prod_display_text).ToList();
-
-            tasksViewModel.apReviewTaskList = apReviewList;
-
-            //Convert Action Plan metric task list to nested list for view model
-            List<RzMtrcTaskPeriod> mtrcCollectList = (
-                from a in tasksDetailList.mtrcTaskList
-                group a by new { a.period_name } into grouped
-                select new RzMtrcTaskPeriod
-                {
-                    periodName = grouped.Key.period_name,
-                    mtrcList = (from b in grouped
-                                select new RzMtrcTaskPeriodMtrc
-                                {
-                                    mtrc_prod_display_text = b.mtrc_prod_display_text,
-                                    status = b.status,
-                                    mtrc_id = b.mtrc_id,
-                                    month = b.month,
-                                    year = b.year,
-                                    month_name = b.month_name
-                                }).OrderBy(x => x.mtrc_prod_display_text).ToList()
-                }).OrderByDescending(x => Int32.Parse(x.mtrcList.First().year)).ThenByDescending(x => Int32.Parse(x.mtrcList.First().month)).ToList();
-
-            tasksViewModel.mtrcTaskList = mtrcCollectList;
-
-            return View(tasksViewModel);
+            return View(teamActivitiesViewModel);
         }
 
 

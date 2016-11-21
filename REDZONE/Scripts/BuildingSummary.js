@@ -3,6 +3,12 @@ $(document).ready(function () {
     $(".menuItem").removeClass("menuSelected");
     //------------------------------------------------------------------------------------
     $("#mDashboard").addClass("menuSelected");
+
+    $('.panel-heading').on('click', '.glyph-link', function (e) {
+        $(this).find('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    });
+
+
     //------------------------------------------------------------------------------------
     //This function is exclusive for the Building Summary Page
     function reviewerHasMetric(metricId) {        
@@ -512,7 +518,6 @@ $('#chkMyBuildingsOnly').change(function () {
     });
 });
 //------------------------------------------------------------------------------------
-
 
 //$(".collapse").on('hidden.bs.collapse', function () {
 //    alert('The collapsible content is now hidden.');

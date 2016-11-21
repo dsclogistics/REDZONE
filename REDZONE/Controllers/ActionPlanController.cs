@@ -165,6 +165,7 @@ namespace REDZONE.Controllers
                 apViewModel.review_EditableStatus = "";
                 apViewModel.displayStatus = "";
                 apViewModel.displayColor = "green";
+                apViewModel.pageHeader = "View Action Plan";
 
                 switch (apViewModel.currentAPStatus)
                 {
@@ -173,42 +174,49 @@ namespace REDZONE.Controllers
                         apViewModel.displayColor = "orange";
                         apViewModel.AP_EditableStatus = apViewModel.canSubmitAP ? "" : "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Start Action Plan" : "View Action Plan";
                         break;
                     case "WIP":
                         apViewModel.displayStatus = "In Process";
                         apViewModel.displayColor = "orange";
                         apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Manage Action Plan" : "View Action Plan";
                         break;
                     case "Ready For Review":
                         apViewModel.displayStatus = "Ready For Review";
                         apViewModel.displayColor = "orange";
                         apViewModel.AP_EditableStatus = "readonly";
                         apViewModel.review_EditableStatus = (apViewModel.canReviewAP) ? "" : "disabled";
+                        apViewModel.pageHeader = (apViewModel.canReviewAP) ? "Review Action Plan" : "View Action Plan";
                         break;
                     case "Rejected":
                         apViewModel.displayStatus = "Rejected";
                         apViewModel.displayColor = "red";
                         apViewModel.AP_EditableStatus = "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = "View Action Plan";
                         break;
                     case "Rejected New":
                         apViewModel.displayStatus = "Rejected (New Plan Required)";
                         apViewModel.displayColor = "red";
                         apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Rework Action Plan" : "View Action Plan";
                         break;
                     case "Approved":
                         apViewModel.displayStatus = "Approved";
                         apViewModel.displayColor = "green";
                         apViewModel.AP_EditableStatus = "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = "View Action Plan";
                         break;
                     default:
                         apViewModel.displayStatus = apViewModel.currentAPStatus;
                         apViewModel.displayColor = "green";
                         apViewModel.AP_EditableStatus = "readonly";
                         apViewModel.review_EditableStatus = "disabled";
+                        apViewModel.pageHeader = "View Action Plan";
                         break;
                 }
             }

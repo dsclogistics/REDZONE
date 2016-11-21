@@ -32,6 +32,7 @@ namespace REDZONE.Models
         public List<ActionPlan> actionPlanList { get; set; }
         public List<PriorActionPlan> priorActionPlanList { get; set; }
 
+        public string pageHeader { get; set; }
         public string currentAPVersion { get; set; }
         public string currentAPStatus { get; set; }
         public string displayStatus { get; set; }

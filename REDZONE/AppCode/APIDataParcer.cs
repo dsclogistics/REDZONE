@@ -700,9 +700,21 @@ namespace REDZONE.AppCode
                     {  nextAction = "Start AP";  }
                     break;
                 case "WIP":         //Same as Rejected
+                    if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN"))
+                    { nextAction = "Continue AP"; }
+                    else
+                    if (currentUser.hasRole("RZ_BLDG_USER") && hasBuildingAccess)
+                    {
+                        nextAction = "View AP";
+                    }
+                    else if ((ap_status == "Rejected" && currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
+                    {
+                        nextAction = "View AP";
+                    }
+                    break;
                 case "Rejected":
                     if ((currentUser.hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN"))
-                    {  nextAction = "Continue AP"; }
+                    {  nextAction = "Rework AP"; }
                     else
                         if (currentUser.hasRole("RZ_BLDG_USER") && hasBuildingAccess) {
                             nextAction = "View AP";
@@ -1174,9 +1186,9 @@ namespace REDZONE.AppCode
         }
 
         //This method returns the count of all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
-        public RZTaskCounts getUserTeamActCount(string app_user_id)
+        public TeamActivityCount getUserTeamActCount(string app_user_id)
         {
-            RZTaskCounts tempTaskCounts = new RZTaskCounts();
+            TeamActivityCount tempActivityCount = new TeamActivityCount();
             try
             {
                 //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
@@ -1187,17 +1199,79 @@ namespace REDZONE.AppCode
                 //string jsonPayload = @"{""productname"":""Red Zone"",""begmonth"":""1"",""begyear"":""" + curYear + @""",""endmonth"":""" + curMonth + @""",""endyear"":""" + curYear+ @""",""app_user_id"":""" + curYear+ @"""}";
                 string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
                 
-                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamtaskscount", jsonPayload));
 
+                JArray jActivities = (JArray)parsed_result["tasks"];
 
-                tempTaskCounts.mtrcCount = 0;
-                tempTaskCounts.actPlanCount = ((JArray)parsed_result["actionplans"]).Count;
+                foreach(var res in jActivities)
+                {
+                    TeamActivityBuildingCount tempActivityBuildingCount = new TeamActivityBuildingCount();
+
+                    tempActivityBuildingCount.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
+                    tempActivityBuildingCount.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                    tempActivityBuildingCount.submitCount = (int)res["submit_count"];
+                    tempActivityBuildingCount.reviewCount = (int)res["review_count"];
+
+                    tempActivityCount.buildingActivityList.Add(tempActivityBuildingCount);
+                }
             }
             catch { }
 
-            return tempTaskCounts;
+            return tempActivityCount;
         }
 
+        //This method returns all Ucompleted Activities for a User's Team (e.g. data collection or action plan submission/review)
+        public List<TeamActivity> getUserTeamActivities(string app_user_id)
+        {
+            List<TeamActivity> teamActivityList = new List<TeamActivity>();
+
+            try
+            {
+                //JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("endpoint","payload") );
+                string curYear = DateTime.Today.Year.ToString();
+                string curMonth = DateTime.Today.Month.ToString();
+
+                string jsonPayload = "{\"productname\":\"Red Zone\",\"begmonth\":\"1\",\"begyear\":\"" + curYear + "\",\"endmonth\":\"" + curMonth + "\",\"endyear\":\"" + curYear + "\",\"app_user_id\":\"" + app_user_id + "\"}";
+
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getmyteamactivities", jsonPayload));
+                JArray jActionPlans = (JArray)parsed_result["actionplans"];
+
+                foreach(var res in jActionPlans)
+                {
+                    TeamActivity tempTeamActivity = new TeamActivity();
+
+                    tempTeamActivity.month = (string)res["month"];
+                    tempTeamActivity.monthName = intToMonth((int)res["month"]);
+                    tempTeamActivity.year = (string)res["year"];
+                    tempTeamActivity.periodName = intToMonth((int)res["month"]) + " " + (string)res["year"];
+                    tempTeamActivity.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                    tempTeamActivity.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
+                    tempTeamActivity.mtrcName = (string)res["mtrc_prod_display_text"];
+                    tempTeamActivity.mtrcPeriodId = (string)res["mtrc_period_id"];
+                    tempTeamActivity.rzBapmId = (string)res["rz_bapm_id"];
+                    tempTeamActivity.rzBapmStatus = (string)res["rz_bapm_status"];
+                    tempTeamActivity.rzBapmStartDate = (string)res["rz_apd_ap_created_on_dtm"];
+
+                    if (String.IsNullOrEmpty(tempTeamActivity.month)) tempTeamActivity.month = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.monthName)) tempTeamActivity.monthName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.year)) tempTeamActivity.year = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.periodName)) tempTeamActivity.periodName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.bldgName)) tempTeamActivity.bldgName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.bldgId)) tempTeamActivity.bldgId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.mtrcName)) tempTeamActivity.mtrcName = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.mtrcPeriodId)) tempTeamActivity.mtrcPeriodId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmId)) tempTeamActivity.rzBapmId = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStatus)) tempTeamActivity.rzBapmStatus = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStartDate)) tempTeamActivity.rzBapmStartDate = "";
+
+                    teamActivityList.Add(tempTeamActivity);
+                }
+
+            }
+            catch { }
+
+            return teamActivityList;
+        }
 
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
         public RZTaskDetailList getUserTaskDetails(string app_user_id)
@@ -1571,7 +1645,8 @@ namespace REDZONE.AppCode
                     tempPriorActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
                     tempPriorActionPlan.priorAPMonth = intToMonth((int)res["month"]);
                     tempPriorActionPlan.priorAPYear = (string)res["year"];
-                    tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                    //tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                    tempPriorActionPlan.priorAPMetricGoalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                     tempPriorActionPlan.priorAPMetricValue = (string)res["mtrc_period_val_value"];
                     tempPriorActionPlan.priorAPStatus = (string)res["rz_apd_ap_status"];
                     tempPriorActionPlan.priorAPText = (string)res["rz_apd_ap_text"];
@@ -1756,7 +1831,8 @@ namespace REDZONE.AppCode
                 tempActionPlan.month = (string)res["month"];
                 tempActionPlan.monthName = intToMonth((int)res["month"]);
                 tempActionPlan.year = (string)res["year"];
-                tempActionPlan.mtrcGoalText = (string)res["goal_txt"];
+                //tempActionPlan.mtrcGoalText = (string)res["goal_txt"];
+                tempActionPlan.mtrcGoalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                 tempActionPlan.mtrcValue = (string)res["mtrc_period_val_value"];
                 tempActionPlan.status = (string)res["rz_bapm_status"];
 
@@ -1834,7 +1910,8 @@ namespace REDZONE.AppCode
                 apViewModel.apMonth = (string)res["month"];
                 apViewModel.apMonthName = intToMonth((int)res["month"]);
                 apViewModel.apYear = (string)res["year"];
-                apViewModel.goalText = (string)res["goal_txt"];
+                //apViewModel.goalText = (string)res["goal_txt"];
+                apViewModel.goalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                 apViewModel.mtrcPeriodValue = (string)res["mtrc_period_val_value"];
 
                 if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";

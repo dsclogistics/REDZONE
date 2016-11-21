@@ -31,7 +31,7 @@
                     @*<a href="/Home/Index"><img src="~/Images/BackToDashboard.png" width="80" height="35" style="float: right" /></a>*@
                     @if (Model.canFilterBuildings)
                     {
-                        <div class="checkbox" style="">
+                        <div class="checkbox" style="padding-left:45px; padding-top:76px">
                             <label class="" style="text-align:left; padding:0; font-size: .8em">
                                 <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
                                 <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
@@ -267,9 +267,85 @@
                         {
                             string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
 
-                            <div class="row" style="margin:0; padding:0; margin-bottom:7px;">
+                            <div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
+
+                                <div class="panel-heading" style="text-align:left; padding-top:0px; padding-bottom:0px">
+                                    <a class="glyph-link" data-toggle="collapse" href="#@monthDivId" style="text-decoration:none; color:black">
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td style="width:65%; text-align: left; ">
+                                                    <span class="glyphicon @APglyphicon"></span>
+                                                    <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
+                                                        Action Plans for @dscBldngHdr.metricMonth @Model.year
+                                                        @if (isFirstMonth)
+                                                        {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
+                                                    </span>
+                                                </td>
+                                                <td style="width:35%">
+                                                    @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
+                                                    {
+                                                        <span style="float:right; color:red; margin-right:5px; font-weight:bold; padding-top:3px">* <span style="color:black; ">Metrics for this month have not been finalized</span></span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </a>
+                                </div>
+
+                                <div id="@monthDivId" class="panel-collapse collapse @collapseStatus">
+                                    <table class="table table-condensed table-hover" style="text-align:center; margin-top:5px">
+                                        <thead >
+                                            <tr style="font-weight:bold; border-bottom:solid lightgrey 2px">
+                                                <td style="width:20%">Metric</td>
+                                                <td style="width:15%">Status</td>
+                                                <td style="width:15%">Action</td>
+                                                <td style="width:15%">Meeting Date</td>
+                                                <td style="width:20%">Meeting Owner</td>
+                                                <td style="width:15%">Last Update</td>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var buildingRow in Model.metricRows)
+                                        {
+                                            //if (@buildingRow.entityMetricCells[mIndex].rz_bapm_status == "Approved")
+                                            if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))
+                                            {
+                                                <tr>
+                                                    <td style="width:20%; font-weight:bold">@buildingRow.rowName</td>
+                                                    <td style="width:15%">@buildingRow.entityMetricCells[mIndex].rz_bapm_status</td>
+                                                    <td style="width:15%">
+                                                        @if (@buildingRow.entityMetricCells[mIndex].nextCellAction.Equals("---"))
+                                                        {
+                                                            <span>@buildingRow.entityMetricCells[mIndex].nextCellAction</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="lnkGotoAP" href="#" style="text-decoration:underline">
+                                                                @buildingRow.entityMetricCells[mIndex].nextCellAction
+                                                                <input id="bapm_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].rz_bapm_id" />
+                                                                <input id="mpv_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].cellValueId" />
+                                                                <input id="mp_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].mtrc_period_id" />
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                    <td style="width:15%">N/A</td>
+                                                    <td style="width:20%">@buildingRow.rowOwner</td>
+                                                    <td style="width:15%">@buildingRow.entityMetricCells[mIndex].metricLastUpdt</td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </table>
+                                </div>
+                            </div>
+
+
+
+
+
+                            @*<div class="row" style="margin:0; padding:0; margin-bottom:7px;">
                                 @*<div class="row bordered-round " style="margin-top:7px; border-width:.143em; background-color:#f7f7f7; width:100%; margin:0; padding:0">*@
-                                <div class="row bordered-round " style="margin-top:7px; background-color:#f7f7f7; width:100%; margin:0; padding:0">
+                                @*<div class="row bordered-round " style="margin-top:7px; background-color:#f7f7f7; width:100%; margin:0; padding:0">
                                     <table style="width:100%;">
                                         <tr>
                                             <td style="width:65%; text-align: left; vertical-align:central">
@@ -281,10 +357,10 @@
                                                         Action Plans for @dscBldngHdr.metricMonth @Model.year
                                                         @if (isFirstMonth)
                                                         {<span class="" style="color:red; margin-left:10px; font-size:14px; font-weight:normal"> [Action Plans are required]</span>}
-                                                    </span>
+                                                    </span>*@
                                                     @*@if (isFirstMonth)
                             {<span class="" style="color:red; text-align:left; margin-left:10px; font-size:14px; "> [Action Plans are required]</span>}*@
-                                                </div>
+                                                @*</div>
                                             </td>
                                             <td style="width:35%">
                                                 @if (Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Mixed") || Model.buildingHeadings.entityMetricCells[mIndex].cellStatus.Equals("Open"))
@@ -340,8 +416,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                                            isFirstMonth = false;
+                            </div>*@
+                            isFirstMonth = false;
                         }
                         colCounter++;
                     }
