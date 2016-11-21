@@ -56,6 +56,29 @@ namespace REDZONE.Models
         [Display(Name = "Status")]
         public string rzBapmStatus { get; set; }
         public string rzBapmStartDate { get; set; }
+        public string rzBapmApprovedDate { get; set; }
+        public string rzBapmUpdateDate { get; set; }
+        public string viewStatus { get; set; }
+        public string accountableParty { get; set; }
+    }
+
+    //ACCOUNTABLE USERS MODEL
+    public class AccountableUserViewModel
+    {
+        public string message { get; set; }
+        public List<AccountableUser> users { get; set; }
+
+        public AccountableUserViewModel()
+        {
+            users = new List<AccountableUser>();
+        }
+    }
+
+    public class AccountableUser
+    {
+        public string username { get; set; }
+        public string app_user_id { get; set; }
+        public string email { get; set; }
     }
 
     //COUNT MODEL

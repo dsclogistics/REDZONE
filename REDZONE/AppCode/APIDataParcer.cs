@@ -1251,6 +1251,10 @@ namespace REDZONE.AppCode
                     tempTeamActivity.rzBapmId = (string)res["rz_bapm_id"];
                     tempTeamActivity.rzBapmStatus = (string)res["rz_bapm_status"];
                     tempTeamActivity.rzBapmStartDate = (string)res["rz_apd_ap_created_on_dtm"];
+                    tempTeamActivity.rzBapmApprovedDate = (string)res["rz_bapm_approved_on_dtm"];
+                    tempTeamActivity.rzBapmUpdateDate = (string)res["lastactivity_on_dtm"];
+                    tempTeamActivity.viewStatus = getMyTeam_Status(tempTeamActivity.rzBapmStatus);
+                    tempTeamActivity.accountableParty = getMyTeam_AccountableParty(tempTeamActivity.rzBapmStatus);
 
                     if (String.IsNullOrEmpty(tempTeamActivity.month)) tempTeamActivity.month = "";
                     if (String.IsNullOrEmpty(tempTeamActivity.monthName)) tempTeamActivity.monthName = "";
@@ -1263,6 +1267,13 @@ namespace REDZONE.AppCode
                     if (String.IsNullOrEmpty(tempTeamActivity.rzBapmId)) tempTeamActivity.rzBapmId = "";
                     if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStatus)) tempTeamActivity.rzBapmStatus = "";
                     if (String.IsNullOrEmpty(tempTeamActivity.rzBapmStartDate)) tempTeamActivity.rzBapmStartDate = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmApprovedDate)) tempTeamActivity.rzBapmApprovedDate = "";
+                    if (String.IsNullOrEmpty(tempTeamActivity.rzBapmUpdateDate)) tempTeamActivity.rzBapmUpdateDate = "";
+
+                    //Parses dateTime strings to MM/dd/yyyy format if possible. Else returns "".
+                    tempTeamActivity.rzBapmStartDate = parseToDate(tempTeamActivity.rzBapmStartDate);
+                    tempTeamActivity.rzBapmApprovedDate = parseToDate(tempTeamActivity.rzBapmApprovedDate);
+                    tempTeamActivity.rzBapmUpdateDate = parseToDate(tempTeamActivity.rzBapmUpdateDate);
 
                     teamActivityList.Add(tempTeamActivity);
                 }
@@ -1271,6 +1282,68 @@ namespace REDZONE.AppCode
             catch { }
 
             return teamActivityList;
+        }
+
+        //This method returns the accountable user for a specified bapm Id
+        public AccountableUserViewModel getAccountableUsers(string rz_bapm_id)
+        {
+            AccountableUserViewModel accountableUserViewModel = new AccountableUserViewModel();
+            try
+            {
+                string jsonPayload = "{\"rz_bapm_id\":\"" + rz_bapm_id + "\"}";
+
+                JObject parsed_result = JObject.Parse(DataRetrieval.executeAPI("getusersforap", jsonPayload));
+
+                if ((string)parsed_result["result"] == "Success")
+                {
+                    string msg = (string)parsed_result["message"];
+                    if (msg == "Action Plan is Approved. No Action Required")
+                    {
+                        //If action plan approved message is displayed.
+                        accountableUserViewModel.message = msg;
+                    }
+                    else
+                    {
+                        if((JArray)parsed_result["users"] == null)
+                        {
+                            //If some other message is displayed.
+                            accountableUserViewModel.message = (String.IsNullOrEmpty(msg)) ? "" : msg;
+                        }
+                        else
+                        {
+                            JArray jUsers = (JArray)parsed_result["users"];
+
+                            if (jUsers.Count() > 0)
+                            {
+                                //If there is a user list.
+                                accountableUserViewModel.message = "These are the assigned users.";
+                                foreach(var user in jUsers)
+                                {
+                                    AccountableUser tempUser = new AccountableUser();
+                                    tempUser.username = (string)user["username"];
+                                    tempUser.app_user_id = (string)user["app_user_id"];
+                                    tempUser.email = (string)user["email"];
+
+                                    if (String.IsNullOrEmpty(tempUser.username)) tempUser.username = "";
+                                    if (String.IsNullOrEmpty(tempUser.app_user_id)) tempUser.app_user_id = "";
+                                    if (String.IsNullOrEmpty(tempUser.email)) tempUser.email = "";
+
+                                    accountableUserViewModel.users.Add(tempUser);
+                                }
+                            }
+                            else
+                            {
+                                //If the user list is empty.
+                                accountableUserViewModel.message = "There are no assigned users.";
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch { }
+
+            return accountableUserViewModel;
         }
 
         //This method returns the count of all types of tasks that the user may have (e.g. data collection or action plan submission/review)
@@ -2037,6 +2110,21 @@ namespace REDZONE.AppCode
             }
             return monthNo;
         }
+        public string parseToDate(string dateTime)
+        {
+            string returnDate = "";
+            if(dateTime == "" || dateTime == null)
+            {
+
+            }
+            else
+            {
+                DateTime tempDateTime = new DateTime();
+                string tempDate = dateTime.Substring(0, 10);
+                returnDate = (DateTime.TryParse(tempDate, out tempDateTime))? tempDateTime.ToString("MM/dd/yyyy") : "";
+            }
+            return returnDate;
+        }
         private string getMonthShortName(string monthLong)
         {
             string monthShort = String.Empty;
@@ -2106,6 +2194,65 @@ namespace REDZONE.AppCode
             if (isGoalMet == "N") return COLOR_LIGHT_RED;
 
             return mColor;
+        }
+
+        public string getMyTeam_Status(string ap_status)
+        {
+            string nextAction = "---";
+
+            switch (ap_status)
+            {
+                case "Not Started":
+                    //Check if User is Submitter for this building or Admin
+                    nextAction = "Not Started";
+                    break;
+                case "WIP":         //Same as Rejected
+                    nextAction = "In Process";
+                    break;
+                case "Rejected":
+                    nextAction = "Rejected - Requires Rework";
+                    break;
+                case "Ready For Review":
+                    nextAction = "Waiting for Review";
+                    break;
+                case "Approved":
+                    nextAction = "Approved";
+                    break;
+                default:
+                    nextAction = "N/A";
+                    break;
+            }
+
+            return nextAction;
+        }
+        public string getMyTeam_AccountableParty(string ap_status)
+        {
+            string nextAction = "---";
+
+            switch (ap_status)
+            {
+                case "Not Started":
+                    //Check if User is Submitter for this building or Admin
+                    nextAction = "Submitter";
+                    break;
+                case "WIP":         //Same as Rejected
+                    nextAction = "Submitter";
+                    break;
+                case "Rejected":
+                    nextAction = "Submitter";
+                    break;
+                case "Ready For Review":
+                    nextAction = "Reviewer";
+                    break;
+                case "Approved":
+                    nextAction = "N/A";
+                    break;
+                default:
+                    nextAction = "N/A";
+                    break;
+            }
+
+            return nextAction;
         }
 
     }
