@@ -305,6 +305,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\BuildingSummary.css" />
     <Content Include="Content\EditView.css" />
+    <Content Include="Content\Effects.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\ReasonMgmt.css" />
     <Content Include="Content\RedZoneApp.css" />
@@ -362,6 +363,7 @@
     <Content Include="Images\download_template.png" />
     <Content Include="Images\DSCHOME_Logo.png" />
     <Content Include="Images\DSCRedZone2.png" />
+    <Content Include="Images\DSCRedZoneSmall.png" />
     <Content Include="Images\iconNoAvatar.png" />
     <Content Include="Images\icon_Warning.png" />
     <Content Include="Images\KPogany.jpg" />

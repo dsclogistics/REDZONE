@@ -9,41 +9,41 @@
     }
 
 </style>
-
-
-<ul class="nav navbar-nav" style="margin-top:12px; margin-left:0; padding:0; font-family:Arial; width:100%">
-    <li class="dropdown " style="padding:0; ">
-        @if (Request.IsAuthenticated)
-        {
-            try
+<li style="float:left; margin-left:8px">
+    <ul class="nav navbar-nav menuItem" style="margin-top:12px; margin-left:0; padding:0; font-family:Arial; width:100%; display:inline;">
+        <li class="dropdown " style="padding:0; ">
+            @if (Request.IsAuthenticated)
             {
-                string userName = (Session["first_name"] == null) ? User.Identity.Name : Session["first_name"].ToString() + " " + Session["last_name"].ToString();
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding:0px; ">
-                    <span class="glyphicon glyphicon-user" style="font-size:medium; "><span id="userAvatar" style="font-family:Arial; margin-left:10px">@userName</span></span>
-                </a>
-                <ul class="dropdown-menu user-menu">
-                    <li class="disabled" style="margin: 0px, 3px; color:gray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
-                    <li id="cmdViewCred" style="margin: 0px, 3px; "><a href="#" id="creds" style="color: lightgray">View Credentials</a></li>
-                    @*<li class="disabled" style="margin: 0px, 3px; color:gray">&nbsp;&nbsp;&nbsp;&nbsp; [ Role: <span id="liUserRole"></span> ]</li>*@
-                    @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; NAME: @Context.User.Identity.Name</li>*@
-                    @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; ADMIN: @Context.User.IsInRole("ADMIN")</li>*@
-                    <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
-                </ul>
+                try
+                {
+                    string userName = (Session["first_name"] == null) ? User.Identity.Name : Session["first_name"].ToString() + " " + Session["last_name"].ToString();
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding:0px; ">
+                        <span class="glyphicon glyphicon-user" style="font-size:medium; "><span id="userAvatar" style="font-family:Arial; margin-left:10px">@userName</span></span>
+                    </a>
+                    <ul class="dropdown-menu user-menu">
+                        <li class="disabled" style="margin: 0px, 3px; color:gray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
+                        <li id="cmdViewCred" style="margin: 0px, 3px; "><a href="#" id="creds" style="color: lightgray">View Credentials</a></li>
+                        @*<li class="disabled" style="margin: 0px, 3px; color:gray">&nbsp;&nbsp;&nbsp;&nbsp; [ Role: <span id="liUserRole"></span> ]</li>*@
+                        @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; NAME: @Context.User.Identity.Name</li>*@
+                        @*<li class="disabled" style="margin: 0px, 3px; color:lightgray">&nbsp;&nbsp;&nbsp;&nbsp; ADMIN: @Context.User.IsInRole("ADMIN")</li>*@
+                        <li style="margin: 0px, 3px">@Html.ActionLink(" Logout", "LogOff", "Account", null, new { style = "color:red; font-weight:bold" })</li>
+                    </ul>
+                }
+                catch
+                {
+                    @*<span>@ex.Message</span>
+                        Server.Transfer("~\\Account\\Logoff");*@
+                    <a href="/Account/LogOff" style="padding:0">
+                        <span class="glyphicon glyphicon-user" style="font-size:large; "> <span id="userAvatar" style="font-family:Arial">&nbsp;Login</span></span>
+                    </a>
+                }
             }
-            catch
+            else
             {
-                @*<span>@ex.Message</span>
-                    Server.Transfer("~\\Account\\Logoff");*@
-                <a href="/Account/LogOff" style="padding:0">
-                    <span class="glyphicon glyphicon-user" style="font-size:large; "> <span id="userAvatar" style="font-family:Arial">&nbsp;Login</span></span>
+                <a href="/Account/LogOff/">
+                    <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
                 </a>
             }
-        }
-        else
-        {
-            <a href="/Account/LogOff/">
-                <span class="glyphicon glyphicon-user" style="font-size:large; color:white">&nbsp;Login</span>
-            </a>
-        }
-    </li>
-</ul>
+        </li>
+    </ul>
+</li>

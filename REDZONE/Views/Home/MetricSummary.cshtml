@@ -23,9 +23,14 @@
     }
     .scroll-Body {
         padding: 0px;
-        height: 500px;
-        overflow-y: auto;
+        overflow-y: scroll; /*auto*/
         overflow-x: hidden;
+    }
+    .full-height {
+        height: 500px;
+    }
+    .med-height {
+        height: 250px;
     }
     .IEScroll{
         width:17px;
@@ -47,6 +52,7 @@
     string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
     double colWidth = .72 / Model.metricRows.Count;
     string strColWidth = colWidth.ToString("00.00%");
+    string panelHeight = (applyFilter == "checked") ? "med-height" : "full-height";
     strColWidth = "6%";
 }
 
@@ -216,7 +222,7 @@ else
                     </div>
 
                     <!-- (((((((((((  SCROLLABLE BUILDING ROWS DETAIL PANEL ))))))))))))))) -->
-                    <div class="panel-body scroll-Body" style="margin:0; padding:0">
+                    <div class="panel-body scroll-Body @panelHeight" style="margin:0; padding:0">
                         <!-- BUILDING DATA ARRAY ROWS -->
                         <div class="row " style="margin:0; padding:0">
                             <table style="width:100%; margin:0">

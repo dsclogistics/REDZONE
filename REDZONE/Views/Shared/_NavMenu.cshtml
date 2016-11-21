@@ -9,34 +9,33 @@
     }*/
 </style>
 
-<nav class="navbar navbar-inverse navbar-fixed-top" style="font-family:Arial; margin:0; padding:0">
-    @*<a class="hidden-sm" style="position:fixed; top:0; left:0" href="/home">
-            <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
-        </a>*@
-    <a class="hidden-sm" style="position:fixed; top:0; left:0; padding:0; margin-left:7px; margin-top:3px" href="/home">
-        @*<img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />*@
-        <img class="img-responsive" src="~/Images/DSCRedZone2.png" />
-    </a>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="font-family:Arial; margin:0; padding:0; width:100%">
+    @*<a class="hidden-sm" style="position:fixed; top:3px; left:7px; margin:0;" href="/home">
+        <img class="img-responsive" style="margin:0; padding:0" src="~/Images/DSCRedZone2.png" />
+    </a>*@
     <div class="navbar-header" >
+        <img class="img-responsive hidden-sm hidden-md" style="margin:0; padding:0;float:left; margin-right:10px" src="~/Images/DSCRedZone2.png" />
+        <img class="img-responsive visible-md" style="margin:0; padding:0;float:left; margin-right:10px" src="~/Images/DSCRedZoneSmall.png" />
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" >
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; margin:0; padding:0; ">
-        <div class="col-md-7 col-md-offset-2" style="text-align:left; margin-left:180px">
+
+    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; margin:0; padding:0; width:100%; margin-left:10px">
+        <div class="col-xs-10 col-sm-8 col-md-6 col-lg-7" style="text-align:left; margin:0; padding:0">
 
             @* ****** RENDER THE "My Team's Activities" OR the 'TASK' MENU OPTION ONLY IF THE USER ROLE REQUIRES IT ******* *@
             @if (User.IsInRole("RZ_BLDG_USER"))
-            { 
+            {
                 @Html.Action("_RZ_MyTeamACT_MenuItems", "MenuBar")
             }
             else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
             {
                 @Html.Action("_RZ_MyTask_MenuItems", "MenuBar")
             }
-            
+
             <ul class="nav navbar-nav menuItem" id="mDashboard">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -73,7 +72,7 @@
             </ul>*@
 
             @*@if (REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("RZ_ADMIN"))*@
-            @if(User.IsInRole("RZ_ADMIN"))
+            @if (User.IsInRole("RZ_ADMIN"))
             {
                 <ul class="nav navbar-nav menuItem" id="mAdmin">
                     <li class="dropdown">
@@ -93,23 +92,19 @@
             }
 
         </div>
-        <div class="col-md-3 " id="divLoginInfo" style="margin:0; padding:0; float:right">
-            <div class="row">
-                <div class="col-xm-3 col-lg-4" style="text-align:right">
-                    @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
-                    @if (User.IsInRole("RZ_BLDG_USER"))
-                    {
-                        @Html.Action("_RZ_TeamsFlag", "MenuBar")
-                    }
-                    else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
-                    {
-                        @Html.Action("_RZ_TasksFlag", "MenuBar")
-                    }
-                </div>
-                <div class="col-xm-9 col-lg-8" style="text-align:left">
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
+        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-3" id="divLoginInfo" style="margin:0; padding:0; float:right; display:inline">
+            <ul style="list-style-type:none; margin:0; padding:0; overflow:hidden">
+                @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
+                @if (User.IsInRole("RZ_BLDG_USER"))
+                {
+                    @Html.Action("_RZ_TeamsFlag", "MenuBar")
+                }
+                else if (User.IsInRole("RZ_AP_REVIEWER") || User.IsInRole("RZ_AP_SUBMITTER") || User.IsInRole("MTRC_COLLECTOR"))
+                {
+                    @Html.Action("_RZ_TasksFlag", "MenuBar")
+                }
+                @Html.Partial("_LoginPartial")
+            </ul>
         </div>
     </div>
 </nav>
