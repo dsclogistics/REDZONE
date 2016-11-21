@@ -25,7 +25,7 @@
         padding: 0px;
         height: 500px;
         overflow-y: auto;
-        /*overflow-x: hidden;*/
+        overflow-x: hidden;
     }
     .IEScroll{
         width:17px;
@@ -132,7 +132,7 @@ else
                                     <td>
                                         <table style="width:100%">
                                             <tr>
-                                                <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold;">
+                                                <td style="vertical-align:middle; min-width:257px; max-width:257px; width:257px; font-weight:bold;">
                                                     @*class="col-sm-2 buildingCol headerCol"*@
                                                     <input type="hidden" id="sortMonth" value="Building" />
                                                     <input type="hidden" id="sortOrder" value=@Model.rowHeadings.displayClass />
@@ -142,26 +142,26 @@ else
                                                     </button>
                                                 </td>
                                                 @*@foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
-                                    {
-                                        dscBldngHdr.isViewable = true;   //Set (Hardcode) all the available Month Headers as Viewable
-                                    }*@
-                                                @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
+                                                {
+                                                    dscBldngHdr.isViewable = true;   //Set (Hardcode) all the available Month Headers as Viewable
+                                                }*@
+                                            @foreach (REDZONE.Models.MeasuredCellEntity dscBldngHdr in @Model.rowHeadings.entityMetricCells)
                                             {
                                                 sortIcon = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "glyphicon-sort" : dscBldngHdr.displayClass.Equals("ASC") ? "glyphicon-sort-by-attributes" : "glyphicon-sort-by-attributes-alt";
                                                 btnClass = String.IsNullOrEmpty(dscBldngHdr.displayClass) ? "btn-default" : "btn-primary";
                                                 if (dscBldngHdr.isViewable || true)
                                                 {  //Always Display Column
-                                                <td class="buildingCol " @*monthCol*@ style="min-width:70px; width:@strColWidth; ">
-                                                    <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
-                                                    <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
-                                                    <span style="font-weight:bold">@dscBldngHdr.metricMonth</span>
-                                                    @if (dscBldngHdr.score > 0)
+                                                    <td class="buildingCol " @*monthCol*@ style="min-width:70px; width:@strColWidth; ">
+                                                        <input type="hidden" id="sortMonth" value="@dscBldngHdr.metricName" />
+                                                        <input type="hidden" id="sortOrder" value="@dscBldngHdr.displayClass" />
+                                                        <span style="font-weight:bold">@dscBldngHdr.metricMonth</span>
+                                                        @if (dscBldngHdr.score > 0)
                                                         {
-                                                        <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
-                                                            <span class="glyphicon @sortIcon" aria-hidden="true"></span>
-                                                        </button>
+                                                            <button type="button" class="btn btn-sm sortButton @btnClass" aria-label="Sort by" style="padding:0px 2px; float:right">
+                                                                <span class="glyphicon @sortIcon" aria-hidden="true"></span>
+                                                            </button>
                                                         }
-                                                </td>
+                                                    </td>
                                                 }
                                                 colCounter++;
                                             }
@@ -179,7 +179,7 @@ else
                                     <td>
                                         <table style="width:100%">
                                             <tr>
-                                                <td style="vertical-align:middle; min-width:183px; max-width:183px; width:17%; font-weight:bold; ">
+                                                <td style="vertical-align:middle; min-width:257px; max-width:257px; width:257px; font-weight:bold; ">
                                                     @*class="col-sm-2 buildingCol headerCol"*@
                                                     @Model.rowGoal.rowName
                                                 </td>
@@ -225,7 +225,7 @@ else
                                     colCounter = 0;
                                     bool allNAs = true;
                                 <tr class="rHover" style="border-bottom: 1px solid #c6c4c4; width:100%">
-                                    <td style="vertical-align:middle; min-width:220px; max-width:220px; width:220px;" title="@buildingRow.rowOwner">
+                                    <td style="vertical-align:middle; min-width:257px; max-width:257px; width:257px;" title="@buildingRow.rowOwner">
                                         <a href="@buildingRow.rowURL">@buildingRow.rowName</a>
                                     </td>
 
@@ -266,7 +266,7 @@ else
                                     <td>
                                         <table style="width:100%">
                                             <tr class="totalsRow">
-                                                <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; min-width:183px; max-width:183px; width:17%;">
+                                                <td @*class="col-sm-2 buildingCol headerCol"*@ style="vertical-align:middle; min-width:257px; max-width:257px; width:257px;">
                                                     <span>@Model.missedGoals.rowName</span>
                                                 </td>
 
