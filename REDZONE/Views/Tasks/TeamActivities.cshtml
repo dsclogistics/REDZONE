@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="~/Scripts/Tasks_TeamActivities.js"></script>
+
 @*<div class="" style="margin-top:50px; border:4px double blue; border-radius:4px;">
     <br /><br /><br />
     <div>
@@ -24,7 +26,7 @@
         </div>
     </div>
 
-    <div class="panel-body padding2">       
+    <div class="panel-body padding2" id="divTeamActivities">       
         @*********@
         @*Periods*@
         @*********@
@@ -54,7 +56,7 @@
                     @***********@
                     <div id="collapse-@period.periodName.Replace(" ", "")" class="panel-collapse collapse in">
                     
-                        <div class="panel panel-default" style="margin-bottom:0px">
+                        <div class="panel panel-info" style="margin-bottom:0px">
                             @foreach (var bldg in period.periodBldgList)
                             {
                                 <div class="panel-heading" style="text-align:left;">
@@ -73,9 +75,9 @@
                                                 <th style="text-align:center">
                                                     @Html.DisplayNameFor(model => model.periodList.First().periodBldgList.First().activityList.First().mtrcName)
                                                 </th>
-                                                <th style="text-align:center">
+                                                @*<th style="text-align:center">
                                                     Finished?
-                                                </th>
+                                                </th>*@
                                                 <th style="text-align:center">
                                                     @Html.DisplayNameFor(model => model.periodList.First().periodBldgList.First().activityList.First().rzBapmStatus)
                                                 </th>
@@ -83,10 +85,19 @@
                                                     Action
                                                 </th>
                                                 <th style="text-align:center">
+                                                    Accountable Party
+                                                </th>
+                                                <th style="text-align:center">
                                                     Due Date
                                                 </th>
                                                 <th style="text-align:center">
                                                     Start Date
+                                                </th>
+                                                <th style="text-align:center">
+                                                    Approve Date
+                                                </th>
+                                                <th style="text-align:center">
+                                                    Last Updated
                                                 </th>
                                             </tr>
                                         </thead>
@@ -100,9 +111,9 @@
                                                 <td style="text-align:center">
                                                     @Html.DisplayFor(modelItem => activity.mtrcName)
                                                 </td>
-                                                <td style="text-align:center; color:@outstandingColor">
+                                                @*<td style="text-align:center; color:@outstandingColor">
                                                     @outstanding
-                                                </td>
+                                                </td>*@
                                                 <td style="text-align:center">
                                                     @Html.DisplayFor(modelItem => activity.rzBapmStatus)
                                                 </td>
@@ -111,9 +122,21 @@
                                                     <a href="@apUrl" style="text-decoration:underline">View Action Plan</a>
                                                 </td>
                                                 <td style="text-align:center">
+                                                    <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@activity.rzBapmId" />
+                                                    <a class="lnkAccountableUsers" href="#" onclick="return false; " style="text-decoration:underline">View</a>
+                                                </td>
+                                                <td style="text-align:center">
                                                     @dueDate.ToString("MM/dd/yyyy")
                                                 </td>
-                                                <td style="text-align:center"></td>
+                                                <td style="text-align:center">
+                                                    @activity.rzBapmStartDate
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @activity.rzBapmApprovedDate
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @activity.rzBapmUpdateDate
+                                                </td>
                                             </tr>
                                         }
                                     </table>
@@ -133,6 +156,25 @@
                 THERE ARE NO DEFINED ACTIVIES FOR YOUR TEAM
             </div>
         }
+
+    </div>
+</div>
+
+<!-- Quick Review Modal -->
+<div id="accountableUsersModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:60%">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-Primary-Gradient" style="padding-top:5px; padding-bottom:5px">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Accountable Users</h3>
+            </div>
+            <div class="modal-body" id="accountableUsersBody">
+
+            </div>
+            @*<div class="modal-footer" id="quickReviewFooter"></div>*@
+        </div>
 
     </div>
 </div>

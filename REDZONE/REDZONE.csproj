@@ -437,6 +437,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\RZglobal.js" />
     <Content Include="Scripts\Tasks_index.js" />
+    <Content Include="Scripts\Tasks_TeamActivities.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Metric\_UploadPreview.cshtml">
       <SubType>Code</SubType>
@@ -489,6 +490,7 @@
     <Content Include="Views\MenuBar\_RZ_MyTeamACT_MenuItems.cshtml" />
     <Content Include="Views\Tasks\TeamActivities.cshtml" />
     <Content Include="Views\MenuBar\_RZ_TeamsFlag.cshtml" />
+    <Content Include="Views\Tasks\_accountableUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
