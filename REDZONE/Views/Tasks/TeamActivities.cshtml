@@ -82,7 +82,7 @@
                                                     @Html.DisplayNameFor(model => model.periodList.First().periodBldgList.First().activityList.First().rzBapmStatus)
                                                 </th>
                                                 <th style="text-align:center; width:12.5%">
-                                                    Action
+                                                    Next Task
                                                 </th>
                                                 <th style="text-align:center; width:12.5%">
                                                     Accountable Party
@@ -119,11 +119,11 @@
                                                 </td>
                                                 <td style="text-align:center; width:12.5%">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + activity.mtrcPeriodId + "&bldg_id=" + activity.bldgId + "&bapm_id=" + activity.rzBapmId;}
-                                                    <a href="@apUrl" style="text-decoration:underline">View Action Plan</a>
+                                                    <a href="@apUrl" style="text-decoration:underline">@activity.viewStatus</a>
                                                 </td>
                                                 <td style="text-align:center; width:12.5%">
                                                     <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@activity.rzBapmId" />
-                                                    <a class="lnkAccountableUsers" href="#" onclick="return false; " style="text-decoration:underline">View</a>
+                                                    <a class="lnkAccountableUsers" href="#" onclick="return false; " style="text-decoration:underline">@activity.accountableParty</a>
                                                 </td>
                                                 <td style="text-align:center; width:12.5%">
                                                     @dueDate.ToString("MM/dd/yyyy")

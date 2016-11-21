@@ -1253,6 +1253,8 @@ namespace REDZONE.AppCode
                     tempTeamActivity.rzBapmStartDate = (string)res["rz_apd_ap_created_on_dtm"];
                     tempTeamActivity.rzBapmApprovedDate = (string)res["rz_bapm_approved_on_dtm"];
                     tempTeamActivity.rzBapmUpdateDate = (string)res["lastactivity_on_dtm"];
+                    tempTeamActivity.viewStatus = getMyTeam_Status(tempTeamActivity.rzBapmStatus);
+                    tempTeamActivity.accountableParty = getMyTeam_AccountableParty(tempTeamActivity.rzBapmStatus);
 
                     if (String.IsNullOrEmpty(tempTeamActivity.month)) tempTeamActivity.month = "";
                     if (String.IsNullOrEmpty(tempTeamActivity.monthName)) tempTeamActivity.monthName = "";
@@ -2192,6 +2194,65 @@ namespace REDZONE.AppCode
             if (isGoalMet == "N") return COLOR_LIGHT_RED;
 
             return mColor;
+        }
+
+        public string getMyTeam_Status(string ap_status)
+        {
+            string nextAction = "---";
+
+            switch (ap_status)
+            {
+                case "Not Started":
+                    //Check if User is Submitter for this building or Admin
+                    nextAction = "Not Started";
+                    break;
+                case "WIP":         //Same as Rejected
+                    nextAction = "In Process";
+                    break;
+                case "Rejected":
+                    nextAction = "Rejected - Requires Rework";
+                    break;
+                case "Ready For Review":
+                    nextAction = "Waiting for Review";
+                    break;
+                case "Approved":
+                    nextAction = "Approved";
+                    break;
+                default:
+                    nextAction = "N/A";
+                    break;
+            }
+
+            return nextAction;
+        }
+        public string getMyTeam_AccountableParty(string ap_status)
+        {
+            string nextAction = "---";
+
+            switch (ap_status)
+            {
+                case "Not Started":
+                    //Check if User is Submitter for this building or Admin
+                    nextAction = "Submitter";
+                    break;
+                case "WIP":         //Same as Rejected
+                    nextAction = "Submitter";
+                    break;
+                case "Rejected":
+                    nextAction = "Submitter";
+                    break;
+                case "Ready For Review":
+                    nextAction = "Reviewer";
+                    break;
+                case "Approved":
+                    nextAction = "N/A";
+                    break;
+                default:
+                    nextAction = "N/A";
+                    break;
+            }
+
+            return nextAction;
         }
 
     }

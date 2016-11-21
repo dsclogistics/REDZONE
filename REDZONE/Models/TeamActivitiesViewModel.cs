@@ -58,6 +58,8 @@ namespace REDZONE.Models
         public string rzBapmStartDate { get; set; }
         public string rzBapmApprovedDate { get; set; }
         public string rzBapmUpdateDate { get; set; }
+        public string viewStatus { get; set; }
+        public string accountableParty { get; set; }
     }
 
     //ACCOUNTABLE USERS MODEL
