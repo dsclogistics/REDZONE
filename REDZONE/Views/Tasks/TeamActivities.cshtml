@@ -72,31 +72,31 @@
                                     <table class="table table-condensed table-hover">
                                         <thead>
                                             <tr style="background-color:transparent">
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     @Html.DisplayNameFor(model => model.periodList.First().periodBldgList.First().activityList.First().mtrcName)
                                                 </th>
                                                 @*<th style="text-align:center">
                                                     Finished?
                                                 </th>*@
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     @Html.DisplayNameFor(model => model.periodList.First().periodBldgList.First().activityList.First().rzBapmStatus)
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Action
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Accountable Party
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Due Date
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Start Date
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Approve Date
                                                 </th>
-                                                <th style="text-align:center">
+                                                <th style="text-align:center; width:12.5%">
                                                     Last Updated
                                                 </th>
                                             </tr>
@@ -108,33 +108,33 @@
                                             string outstanding = (activity.rzBapmStatus == "Approved") ? "Yes" : "No";
                                             string outstandingColor = (activity.rzBapmStatus == "Approved") ? "green" : "red";
                                             <tr>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @Html.DisplayFor(modelItem => activity.mtrcName)
                                                 </td>
                                                 @*<td style="text-align:center; color:@outstandingColor">
                                                     @outstanding
                                                 </td>*@
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @Html.DisplayFor(modelItem => activity.rzBapmStatus)
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + activity.mtrcPeriodId + "&bldg_id=" + activity.bldgId + "&bapm_id=" + activity.rzBapmId;}
                                                     <a href="@apUrl" style="text-decoration:underline">View Action Plan</a>
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@activity.rzBapmId" />
                                                     <a class="lnkAccountableUsers" href="#" onclick="return false; " style="text-decoration:underline">View</a>
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @dueDate.ToString("MM/dd/yyyy")
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @activity.rzBapmStartDate
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @activity.rzBapmApprovedDate
                                                 </td>
-                                                <td style="text-align:center">
+                                                <td style="text-align:center; width:12.5%">
                                                     @activity.rzBapmUpdateDate
                                                 </td>
                                             </tr>
