@@ -56,21 +56,21 @@
                 <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
                     @if (Model.canFilterBuildings)
                     {
-                        <div class="checkbox" style="padding-left:30px; padding-top:38px">
+                        <div style="margin:0; padding:0; margin-top:38px">
+                            <label class="switch" style="display:inline-block; margin:0;">
+                                <input class="switch-input" id="chkMyBuildingsOnly" type="checkbox" @applyFilter />
+                                <span class="switch-label" data-on="Y" data-off="N"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                            <span class="" style="font-size:12px; margin:0; padding:0; padding-top:5px; display:inline-block">View my Buildings Only</span>
+                        </div>
+                        @*<div class="checkbox" style="padding-left:30px; padding-top:38px">
                             <label class="" style="text-align:left; padding:0; font-size: .8em">
                                 <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
                                 <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
                                 <span id="chkText" style="font-size:12px">View my Buildings Only</span>
                             </label>
-                        </div>
-                        <div>
-                            <label class="switch" style="display:inline-block">
-                                <input class="switch-input" type="checkbox" @applyFilter/>
-                                <span class="switch-label" data-on="Y" data-off="N"></span>
-                                <span class="switch-handle"></span>
-                            </label>
-                            <span>View my Buildings Only</span>
-                        </div>
+                        </div>*@
                     }                    
                 </div>
                 <div class="col-sm-8">
@@ -172,8 +172,12 @@
                             </tr><!-- *************** METRIC GOALS ROW END *************** -->
                         </table>
                     </div>
-
-
+                    
+                    @*<div id="divWait" style="margin-top:60px; text-align:center; display:none">
+                         <div>Please wait</div>
+                         <div style="margin-top:20px"><img src="~/Images/ui-anim_basic_16x16.gif" /></div>
+                    </div>*@
+                    
                     <div class="panel-body scroll-Body @panelHeight">   <!--  ******** START OF BUILDING DETAIL SECTION ************-->
                         <div class="row " style="margin:0">
                             <table style="width:100%">
@@ -229,82 +233,8 @@
                     </div>  <!-- *********** END OF FOOTER ROW (ROW TOTALS) ************  -->
                 </div> <!-- ********** END of Metric Data Table *********** -->
                 
-                
-                @*<div class="row hidden-xs" style=" border-radius: 5px; margin: 0; padding:0; ">
-                        <!-- ROWS -->
-                        <div class="row">
-                            <!-- COLUMNS -->
-                            <div class="col-sm-2 buildingCol headerCol">
-                                <span style="font-weight:bold"> @Model.month @Model.year</span>
-                            </div>
-                            @foreach (var m in Model.allMetrics)
-                            {
-                                <div class="col-sm-1 buildingCol headerCol" title="@m.metricDescription">
-                                    <a href="@m.url">@m.metricName</a>
-                                </div>
-                            }
-                            @{
-                            int colsLeft = 10 - Model.allMetrics.Count;
-                            string colClass = "col-sm-1";
-                            if (colsLeft > 0) { colClass = "col-sm-" + colsLeft.ToString(); }
-                            }
-                            <div class="@colClass buildingCol headerCol scoreCol">
-                                Building Score
-                            </div>
-                        </div><!-- ---------------- TITLES ROW -----------------------    -->
-                        <div class="row buildingRowX" style="background-color: #bbedff">
-                            <div class="col-sm-2 buildingCol" style="font-weight:bold ">
-                                @Model.goalsRow.BuildingName
-                            </div>
-                            @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
-                            {
-                                <div class="col-sm-1 buildingCol" style="color:blue; font-weight:bold;">
-                                    @bldngMV.metricValue
-                                </div>
-                            }
-                            <div class="@colClass buildingCol scoreCol" style="">
-                                <br />
-                            </div>
-                        </div><!-- ------------------- GOAL ROWS END ----------------- -->
 
-
-                        @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                        {
-                            <div class="row buildingRowX rHover">
-                                <div class="col-sm-2 buildingCol" style="text-align:center">
-                                    <a href="@dscBldng.url">@dscBldng.BuildingName</a>
-                                </div>
-                                @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
-                                {
-                                    <div class="col-sm-1 buildingCol @bldngMV.displayClass" style="">
-                                        @if (String.IsNullOrEmpty(@bldngMV.metricValue))
-                                        { <br /> }
-                                        else
-                                        { @bldngMV.metricValue }
-                                    </div>
-                                }
-                                <div class="@colClass buildingCol scoreCol @dscBldng.scoreDisplayClass" style="">
-                                    @dscBldng.rowScore
-                                </div>
-                            </div><!-- --------------- building ROWS ----------- -->
-                        }
-
-                        <div class="row buildingRowX totalsRow rHover">
-                            <div class="col-sm-2 buildingCol" style="font-weight:bold">
-                                <span>@Model.goalsMissedRow.BuildingName</span>
-                            </div>
-                            @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
-                            {
-                                <div class="col-sm-1 buildingCol" style="">
-                                    @metricTotalCell.score.ToString("0")
-                                </div>
-                            }
-                            <div class="@colClass buildingCol @Model.goalsMissedRow.scoreDisplayClass" style="">
-                                @Model.total
-                            </div>
-                        </div><!-- Goals Not Met Totals -->
-                    </div> <!-- End of DIV Table Table -->*@
-        <!-- **************************** EXTRA SMALL DISPLAY ********************************** -->
+            <!-- **************************** EXTRA SMALL DISPLAY ********************************** -->
                 foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
                 {
                     <div class="panel panel-default visible-xs" style="margin-right:12px; width:100%">
@@ -386,6 +316,9 @@
 
         $('#chkMyBuildingsOnly').change(function () {
             var filter = ($(this).prop("checked") ? "Y" : "N");
+
+            //$('.scroll-Body').hide();
+            //$('#divWait').show();
 
             $.ajax({
                 url: '/Account/setUserBuildingFilter',
