@@ -42,9 +42,9 @@
         display: block;
     }
 </style>
-<li style="float:left">
-    <ul class="nav navbar-nav menuItem" id="myTasksFlag" style="margin:0; padding:0; font-family:Arial; font-size:small; display:inline;">
-        <li class="dropdown ddTask" style="padding:0; ">
+@*<li class="dropdown" style="float:left">*@
+    <ul class="nav navbar-nav menuItem" id="myTasksFlag" @*style="margin:0; padding:0; font-family:Arial; font-size:small; display:inline;"*@>
+        <li class="dropdown ddTask" >
             <a class="dropdown-toggle taskButton" data-toggle="dropdown" href="#">
                 <span><i class="glyphicon glyphicon-flag"></i></span>
                 <span class="button__badge" style="background-color: @alertBGColor">@Model.totalTasks</span>
@@ -113,7 +113,7 @@
             </div>
         </li>
     </ul>
-</li>
+@*</li>*@
 <script>
     $(document).ready(function () {
 

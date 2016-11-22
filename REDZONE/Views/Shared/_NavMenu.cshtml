@@ -92,8 +92,9 @@
             }
 
         </div>
-        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-3" id="divLoginInfo" style="margin:0; padding:0; float:right; display:inline">
-            <ul style="list-style-type:none; margin:0; padding:0; overflow:hidden">
+        @*<div class="collapse navbar-collapse" id="myNavbar" style="font-size:small; margin:0; padding:0; width:100%; margin-left:10px"*@
+        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-3" id="divLoginInfo" style="margin:0; padding:0; float:right;">
+            @*<ul class="nav navbar-nav menuItem" style="list-style-type:none; margin:0; padding:0; overflow:hidden">*@
                 @* ****** RENDER THE 'TASK' FLAG ICON ONLY IF THE USER ROLE REQUIRES IT ******* *@
                 @if (User.IsInRole("RZ_BLDG_USER"))
                 {
@@ -104,7 +105,7 @@
                     @Html.Action("_RZ_TasksFlag", "MenuBar")
                 }
                 @Html.Partial("_LoginPartial")
-            </ul>
+            @*</ul>*@
         </div>
     </div>
 </nav>

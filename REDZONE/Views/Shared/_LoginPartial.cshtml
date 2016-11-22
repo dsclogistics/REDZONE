@@ -9,8 +9,8 @@
     }
 
 </style>
-<li style="float:left; margin-left:8px">
-    <ul class="nav navbar-nav menuItem" style="margin-top:12px; margin-left:0; padding:0; font-family:Arial; width:100%; display:inline;">
+@*<li class="dropdown" style="float:left; margin-left:8px">*@
+    <ul class="nav navbar-nav menuItem" style="font-family:Arial; font-size:22px; margin-top:12px;  margin-left:14px">
         <li class="dropdown " style="padding:0; ">
             @if (Request.IsAuthenticated)
             {
@@ -18,7 +18,7 @@
                 {
                     string userName = (Session["first_name"] == null) ? User.Identity.Name : Session["first_name"].ToString() + " " + Session["last_name"].ToString();
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding:0px; ">
-                        <span class="glyphicon glyphicon-user" style="font-size:medium; "><span id="userAvatar" style="font-family:Arial; margin-left:10px">@userName</span></span>
+                        <span class="glyphicon glyphicon-user" style="font-size:medium; "><span id="userAvatar" style="font-family:Arial; margin-left:5px">@userName</span></span>
                     </a>
                     <ul class="dropdown-menu user-menu">
                         <li class="disabled" style="margin: 0px, 3px; color:gray">&nbsp;&nbsp;&nbsp;&nbsp; Edit Profile</li>
@@ -46,4 +46,4 @@
             }
         </li>
     </ul>
-</li>
+@*</li>*@
