@@ -101,7 +101,7 @@ namespace REDZONE.Controllers
                     //apViewModel.currentAPVersion = apViewModel.actionPlanList.First().apVersion;
                 }
             }
-            else if (apViewModel.actionPlanList.Count == 0 && apViewModel.bapmStatus == "Not Started")
+            else if (apViewModel.actionPlanList.Count == 0 && (apViewModel.bapmStatus == "Not Started" || apViewModel.bapmStatus == "Expired"))
             {
                 //When action plan list is empty, pass in "empty" model
                 ActionPlan newActionPlan = new ActionPlan();
@@ -157,7 +157,7 @@ namespace REDZONE.Controllers
                 apViewModel.canReviewAP = true;
             }
 
-            if(apViewModel.actionPlanList.Count() > 0 && apViewModel.bapmStatus != "")
+            if(apViewModel.actionPlanList.Count() > 0 && apViewModel.bapmStatus != "" && apViewModel.bapmStatus != "Expired")
             {
                 apViewModel.currentAPVersion = apViewModel.actionPlanList.First().apVersion;
                 apViewModel.currentAPStatus = apViewModel.actionPlanList.First().apStatus;
@@ -172,7 +172,8 @@ namespace REDZONE.Controllers
                     case "Not Started":
                         apViewModel.displayStatus = "New";
                         apViewModel.displayColor = "orange";
-                        apViewModel.AP_EditableStatus = apViewModel.canSubmitAP ? "" : "readonly";
+                        apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "readonly";
+                        apViewModel.AP_EditableColor = (apViewModel.canSubmitAP) ? "transparent" : "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Start Action Plan" : "View Action Plan";
                         break;
@@ -180,6 +181,7 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = "In Process";
                         apViewModel.displayColor = "orange";
                         apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "readonly";
+                        apViewModel.AP_EditableColor = (apViewModel.canSubmitAP) ? "transparent" : "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Manage Action Plan" : "View Action Plan";
                         break;
@@ -187,6 +189,7 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = "Ready For Review";
                         apViewModel.displayColor = "orange";
                         apViewModel.AP_EditableStatus = "readonly";
+                        apViewModel.AP_EditableColor = "#eee";
                         apViewModel.review_EditableStatus = (apViewModel.canReviewAP) ? "" : "disabled";
                         apViewModel.pageHeader = (apViewModel.canReviewAP) ? "Review Action Plan" : "View Action Plan";
                         break;
@@ -194,6 +197,7 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = "Rejected";
                         apViewModel.displayColor = "red";
                         apViewModel.AP_EditableStatus = "readonly";
+                        apViewModel.AP_EditableColor = "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = "View Action Plan";
                         break;
@@ -201,6 +205,7 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = "Rejected (New Plan Required)";
                         apViewModel.displayColor = "red";
                         apViewModel.AP_EditableStatus = (apViewModel.canSubmitAP) ? "" : "readonly";
+                        apViewModel.AP_EditableColor = apViewModel.canSubmitAP ? "transparent" : "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = (apViewModel.canSubmitAP) ? "Rework Action Plan" : "View Action Plan";
                         break;
@@ -208,6 +213,7 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = "Approved";
                         apViewModel.displayColor = "green";
                         apViewModel.AP_EditableStatus = "readonly";
+                        apViewModel.AP_EditableColor = "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = "View Action Plan";
                         break;
@@ -215,10 +221,22 @@ namespace REDZONE.Controllers
                         apViewModel.displayStatus = apViewModel.currentAPStatus;
                         apViewModel.displayColor = "green";
                         apViewModel.AP_EditableStatus = "readonly";
+                        apViewModel.AP_EditableColor = "#eee";
                         apViewModel.review_EditableStatus = "disabled";
                         apViewModel.pageHeader = "View Action Plan";
                         break;
                 }
+            }
+            else if (apViewModel.bapmStatus == "Expired")
+            {
+                apViewModel.currentAPVersion = apViewModel.actionPlanList.First().apVersion;
+                apViewModel.currentAPStatus = apViewModel.actionPlanList.First().apStatus;
+                apViewModel.AP_EditableStatus = "readonly";
+                apViewModel.AP_EditableColor = "#eee";
+                apViewModel.review_EditableStatus = "disabled";
+                apViewModel.displayStatus = "Expired";
+                apViewModel.displayColor = "red";
+                apViewModel.pageHeader = "View Action Plan";
             }
 
             if (!apViewModel.canAccessAP) { return View("NoAuth"); }

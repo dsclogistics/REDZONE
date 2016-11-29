@@ -38,6 +38,7 @@ namespace REDZONE.Models
         public string displayStatus { get; set; }
         public string displayColor { get; set; }
         public string AP_EditableStatus { get; set; }
+        public string AP_EditableColor { get; set; }
         public string review_EditableStatus { get; set; }
 
         public ActionPlanViewModel()

@@ -57,10 +57,10 @@
                 <input type="hidden" id="bapmId" value="@ViewBag.bapmId" />
             </div>
             <div class="col-xs-4">
-                @*<div class="" style="margin-top:15px; margin-left:5px; font-size:18px; text-align:right; padding-left:3px">
+                <div class="" style="margin-top:15px; margin-left:5px; font-size:18px; text-align:right; padding-left:3px">
                     <span>Status: </span>
                     <span style="padding-left:3px; text-align:left; font-weight:bold; color:@Model.displayColor">@Model.displayStatus</span>
-                </div>*@
+                </div>
             </div>
         </div>
     </div>
@@ -87,10 +87,10 @@
                             }
                             else
                             {
-                                <div style="color:red; padding-bottom:5px">There are no Assigned Reasons for the current Metric Action Plan</div>
+                                <div style="color:red; padding-bottom:5px; text-align:center">There are no assigned reasons for this metric action plan.</div>
                             }
                         </div>
-                        @if (!(Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved") && Model.canEditReasons)
+                        @if (!(Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.bapmStatus == "Expired") && Model.canEditReasons)
                         {
                             <div id="btnsReasons" style="text-align:left; margin-top:5px">
                                 <input type="button" class="btn btn-primary" id="btnEditReasons" value="Edit Reasons" />
@@ -144,12 +144,19 @@
                     @*------------------------------*@
                     @*-         Action Plan        -*@
                     @*------------------------------*@
-                    @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected")))
+                    @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected" || Model.bapmStatus == "Expired")))
                     {
-                        <div class="col-md-6" style="text-align:left; font-size:18px; padding:0">Action Plan - Version @Model.currentAPVersion</div>
+                        
+                        <div class="col-md-6" style="text-align:left; font-size:18px; padding:0">
+                            Action Plan - Version @Model.currentAPVersion
+                            @if (Model.bapmStatus == "Expired")
+                            {
+                                <span style="color:@Model.displayColor">(Status when expired: @Model.currentAPStatus)</span>
+                            }
+                        </div>
                         <div class="col-md-6" id="apTextChars" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
                         
-                        <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
+                        <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px; background-color: @Model.AP_EditableColor" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
                         
                         <div class="row">
                             <div class="col-md-6" id="btnsActionPlan" style="text-align:left">
