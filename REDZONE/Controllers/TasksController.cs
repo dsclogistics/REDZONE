@@ -46,7 +46,8 @@ namespace REDZONE.Controllers
                                                       bldg_id = c.bldg_id,
                                                       rz_bapm_id = c.rz_bapm_id,
                                                       month = c.month,
-                                                      year = c.year
+                                                      year = c.year,
+                                                      mtrc_period_val_id = c.mtrc_period_val_id
                                                   }).OrderBy(x => x.mtrc_prod_display_text).ToList()
                                   }).OrderByDescending(x => Int32.Parse(x.mtrcList.First().year)).ThenByDescending(x => Int32.Parse(x.mtrcList.First().month)).ToList()
                 }).OrderBy(x => x.bldgName).ToList();

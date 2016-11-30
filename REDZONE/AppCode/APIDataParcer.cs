@@ -1376,6 +1376,7 @@ namespace REDZONE.AppCode
                     tempAPTask.bldg_id = (int)res["dsc_mtrc_lc_bldg_id"];
                     tempAPTask.status = (string)res["status"];
                     tempAPTask.rz_bapm_id = (string)res["rz_bapm_id"];
+                    tempAPTask.mtrc_period_val_id = (string)res["mtrc_period_val_id"];
                     if (String.IsNullOrEmpty(tempAPTask.month)) tempAPTask.month = "";
                     if (String.IsNullOrEmpty(tempAPTask.year)) tempAPTask.year = "";
                     if (String.IsNullOrEmpty(tempAPTask.period_name)) tempAPTask.period_name = "";
@@ -1384,6 +1385,7 @@ namespace REDZONE.AppCode
                     if (String.IsNullOrEmpty(tempAPTask.bldg_name)) tempAPTask.bldg_name = "";
                     if (String.IsNullOrEmpty(tempAPTask.status)) tempAPTask.status = "";
                     if (String.IsNullOrEmpty(tempAPTask.rz_bapm_id)) tempAPTask.rz_bapm_id = "";
+                    if (String.IsNullOrEmpty(tempAPTask.mtrc_period_val_id)) tempAPTask.mtrc_period_val_id = "0";
 
                     tasksViewModel.apSubmitTaskList.Add(tempAPTask);
                 }
@@ -1985,6 +1987,7 @@ namespace REDZONE.AppCode
                 apViewModel.bapmStatus = (string)res["rz_bapm_status"];
                 apViewModel.mpv_id = (string)res["mtrc_period_val_id"];
                 apViewModel.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
+                apViewModel.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
                 apViewModel.mtrcDisplayText = (string)res["mtrc_prod_display_text"];
                 apViewModel.apMonth = (string)res["month"];
                 apViewModel.apMonthName = intToMonth((int)res["month"]);
@@ -1997,6 +2000,7 @@ namespace REDZONE.AppCode
                 if (String.IsNullOrEmpty(apViewModel.bapmStatus)) apViewModel.bapmStatus = "";
                 if (String.IsNullOrEmpty(apViewModel.mpv_id)) apViewModel.mpv_id = "0";
                 if (String.IsNullOrEmpty(apViewModel.bldgName)) apViewModel.bldgName = "";
+                if (String.IsNullOrEmpty(apViewModel.bldgId)) apViewModel.bldgId = "0";
                 if (String.IsNullOrEmpty(apViewModel.mtrcDisplayText)) apViewModel.mtrcDisplayText = "";
                 if (String.IsNullOrEmpty(apViewModel.apMonth)) apViewModel.apMonth = "0";
                 if (String.IsNullOrEmpty(apViewModel.apMonthName)) apViewModel.apMonthName = "0";
