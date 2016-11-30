@@ -112,7 +112,7 @@ function toggleMenuOn() {
     if (hasReasons == "") {    //There are no Reasons assigned       
         //Before displaying the context menu, set the correct "Reason" Related options based on the status of the cell that was right clicked
         //Check if the current MPV Status Allows for reasons to be Added
-        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved") {$('#li_Add').hide();}
+        if (actionPlanSts == "Ready For Review" || actionPlanSts == "Approved" || actionPlanSts == "Expired") {$('#li_Add').hide();}
         else { //Reasons can be added but only if you are an Admin, or approved building owner (RZ_AP_SUBMITTER)
             if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN")) {
                 $('#li_Add').show();
@@ -192,6 +192,12 @@ function toggleMenuOn() {
                 // Building User or Submitter (With Building Access) or reviewer (With proper Metric Access) or ADMIN can View the AP
                 if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess) || hasRole("RZ_ADMIN") || (hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
                 {
+                    $("#li_ViewAP").show();
+                }
+                break;
+            case "Expired":
+                // Building User or Submitter (With Building Access) or reviewer (With proper Metric Access) or ADMIN can View the AP
+                if (((hasRole("RZ_BLDG_USER") || hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess) || hasRole("RZ_ADMIN") || (hasRole("RZ_AP_REVIEWER") && hasMetricAssigned)) {
                     $("#li_ViewAP").show();
                 }
                 break;

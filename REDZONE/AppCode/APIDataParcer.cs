@@ -739,6 +739,12 @@ namespace REDZONE.AppCode
                         nextAction = "View AP";
                     }
                     break;
+                case "Expired":
+                    if (((currentUser.hasRole("RZ_BLDG_USER") || currentUser.hasRole("RZ_AP_SUBMITTER")) && hasBuildingAccess) || currentUser.hasRole("RZ_ADMIN") || (currentUser.hasRole("RZ_AP_REVIEWER") && hasMetricAssigned))
+                    {
+                        nextAction = "View AP";
+                    }
+                    break;
                 default:
                     nextAction = "N/A";
                     break;
