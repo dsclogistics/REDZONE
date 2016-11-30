@@ -477,11 +477,12 @@ $(".collapse").on('shown.bs.collapse', function () {
 });
 //------------------------------------------------------------------------------------
 $('.lnkGotoAP').click(function () {
-    var currentAction = $.trim($(this).html());
+    var currentAction = $.trim($(this).text());
     var bapm_id = $(this).find('#bapm_id').val();
     var mpvId = $(this).find('#mpv_id').val();
     var mp_id = $(this).find('#mp_id').val();
 
+    alert(currentAction);
     var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
 
     localStorage.setItem("bapmId", bapm_id);     // Reset the Local Storage value before redirection

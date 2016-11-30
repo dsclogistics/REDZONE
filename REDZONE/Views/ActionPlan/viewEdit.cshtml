@@ -146,7 +146,7 @@
                     @*------------------------------*@
                     @if (Model.canViewWipAP || (Model.canViewFinishedAP && (Model.currentAPStatus == "Ready For Review" || Model.currentAPStatus == "Approved" || Model.currentAPStatus == "Rejected" || Model.bapmStatus == "Expired")))
                     {
-                        
+
                         <div class="col-md-6" style="text-align:left; font-size:18px; padding:0">
                             Action Plan - Version @Model.currentAPVersion
                             @if (Model.bapmStatus == "Expired")
@@ -155,9 +155,9 @@
                             }
                         </div>
                         <div class="col-md-6" id="apTextChars" style="text-align:right;color:gray">@Model.actionPlanList.First().actionPlanAction.Length / 2000</div>
-                        
+
                         <textarea id="apText" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px; background-color: @Model.AP_EditableColor" maxlength="2000" @Model.AP_EditableStatus>@Model.actionPlanList.First().actionPlanAction</textarea>
-                        
+
                         <div class="row">
                             <div class="col-md-6" id="btnsActionPlan" style="text-align:left">
                                 <input type="hidden" id="apDetailId" value="@Model.actionPlanList.First().apd_id" />
@@ -169,7 +169,7 @@
                             </div>
 
                             <div id="apSubmittedBy" class="col-md-6" style="text-align:right;color:gray">
-                                @if(!String.IsNullOrEmpty(@Model.actionPlanList.First().submittedBy))
+                                @if (!String.IsNullOrEmpty(@Model.actionPlanList.First().submittedBy))
                                 {
                                     <span>Submitted By: @Model.actionPlanList.First().submittedBy</span>
                                 }
@@ -199,7 +199,7 @@
                         <div class="col-md-6" id="apReviewChars" style="text-align:right;color:gray">@Model.actionPlanList.First().reviewerComments.Length / 2000</div>
 
                         <textarea id="apReviewComment" style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" maxlength="2000" @Model.review_EditableStatus>@Model.actionPlanList.First().reviewerComments</textarea>
-                        
+
                         <div class="row">
                             <div class="col-md-6" id="btnsReviewAP" style="text-align:left">
                                 <input type="hidden" id="bapmId" value=@ViewBag.bapmId />
@@ -400,5 +400,8 @@
     </div>
 </div>
 
+<div>
+    @Html.ActionLink("Back to Building Summary", "BuildingSummary", "Home", routeValues: new { year = Model.apYear, buildingID = Model.bldgId }, htmlAttributes: null)
+</div>
 
-
+<br />

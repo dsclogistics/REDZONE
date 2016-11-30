@@ -47,276 +47,14 @@
         <input type="hidden" id="hdnDisplay" value="@ViewBag.display"/>
     </div>
 
-    <div class="panel-body padding2 " style="display:none">
-        @*****************@
-        @*SUBMITTER TASKS*@
-        @*****************@
-        @*<div class="row" id="divSubmitterTasks" style="margin-left:5px; margin-right:5px">
-            @if (Model.apSubmitTaskList.Count() > 0)
-            {
-                <div class="btn-toolbar" style="margin-top:5px; display:none">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-top-right-radius:0px; border-bottom-right-radius:0px; border-color: transparent">
-                            <span class="glyphicon @apTaskGlyph"></span>
-                        </button>
-                    </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px; font-weight:bold ">
-                            Action Plan Tasks 
-                            <span style="color:red">(@Model.apSubmitTaskList.SelectMany(x => x.periodList).SelectMany(x => x.mtrcList).Count())</span>
-                        </h4>
-                    </div>
-                </div>
-
-                <div class="collapse @apTaskDisplay" style="margin-left:42px; display:none">
-                    @foreach (var bldg in Model.apSubmitTaskList)
-                    {
-                        <div class="btn-toolbar" style="margin-top:5px">
-                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:grey; border-right:transparent">
-                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon @apTaskGlyph"></span>
-                                </button>
-                            </div>
-                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-top-right-radius:4px; border-bottom-right-radius:4px; border-color:grey">
-                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">
-                                    @{string url = "/Home/BuildingSummary/?year=" + bldg.periodList.First().mtrcList.First().year + "&bldg_id=" + bldg.periodList.First().mtrcList.First().bldg_id ;}
-                                    <a href="@url">@bldg.bldgName</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <div class="collapse @apTaskDisplay" style="margin-left:42px">
-                            @foreach (var period in bldg.periodList)
-                            {
-                                <div class="btn-toolbar" style="margin-top:5px">
-                                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
-                                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                            <span class="glyphicon @apTaskGlyph"></span>
-                                        </button>
-                                    </div>
-                                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@period.periodName</h5>
-                                    </div>
-                                </div>
-
-                                <div class="collapse @apTaskDisplay" style="margin-left:40px">
-                                    <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                        <tr style="background-color:lightgray">
-                                            <th style="text-align:center; width:25%">
-                                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().mtrc_prod_display_text)
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                @Html.DisplayNameFor(model => model.apSubmitTaskList.First().periodList.First().mtrcList.First().status)
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                Action
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                Due By
-                                            </th>
-                                        </tr>
-
-                                        @foreach (var mtrc in period.mtrcList)
-                                        {
-                                            string backgroundColor = (mtrc.status == "Rejected") ? "#ffbb8b" : "white";
-                                            <tr style="background-color:@backgroundColor">
-                                                <td style="text-align:center; width:25%">
-                                                    @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
-                                                </td>
-                                                <td style="text-align:center; width:25%">
-                                                    @Html.DisplayFor(modelItem => mtrc.status)
-                                                </td>
-                                                <td style="text-align:center; width:25%">
-                                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;}
-                                                    <a href="@apUrl" style="color:red">@mtrc.action</a>
-                                                </td>
-                                                <td style="text-align:center; width:25%">
-                                                    TBD
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-
-                                </div>
-                            }
-
-
-                        </div>
-                    }
-                </div>
-            }
-        </div>*@
-        @****************@
-        @*REVIEWER TASKS*@
-        @****************@
-        @*<div class="row" id="divReviewerTasks" style="margin-left:5px; margin-right:5px">
-            @if (Model.apReviewTaskList.Count() > 0)
-            {
-                <div class="btn-toolbar" style="margin-top:5px">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                            <span class="glyphicon @apTaskGlyph"></span>
-                        </button>
-                    </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Action Plan Review Tasks</h4>
-                    </div>
-                </div>
-
-                <div class="collapse @apTaskDisplay" style="margin-left:42px;">
-                    @foreach (var mtrc in Model.apReviewTaskList)
-                    {
-                        <div class="btn-toolbar" style="margin-top:5px">
-                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
-                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon @apTaskGlyph"></span>
-                                </button>
-                            </div>
-                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                                <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@mtrc.mtrc_prod_display_text</h4>
-                            </div>
-                        </div>
-
-                        <div class="collapse @apTaskDisplay" style="margin-left:42px">
-                            @foreach (var period in mtrc.periodList)
-                            {
-                                <div class="btn-toolbar" style="margin-top:5px">
-                                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
-                                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                            <span class="glyphicon @apTaskGlyph"></span>
-                                        </button>
-                                    </div>
-                                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                                        <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@period.periodName</h5>
-                                    </div>
-                                </div>
-
-                                <div class="collapse @apTaskDisplay" style="margin-left:40px">
-                                    <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                        <tr style="background-color:lightgray">
-                                            <th style="text-align:center; width:25%">
-                                                @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().bldgName)
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                @Html.DisplayNameFor(model => model.apReviewTaskList.First().periodList.First().bldgList.First().status)
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                Action
-                                            </th>
-                                            <th style="text-align:center; width:25%">
-                                                Due By
-                                            </th>
-                                        </tr>
-
-                                        @foreach (var bldg in period.bldgList)
-                                        {
-                                            string dueMonth = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Month.ToString();
-                                            string dueYear = new DateTime(Int32.Parse(bldg.year), Int32.Parse(bldg.month), 18).AddMonths(1).Year.ToString();
-                                            string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
-                                            <tr>
-                                                <td style="text-align:center; width:25%">
-                                                    @Html.DisplayFor(modelItem => bldg.bldgName)
-                                                </td>
-                                                <td class="cellAPStatus" style="text-align:center; width:25%">
-                                                    @Html.DisplayFor(modelItem => bldg.status)
-                                                </td>
-                                                <td class="cellQuickReview" style="text-align:center; width:25%">
-                                                    @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + bldg.mtrc_period_id + "&bldg_id=" + bldg.bldg_id + "&bapm_id=" + bldg.rz_bapm_id;}
-                                                    <input type="hidden" class="hdnBapmId" id="hdnBapmId" value="@bldg.rz_bapm_id" />
-                                                    <a class="lnkQuickReview" href="#" onclick="return false; ">Quick Review</a>
-                                                </td>
-                                                <td style="text-align:center; width:25%">
-                                                    TBD
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
-            }
-        </div>*@
-        @************************@
-        @*METRIC COLLECTOR TASKS*@
-        @************************@
-        @*<div class="row" id="divCollectorTasks" style="margin-left:5px; margin-right:5px">
-            @if (Model.mtrcTaskList.Count() > 0)
-            {
-                <div class="btn-toolbar" style="margin-top:5px">
-                    <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-width:.143em; border-color:black; border-right:2px solid gray ">
-                        <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                            <span class="glyphicon @mtrcTaskGlyph"></span>
-                        </button>
-                    </div>
-                    <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-width:.143em; border-color:black; border-left:transparent; border-top-right-radius:4px; border-bottom-right-radius:4px; background-color:#f7f7f7;">
-                        <h4 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">Metric Collector Tasks</h4>
-                    </div>
-                </div>
-
-                <div class="collapse @mtrcTaskDisplay" style="margin-left:42px">
-                    @foreach (var period in Model.mtrcTaskList)
-                    {
-                        <div class="btn-toolbar" style="margin-top:5px">
-                            <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:transparent; border-right:transparent">
-                                <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
-                                    <span class="glyphicon @mtrcTaskGlyph"></span>
-                                </button>
-                            </div>
-                            <div class="bordered" style="display:table-cell; width:100%; vertical-align:middle; border-color:transparent; border-bottom-color:lightgray">
-                                <h5 class="btn-group" style="text-align:left; margin:auto; margin-left:10px ">@period.periodName</h5>
-                            </div>
-                        </div>
-
-                        <div class="collapse @mtrcTaskDisplay" style="margin-left:42px">
-                            <table class="table table-condensed table-hover" id="tblAPTasks" style="margin-top:5px">
-                                <tr style="background-color:lightgray; max-height:10px">
-                                    <th style="text-align:center; width:25%">
-                                        @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().mtrc_prod_display_text)
-                                    </th>
-                                    <th style="text-align:center; width:25%">
-                                        @Html.DisplayNameFor(model => model.mtrcTaskList.First().mtrcList.First().status)
-                                    </th>
-                                    <th style="text-align:center; width:25%">
-                                        Action
-                                    </th>
-                                    <th style="text-align:center; width:25%">
-                                        Due By
-                                    </th>
-                                </tr>
-
-                                @foreach (var mtrc in period.mtrcList)
-                                {
-                                    string dueMonth = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Month.ToString();
-                                    string dueYear = new DateTime(Int32.Parse(mtrc.year), Int32.Parse(mtrc.month), 18).AddMonths(1).Year.ToString();
-                                    string overdueClass = (new DateTime(Int32.Parse(dueYear), Int32.Parse(dueMonth), 18) < DateTime.Today) ? "overdue" : "";
-                                    <tr>
-                                        <td style="text-align:center; width:25%">
-                                            @Html.DisplayFor(modelItem => mtrc.mtrc_prod_display_text)
-                                        </td>
-                                        <td style="text-align:center; width:25%">
-                                            @Html.DisplayFor(modelItem => mtrc.status)
-                                        </td>
-                                        <td style="text-align:center; width:25%">
-                                            @{string mtrcUrl = "/Metric/EditView/" + mtrc.mtrc_id + "?month=" + mtrc.month_name + "&year=" + mtrc.year;}
-                                            <a href="@mtrcUrl">Manage Metric</a>
-                                        </td>
-                                        <td class="@overdueClass" style="text-align:center; width:25%">
-                                            @dueMonth/18/@dueYear
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-
-                        </div>
-                    }
-                </div>
-            }
-
-        </div>*@
-    </div>
+    @if(Model.apSubmitTaskList.Count() + Model.apReviewTaskList.Count() + Model.mtrcTaskList.Count() == 0)
+    {
+        <div class="panel-body padding2">
+            <div style="padding:15px">
+                <span>There are no outstanding tasks.</span>
+            </div>
+        </div>
+    }
 </div>
 
 
@@ -417,7 +155,7 @@
                                                                 {
                                                                     overdueClass = "overdue-5";
                                                                 }
-                                                                else if(dueDate < DateTime.Today.AddDays(10))
+                                                                else if (dueDate < DateTime.Today.AddDays(10))
                                                                 {
                                                                     overdueClass = "overdue-10";
                                                                 }
@@ -430,7 +168,10 @@
                                                                         @Html.DisplayFor(modelItem => mtrc.status)
                                                                     </td>
                                                                     <td style="text-align:center; width:25%">
-                                                                        @{string apUrl = "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;}
+                                                                        @{ string apUrl = (mtrc.action == "Start AP") ?
+                                                                                   "/MPVreasons/Assigment/" + mtrc.mtrc_period_val_id + "?mpId=" + mtrc.mtrc_period_id + "&returnUrl=/Home/BuildingSummary/?year=" + mtrc.year + "&buildingID=" + mtrc.bldg_id :
+                                                                                   "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;
+                                                                        }
                                                                         <a href="@apUrl" style="text-decoration:underline">@mtrc.action</a>
                                                                     </td>
                                                                     <td class="@overdueClass" style="text-align:center; width:25%">

@@ -55,6 +55,7 @@ namespace REDZONE.Models
         public string rz_bapm_id { get; set; }
         public string month { get; set; }
         public string year { get; set; }
+        public string mtrc_period_val_id { get; set; }
     }
 
     //Action Plan Reviewer Task ViewModel
@@ -154,6 +155,7 @@ namespace REDZONE.Models
         [Display(Name = "Status")]
         public string status { get; set; }
         public string rz_bapm_id { get; set; }
+        public string mtrc_period_val_id { get; set; }
     }
     public class RZMetricTask
     {
