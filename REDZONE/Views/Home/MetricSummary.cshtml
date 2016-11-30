@@ -2,6 +2,7 @@
 @{ ViewBag.Title = "Building Summary"; }
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
+<link href="~/Content/RZ_Effects.css" rel="stylesheet" />
 <style>
     .monthCol {
         width: 120px;
@@ -72,13 +73,22 @@ else
                     <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
                         @if (Model.canFilterRows)
                         {
-                            <div class="checkbox" style="padding-left:45px; padding-top:38px">
+                            <div style="margin:0; padding:0; margin-top:38px">
+                                <label class="switch" style="display:inline-block; margin:0;">
+                                    <input class="switch-input" id="chkMyBuildingsOnly" type="checkbox" @applyFilter />
+                                    <span class="switch-label" data-on="Y" data-off="N"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                                <span class="" style="font-size:12px; margin:0; padding:0; padding-top:5px; display:inline-block">View my Buildings Only</span>
+                            </div>
+
+                            @*<div class="checkbox" style="padding-left:45px; padding-top:38px">
                                 <label class="" style="text-align:left; padding:0; font-size: .8em">
                                     <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
                                     <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
                                     <span id="chkText" style="font-size:12px">View my Buildings Only</span>
                                 </label>
-                            </div>
+                            </div>*@
                         }
                     </div>
                     <div class="col-sm-8">

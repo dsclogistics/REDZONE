@@ -1,7 +1,7 @@
 ﻿@{
     // +++++++++++++++ THIS IS A DEVELOPMENT BRANCH to implement New Feaures for Reason ans reason assigment Management ++++++++++++++++++
-    
-    string pageFirstLoad = (Session["firstLoad"] == null) ? "NULL" : Session["firstLoad"].ToString();  //This ensure we have a value and avoid page errors even is Session Variable is lost 
+
+    string pageFirstLoad = (Session["firstLoad"] == null) ? "NULL" : Session["firstLoad"].ToString();  //This ensure we have a value and avoid page errors even is Session Variable is lost
     string userFName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString();
     string userLName = (Session["last_name"] == null) ? "" : Session["last_name"].ToString();
     string userSSO = (Session["userSSO"] == null) ? "" : Session["userSSO"].ToString();
@@ -77,7 +77,7 @@
                 //alert("This is a first Page load");
             }
         }
-        catch(err) {
+        catch (err) {
             alert("An unhandled error exist: \n" + err);
         }
 
@@ -85,7 +85,7 @@
         $(document).ready(function () {
 
         });
-    </script>    
+    </script>
 </head>
 
 <body>
@@ -110,10 +110,10 @@
         <div class="row" style="text-align:left; margin:0; padding:0;"> @Html.Partial("_NavMenu") </div>
         @*-----------------------------------------------------------------------------------*@
 
-        @* ------- Render the partial View that contains the Application BODY  ------------- *@        
-            <div class="container body-content text-center" style="width:100%; max-width:1500px; margin-top:22px" >
-                @RenderBody()
-            </div>
+        @* ------- Render the partial View that contains the Application BODY  ------------- *@
+        <div class="container body-content text-center" style="width:100%; max-width:1500px; margin-top:22px">
+            @RenderBody()
+        </div>
         @*-----------------------------------------------------------------------------------*@
 
 
@@ -133,7 +133,7 @@
         </div>
 
         <div style="color:red; text-align:center">
-        @{
+            @{
         if (Session["globalAppError"] != null)
         {
             string erroMessage = Session["globalAppError"].ToString();
@@ -144,48 +144,49 @@
                 <span>Please try again later or contact the Service Desk if the problem Persists</span>
             }
         }
-        }
+            }
         </div>
 
-    <div>
-        <div id="msgForm" class="modal fade" role="dialog">
-            <div class="modal-dialog" style="width:35%; min-width:400px">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header bg-primary" >
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title msgFormTitle">Red Zone Application Message</h4>
-                    </div>
-                    <div class="modal-body" id="msgFormBody">
-                        <div class="row " id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; text-align:center">
+        <div>
+            <div id="msgForm" class="modal fade" role="dialog">
+                <div class="modal-dialog" style="width:35%; min-width:400px">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title msgFormTitle">Red Zone Application Message</h4>
+                        </div>
+                        <div class="modal-body" id="msgFormBody">
+                            <div class="row " id="msgFormBodyData" style="margin-top:40px; margin-bottom:30px; text-align:center">
+                            </div>
+                        </div>
+                        <div class="modal-footer" id="msgFormFooter" style="text-align:center">
+                            <button type="button" class="btn btn-primary" id="btnCancelMsgForm" data-dismiss="modal" style="width:120px">DONE</button>
                         </div>
                     </div>
-                    <div class="modal-footer" id="msgFormFooter" style="text-align:center">
-                        <button type="button" class="btn btn-primary" id="btnCancelMsgForm" data-dismiss="modal" style="width:120px">DONE</button>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="popupForm" class="modal fade" role="dialog">
-        <div class="modal-dialog puf" style="width:60%; min-width:1000px">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header bg-Primary-Gradient" style="color:white; ">  @*background-color:#904545*@
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title popupFormTitle" style="text-align:center"></h4>
-                </div>
-                <div class="modal-body" id="popupFormBody">
-                    <div class="row " id="popupFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+        <div id="popupForm" class="modal fade" role="dialog">
+            <div class="modal-dialog puf" style="width:60%; min-width:1000px">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header bg-Primary-Gradient" style="color:white; ">
+                        @*background-color:#904545*@
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title popupFormTitle" style="text-align:center"></h4>
                     </div>
-                </div>
-                <div class="modal-footer" id="popupFormFooter" style="text-align:center">
-                    <button type="button" class="btn btn-primary" id="btnCancelpopupForm" data-dismiss="modal" style="width:120px">DONE</button>
+                    <div class="modal-body" id="popupFormBody">
+                        <div class="row " id="popupFormBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="popupFormFooter" style="text-align:center">
+                        <button type="button" class="btn btn-primary" id="btnCancelpopupForm" data-dismiss="modal" style="width:120px">DONE</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
         @Scripts.Render("~/bundles/bootstrap")
