@@ -1641,7 +1641,7 @@ namespace REDZONE.AppCode
 
         //ACTION PLANS
         //
-        public ActionPlanViewModel getActionPlanList(string productname, string rz_bapm_id)
+        public ActionPlanViewModel getActionPlanList(string productname, string rz_bapm_id)     //DEPRECATED
         {
             //This method returns a list of versioned action plans corresponding to a RZ_BAPM_ID (Red Zone Building Action Plan Metric Id).
             ActionPlanViewModel apViewModel = new ActionPlanViewModel();
@@ -1738,6 +1738,85 @@ namespace REDZONE.AppCode
                     JArray jPriorReasonList = (JArray)res["assignedreasons"];
 
                     foreach(var rawReason in jPriorReasonList)
+                    {
+                        tempMPReason = new Models.MPReason();
+
+                        tempMPReason.val_reason_id = (string)rawReason["mpvr_id"];
+                        tempMPReason.reason_id = (string)rawReason["mpr_id"];
+                        tempMPReason.reason_text = (string)rawReason["mpr_display_text"];
+                        tempMPReason.mpvr_Comment = (string)rawReason["mpvr_comment"];
+
+                        if (String.IsNullOrEmpty(tempMPReason.reason_text)) tempMPReason.reason_text = "";
+                        if (String.IsNullOrEmpty(tempMPReason.mpvr_Comment)) tempMPReason.mpvr_Comment = "";
+
+                        reasonList.Add(tempMPReason);
+                    }
+
+                    tempPriorActionPlan.priorAPReasonList = reasonList;
+                    tempPriorActionPlan.priorAPStatusColor = "green";
+
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMonth)) tempPriorActionPlan.priorAPMonth = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPYear)) tempPriorActionPlan.priorAPYear = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMetricGoalText)) tempPriorActionPlan.priorAPMetricGoalText = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPMetricValue)) tempPriorActionPlan.priorAPMetricValue = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPStatus)) tempPriorActionPlan.priorAPStatus = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPText)) tempPriorActionPlan.priorAPText = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.priorAPReviewText)) tempPriorActionPlan.priorAPReviewText = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.submittedBy)) tempPriorActionPlan.submittedBy = "";
+                    if (String.IsNullOrEmpty(tempPriorActionPlan.approvedBy)) tempPriorActionPlan.approvedBy = "";
+
+                    priorActionPlanList.Add(tempPriorActionPlan);
+                }
+            }
+            catch
+            {
+
+            }
+            return priorActionPlanList;
+        }       //DEPRECATED
+        public List<PriorActionPlan> getRecentActionPlanList(string productname, string mtrc_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
+        {
+            //This method returns a list of prior month action plans based on product, metric_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, and endyear.
+            List<PriorActionPlan> priorActionPlanList = new List<PriorActionPlan>();
+            PriorActionPlan tempPriorActionPlan = new PriorActionPlan();
+            List<MPReason> reasonList = new List<MPReason>();
+            MPReason tempMPReason = new MPReason();
+
+            //string raw_data = api.getPriorActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear);
+            string raw_data = api.lookUpActionPlans(productname, mtrc_period_id, dsc_mtrc_lc_bldg_id, begmonth, begyear, endmonth, endyear, "Approved");
+
+            try
+            {
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                JArray jPriorActionPlanList = (JArray)parsed_result["actionplans"];
+                foreach (var res in jPriorActionPlanList)
+                {
+                    tempPriorActionPlan = new Models.PriorActionPlan();
+                    reasonList = new List<MPReason>();
+
+                    JArray jPriorAPDetails = (JArray)res["details"];
+                    var mostRecentAPDetail = jPriorAPDetails.OrderByDescending(x => (int)x["rz_apd_ap_ver"]).ToArray()[0];
+
+                    tempPriorActionPlan.apd_id = (string)mostRecentAPDetail["rz_apd_id"];
+                    tempPriorActionPlan.bapm_id = (string)res["rz_bapm_id"];
+                    tempPriorActionPlan.mtrc_period_val_id = (string)res["mtrc_period_val_id"];
+                    tempPriorActionPlan.mtrc_period_id = (string)res["mtrc_period_id"];
+                    tempPriorActionPlan.dsc_mtrc_lc_bldg_id = (string)res["dsc_mtrc_lc_bldg_id"];
+                    tempPriorActionPlan.priorAPMonth = intToMonth((int)res["month"]);
+                    tempPriorActionPlan.priorAPYear = (string)res["year"];
+                    //tempPriorActionPlan.priorAPMetricGoalText = (string)res["goal_txt"];
+                    tempPriorActionPlan.priorAPMetricGoalText = ((string)res["goal_txt"]).Replace("<=", "&le;").Replace(">=", "&ge;");
+                    tempPriorActionPlan.priorAPMetricValue = (string)res["mtrc_period_val_value"];
+                    tempPriorActionPlan.priorAPStatus = (string)mostRecentAPDetail["rz_apd_ap_status"];
+                    tempPriorActionPlan.priorAPText = (string)mostRecentAPDetail["rz_apd_ap_text"];
+                    tempPriorActionPlan.priorAPReviewText = (string)mostRecentAPDetail["rz_apd_ap_review_text"];
+                    tempPriorActionPlan.submittedBy = (string)mostRecentAPDetail["submitted_by"];
+                    tempPriorActionPlan.approvedBy = (string)mostRecentAPDetail["approved_by"];
+
+                    JArray jPriorReasonList = (JArray)res["assignedreasons"];
+
+                    foreach (var rawReason in jPriorReasonList)
                     {
                         tempMPReason = new Models.MPReason();
 

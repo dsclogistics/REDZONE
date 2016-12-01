@@ -57,7 +57,7 @@ namespace REDZONE.Controllers
             string endmonth = begmonth;
             string endyear = DateTime.Now.Year.ToString();
 
-            recentAPList = dataParcer.getPriorActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
+            recentAPList = dataParcer.getRecentActionPlanList(productName, mpId, bldgId, begmonth, begyear, endmonth, endyear);
 
             PriorActionPlan currentAP = dataParcer.getMostRecentAP(productName, mpId, bldgId, DateTime.Today.AddMonths(-11).Month.ToString(), DateTime.Today.AddMonths(-11).Year.ToString(), 
                                                             DateTime.Today.AddMonths(-1).Month.ToString(), DateTime.Today.AddMonths(-1).Year.ToString());

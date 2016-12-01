@@ -741,6 +741,9 @@ namespace REDZONE.AppCode
         }
 
         //--------------------------------------------------------------------------------------------------------
+        //Json Data Retrieval for Action Plans
+        //--------------------------------------------------------------------------------------------------------
+        //THIS API IS DEPRECATED. See lookUpActionPlans for the new API.
         public string getActionPlans(string productname, string rz_bapm_id)
         {
             string endPoint = "getactplanbyid";
@@ -770,6 +773,7 @@ namespace REDZONE.AppCode
             }
         }
 
+        //THIS API IS DEPRECATED. See lookUpActionPlans for the new API.
         //Get list of action plans from prior months
         public string getPriorActionPlans(string productname, string metric_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear)
         {
@@ -829,6 +833,34 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
+        public string lookUpActionPlans(string productname, string metric_period_id, string dsc_mtrc_lc_bldg_id, string begmonth, string begyear, string endmonth, string endyear, string status)
+        {
+            string endPoint = "lookupap";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = "{\"productname\":\"" + productname + "\", \"mtrc_period_id\":\"" + metric_period_id + "\", \"dsc_mtrc_lc_bldg_id\":\"" + dsc_mtrc_lc_bldg_id + "\", \"begmonth\":\"" + begmonth + "\", \"begyear\":\"" + begyear + "\", \"endmonth\":\"" + endmonth + "\", \"endyear\":\"" + endyear + "\", \"status\":\"" + status + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
         public string lookUpActionPlans(string productname, string rz_bapm_id)
         {
             string endPoint = "lookupap";
@@ -857,7 +889,6 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
-
 
         //Submit Existing/New Action Plan
         public string submitActionPlan(string raw_json)
