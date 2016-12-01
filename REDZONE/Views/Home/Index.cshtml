@@ -11,8 +11,8 @@
     string btnClassScore = (ViewData["bntClassS"] == null) ? "" : ViewData["bntClassS"].ToString();
     string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
     string panelHeight = (applyFilter == "checked") ? "med-height" : "full-height";
-    string vScrollStatus = "scroll";  //or "hidden"
-    vScrollStatus = (applyFilter.Equals("checked")) ? "hidden" : "scroll";
+    //string vScrollStatus = "scroll";  //or "hidden"
+    string vScrollStatus = (applyFilter.Equals("checked")) ? "hidden" : "scroll";
 }
 
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -131,11 +131,11 @@
                                     </td>
                                     @foreach (var m in Model.allMetrics)
                                     {
-                                <td class="buildingCol" title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
-                                    <a href="@m.url">@m.metricName</a>
-                                </td>
+                                    <td class="buildingCol" title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
+                                         <a href="@m.url">@m.metricName</a>
+                                    </td>
                                     }
-                                    <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                    <td class="buildingCol " style="vertical-align:middle; width:11%; padding-right:13px">
                                         <input class="sortOrder" type="hidden" id="sSortOrder" value="@ViewData["sOrder"]" />
                                         Building Score
                                         <button type="button" class="btn btn-sm sortButton @btnClassScore" aria-label="Sort by" style="padding:0px 2px; float:right">
@@ -191,7 +191,7 @@
                     </div> <!-- *********** END OF BUILDING ROWS DATA SECTION ************** -->
 
 
-                    <div class="panel-footer scroll-Footer " style="overflow-y: @vScrollStatus">
+                    <div class="panel-footer scroll-Footer" style="overflow-y: @vScrollStatus">
                         <div class="row " style="margin:0; padding:0">
                             <table style="margin:0; width:100%">
                                 <tr totalsrow>
