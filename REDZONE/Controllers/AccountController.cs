@@ -519,6 +519,7 @@ namespace REDZONE.Controllers
             switch (loginModel.Username.ToUpper() + loginModel.Password) { 
                 case "DELGADO_FELICIANO~~":
                 case "ABDUGUEV_RASUL~~":
+                case "CHEN_ALEX~~":
                      isDeveloper= true;
                      logggedUser = new dscUser(loginModel.Username.Trim());  //Retrieve all User Info
                      logggedUser.isAuthenticated = true;

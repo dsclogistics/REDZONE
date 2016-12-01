@@ -482,7 +482,7 @@ $('.lnkGotoAP').click(function () {
     var mpvId = $(this).find('#mpv_id').val();
     var mp_id = $(this).find('#mp_id').val();
 
-    alert(currentAction);
+    //alert(currentAction);
     var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
 
     localStorage.setItem("bapmId", bapm_id);     // Reset the Local Storage value before redirection
