@@ -116,7 +116,7 @@ namespace REDZONE.Controllers
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
             string decryptToken = "";
             Session["errorMessage"] = "";
-            Session["buildingFilter"] = "N";        //Initial Building Filter Status for user is set to "N"
+            Session["buildingFilter"] = "Y";        //Initial Building Filter Status for user is set to "N"
             //Session["loginToken"] = null;
             try
             {  //try to decrypt the password
