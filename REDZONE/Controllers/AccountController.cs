@@ -116,7 +116,7 @@ namespace REDZONE.Controllers
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
             string decryptToken = "";
             Session["errorMessage"] = "";
-            Session["buildingFilter"] = "Y";        //Initial Building Filter Status for user is set to "N"
+            Session["buildingFilter"] = "N";        //Initial Building Filter Status for user is set to "N"
             //Session["loginToken"] = null;
             try
             {  //try to decrypt the password
@@ -541,6 +541,7 @@ namespace REDZONE.Controllers
                 Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
                 Session["userRole"] = logggedUser.getUserRoles();
                 Session["userBuildings"] = logggedUser.getUserBuildings();
+                Session["buildingFilter"] = (logggedUser.buildings.Count() > 0) ? "Y" : "N";
 
                 //Register the User with the Server as an authenticated user
                 //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
