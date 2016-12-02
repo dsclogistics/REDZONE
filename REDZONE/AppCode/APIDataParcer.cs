@@ -1521,11 +1521,11 @@ namespace REDZONE.AppCode
                                 break;
                             case 0:   //This is the first element of the list
                                 prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[usrBldgList.Count - 1]);
-                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
+                                prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
                                 break;
                             default:    //Not first nor last element
                                 prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex - 1]);
-                                prevNext[0] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
+                                prevNext[1] = String.Format("/Home/BuildingSummary/?year={0}&buildingID={1}", year, usrBldgList[curIndex + 1]);
                                 break;                        
                         }
                         return prevNext;

@@ -258,7 +258,7 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string submitActionPlanReview(string raw_json)
         {
-            string status = api.submitAPReview (raw_json);
+            string status = api.submitAPReview (raw_json.Replace("\n", "\\n"));
 
             return returnResultMessage(status);
         }
@@ -310,12 +310,17 @@ namespace REDZONE.Controllers
         /////////////////////////////////////////////////////////////////
         // ==================== PRIVATE METHODS ==================== ////
         /////////////////////////////////////////////////////////////////
+
         private string returnResultMessage(string status)
         {
             if (status.ToLower().Contains("success"))
             {
                 //Session["metricSaveMsg"] = "Data Saved Successfully.";
                 return "Success";
+            }
+            else if (status.Contains("The remote server returned an error: (400) Bad Request."))
+            {
+                return "The remote server returned an error: (400) Bad Request.";
             }
             else
             {

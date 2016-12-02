@@ -241,11 +241,13 @@
 
                         <div class="collapse" style="margin-left:40px">
                             <h4 style="text-align:left; margin-top:10px">Action Plan Text</h4>
-                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>
+                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.actionPlanAction</textarea>
+                            @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>*@
                             <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
 
                             <h4 style="text-align:left">Reviewer Comments</h4>
-                            <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>
+                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.reviewerComments</textarea>
+                            @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>*@
                             <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
                         </div>
                         <br />
@@ -267,7 +269,7 @@
 @* ======================= SECTION: RECENT MONTH ACTION PLANS ===================================== *@
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading">
-        <h4 style="font-weight:bold; font-size:20px; color:darkblue">Recent Action Plans</h4>
+        <h4 style="font-weight:bold; font-size:20px; color:darkblue; margin:0; padding:0">Recent Action Plans</h4>
     </div>
 
     <div class="panel-body padding2 ">
