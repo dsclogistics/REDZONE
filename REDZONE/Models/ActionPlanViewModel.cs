@@ -19,6 +19,7 @@ namespace REDZONE.Models
         public List<MPReason> reasonList { get; set; }
         public string bapm_id { get; set; }
         public string bapmStatus { get; set; }
+        public string mp_id { get; set; }
         public string mpv_id { get; set; }
         public string bldgName { get; set; }
         public string bldgId { get; set; }

@@ -515,7 +515,8 @@ $(document).ready(function () {
     });
 
     $('#btnCancelReasons').click(function () {
-        //alert("Returning back to URL: " + returnUrl);
+        alert($('#urlReturn').val());
+        alert("Returning back to URL: " + decodeURIComponent($('#urlReturn').val()));
         window.location.href = decodeURIComponent($('#urlReturn').val());
     });
 

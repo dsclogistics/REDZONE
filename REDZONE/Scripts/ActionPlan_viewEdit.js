@@ -65,13 +65,26 @@ $(document).ready(function () {
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         localStorage.setItem("backUrl", document.URL);
+        mpvId = $('#mpvId').val();
+        mpId = $('#mpId').val();
+
         //alert(localStorage.getItem("backUrl"));
         //alert("Metric Id is: " + getMPid());
-        if (getMPid() == null) {
+        if (mpId == null || mpvId == null) {
             alert("Session variables were lost");
         }
         else {
-            window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + document.URL;
+            localStorage.setItem("mpId", mpId);
+            localStorage.setItem("mpBuildingName", $("#buildingName").text());
+            localStorage.setItem("mpName", $("#metricName").text());
+            localStorage.setItem("mpGoal", $("#goalText").val());
+            localStorage.setItem("mpValueId", mpvId);
+            localStorage.setItem("mpValue", $("#mpValue").val());
+            localStorage.setItem("mpValueDisplayClass", "Closed-Missed");
+            localStorage.setItem("mpValueDate", $("#metricDate").text());
+            localStorage.setItem("buildingId", $('#bldgId').val());
+            //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + document.URL;
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mpId + "&returnUrl=" + document.URL;
         }
     });
 

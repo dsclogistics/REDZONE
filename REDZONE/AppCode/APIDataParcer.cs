@@ -2065,6 +2065,7 @@ namespace REDZONE.AppCode
                 apViewModel.bapm_id = (string)res["rz_bapm_id"];
                 apViewModel.bapmStatus = (string)res["rz_bapm_status"];
                 apViewModel.mpv_id = (string)res["mtrc_period_val_id"];
+                apViewModel.mp_id = (string)res["mtrc_period_id"];
                 apViewModel.bldgName = (string)res["dsc_mtrc_lc_bldg_name"];
                 apViewModel.bldgId = (string)res["dsc_mtrc_lc_bldg_id"];
                 apViewModel.mtrcDisplayText = (string)res["mtrc_prod_display_text"];
@@ -2077,6 +2078,7 @@ namespace REDZONE.AppCode
 
                 if (String.IsNullOrEmpty(apViewModel.bapm_id)) apViewModel.bapm_id = "0";
                 if (String.IsNullOrEmpty(apViewModel.bapmStatus)) apViewModel.bapmStatus = "";
+                if (String.IsNullOrEmpty(apViewModel.mp_id)) apViewModel.mp_id = "0";
                 if (String.IsNullOrEmpty(apViewModel.mpv_id)) apViewModel.mpv_id = "0";
                 if (String.IsNullOrEmpty(apViewModel.bldgName)) apViewModel.bldgName = "";
                 if (String.IsNullOrEmpty(apViewModel.bldgId)) apViewModel.bldgId = "0";
