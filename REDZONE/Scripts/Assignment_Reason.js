@@ -515,9 +515,8 @@ $(document).ready(function () {
     });
 
     $('#btnCancelReasons').click(function () {
-        alert($('#urlReturn').val());
-        alert("Returning back to URL: " + decodeURIComponent($('#urlReturn').val()));
-        window.location.href = decodeURIComponent($('#urlReturn').val());
+        //alert("Local Storage Return URL is: " + localStorage.getItem("backUrl"));
+        window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
     });
 
     $('#btnAddReasonDetail').click(function () {

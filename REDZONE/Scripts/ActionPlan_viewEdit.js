@@ -64,7 +64,9 @@ $(document).ready(function () {
     });
 
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
-        localStorage.setItem("backUrl", document.URL);
+        //alert("Setting Local storage back URL: " + window.location.href);
+        localStorage.setItem("backUrl", window.location.href);
+
         mpvId = $('#mpvId').val();
         mpId = $('#mpId').val();
 
@@ -84,7 +86,7 @@ $(document).ready(function () {
             localStorage.setItem("mpValueDate", $("#metricDate").text());
             localStorage.setItem("buildingId", $('#bldgId').val());
             //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + document.URL;
-            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mpId + "&returnUrl=" + document.URL;
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mpId + "&buildingID=" + $('#bldgId').val();
         }
     });
 

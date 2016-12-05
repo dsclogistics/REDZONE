@@ -1,5 +1,10 @@
 ﻿
 $(document).ready(function () {
+    //Set the current page as the "back URL" so we can return to this page once we bavigate out
+
+    //alert("Setting Local storage back URL: " + window.location.href);
+    localStorage.setItem("backUrl", window.location.href);
+
     $(".menuItem").removeClass("menuSelected");
     //------------------------------------------------------------------------------------
     $("#mDashboard").addClass("menuSelected");
@@ -483,7 +488,7 @@ $('.lnkGotoAP').click(function () {
     var mp_id = $(this).find('#mp_id').val();
 
     //alert(currentAction);
-    var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    //var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
     var metricDate = $(this).parents('.APmonthSection').first().find('#monthYearDIV').first().val();
 
     //Set all the Local Storage Values to be used on the Reason Assigment Screen (If needed)
@@ -501,16 +506,11 @@ $('.lnkGotoAP').click(function () {
 
     localStorage.setItem("mpValueDisplayClass", $(this).find('#mpValueDisplayClass').val());
     
-    
-
-
-
-
     switch (currentAction) {
         case "Start AP":
             localStorage.setItem("mpvStatus", "Not Started");
 
-            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mp_id + "&returnUrl=" + backUrl;
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mp_id;
             //alert("Great! You are ready to Start your action plan for:\n bapm_id :" + bapm_id + "\n mpvId :" + mpvId + "\n MP Id :" + mp_id );
             break;
         default:
