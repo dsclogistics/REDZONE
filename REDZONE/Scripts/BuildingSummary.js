@@ -484,8 +484,27 @@ $('.lnkGotoAP').click(function () {
 
     //alert(currentAction);
     var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    var metricDate = $(this).parents('.APmonthSection').first().find('#monthYearDIV').first().val();
 
+    //Set all the Local Storage Values to be used on the Reason Assigment Screen (If needed)
     localStorage.setItem("bapmId", bapm_id);     // Reset the Local Storage value before redirection
+    localStorage.setItem("mpId", mp_id);
+    localStorage.setItem("mpValueId", mpvId);
+    localStorage.setItem("buildingId", $('#buildingId').val());
+    localStorage.setItem("mpBuildingName", $("#buildingName").val());
+
+    localStorage.setItem("mpValueDate", metricDate);
+
+    localStorage.setItem("mpName", $(this).find('#mpName').val());
+    localStorage.setItem("mpGoal", $(this).find('#mpGoal').val());
+    localStorage.setItem("mpValue", $(this).find('#mpValue').val());
+
+    localStorage.setItem("mpValueDisplayClass", $(this).find('#mpValueDisplayClass').val());
+    
+    
+
+
+
 
     switch (currentAction) {
         case "Start AP":

@@ -277,8 +277,8 @@
                         {
                             string monthDivId = "monthDiv" + (colCounter + 1).ToString("00");
 
-                            <div class="panel panel-default" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
-
+                            <div class="panel panel-default APmonthSection" style="font-family:Arial; max-width:1000px; margin:0 auto; margin-top:10px">
+                                <input type="hidden" id="monthYearDIV" value="@dscBldngHdr.metricMonth @Model.year" />
                                 <div class="panel-heading" style="text-align:left; padding-top:0px; padding-bottom:0px">
                                     <a class="glyph-link" data-toggle="collapse" href="#@monthDivId" style="text-decoration:none; color:black">
                                         <table style="width:100%;">
@@ -335,6 +335,11 @@
                                                                 <input id="bapm_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].rz_bapm_id" />
                                                                 <input id="mpv_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].cellValueId" />
                                                                 <input id="mp_id" type="hidden" value="@buildingRow.entityMetricCells[mIndex].mtrc_period_id" />
+
+                                                                <input id="mpName" type="hidden" value="@buildingRow.entityMetricCells[mIndex].metricName" />
+                                                                <input id="mpGoal" type="hidden" value="@buildingRow.scoreGoal" />
+                                                                <input id="mpValue" type="hidden" value="@buildingRow.entityMetricCells[mIndex].metricValue" />
+                                                                <input id="mpValueDisplayClass" type="hidden" value="@buildingRow.entityMetricCells[mIndex].displayClass" />
                                                             </a>
                                                         }
                                                     </td>
@@ -433,72 +438,6 @@
                     }
                 </div>
                 <br />
-
- <!-- ***************************** PAGE DATA AND CALENDAR SECTION *********************************************  -->
-                @*<div class="row" style="margin:10px 0px;">
-                        <div class="col-sm-7">
-                            <div class="row actions-th" style="background-color:#f5f5f5">
-                                Meeting Date and Times
-                            </div>
-                            <div class="row" style="margin: 8px 10px 0px 10px; ">
-                                <table class="bordered table-bordered" style="margin:0; width:100%;">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align:center; width:20%">Metric</th>
-                                            <th style="text-align:center; width:20%">Corporate Resource</th>
-                                            <th style="text-align:center; width:20%">Meeting Date</th>
-                                            <th style="text-align:center; width:40%">Meeting Time (CST)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="padding:0">
-                                            <td style="width:20%">POP/Net FTE</td>
-                                            <td style="width:20%">Christina Dempsey</td>
-                                            <td style="width:20%"></td>
-                                            <td style="width:40%"></td>
-                                        </tr>
-                                        <tr class="bordered-r">
-                                            <td>Turnover</td>
-                                            <td>Mona Mounts</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>OT</td>
-                                            <td>Christina Dempsey</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Trainees</td>
-                                            <td>Mona Mounts</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Safety</td>
-                                            <td>Joe Smiesko</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>IT Tickets</td>
-                                            <td>Pete Kuranchie</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Financial</td>
-                                            <td>Steve Pignataro</td>
-                                            <td>N/A</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>*@ <!-- END OF ACTIONS AND MEETING SCHEDULE PANEL -->
-
             }
             else
             {
