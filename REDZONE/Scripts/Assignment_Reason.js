@@ -524,6 +524,7 @@ $(document).ready(function () {
 
     $('#btnCancelReasons').click(function () {
         //alert("Local Storage Return URL is: " + localStorage.getItem("backUrl"));
+        //alert(decodeURIComponent(localStorage.getItem("backUrl")));
         window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
     });
 

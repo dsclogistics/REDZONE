@@ -9,6 +9,7 @@
     $('#mMyTasks').show();                      // Show a new Menu Item when this page is displayed
     $("#mMyTasks").addClass("menuSelected");
 
+    localStorage.setItem("backUrl", window.location.href);
 
     $('.btn-toolbar').on('click', '.btn', function (e) {
         var $target = $(this).parentsUntil('btn-toolbar').next('.collapse');
@@ -77,7 +78,6 @@
         //buildSubmitAPReviewJSON(status);
         submitAPReview(status);
     });
-
 
 });
 

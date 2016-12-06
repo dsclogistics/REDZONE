@@ -481,11 +481,13 @@ $(".collapse").on('shown.bs.collapse', function () {
     $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly Expanded Section
 });
 //------------------------------------------------------------------------------------
-$('.lnkGotoAP').click(function () {
+$('.lnkGotoAP').click(function (evt) {
     var currentAction = $.trim($(this).text());
     var bapm_id = $(this).find('#bapm_id').val();
     var mpvId = $(this).find('#mpv_id').val();
     var mp_id = $(this).find('#mp_id').val();
+
+    evt.preventDefault();
 
     //alert(currentAction);
     //var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
@@ -518,6 +520,8 @@ $('.lnkGotoAP').click(function () {
             //alert("Redirecting you to View/Continue your action plan for:\nMP Id :" + mp_id + "\nBuilding Id :" + getBuildingId() + "\nbapm_id :" + bapm_id);
             break;
     }
+
+    return false;
 
 });
 //------------------------------------------------------------------------------------
