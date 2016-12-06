@@ -126,6 +126,12 @@ $(document).ready(function () {
         //alert(getBapmId());
         window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id +"&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
     });
+
+    $('#lnkBack').click(function () {
+        //alert("Local Storage Return URL is: " + localStorage.getItem("backUrl"));
+        //window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
+        window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
+    });
 });
 
 //------------------------------------------------------------------------------------------------
