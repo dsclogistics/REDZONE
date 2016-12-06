@@ -1,7 +1,6 @@
 ﻿@model REDZONE.Models.RZTaskDetailList
 @{
     int taskCounter = 0;
-    
 }
 <style>
     /*.taskItem:nth-child(even) {
@@ -23,7 +22,6 @@
         background-color:#0d33ff !important;
     }*/
 </style>
-
 <table class="table table-condensed" style="width:100%">
     @foreach (REDZONE.Models.RZActionPlanTask apReviewTask in Model.apReviewTaskList)
     {
@@ -32,18 +30,24 @@
             <tr class="taskItem" style="text-align:left; color:black;">
                 <td style="min-width:350px; ">
                     <div style="margin:0; padding:0;">
-                        <img src="~/Images/icon_Warning.png" />
-                        <span style="min-width: 150px; color:#fd6868; ">[@apReviewTask.status]</span>
+                        <input type="hidden" id="mp_id" value="@apReviewTask.mtrc_period_id" />
+                        <input type="hidden" id="bldg_id" value="@apReviewTask.bldg_id" />
+                        <input type="hidden" id="bapm_id" value="@apReviewTask.rz_bapm_id" />
+                        <input type="hidden" id="ap_Status" value="@apReviewTask.status" />
+                        <input type="hidden" id="mpv_id" value="@apReviewTask.mtrc_period_val_id" />
+                        <img src="~/Images/icon_Warning.png" />                        
                         <span>@apReviewTask.bldg_name @apReviewTask.mtrc_prod_display_text</span>
                     </div>
                     <div style="margin:0; padding:0;">
-                        <span style="margin-left:10px">For: @apReviewTask.period_name</span>
+                        <span style="margin-left:25px">For: @apReviewTask.period_name</span>
+                        <span style="min-width: 150px; color:#fd6868; ">[@apReviewTask.status]</span>
                     </div>
                 </td>
             </tr>
         }
         taskCounter++;
     }
+    @{taskCounter = 0;}
     @foreach (REDZONE.Models.RZActionPlanTask apSubmitTask in Model.apSubmitTaskList)
     {
         if (taskCounter < 10)
@@ -51,31 +55,40 @@
             <tr class="taskItem" style="text-align:left">
                 <td style="min-width:300px">
                     <div style="margin:0; padding:0;">
+                        <input type="hidden" id="mp_id" value="@apSubmitTask.mtrc_period_id" />
+                        <input type="hidden" id="bldg_id" value="@apSubmitTask.bldg_id" />
+                        <input type="hidden" id="bapm_id" value="@apSubmitTask.rz_bapm_id" />
+                        <input type="hidden" id="ap_Status" value="@apSubmitTask.status" />
+                        <input type="hidden" id="mpv_id" value="@apSubmitTask.mtrc_period_val_id" />
                         <img src="~/Images/icon_Warning.png" />
-                        <span style="min-width: 150px; color:#fd6868; ">[@apSubmitTask.status]</span>
                         <span>@apSubmitTask.bldg_name @apSubmitTask.mtrc_prod_display_text</span>
                     </div>
                     <div style="margin:0; padding:0;">
-                        <span style="margin-left:20px">For: @apSubmitTask.period_name</span>
+                        <span style="margin-left:25px">For: @apSubmitTask.period_name</span>
+                        <span style="min-width: 150px; color:#fd6868; ">[@apSubmitTask.status]</span>
                     </div>
                 </td>
             </tr>
         }
         taskCounter++;
     }
-    @foreach (REDZONE.Models.RZMetricTask apReviewTask in Model.mtrcTaskList)
+    @{taskCounter = 0;}
+    @foreach (REDZONE.Models.RZMetricTask apMetricTask in Model.mtrcTaskList)
     {
         if (taskCounter < 10)
         {
-            <tr class="taskItem" style="text-align:left">
-                <td style="min-width:300px">
+            <tr class="metricItem" style="text-align:left">
+                <td style="min-width:300px">                    
                     <div style="margin:0; padding:0;">
+                        <input type="hidden" id="metric_id" value="@apMetricTask.mtrc_id" />
+                        <input type="hidden" id="metric_month" value="@apMetricTask.month_name" />
+                        <input type="hidden" id="metric_year" value="@apMetricTask.year" />
                         <img src="~/Images/icon_Warning.png" />
-                        <span style="min-width: 150px; color:#fd6868;">[@apReviewTask.status]</span>
-                        <span>@apReviewTask.mtrc_prod_display_text</span>
+                        <span>@apMetricTask.mtrc_prod_display_text</span>
                     </div>
                     <div style="margin:0; padding:0;">
-                        <span style="margin-left:20px">For: @apReviewTask.period_name</span>
+                        <span style="margin-left:25px">For: @apMetricTask.period_name</span>
+                        <span style="min-width: 150px; color:#fd6868;">[@apMetricTask.status]</span>
                     </div>
                 </td>
             </tr>
@@ -96,12 +109,34 @@
 <script>
     $(document).ready(function () {
         $('.taskItem').click(function () {
-            alert("Item Clicked.");
-            //href="/ActionPlan/viewEdit/?mp_id=2&bldg_id=8&bapm_id=387"
+            var mp_id = $(this).find('#mp_id').first().val();
+            var bldg_id = $(this).find('#bldg_id').first().val();
+            var bapm_id = $(this).find('#bapm_id').first().val();
+            var mpv_id = $(this).find('#mpv_id').first().val();
+
+            if ($(this).find('#ap_Status').first().val() == "Not Started") {
+                //Action plan Status is "Not Started" navigate to Reason Assigment Screen
+                // /MPVreasons/Assigment/4366?mpId=2&buildingID=13
+                location.href = "/MPVreasons/Assigment/" + mpv_id + "?mpId=" + mp_id + "&buildingID=" + bldg_id;
+            }
+            else { //Navigate to the Corresponding AP Detail Screen
+                //alert("Navigating to: \nmp_id: " + mp_id + "\nBuilding Id: " + bldg_id + "\nBapm_id: " + bapm_id);
+                location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id + "&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
+            }
+        });
+
+        $('.metricItem').click(function () {
+            var metric_id = $(this).find('#metric_id').first().val();
+            var m_month = $(this).find('#metric_month').first().val();
+            var m_year = $(this).find('#metric_year').first().val();
+            //alert("Navigating to: \nMetric Id: " + metric_id + "\nMetric Month: " + m_month + "\nMetric Year: " + m_year);
+            location.href = "Metric/EditView/" + metric_id + "?month=" + m_month + "&year=" + m_year;
+            //href="Metric/EditView/3?month=November&year=2016"
         });
 
         $('#btnShowAllTasks').click(function () {
-            alert("Showing All Task is not Implemented yet");
+            //alert("Showing All Task is not Implemented yet");
+            location.href = "/Tasks/Index/";
         });
 
     });

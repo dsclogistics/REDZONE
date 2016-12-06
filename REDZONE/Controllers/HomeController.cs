@@ -154,6 +154,11 @@ namespace REDZONE.Controllers
             }
             return View(dashBoard);
         }
+        
+        public ActionResult Chat()
+        {
+            return View();
+        }
     }
 
 }

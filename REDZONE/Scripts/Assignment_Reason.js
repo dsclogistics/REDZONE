@@ -228,6 +228,14 @@ $(document).ready(function () {
     $("#mGoalCell").html(getMetricGoal());
     $("#mValueCell").html(getMPvalue());
     
+    //Reset all Local Storage values so old data does not persist
+    localStorage.setItem("mpBuildingName", "");
+    localStorage.setItem("mpValueDate", "");
+    localStorage.setItem("mpName", "");
+    localStorage.setItem("mpGoal", "");
+    localStorage.setItem("mpValueId", "");
+    localStorage.setItem("mpValue", "");
+    
     // -------------- DOM EVENTS -------------
     //resetMetricValueVariables(); After document has loaded we do not need to keep the variables cached in local Storage
     //============================ SAVE PROGRESS ACTION ====================================================
