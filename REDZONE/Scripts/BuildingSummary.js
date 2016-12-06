@@ -1,5 +1,10 @@
 ﻿
 $(document).ready(function () {
+    //Set the current page as the "back URL" so we can return to this page once we bavigate out
+
+    //alert("Setting Local storage back URL: " + window.location.href);
+    localStorage.setItem("backUrl", window.location.href);
+
     $(".menuItem").removeClass("menuSelected");
     //------------------------------------------------------------------------------------
     $("#mDashboard").addClass("menuSelected");
@@ -485,15 +490,29 @@ $('.lnkGotoAP').click(function (evt) {
     evt.preventDefault();
 
     //alert(currentAction);
-    var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    //var backUrl = '/Home/BuildingSummary/?year=' + $('#buildingYear').val() + '&buildingID=' + $('#buildingId').val();
+    var metricDate = $(this).parents('.APmonthSection').first().find('#monthYearDIV').first().val();
 
+    //Set all the Local Storage Values to be used on the Reason Assigment Screen (If needed)
     localStorage.setItem("bapmId", bapm_id);     // Reset the Local Storage value before redirection
+    localStorage.setItem("mpId", mp_id);
+    localStorage.setItem("mpValueId", mpvId);
+    localStorage.setItem("buildingId", $('#buildingId').val());
+    localStorage.setItem("mpBuildingName", $("#buildingName").val());
 
+    localStorage.setItem("mpValueDate", metricDate);
+
+    localStorage.setItem("mpName", $(this).find('#mpName').val());
+    localStorage.setItem("mpGoal", $(this).find('#mpGoal').val());
+    localStorage.setItem("mpValue", $(this).find('#mpValue').val());
+
+    localStorage.setItem("mpValueDisplayClass", $(this).find('#mpValueDisplayClass').val());
+    
     switch (currentAction) {
         case "Start AP":
             localStorage.setItem("mpvStatus", "Not Started");
 
-            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mp_id + "&returnUrl=" + backUrl;
+            window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mp_id;
             //alert("Great! You are ready to Start your action plan for:\n bapm_id :" + bapm_id + "\n mpvId :" + mpvId + "\n MP Id :" + mp_id );
             break;
         default:
