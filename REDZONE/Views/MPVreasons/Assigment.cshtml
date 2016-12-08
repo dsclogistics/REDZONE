@@ -1,7 +1,7 @@
-﻿@model IEnumerable<REDZONE.Models.MPReason>
+﻿@model REDZONE.Models.MPReasonViewModel
 @{ ViewBag.Title = "Assigment";  }
 @{
-    string noDataClass = (Model.Count() > 0) ? "display:none;" : "";
+    string noDataClass = (Model.mpReasonList.Count() > 0) ? "display:none;" : "";
 }
 <style>
     .headerCell {
@@ -186,9 +186,9 @@
 <div class="panel panel-default " style="margin-top:5px; font-family:Arial; ">
     <div class="panel-heading padding2">
         <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Reason Assignment</span><br />
-        <span style="font-weight:bold; color: #525151; font-size:x-large; padding:0px" id="buildingName"></span>
+        <span style="font-weight:bold; color: #525151; font-size:x-large; padding:0px" id="buildingName">@Model.bldgName</span>
         <span style="display:none">&nbsp;-&nbsp;</span>
-        <span style="font-weight:bold; color: black; display:none" id="metricDate"></span>
+        <span style="font-weight:bold; color: black; display:none" id="metricDate">@Model.monthName @Model.year</span>
     </div>
     <div class="panel-body padding2 ">
         <div style="margin:0 auto; text-align:center; margin-bottom:8px; margin-top:5px; max-width:550px">
@@ -196,12 +196,12 @@
             <div class="row" style="margin:0; font-weight:bold">
                 <div class="col-xs-4 headerCell" style="background-color:#f0eaea">Metric</div>
                 <div class="col-xs-4 headerCell" style="background-color:#bbedff">Goal</div>
-                <div class="col-xs-4 headerCell" style="background-color:#f0eaea"><span id="metricDate1"></span></div>
+                <div class="col-xs-4 headerCell" style="background-color:#f0eaea"><span id="metricDate1">@Model.monthName @Model.year</span></div>
             </div>
             <div class="row" style="margin:0">
-                <div class="col-xs-4 headerCell" style="background-color:#f0eaea"><span class="mNameCell"></span></div>
-                <div class="col-xs-4 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell"></span></div>
-                <div class="col-xs-4 headerCell" id="mValueCell" style="font-weight:normal"></div>
+                <div class="col-xs-4 headerCell" style="background-color:#f0eaea"><span class="mNameCell">@Model.mtrc_prod_display_text</span></div>
+                <div class="col-xs-4 headerCell" style="background-color:#bbedff; color:blue; font-weight:bold;"><span id="mGoalCell">@Model.goalTxt</span></div>
+                <div class="col-xs-4 headerCell @Model.displayClass" id="mValueCell" style="font-weight:normal">@Model.mpvVal</div>
             </div>
         </div> <!-- END OF HEADER INFORMATION-->
 
@@ -217,7 +217,7 @@
                 @{ int ckBoxCounter = 0;
                  string commentStatus = "display: none";
                 }
-                @foreach (var item in Model)
+                @foreach (var item in Model.mpReasonList)
                 {
                     if (item.reason_std_yn.Equals("Y"))
                     {
@@ -296,13 +296,13 @@
                     int nsChkCounter = 0;
                     string nsListItems = "";
                     //Get a list of all the dropdown items
-                    foreach (var nsItem in Model.Where(x => x.reason_std_yn != "Y").ToList())
+                    foreach (var nsItem in Model.mpReasonList.Where(x => x.reason_std_yn != "Y").ToList())
                     {
                         string isVisible = nsItem.isAssigned ? "display:none" : "";
                         nsListItems += nsItem.reason_id + "," + nsItem.reason_text + "," + isVisible + ",false~";
                     }
                 }
-                @foreach (var nsAssignedItem in Model.Where(x => x.reason_std_yn != "Y" && x.isAssigned).ToList())
+                @foreach (var nsAssignedItem in Model.mpReasonList.Where(x => x.reason_std_yn != "Y" && x.isAssigned).ToList())
                 { //loop through all Reason codes that are non-Standard
                     nsChkCounter++;
                     @Html.Action("_assignedNoStdrReason", "MPVreasons", new { nsChkNameIndex = nsChkCounter, reasonId = nsAssignedItem.reason_id, valRsnId = nsAssignedItem.val_reason_id, reasonText = nsAssignedItem.reason_text, reasonComment = nsAssignedItem.mpvr_Comment, wasUpdated = "N", ddItems = nsListItems })
@@ -386,17 +386,17 @@
 <br /><br /><br /><br /><br />
 <table class="table" id="listTable" style="display:none">
     <tr>
-        <th>@Html.DisplayNameFor(model => model.reason_id)</th>
-        <th>@Html.DisplayNameFor(model => model.metric_period_id)</th>
-        <th>@Html.DisplayNameFor(model => model.reason_text)</th>
-        <th>@Html.DisplayNameFor(model => model.reason_order)</th>
-        <th>@Html.DisplayNameFor(model => model.reason_description)</th>
-        <th>@Html.DisplayNameFor(model => model.reason_std_yn)</th>
-        <th>@Html.DisplayNameFor(model => model.isAssigned)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().reason_id)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().metric_period_id)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().reason_text)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().reason_order)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().reason_description)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().reason_std_yn)</th>
+        <th>@Html.DisplayNameFor(model => model.mpReasonList.First().isAssigned)</th>
         <th>Metrics Using it</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.mpReasonList)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.reason_id)</td>

@@ -52,4 +52,27 @@ namespace REDZONE.Models
         [Display(Name = "Assigned Reason Comment")]
         public string mpvr_Comment { get; set; }
     }
+
+    public class MPReasonViewModel
+    {
+        public string month { get; set; }
+        public string monthName { get; set; }
+        public string year { get; set; }
+        public string bldgName { get; set; }
+        public string bldgId { get; set; }
+        public string mtrc_prod_display_text { get; set; }
+        public string mpId { get; set; }
+        public string mpvVal { get; set; }
+        public string mpvId { get; set; }
+        public string goalTxt { get; set; }
+        public string data_type_token { get; set; }
+        public string goalMetYN { get; set; }
+        public string displayClass { get; set; }
+        public List<MPReason> mpReasonList { get; set; }
+
+        public MPReasonViewModel()
+        {
+            mpReasonList = new List<MPReason>();
+        }
+    }
 }
