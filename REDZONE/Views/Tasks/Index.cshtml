@@ -172,7 +172,12 @@
                                                                                    "/MPVreasons/Assigment/" + mtrc.mtrc_period_val_id + "?mpId=" + mtrc.mtrc_period_id + "&returnUrl=/Home/BuildingSummary/?year=" + mtrc.year + "&buildingID=" + mtrc.bldg_id :
                                                                                    "/ActionPlan/viewEdit/?mp_id=" + mtrc.mtrc_period_id + "&bldg_id=" + mtrc.bldg_id + "&bapm_id=" + mtrc.rz_bapm_id;
                                                                         }
-                                                                        <a href="@apUrl" style="text-decoration:underline">@mtrc.action</a>
+                                                                        <input type="hidden" id="submitMPVId" value="@mtrc.mtrc_period_val_id" />
+                                                                        <input type="hidden" id="submitReturnUrl" value="/Tasks/Index" />
+                                                                        <input type="hidden" id="submitMPId" value="@mtrc.mtrc_period_id" />
+                                                                        <input type="hidden" id="submitBldgId" value="@mtrc.bldg_id" />
+                                                                        <input type="hidden" id="submitBapmId" value="@mtrc.rz_bapm_id" />
+                                                                        <a href="#" onclick="return false; " id="lnkSubmitterAction" style="text-decoration:underline">@mtrc.action</a>
                                                                     </td>
                                                                     <td class="@overdueClass" style="text-align:center; width:25%">
                                                                         @dueDate.ToString("MM/dd/yyyy")

@@ -79,6 +79,37 @@
         submitAPReview(status);
     });
 
+    $('#divSubmitterTasks').on('click', '#lnkSubmitterAction', function () {
+        var mpId = $(this).parent().find("#submitMPId").val();
+        var bldgId = $(this).parent().find("#submitBldgId").val();
+        var bapmId = $(this).parent().find("#submitBapmId").val();
+
+        if (mpId == null || bldgId == null || bapmId == null) {
+            alert("Session variables were lost");
+        } else {
+            if ($(this).text() == "Start AP") {
+                var mpvId = $(this).parent().find("#submitMPVId").val();
+                var backUrl = $(this).parent().find("#submitReturnUrl").val();
+
+                if (mpvId == null || backUrl == null) {
+                    alert("Session variables were lost");
+                }
+                else {
+                    localStorage.setItem("mpId", mpId);
+                    localStorage.setItem("buildingId", bldgId);
+                    localStorage.setItem("bapmId", bapmId);
+                    localStorage.setItem("mpvStatus", "Not Started");
+
+                    window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mpId + "&returnUrl=" + backUrl;
+                }
+            }
+            else {
+                window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mpId + "&bldg_id=" + bldgId + "&bapm_id=" + bapmId;
+            }
+        }
+
+    });
+
 });
 
 

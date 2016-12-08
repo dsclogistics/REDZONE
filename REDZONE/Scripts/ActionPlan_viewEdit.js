@@ -66,6 +66,7 @@ $(document).ready(function () {
     $('#btnsReasons').on('click', '#btnEditReasons', function () {
         //alert("Setting Local storage back URL: " + window.location.href);
         localStorage.setItem("backUrl", window.location.href);
+        localStorage.setItem("mpvStatus", "Not Started");
 
         mpvId = $('#mpvId').val();
         mpId = $('#mpId').val();
@@ -85,6 +86,7 @@ $(document).ready(function () {
             localStorage.setItem("mpValueDisplayClass", "Closed-Missed");
             localStorage.setItem("mpValueDate", $("#metricDate").text());
             localStorage.setItem("buildingId", $('#bldgId').val());
+            localStorage.setItem("bapmId", $('#bapmId').val());
             //window.location.href = "/MPVreasons/Assigment/" + getMPvalueId() + "?mpId=" + getMPid() + "&returnUrl=" + document.URL;
             window.location.href = "/MPVreasons/Assigment/" + mpvId + "?mpId=" + mpId + "&buildingID=" + $('#bldgId').val();
         }
