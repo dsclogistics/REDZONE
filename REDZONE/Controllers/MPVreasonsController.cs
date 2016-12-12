@@ -61,6 +61,7 @@ namespace REDZONE.Controllers
         {
             ViewBag.ReturnUrl = returnUrl + @"&buildingID=" + buildingID;
             int mtrc_period_val_id = id ?? 0;
+            MPReasonViewModel mpReasonViewModel = new MPReasonViewModel();
             List<MPReason> MPReasons;
             List<MPReason> MPAssignedReasons;
 
@@ -71,6 +72,8 @@ namespace REDZONE.Controllers
                 throw new Exception("The provided Metric Id '" + mpId + "' is not valid." + Environment.NewLine + "Review your input and try again.");
             }
 
+            // Get (From API call) the time, building and metric display information for this mpv Id
+            mpReasonViewModel = parcer.getMetricPeriodValueInfo("Red Zone", mtrc_period_val_id.ToString());
             // Get (From API call) the list of Existing Reasons for this metric period id (param: mpId)
             MPReasons = parcer.getMetricPeriodReasons(mpId);
             // Get  (From API call) the list of Reason assigned to metric period Value id (param: id)
@@ -84,6 +87,8 @@ namespace REDZONE.Controllers
                 matchMPVR.val_reason_id = assignedReason.val_reason_id;
                 matchMPVR.mpvr_Comment = assignedReason.mpvr_Comment;
             }
+
+            mpReasonViewModel.mpReasonList = MPReasons;
 
             //Return the merged list to the view for display
 
@@ -100,7 +105,7 @@ namespace REDZONE.Controllers
 
             //
 
-            return View(MPReasons);
+            return View(mpReasonViewModel);
         }
 
         // GET: /MPVreasons/_assignedNoStdrReason

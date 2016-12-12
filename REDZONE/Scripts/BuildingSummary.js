@@ -109,6 +109,7 @@ function toggleMenuOn() {
     var cell_mpId = $cellSelected.find('#mpId').val();   //$cellSelected.parents('.buildingRow').first().find('#mName').html();
     var hasMetricAssigned = reviewerHasMetric(cell_mpId);  //Check if the selected metric Period Id is assigned to the Current User as a Reviewer.
     var noItems = "";
+    var cellStatus = $cellSelected.find('#periodStatus').val();
     $('#li_NoOptions').hide();
     
     //alert("This User has building Access: " + hasBuildingAccess );
@@ -122,6 +123,9 @@ function toggleMenuOn() {
             if ((hasRole("RZ_AP_SUBMITTER") && hasBuildingAccess ) || hasRole("RZ_ADMIN")) {
                 $('#li_Add').show();
             } else { $('#li_Add').hide(); }
+        }
+        if (cellStatus != "Closed") {
+            $('#li_Add').hide();
         }
         $('#li_View').hide();
         $('#li_Manage').hide();

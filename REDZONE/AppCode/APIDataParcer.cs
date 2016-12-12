@@ -1141,6 +1141,52 @@ namespace REDZONE.AppCode
             reasonList.Sort((x, y) => x.reason_order_int.CompareTo(y.reason_order_int));   //Sort by the Numeric Reason Order Value
             return reasonList;
         }
+        public MPReasonViewModel getMetricPeriodValueInfo(string productname, string mtrc_period_val_id)
+        {
+            //Define and Initializa Model Object Components
+            MPReasonViewModel mpReasonViewModel = new MPReasonViewModel();
+
+            string raw_data = String.Empty;
+            try
+            {
+                raw_data = api.getMetricPeriodValueInfo(productname, mtrc_period_val_id);
+
+                JObject parsed_result = JObject.Parse(raw_data);
+
+                mpReasonViewModel.month = (string)parsed_result["month"];
+                mpReasonViewModel.monthName = intToMonth((int)parsed_result["month"]);
+                mpReasonViewModel.year = (string)parsed_result["year"];
+                mpReasonViewModel.bldgName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
+                mpReasonViewModel.bldgId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
+                mpReasonViewModel.mtrc_prod_display_text = (string)parsed_result["mtrc_prod_display_text"];
+                mpReasonViewModel.mpId = (string)parsed_result["mtrc_period_id"];
+                mpReasonViewModel.mpvVal = (string)parsed_result["mtrc_period_val_value"];
+                mpReasonViewModel.mpvId = (string)parsed_result["mtrc_period_val_id"];
+                mpReasonViewModel.goalTxt = (string)parsed_result["goal_txt"];
+                mpReasonViewModel.data_type_token = (string)parsed_result["data_type_token"];
+                mpReasonViewModel.goalMetYN = (string)parsed_result["rz_mpvg_goal_met_yn"];
+                mpReasonViewModel.displayClass = getMetricDisplayClass(mpReasonViewModel.mpvVal, mpReasonViewModel.goalMetYN, "Closed");
+            }
+            catch
+            {
+            }
+
+            if (String.IsNullOrEmpty(mpReasonViewModel.month)) mpReasonViewModel.month = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.monthName)) mpReasonViewModel.monthName = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.year)) mpReasonViewModel.year = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.bldgName)) mpReasonViewModel.bldgName = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.bldgId)) mpReasonViewModel.bldgId = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.mtrc_prod_display_text)) mpReasonViewModel.mtrc_prod_display_text = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.mpId)) mpReasonViewModel.mpId = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.mpvVal)) mpReasonViewModel.mpvVal = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.mpvId)) mpReasonViewModel.mpvId = "0";
+            if (String.IsNullOrEmpty(mpReasonViewModel.goalTxt)) mpReasonViewModel.goalTxt = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.goalTxt)) mpReasonViewModel.goalTxt = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.data_type_token)) mpReasonViewModel.data_type_token = "";
+            if (String.IsNullOrEmpty(mpReasonViewModel.goalMetYN)) mpReasonViewModel.goalMetYN = "N";
+
+            return mpReasonViewModel;
+        }
 
         //This method returns the list of all metrics Product Ids that the user is authorized to edit. 
         public List<int> getUserEditableMetrics(string userName)

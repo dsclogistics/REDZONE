@@ -462,6 +462,34 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
+        public string getMetricPeriodValueInfo(string productname, string mtrc_period_val_id)
+        {
+            string endPoint = "getmpvalueinfo";
+            WebRequest request = WebRequest.Create(api_url + endPoint);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string parsedContent = "{\"productname\":\"" + productname + "\",\"mtrc_period_val_id\":\"" + mtrc_period_val_id + "\"}";
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            string JsonString = String.Empty;
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                    return JsonString;
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
         //--------------------------------------------------------------------------------------------------------
         public string getMetricPeriods()
         {

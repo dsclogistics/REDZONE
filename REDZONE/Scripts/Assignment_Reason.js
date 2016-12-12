@@ -220,13 +220,13 @@ $(document).ready(function () {
 
     $('#fancy-checkbox-default-999').prop('disabled', true);
     $('#nonStdRsnDropDown').find('.ghost').first().css('background-color', 'gray');
-    $("#buildingName").html(getBuildingName());
-    $("#metricDate").html(getMetricDate());
-    $("#metricDate1").html(getMetricDate());
-    $("#mValueCell").addClass(getMPvalueDisplayClass());
-    $(".mNameCell").html(getMetricName());
-    $("#mGoalCell").html(getMetricGoal());
-    $("#mValueCell").html(getMPvalue());
+    //$("#buildingName").html(getBuildingName());
+    //$("#metricDate").html(getMetricDate());
+    //$("#metricDate1").html(getMetricDate());
+    //$("#mValueCell").addClass(getMPvalueDisplayClass());
+    //$(".mNameCell").html(getMetricName());
+    //$("#mGoalCell").html(getMetricGoal());
+    //$("#mValueCell").html(getMPvalue());
     
     //Reset all Local Storage values so old data does not persist
     localStorage.setItem("mpBuildingName", "");
