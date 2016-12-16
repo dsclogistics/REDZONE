@@ -247,7 +247,7 @@ $(document).ready(function () {
         // List 3: ASSIGN LIST - A list of reason codes that need to be assigned (Added)
         //if ($('#nsItemsToDelete').val() != "") { alert("Item to Delete: " + $('#nsItemsToDelete').val()); }
 
-        if (!getMPvalueId()) {
+        if ($('#hdnMpvId').val() == null || $('#hdnMpvId').val() == 0) {
             showAlert("Warning!! Your session has timed out. Some of the changes might not be saved.\nGo back to building dashboard and try again.");
             //-------------------- TO DO --------------------------------------------------------------------
             // -- Restore all Local Storage Values from the cached webpage labels so user is not kicked out
