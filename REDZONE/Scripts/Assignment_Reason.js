@@ -590,12 +590,64 @@ $(document).ready(function () {
                 //alert("Reason id: " + d + " [" + reasonText + "] was added.")
                 $('#btnSaveProg').prop("disabled", false);    //Re-Enable the Save progress button
                 //location.reload();
+
+                AddNewReasonToChecked(newReasonId, reasonText);
             } else {
                 showAlert("Error Saving the data./nThe Reason entered could not be added to the Database.");
                 //alert("Error Saving the data!\n" + JSON.stringify(d));
             }
         });
     });
+
+    //-------------- When an Item from the Static (ADD New) dropdown is selected --------------------------
+    function AddNewReasonToChecked(newReasonId, reasonText) {
+        //$('#nonStdRsnDropDown').on('click', '.ddlReasonItem', function () {
+        $('.noData').hide();  //Just in case it is still visible
+        $('#ddlWait').show();
+        var elNameIndex = parseInt($('#newReasonCounter').val()) + 1;  //Get last elementCounter and increase it by One to be used an part of the unique name
+
+        //Perform Ajax Call to get a new drop down added with the Reason Id and text that was selected
+        //Controller called has Parameters:
+        //int? nsChkNameIndex, string reasonId, string valRsnId, string reasonText, string reasonComment, string wasUpdated, string ddItems
+        $('#newReasonCounter').val(elNameIndex);      //Store the increased new Index to be used later
+        //var selReasonId = $(this).prop("id").replace("li_", "");
+        var selReasonId = newReasonId;
+        //var selReasonText = $(this).html();
+        var selReasonText = reasonText;
+        var ddlListItems = $('#nsItemList').val();
+        //alert("Generating drop down for:\nReason Id: " + selReasonId + "\nReason Text: [" + selReasonText + "]");
+
+        $.ajax({
+            url: '/MPVreasons/_assignedNoStdrReason',
+            method: "POST",
+            cache: false,
+            //type: "POST",
+            //data: payload,
+            //string mpvr_id, string mtrc_period_val_id, string mpr_id, string mpvr_comment
+            data: { nsChkNameIndex: elNameIndex, reasonId: selReasonId, valRsnId: "", reasonText: selReasonText, reasonComment: "", wasUpdated: "", ddItems: ddlListItems },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            error: function (jqXHR, textStatus, errorThrown) {
+                showAlert("Failed Retrieve template for New reason. Please try again!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                $('#ddlWait').hide();
+            }
+        }).done(function (d) {
+            $("#nonStdrReasonsDivAdded").append(d);
+            $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly added element
+            $('#btnSaveProg').prop("disabled", false);
+            //alert("Reason Id is: " + selReasonId);
+            var curLiId = "#li_" + selReasonId;
+            rsList_ItemChangeId(selReasonId, "hide");   //Hide the Reason from the Page List so it is not included in New Drop Downs
+            //Remove (hide) the Selected Reason Id from all the Existing Drop down boxes so it cannot be added back again anywhere
+            $('.nsReason').each(function () {
+                $(this).find(curLiId).first().parents('li').first().hide();
+            });
+
+            $('#ddlWait').hide();
+            $('#nonStdrReasonsDivAdded').find(".rCommentBox").last().focus();        //Position to the last added Reason Control's Comment Box
+        });
+        //}); //----- End of When an Item from the Static dropdown is selected ----------
+    }
 
     $("#showTable").dblclick(function () {
         $('#listTable').show();
