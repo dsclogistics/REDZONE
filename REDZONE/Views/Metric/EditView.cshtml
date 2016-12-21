@@ -1,7 +1,7 @@
 ﻿@model REDZONE.Models.RZ_Metric
 @{
     ViewBag.Title = "Model Metric";
-    string titleClass = "alert-standard";
+    string titleClass = "";
     if (Model.metricName.Equals("Requested Metric Period invalid or does not Exist")) { titleClass = "alert-danger"; };
 
     var curMonth = @Model.displayPeriodName.Substring(0, @Model.displayPeriodName.IndexOf(" "));

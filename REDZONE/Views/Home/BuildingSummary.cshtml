@@ -307,16 +307,16 @@
                                     <table class="table table-condensed table-hover" style="text-align:center; margin-top:5px">
                                         <thead >
                                             <tr style="font-weight:bold; border-bottom:solid lightgrey 2px">
-                                                <td style="width:20%">Metric</td>
-                                                <td style="width:15%">Status</td>
-                                                <td style="width:15%">Action</td>
-                                                <td style="width:15%">Meeting Date</td>
-                                                <td style="width:20%">Meeting Owner</td>
-                                                <td style="width:15%">Last Update</td>
+                                                <td style="width:20%; text-decoration:underline">Metric</td>
+                                                <td style="width:15%; text-decoration:underline">Status</td>
+                                                <td style="width:15%; text-decoration:underline">Action</td>
+                                                <td style="width:15%; text-decoration:underline">Meeting Date</td>
+                                                <td style="width:20%; text-decoration:underline">Meeting Owner</td>
+                                                <td style="width:15%; text-decoration:underline">Last Update</td>
                                             </tr>
                                         </thead>
 
-                                        @foreach (var buildingRow in Model.metricRows)
+                                        @foreach (var buildingRow in Model.metricRows.OrderBy(x=>x.rowName).ToList())
                                         {
                                             //if (@buildingRow.entityMetricCells[mIndex].rz_bapm_status == "Approved")
                                             if (!String.IsNullOrEmpty(@buildingRow.entityMetricCells[mIndex].rz_bapm_status))

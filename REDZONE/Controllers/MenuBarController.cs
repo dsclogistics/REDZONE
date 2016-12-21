@@ -90,7 +90,7 @@ namespace REDZONE.Controllers
 
 
         // GET: Tasks Menu
-        [ChildActionOnly]
+        [ChildActionOnly] [OutputCache(Duration=5)]
         public ActionResult _RZ_TasksFlag()
         {
             dscUser user = new Models.dscUser(User.Identity.Name);
