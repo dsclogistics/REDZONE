@@ -193,8 +193,8 @@ function saveReasons(startAP) {
                 window.location.href = "/ActionPlan/viewEdit/?" + "mp_id=" + getMPid() + "&bldg_id=" + getBuildingId() + "&bapm_id=" + localStorage.getItem("bapmId");
             }
             else { //No need to redirect to the AP page. Just display a confirmation message
-                //alert("Update Operation completed:\n\n=========== OPERATION RESULTS ===============\n" + d);
-                $("#msgFormBodyData").html("Update Operation completed:<br /><br />=========== OPERATION RESULTS ===============<br />" + d.replaceAll("\n", "<br />"));
+                //alert("Reasons Saved Successfully\n\n=========== OPERATION RESULTS ===============\n" + d);
+                $("#msgFormBodyData").html('<span style="font-weight:bold; color:green">Reasons Saved Successfully</span><br /><br />=========== OPERATION RESULTS ===============<br />' + d.replaceAll("\n", "<br />"));
                 $('#reloadAfterPopup').val("Y");  //To trigger a relaod when popup is Closed
                 $('#msgForm').modal('show');
             }
