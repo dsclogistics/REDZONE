@@ -101,7 +101,7 @@ namespace REDZONE.Controllers
                 buildingID = currentUser.buildings[0].id;   //Exists at least one building. Default to the first one
             }
 
-            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.Year.ToString(); }  //Default to the current year
+            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.AddMonths(-1).Year.ToString(); }  //Default to the current year
             if (String.IsNullOrEmpty(buildingID)) {    //Retrieve The current User list of building and select it's first                
                 if (currentUser.buildings.Count > 0) { buildingID = currentUser.buildings[0].id; }
                 else { buildingID = DFLT_BUILDING; }                
@@ -122,7 +122,7 @@ namespace REDZONE.Controllers
 
            // sortMonth =  REDZONE.AppCode.Util.getMonthLongName(sortMonth);
             // ------ SET DEFAULT VALUES ------
-            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.Year.ToString(); }  //Default to the current year
+            if (String.IsNullOrEmpty(year)) { year = DateTime.Today.AddMonths(-1).Year.ToString(); }  //Default to the current year
             if (String.IsNullOrEmpty(metricID))
             {    //Retrieve The current User list of Reviewer Met5rics and select it's first
                 //dscUser currentUser = new dscUser(User.Identity.Name);
