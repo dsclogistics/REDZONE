@@ -113,7 +113,7 @@ namespace REDZONE.Controllers
             return View(tasksViewModel);
         }
 
-        [HttpPost] [OutputCache (Duration=10)]
+        [HttpPost] 
         public PartialViewResult _myTaskSummary() {
 
             dscUser actionPlanUser = new dscUser(User.Identity.Name);
