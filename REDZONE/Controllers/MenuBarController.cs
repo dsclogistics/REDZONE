@@ -24,11 +24,14 @@ namespace REDZONE.Controllers
         {
             string userName = User.Identity.Name;
             List<RZMetricMenu> RZMenu = new List<RZMetricMenu>();
-
+            string message = "";
             try
             {
+                message = "Failed to Load the 'Allowed Metrics' list for this user";
                 List<int> allowedMetrics = parcer.getUserEditableMetrics(userName);
+                message = "Failed to Retrieve Full Metric Names List";
                 JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
+                message = "Failed to parce metrics that can be accessed by this user";
                 DateTime defDate = DateTime.Today.AddMonths(-1);
                 foreach (var metricName in parsed_result["metriclist"])
                 {
@@ -40,10 +43,12 @@ namespace REDZONE.Controllers
                         RZMenu.Add(menuItem);
                     }
                 }
-            }
+                message = "";
+                Session["globalAppError"] = "";
+             }
             catch (Exception e)
             {
-                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+                Session["globalAppError"] = "ERROR: " + message + Environment.NewLine + " ==>" + e.Message;
             }
 
             return PartialView(RZMenu);
@@ -105,10 +110,11 @@ namespace REDZONE.Controllers
                 //else {
                     rzTaskCounts = parcer.getUserTasksCount(user.dbUserId);
                 //}                
+                    Session["globalAppError"] = "";
             }
             catch (Exception e)
             {
-                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+                Session["globalAppError"] = "ERROR: Failed to retrieve the 'Task Count' for this user." + Environment.NewLine + e.Message;
             }
 
             return PartialView(rzTaskCounts);
@@ -129,10 +135,11 @@ namespace REDZONE.Controllers
                 string endMonth = DateTime.Today.Month.ToString();
 
                 teamActivityCount = parcer.getUserTeamActCount(user.dbUserId, begMonth, begYear, endMonth, endYear);
+                Session["globalAppError"] = "";
             }
             catch (Exception e)
             {
-                Session["globalAppError"] = "ERROR: Failed to access remote server." + Environment.NewLine + e.Message;
+                Session["globalAppError"] = "ERROR: Failed to retrieve the user's 'Team Task Count'." + Environment.NewLine + e.Message;
             }
 
             return PartialView(teamActivityCount);

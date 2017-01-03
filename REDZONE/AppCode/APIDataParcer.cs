@@ -1193,10 +1193,12 @@ namespace REDZONE.AppCode
         {
             List<int> accessibleMetrics = new List<int>();
             JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
-            foreach (var res in parsed_result["authorizationdetails"])
-            {
-                int mtrc_period_id = (int)res["mtrc_prod_id"];
-                accessibleMetrics.Add(mtrc_period_id);
+            if (!(parsed_result["authorizationdetails"] == null)) {
+                foreach (var res in parsed_result["authorizationdetails"])
+                {
+                    int mtrc_period_id = (int)res["mtrc_prod_id"];
+                    accessibleMetrics.Add(mtrc_period_id);
+                }            
             }
             return accessibleMetrics;
         }
