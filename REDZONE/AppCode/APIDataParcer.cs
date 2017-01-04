@@ -1188,20 +1188,20 @@ namespace REDZONE.AppCode
             return mpReasonViewModel;
         }
 
-        //This method returns the list of all metrics Product Ids that the user is authorized to edit. 
-        public List<int> getUserEditableMetrics(string userName)
-        {
-            List<int> accessibleMetrics = new List<int>();
-            JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
-            if (!(parsed_result["authorizationdetails"] == null)) {
-                foreach (var res in parsed_result["authorizationdetails"])
-                {
-                    int mtrc_period_id = (int)res["mtrc_prod_id"];
-                    accessibleMetrics.Add(mtrc_period_id);
-                }            
-            }
-            return accessibleMetrics;
-        }
+        ////This method returns the list of all metrics Product Ids that the user is authorized to edit. 
+        //public List<int> getUserEditableMetrics(string userName)
+        //{
+        //    List<int> accessibleMetrics = new List<int>();
+        //    JObject parsed_result = JObject.Parse(api.authorizeUser(userName));
+        //    if (!(parsed_result["authorizationdetails"] == null)) {
+        //        foreach (var res in parsed_result["authorizationdetails"])
+        //        {
+        //            int mtrc_period_id = (int)res["mtrc_period_id"];
+        //            accessibleMetrics.Add(mtrc_period_id);
+        //        }            
+        //    }
+        //    return accessibleMetrics;
+        //}
 
         //This method returns the list of all metrics Ids that user is authorized to edit. 
         public List<int> getUserMetrics(string userName)

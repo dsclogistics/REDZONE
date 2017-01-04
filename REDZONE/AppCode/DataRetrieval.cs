@@ -193,6 +193,7 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
+        
         public string authorizeUser(string userName)
         {
             string endPoint = "metricauthorization";
@@ -214,6 +215,7 @@ namespace REDZONE.AppCode
                 return JsonString;
             }
         }
+
         public string getUserTasksCount(string app_user_id)
         {
             //try { 

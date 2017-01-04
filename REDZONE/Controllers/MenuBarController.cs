@@ -20,30 +20,30 @@ namespace REDZONE.Controllers
 
         // GET: Menu
         [ChildActionOnly]
-        public ActionResult _RZDM_MenuItems()
-        {
+        public ActionResult _RZDM_MenuOption()
+        { 
             string userName = User.Identity.Name;
-            List<RZMetricMenu> RZMenu = new List<RZMetricMenu>();
-            string message = "";
+            dscUser loggedonUser = new dscUser(userName);      //Create a user instance of the Loggedon user
+            RZMetricMenu RZMenu = new RZMetricMenu();          //Create an instance of a Metric Data Collection Menu object
+            RZMenu.canCollect = false;
+            string message = "";  ///////////////Do we need it????????????????????????????????????????????????????
             try
             {
-                message = "Failed to Load the 'Allowed Metrics' list for this user";
-                List<int> allowedMetrics = parcer.getUserEditableMetrics(userName);
-                message = "Failed to Retrieve Full Metric Names List";
-                JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
-                message = "Failed to parce metrics that can be accessed by this user";
-                DateTime defDate = DateTime.Today.AddMonths(-1);
-                foreach (var metricName in parsed_result["metriclist"])
-                {
-                    if (allowedMetrics.IndexOf((int)metricName["mtrc_period_id"]) != -1)
+                //Load the Data Collection Menu from the Logged User "MTRC_COLLECTOR" Role's Metric List (If it exist)                
+                userRole collectorRole = loggedonUser.roles.FirstOrDefault(r => r.roleName == "MTRC_COLLECTOR");
+                if (collectorRole != null)
+                { //Load the Menu Metrics
+                    DateTime defDate = DateTime.Today.AddMonths(-1);
+                    RZMenu.canCollect = true;
+                    foreach (roleMetric metricName in collectorRole.roleMetrics)
                     {
-                        RZMetricMenu menuItem = new RZMetricMenu();
-                        menuItem.menuText = (string)metricName["mtrc_prod_display_text"];
-                        menuItem.menuValue = "/Metric/EditView/" + (string)metricName["mtrc_id"] + "?month=" + defDate.ToString("MMMM") + "&year=" + defDate.ToString("yyyy");
-                        RZMenu.Add(menuItem);
+                        RZMetricMenuItem metricMenuItem = new RZMetricMenuItem();
+                        metricMenuItem.menuText = metricName.mpDisplayName;
+                        metricMenuItem.menuValue = "/Metric/EditView/" + metricName.metricId + "?month=" + defDate.ToString("MMMM") + "&year=" + defDate.ToString("yyyy");
+
+                        RZMenu.DM_MetricItems.Add(metricMenuItem);
                     }
                 }
-                message = "";
                 Session["globalAppError"] = "";
              }
             catch (Exception e)
@@ -147,6 +147,12 @@ namespace REDZONE.Controllers
     }
 
     public class RZMetricMenu
+    {
+        public bool canCollect { set; get; }
+        public List<RZMetricMenuItem> DM_MetricItems = new List<RZMetricMenuItem>();
+    }
+
+    public class RZMetricMenuItem 
     {
         public string menuText { set; get; }
         public string menuValue { set; get; }

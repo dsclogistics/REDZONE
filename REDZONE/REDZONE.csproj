@@ -482,7 +482,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Metric\EditView.cshtml" />
     <Content Include="Views\Metric\Index.cshtml" />
-    <Content Include="Views\MenuBar\_RZDM_MenuItems.cshtml" />
+    <Content Include="Views\MenuBar\_RZDM_MenuOption.cshtml" />
     <Content Include="Views\Metric\_Upload.cshtml" />
     <Content Include="Views\ExecutiveSummary\MonthlySummary.cshtml" />
     <Content Include="Views\Home\BuildingSummary.cshtml" />

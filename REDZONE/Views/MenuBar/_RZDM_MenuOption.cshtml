@@ -1,6 +1,6 @@
-﻿@model IEnumerable<REDZONE.Controllers.RZMetricMenu>
+﻿@model REDZONE.Controllers.RZMetricMenu
 
-@if (Model.Count() > 0)
+@if (Model.canCollect)
 {
     <ul class="nav navbar-nav menuItem menuSelected" id="mDataM">
         <li class="dropdown">
@@ -9,7 +9,7 @@
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                @foreach (var item in Model)
+                @foreach (var item in Model.DM_MetricItems)
                 {
                     <li><a href="@item.menuValue">@item.menuText</a></li>
                 }
@@ -17,9 +17,3 @@
         </li>
     </ul>
 }
-
-@*<script>
-    $(document).ready(function () {
-        $("#mDataM").addClass("menuSelected");
-    });
-</script>*@

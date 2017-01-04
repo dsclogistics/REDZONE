@@ -9,6 +9,7 @@
     string userRole = (Session["userRole"] == null) ? "" : Session["userRole"].ToString();
     string userBuildings = (Session["userBuildings"] == null) ? "" : Session["userBuildings"].ToString();
     string empId = (Session["emp_id"] == null) ? "" : Session["emp_id"].ToString();
+    string APIserver = (Session["APIserver"] == null) ? "Not Connected" : Session["APIserver"].ToString();
 }
 <!DOCTYPE html>
 <html>
@@ -121,7 +122,7 @@
         <div id="foot" style="z-index: 999">
             <table style="width:100%;">
                 <tr>
-                    <td style="text-align:center"></td>
+                    <td style="text-align:Left; color:#f0f0f0" >API Server: @APIserver</td>
                     <td style="text-align:center">
                         Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
                     </td>

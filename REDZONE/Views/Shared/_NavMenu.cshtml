@@ -50,7 +50,7 @@
                 </li>
             </ul>
 
-            @Html.Action("_RZDM_MenuItems", "MenuBar")
+            @Html.Action("_RZDM_MenuOption", "MenuBar")
 
             <ul class="nav navbar-nav menuItem" id="mReason" style="display:none">
                 <li><a href="#">REASON MANAGEMENT</a></li>
@@ -58,18 +58,6 @@
             <ul class="nav navbar-nav menuItem" id="mActionPlan" style="display:none">
                 <li><a href="#">ACTION PLAN</a></li>
             </ul>
-
-            @*<ul class="nav navbar-nav menuItem" id="mActionPlans">
-                <li class="dropdown ">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        ACTION PLANS
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#">Coming Q1 2017</a></li>
-                    </ul>
-                </li>
-            </ul>*@
 
             @*@if (REDZONE.AppCode.Util.getUserRoles(User.Identity.Name).Contains("RZ_ADMIN"))*@
             @if (User.IsInRole("RZ_ADMIN"))

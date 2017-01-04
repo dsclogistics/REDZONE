@@ -57,15 +57,15 @@ namespace REDZONE.Models
             string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword);
             try      // -------- Try Parsing the User Data properties --------
             {
-                JObject parsed_result = JObject.Parse(jsonData);
+                JObject parsed_UserDetails = JObject.Parse(jsonData);
 
                 //Verify that the Data Retrieval was successful before attempting to parse any data
-                if (parsed_result["result"].ToString().Equals("Success") && !parsed_result["user_id"].ToString().Equals("0"))
+                if (parsed_UserDetails["result"].ToString().Equals("Success") && !parsed_UserDetails["user_id"].ToString().Equals("0"))
                 {
                     // -------------- Get Personal Details --------------------------
-                    string uName = (string)parsed_result["username"];
-                    dbUserId = (string)parsed_result["user_id"];
-                    emailAddress = (string)parsed_result["email"];
+                    string uName = (string)parsed_UserDetails["username"];
+                    dbUserId = (string)parsed_UserDetails["user_id"];
+                    emailAddress = (string)parsed_UserDetails["email"];
 
                     //Routine to parse the First & Last Name
                     if (String.IsNullOrEmpty(uName))
@@ -93,27 +93,46 @@ namespace REDZONE.Models
 
 
                     // ------- Retrieve all the User ROLES --------
-                    JArray jRoles = (JArray)parsed_result["roles"];
+                    JArray jRoles = (JArray)parsed_UserDetails["roles"];
                     if (jRoles.HasValues)
                     {
                         int roleIndex = 0;
+                        bool isDataAdminUser = false;
                         foreach (var jRole in jRoles)
                         {
+                            bool curRoleIsDataAdmin = false;
                             userRole uRole = new userRole();
                             uRole.roleDesc = (string)jRole["role_desc"];
                             uRole.id = (string)jRole["role_id"];
                             uRole.roleName = (string)jRole["role_name"];
                             uRole.appProduct = (string)jRole["prod_name"];
 
-                            //Add all the metrics for this role
-                            foreach (var rMetric in jRole["metrics"])
+                            curRoleIsDataAdmin = uRole.roleName.Equals("RZ_ADMIN") || uRole.roleName.Equals("MDMT_ADMIN") || uRole.roleName.Equals("MTRC_DATA_ADMIN");
+                            //If the 'isDataAmin' flag is false (no Admin role was found previouly) and the current role is a Data Admin Role
+                            //Grant this user access to collect data for all Metrics
+                            if (!isDataAdminUser && curRoleIsDataAdmin)
                             {
-                                roleMetric roleMetricInfo = new roleMetric();
-                                roleMetricInfo.mpId = (string)rMetric["metric_period_id"];
-                                roleMetricInfo.mpName = (string)rMetric["metric_period_name"];
-                                uRole.roleMetrics.Add(roleMetricInfo);  //Add a metric entry to this Role's Metrics
+                                makeUserDataCollectorAdmin();
+                                isDataAdminUser = true;
                             }
-                            roles.Add(uRole); //Add a "Role" Entry to this user Roles
+
+                            //If the Role is "MTRC_COLLECTOR" and the 'isDataAdminUser' flag is true (User has already been set as Metric Collector of all Metrics)
+                            // then do not add the role as it already exist
+                            if (!(uRole.roleName == "MTRC_COLLECTOR" && isDataAdminUser)) {
+                                //Add all the metrics for this role
+                                foreach (var rMetric in jRole["metrics"])
+                                {
+                                    roleMetric roleMetricInfo = new roleMetric();
+                                    roleMetricInfo.metricId = (string)rMetric["mtrc_id"];
+                                    roleMetricInfo.mpId = (string)rMetric["metric_period_id"];
+                                    roleMetricInfo.mpName = (string)rMetric["metric_period_name"];
+                                    roleMetricInfo.mpDisplayName = (string)rMetric["mtrc_name"];
+                                    roleMetricInfo.order = 0;
+                                    uRole.roleMetrics.Add(roleMetricInfo);  //Add a metric entry to this Role's Metrics
+                                }
+                                roles.Add(uRole); //Add a "Role" Entry to this user Roles                            
+                            }
+                            
                             roleIndex++;      //Get Index of the Next Role in the Json Data
                         }
                     }
@@ -130,7 +149,7 @@ namespace REDZONE.Models
                     roles = roles.OrderBy(p => p.appProduct).ThenBy(r => r.roleName).ToList();
 
                     // ------ Retrieve and parse all the User BUILDINGS ----------
-                    JArray jbldgList = (JArray)parsed_result["buildings"];
+                    JArray jbldgList = (JArray)parsed_UserDetails["buildings"];
                     if (jbldgList != null && jbldgList.HasValues)
                     {
                         foreach (var building in jbldgList)
@@ -162,7 +181,7 @@ namespace REDZONE.Models
                 }
                 else
                 {
-                    string apiCallResult = (string)parsed_result["message"];
+                    string apiCallResult = (string)parsed_UserDetails["message"];
                     isValidUser = false;
                     isAuthenticated = false;
                     dbUserId = "0";
@@ -177,6 +196,41 @@ namespace REDZONE.Models
                 userStatusMsg = ex.Message;
             }
         }
+
+        private void makeUserDataCollectorAdmin()
+        {
+            //Remove the Role "MTRC_COLLECTOR" if it already exist
+            userRole itemToRemove = roles.FirstOrDefault(r => r.roleName == "MTRC_COLLECTOR");
+            if (itemToRemove != null) { roles.Remove(itemToRemove); }
+
+            //Add a new "MTRC_COLLECTOR" role that contains all existing Metrics
+            userRole uRole = new userRole();
+            uRole.roleDesc = "An all-product role that grants metric collection rights for a set of metrics";
+            uRole.id = "";
+            uRole.roleName = "MTRC_COLLECTOR";
+            uRole.appProduct = "ALL";
+            //Add all available metrics to the "MTRC_COLLECTOR" Role
+
+            try {
+                DataRetrieval api = new DataRetrieval();
+                JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
+                foreach (var metricName in parsed_result["metriclist"])
+                {
+                    roleMetric roleMetricInfo = new roleMetric();
+                    roleMetricInfo.metricId = (string)metricName["mtrc_id"];
+                    roleMetricInfo.mpId = (string)metricName["mtrc_period_id"];
+                    roleMetricInfo.mpName = (string)metricName["mtrc_name"];
+                    roleMetricInfo.mpDisplayName = (string)metricName["mtrc_prod_display_text"];
+                    roleMetricInfo.order = (int)metricName["mtrc_prod_display_order"];
+
+                    uRole.roleMetrics.Add(roleMetricInfo);  //Add a metric entry to this Role's Metrics
+                }
+            }
+            catch { }
+
+            roles.Add(uRole); 
+        }
+
         public string getJsonUserData(string userSSO="", string userPwd="") {
             // This function wil retrieve the API Json data. If no password is specified, it will retrieve User Role API data.
             // If a password is specified it will return the Authentication Jason API data
@@ -261,9 +315,11 @@ namespace REDZONE.Models
     }
 
     public class roleMetric {
-        public string mpId { get; set; }             //Metric Period
+        public string metricId { get; set; }         //Metric ID
+        public string mpId { get; set; }             //Metric Period ID
         public string mpName { get; set; }
         public string mpDisplayName { get; set; }
+        public int order { get; set; }
     }
 
     public class building {
