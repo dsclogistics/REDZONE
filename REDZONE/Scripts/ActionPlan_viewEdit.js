@@ -31,6 +31,9 @@ $(document).ready(function () {
     //------------------------------------------BEHAVIOR---------------------------------------------
     //-----------------------------------------------------------------------------------------------
 
+    $('.panel-heading').on('click', '.glyph-link', function (e) {
+        $(this).find('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+    });
 
     $('#apText').on('keyup', function () {
         var characters = $(this).val().length;

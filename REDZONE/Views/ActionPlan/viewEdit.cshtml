@@ -229,11 +229,31 @@
 
                 // ---------- SECTION: PREVIOUS VERSIONS OF CURRENT ACTION PLAN -----------------------------------
                 <div id="divPreviousAPversions">
-                    <br />
 
                     @foreach (REDZONE.Models.ActionPlan actionPlan in Model.actionPlanList.Where(x => x.apVersion != Model.actionPlanList.First().apVersion))
                     {
-                        <div class="btn-toolbar">
+                        <div class="panel panel-default" style="font-family:Arial; margin:0 auto; margin-top:10px">
+                            <div class="panel-heading" style="text-align:left; padding-top:0px; padding-bottom:0px">
+                                <a class="glyph-link" data-toggle="collapse" href="#@actionPlan.apd_id" style="text-decoration:none; color:black">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
+                                        Action Plan - Version @actionPlan.apVersion <span style="color:red">(@actionPlan.apStatus)</span>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div id="@actionPlan.apd_id" class="panel-collapse collapse" style="padding:20px; padding-top:0">
+                                    <h4 style="text-align:left;">Action Plan Text</h4>
+                                    <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.actionPlanAction</textarea>
+                                    <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
+
+                                    <h4 style="text-align:left">Reviewer Comments</h4>
+                                    <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.reviewerComments</textarea>
+                                    <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
+                            </div>
+                        </div>
+
+                        @*<div class="btn-toolbar">
                             <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
                                 <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                     <span class="glyphicon glyphicon-chevron-right"></span>
@@ -246,16 +266,15 @@
 
                         <div class="collapse" style="margin-left:40px">
                             <h4 style="text-align:left; margin-top:10px">Action Plan Text</h4>
-                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.actionPlanAction</textarea>
+                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.actionPlanAction</textarea>*@
                             @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.actionPlanAction</div>*@
-                            <div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
+                            @*<div style="text-align:left;color:gray">Submitted By: @actionPlan.submittedBy</div>
 
                             <h4 style="text-align:left">Reviewer Comments</h4>
-                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.reviewerComments</textarea>
+                            <textarea style="padding:15px; text-align:left; border-radius:4px; min-width:100%; min-height:100px" readonly>@actionPlan.reviewerComments</textarea>*@
                             @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">@actionPlan.reviewerComments</div>*@
-                            <div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
-                        </div>
-                        <br />
+                            @*<div style="text-align:left;color:gray">Reviewed By: @actionPlan.reviewedBy</div>
+                        </div>*@
                     }
                 </div>
             }
@@ -286,8 +305,110 @@
                     counter = counter + 1;
                     //mostRecentApOpen = (counter == 1) ? "in" : "";
                     mostRecentApOpen = "";
+                    
+                    //Identifier for panel dropdown targeting
+                    string monthYear = priorAP.priorAPMonth + priorAP.priorAPYear;
 
-                    <div class="btn-toolbar">
+                    <div class="panel panel-default" style="font-family:Arial; margin:0 auto; margin-top:10px">
+                        <div class="panel-heading" style="text-align:left; padding-top:0px; padding-bottom:0px">
+                            <a class="glyph-link" data-toggle="collapse" href="#@monthYear" style="text-decoration:none; color:black">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="btn-group " style="text-align:left; margin:auto; margin-left:5px; font-size:18px; padding-top:5px; font-weight:bold ">
+                                    @priorAP.priorAPMonth @priorAP.priorAPYear Action Plan <span style="color:@priorAP.priorAPStatusColor">(@priorAP.priorAPStatus)</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <div id="@monthYear" class="panel-collapse collapse" style="padding:20px; padding-top:0">
+                            <br />
+                            @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
+                            <div>
+                                @****************@
+                                @* Prior Reasons*@
+                                @****************@
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align:left; font-size:18px">Reason Summary</div>
+                                    <div class="col-md-6">
+                                        <div class="bordered" style="padding:10px; padding-bottom:5px; border-radius:4px; border-color:darkgray; text-align:left ">
+                                            @if (priorAP.priorAPReasonList.Count() > 0)
+                                            {
+                                                <ul style="text-align:left; padding-left:20px;">
+                                                    @foreach (var reason in priorAP.priorAPReasonList)
+                                                    {
+                                                        <li title="@reason.mpvr_Comment" style="text-align:left;">
+                                                            @reason.reason_text
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <div style="color:red; padding-bottom:5px">There are no Assigned Reasons for the current Metric Action Plan</div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*------------------------------*@
+                                        @*-         Goal Table         -*@
+                                        @*------------------------------*@
+                                        <div class="panel panel-default scroll-Table hidden-xs">
+                                            <div class="panel-heading scroll-Head ">
+                                                <table style="margin:0; width:100%;">
+                                                    <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
+                                                        <td>
+                                                            <table style="width:100%">
+                                                                <tr>
+                                                                    <td class="col-md-4">Metric</td>
+                                                                    <td class="col-md-4" style="border-left: 1px solid #c6c4c4; background-color:#bbedff">Goal</td>
+                                                                    <td class="col-md-4" style="border-left: 1px solid #c6c4c4"><span id="metricDate1">@priorAP.priorAPMonth</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+                                            <div class="panel-body scroll-Body">
+                                                <div class="row" style="margin:0">
+                                                    <table style="width:100%">
+                                                        <tr class="rHover" style="border-bottom: 1px solid #c6c4c4;">
+                                                            <td class="col-md-4" style="text-align:center; background-color:#f0eaea">@Model.mtrcDisplayText</td>
+                                                            <td class="col-md-4" style="text-align:center; border-left: 1px solid #c6c4c4; background-color:#bbedff; color:blue; font-weight:bold;">@HttpUtility.HtmlDecode(priorAP.priorAPMetricGoalText)</td>
+                                                            <td class="col-md-4" style="text-align:center; border-left: 1px solid #c6c4c4; background-color:#ffbb8b">@priorAP.priorAPMetricValue</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (priorAP.priorAPText != "")
+                                {
+                                    <div style="text-align:left; font-size:18px; padding:0; margin-top:5px">Action Plan</div>
+                                    <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
+                                }
+                            </div>
+                            @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
+                            <br />
+
+                            <div class="btns-prior-ap-detail" style="text-align:left">
+                                <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
+                                <input type="hidden" id="priorMpvId" value=@priorAP.mtrc_period_val_id />
+                                <input type="hidden" id="priorMpId" value="@priorAP.mtrc_period_id" />
+                                <input type="hidden" id="priorBldgId" value="@priorAP.dsc_mtrc_lc_bldg_id" />
+                                <input type="hidden" id="priorMpGoal" value="@priorAP.priorAPMetricGoalText" />
+                                <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
+                                <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
+                                <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
+                                <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="btn-toolbar">
                         <div class="bordered" style="display:table-cell; border-top-left-radius:4px; border-bottom-left-radius:4px; border-color:darkgray; border-right:transparent">
                             <button type="button" class="btn btn-default btn-group" style="margin-left:0px; border-color:transparent; border-top-right-radius:0px; border-bottom-right-radius:0px">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -307,13 +428,13 @@
                     </div>
 
                     <div class="collapse @mostRecentApOpen" style="margin-left:40px">
-                        <br />
+                        <br />*@
                         @*<div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:darkgray; min-height:100px">*@
-                        <div>
+                        @*<div>*@
                             @****************@                        
                             @* Prior Reasons*@
                             @****************@
-                            <div class="row">
+                            @*<div class="row">
                                 <div class="col-md-12" style="text-align:left; font-size:18px">Reason Summary</div>
                                 <div class="col-md-6">
                                     <div class="bordered" style="padding:10px; padding-bottom:5px; border-radius:4px; border-color:darkgray; text-align:left ">
@@ -334,11 +455,11 @@
                                         }
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6">*@
                                     @*------------------------------*@
                                     @*-         Goal Table         -*@
                                     @*------------------------------*@
-                                    <div class="panel panel-default scroll-Table hidden-xs">
+                                    @*<div class="panel panel-default scroll-Table hidden-xs">
                                         <div class="panel-heading scroll-Head ">
                                             <table style="margin:0; width:100%;">
                                                 <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
@@ -377,9 +498,9 @@
                                 <div style="text-align:left; font-size:18px; padding:0; margin-top:5px">Action Plan</div>
                                 <div class="bordered" style="padding:15px; text-align:left; border-radius:4px; border-color:lightgray">@priorAP.priorAPText</div>
                             }
-                        </div>
+                        </div>*@
                         @*<div style="text-align:left;color:gray">Submitted By: @priorAP.submittedBy</div>*@
-                        <br />
+                        @*<br />
 
                         <div class="btns-prior-ap-detail" style="text-align:left">
                             <input type="hidden" id="priorBapmId" value="@priorAP.bapm_id" />
@@ -392,8 +513,7 @@
                             <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
                             <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
                         </div>
-                    </div>
-                    <br />
+                    </div>*@
                 }
             }
             else
