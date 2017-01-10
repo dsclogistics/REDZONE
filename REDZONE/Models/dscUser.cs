@@ -37,7 +37,7 @@ namespace REDZONE.Models
         }
         //..... User SSO constructor. Creates user and retrieves its associated info. It Does not perform User authentication
         public dscUser(string userSSO) {
-            SSO = userSSO;
+            SSO = removeUserDomainCharacter(userSSO);
             isAuthenticated = false;
             FirstName = userSSO;  //Default the name to the SSO Id (For invalid users that do not have a real DB Name)
             loadUserDetails(SSO);
@@ -58,6 +58,9 @@ namespace REDZONE.Models
             try      // -------- Try Parsing the User Data properties --------
             {
                 JObject parsed_UserDetails = JObject.Parse(jsonData);
+
+                //After API has been called, correct the User SSO back to the the valid DB User Id
+                SSO = removeUserDomainCharacter(SSO);
 
                 //Verify that the Data Retrieval was successful before attempting to parse any data
                 if (parsed_UserDetails["result"].ToString().Equals("Success") && !parsed_UserDetails["user_id"].ToString().Equals("0"))
@@ -195,6 +198,26 @@ namespace REDZONE.Models
                 dbUserId = "0";
                 userStatusMsg = ex.Message;
             }
+        }
+
+        private string removeUserDomainCharacter(string SSO)
+        {
+            return (SSO.StartsWith("@") || SSO.StartsWith("!") || SSO.StartsWith("#"))?SSO.Substring(1):SSO;
+
+            //string domainChar = SSO.Substring(0, 1);
+            //string userSSO = "";
+            //switch (domainChar) { 
+            //    case "@":
+            //    case "#":
+            //    case "!":
+            //    case "$":
+            //        userSSO = SSO.Substring(1);  //Remove first character of the User Id
+            //        break;
+            //    default:
+            //        userSSO = SSO;
+            //        break;
+            //}
+            //return userSSO;
         }
 
         private void makeUserDataCollectorAdmin()

@@ -21,7 +21,7 @@ namespace REDZONE.Controllers
         //private ApplicationSignInManager _signInManager;
         //private ApplicationUserManager _userManager;
 
-        //GET: /Account/getLoginToken
+        //GET: /Account/getIV
         [AllowAnonymous]
         [HttpGet]
         public string getIV()
@@ -584,16 +584,17 @@ namespace REDZONE.Controllers
             //HttpContext.Current.Response.Cookies.Add(authCookie);
         }
 
-        private string getUserRoles(string uName) {
-            //This function Queries the RZ DB directly and get the Metric Product Names that an User is Authorized to
-            DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
+        //Obsolete Function
+        //private string getUserRoles(string uName) {
+        //    //This function Queries the RZ DB directly and get the Metric Product Names that an User is Authorized to
+        //    DSC_MTRC_DEV_Entities db = new DSC_MTRC_DEV_Entities();
 
-            string uRoles = String.Join(";", db.MTRC_MGMT_AUTH.Include(d => d.MTRC_METRIC_PRODUCTS)
-                .Where(x => x.mma_eff_start_date < DateTime.Now && x.mma_eff_end_date > DateTime.Now && x.mma_dsc_ad_username == uName)
-                .Select(y => y.MTRC_METRIC_PRODUCTS.mtrc_prod_display_text).ToArray());
+        //    string uRoles = String.Join(";", db.MTRC_MGMT_AUTH.Include(d => d.MTRC_METRIC_PRODUCTS)
+        //        .Where(x => x.mma_eff_start_date < DateTime.Now && x.mma_eff_end_date > DateTime.Now && x.mma_dsc_ad_username == uName)
+        //        .Select(y => y.MTRC_METRIC_PRODUCTS.mtrc_prod_display_text).ToArray());
 
-            return uRoles;
-        }
+        //    return uRoles;
+        //}
 
         #endregion
     }
