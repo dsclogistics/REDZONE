@@ -59,7 +59,7 @@
 {
     <div style="margin-top:250px; color:red">
         <img src="~/Images/confused-emoticon.jpg" />
-        <h2>Please Select a valid Metric </h2>
+        <h2>Please Select a valid Metric and Period</h2>
     </div>
 }
 else
@@ -93,21 +93,39 @@ else
                         <div class="row ">
                             <span style="font-size:x-large; font-weight:bold; color:darkblue">Metric Summary</span>
                         </div>
-                        <div class="row " style="margin-bottom:10px">
+                        @* <----------- Navigation Field by Metric Type*@
+                        <div class="row" style="margin-bottom:3px">
                             <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px; ">
                                 <span class="input-group-btn">
-                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px; height: 35px" onclick="location.href='@Model.urlPrevMetric'" title="Navigate to Previous Building">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlPrevMetric'" title="Navigate to Previous Metric" @Model.statusPrevMetric>
                                         <span class="glyphicon glyphicon-chevron-left"></span>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" value="@Model.metricName @Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px; height:35px">
+                                <input type="text" class="form-control" value="@Model.metricName" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:x-large; padding:0px">
                                 <span class="input-group-btn">
-                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px; height: 35px" onclick="location.href='@Model.urlNextMetric'" title="Navigate to Next Building">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px" onclick="location.href='@Model.urlNextMetric'" title="Navigate to Next Metric" @Model.statusNextMetric>
                                         <span class="glyphicon glyphicon-chevron-right"></span>
                                     </button>
                                 </span>
                             </div>
-                        </div>
+                        </div>@* <----------- End of Navigation Field by Metric Type*@
+                        @* <----------- Navigation Field by Year *@
+                        <div class="row" style="margin-bottom:10px; padding:0px;">
+                            <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px;">
+                                <span class="input-group-btn" style="padding:0px;">
+                                    <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Building" @Model.statusPrevPeriod>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    </button>
+                                </span>
+                                @*<span style="min-width:100%; text-align:center; vertical-align:middle; font-size:large; padding:0px">Period: @Model.year</span>*@
+                                <input type="text" class="form-control" value="@Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large; padding:0px">
+                                <span class="input-group-btn">
+                                    <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>@* <----------- End of Navigation Field by Year *@
                     </div>
                     <div class="col-sm-2" style="padding-top:10px">
                         @*@if (Model.canFilterRows)

@@ -92,6 +92,13 @@ namespace REDZONE.AppCode
                     bldg.buildingErrorMsg = String.Empty;
                     bldg.valueErrorMsg = String.Empty;
                     bldg.buildingViewClass = VALIDCLASS;
+
+                    try { 
+                        if (String.IsNullOrEmpty(workSheet.Cells[rowIterator, 1].Value.ToString().Trim())) { continue; }
+                    }
+                    catch { }
+                    
+
                     try
                     {
                         bldg.buildingName = workSheet.Cells[rowIterator, 1].Value.ToString();

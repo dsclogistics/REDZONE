@@ -221,6 +221,7 @@
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\ActionPlanViewModel.cs" />
+    <Compile Include="Models\BuildingSummaryViewModel1.cs" />
     <Compile Include="Models\dscUser.cs" />
     <Compile Include="Models\TasksViewModel.cs" />
     <Compile Include="Models\TeamActivitiesViewModel.cs" />
@@ -367,6 +368,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\BackToDashboard.png" />
     <Content Include="Images\Button-Add-icon.png" />
+    <Content Include="Images\ChangeView.png" />
     <Content Include="Images\confused-emoticon.jpg" />
     <Content Include="Images\dashboard.png" />
     <Content Include="Images\download_template.png" />

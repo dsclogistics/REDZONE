@@ -891,6 +891,20 @@ namespace REDZONE.AppCode
 
             try
             {
+
+                //------- Initialize the System Current Date/Time Deppendent Values -----------
+                int intYear = 0;
+                if (!(Int32.TryParse(year, out intYear))) { intYear = 9999; }
+                //For next and previous period, the Metric Id remains static. Only the year will change
+                mSummary.urlNextPeriod = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", (intYear + 1).ToString(), metricID);
+                mSummary.urlPrevPeriod = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", (intYear - 1).ToString(), metricID);
+                mSummary.statusPrevPeriod = (intYear <= 2016) ? "disabled" : "";
+                //For the first 15 days of January, the current year is unavailable as there is no data available until after the 15th
+                mSummary.statusNextPeriod = ((DateTime.Today.Year == intYear) || (DateTime.Today.Year - 1 == intYear && DateTime.Today.Month == 01 && DateTime.Today.Day < 15)) ? "disabled" : "";
+                //------- END of hardcoding data ------------------------------------------
+
+
+
                 JObject parsed_result = JObject.Parse(raw_data);
                 JArray apiBuildings = (JArray)parsed_result["buildings"];
                 JArray months = (JArray)parsed_result["Months"];
