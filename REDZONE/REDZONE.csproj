@@ -222,6 +222,7 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\ActionPlanViewModel.cs" />
     <Compile Include="Models\BuildingSummaryViewModel1.cs" />
+    <Compile Include="Models\displayTable.cs" />
     <Compile Include="Models\dscUser.cs" />
     <Compile Include="Models\TasksViewModel.cs" />
     <Compile Include="Models\TeamActivitiesViewModel.cs" />

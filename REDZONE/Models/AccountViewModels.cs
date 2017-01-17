@@ -21,6 +21,12 @@ namespace REDZONE.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required]
+        public string domain { get; set; }
+        [Required]
+        public string userSSO { get; set; }
+        [Required]
+        public string uEncryPwd { get; set; }
         //[Display(Name = "Remember me?")]
         //public bool RememberMe { get; set; }
     }

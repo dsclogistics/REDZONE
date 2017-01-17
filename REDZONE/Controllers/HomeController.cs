@@ -106,7 +106,7 @@ namespace REDZONE.Controllers
                 if (currentUser.buildings.Count > 0) { buildingID = currentUser.buildings[0].id; }
                 else { buildingID = DFLT_BUILDING; }                
             }
-            BuildingSummaryViewModel bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name, filterByBuilding);
+            BuildingSummaryViewModel1 bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name, filterByBuilding);
             
 
             //Retrieve the Current Logged on User Reviewer's metrics (If any)

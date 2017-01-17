@@ -431,15 +431,14 @@ namespace REDZONE.AppCode
             return eSummary;
         }
 
-        public BuildingSummaryViewModel getBuildingSummaryView(string year, string buildingID, string currentUserSSO, bool filterByBldng)
+        public BuildingSummaryViewModel1 getBuildingSummaryView(string year, string buildingID, string currentUserSSO, bool filterByBldng)
         {
             const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
 
             //Define and Initializa Model Object Components
-            BuildingSummaryViewModel bSummary = new BuildingSummaryViewModel();   // Main Metric Model Object. Returned back to calling method
+            BuildingSummaryViewModel1 bSummary = new BuildingSummaryViewModel1();   // Main Metric Model Object. Returned back to calling method
             MeasuredRowEntity rowHeader = new MeasuredRowEntity();                // Model Contains one Header Row
             MeasuredRowEntity rowTotals = new MeasuredRowEntity();                // Model Contains one Totals Row
-            MeasuredRowEntity rowActions = new MeasuredRowEntity();               // Model Contains one Row with Link Actions
             List<MeasuredRowEntity> metricsRowList = new List<MeasuredRowEntity>();         // Building Metrics (Row) List
             List<MeasuredCellEntity> metricValueCellList = new List<MeasuredCellEntity>();  // RowCellColection
 
@@ -464,7 +463,6 @@ namespace REDZONE.AppCode
             bSummary.year = year;
             rowHeader.rowName = bSummary.bName;
             rowTotals.rowName = "Building Score";
-            rowActions.rowName = "ACTIONS PLAN";
             string raw_data = String.Empty;
             try
             {
@@ -482,13 +480,67 @@ namespace REDZONE.AppCode
                 bSummary.bName = (string)parsed_result["dsc_mtrc_lc_bldg_name"];
                 bSummary.bId = (string)parsed_result["dsc_mtrc_lc_bldg_id"];
                 string[] prevNext = getPrevNextBuildingUrl(year, bSummary.bId, userBuildings);//prevNext[0]=prev url, prevNext[1]=next url
-                bSummary.statusPrevBuilding = prevNext[0] == "disabled" ? prevNext[0] : "";
-                bSummary.statusNextBuilding = prevNext[1] == "disabled" ? prevNext[1] : "";
+                bSummary.statusPrevBuilding = (prevNext[0] == "disabled") ? prevNext[0] : "";
+                bSummary.statusNextBuilding = (prevNext[1] == "disabled") ? prevNext[1] : "";
                 bSummary.urlPrevBuilding = prevNext[0];
                 bSummary.urlNextBuilding = prevNext[1];
                 JArray apiMetrics = (JArray)parsed_result["metrics"];
-                JArray months = (JArray)parsed_result["Months"];
-                JArray apiBuildingsMetrics = (JArray)parsed_result["buildingsmetrics"];
+                JArray apiMonths = (JArray)parsed_result["Months"];
+                JArray apiBuildingsMetricValuess = (JArray)parsed_result["buildingsmetrics"];
+
+
+                //Process all the Metric View properties
+                //public MeasuredRowEntity mvHeadings = new MeasuredRowEntity();
+                //public MeasuredRowEntity mvGoals = new MeasuredRowEntity();
+                //public List<MeasuredRowEntity> mvMonths = new List<MeasuredRowEntity>();
+                //public MeasuredRowEntity mvTotals = new MeasuredRowEntity();
+                
+                if (apiMetrics.HasValues && apiMonths.HasValues)
+                {
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Header, rowIndex = 0 });   // Add the Headers/Titles Row
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Subheader, rowIndex = 1 });   // Add the Goals Row
+                    //Add one row for each Month retrieved
+                    for (int x = 0; x < apiMonths.Count; x++ )
+                    {
+                        bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Value, rowIndex = x + 2 });   // Add the Goals Missed Totals Row
+                    }
+
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Total, rowIndex = apiMonths.Count + 2 });   // Add the Goals Missed Totals Row                   
+                    //------------ Finished Adding all Rows-------- //
+
+                    //Add cells to each Row
+                    foreach (rzRow tableRow in bSummary.buildingTable.datarow) {
+                        //Add one Row Header Cell
+                        tableRow.rowColumns.Add(new rzCell
+                        {
+                            rzCellType = rzCell.cellType.Header,       cellIndex = 0,
+                            cellValue = "",
+                            cellWidth = ""                     
+                        });
+                    }
+
+
+                    //Add one row to the table for each Month Found
+                    foreach (var m in apiMonths) {
+
+                        MeasuredRowEntity monthRow = new MeasuredRowEntity();
+
+                       
+                    }
+
+                    
+
+
+                    //Each Metric Name Becomes a Column Header 
+
+                }
+                else {
+                    // There is no data to populate on the Table.
+                    bSummary.isModelValid = false;
+                    bSummary.modelValidationMsg = "Data Model Contains no Metric Data";
+                    return bSummary;
+                }
+
 
                 if (apiMetrics.HasValues)
                 {
@@ -501,9 +553,9 @@ namespace REDZONE.AppCode
                         row.scoreGoal = ((string)mtr["mpg_display_text"]).Replace("<=", "&le;").Replace(">=", "&ge;");
                         row.rowURL = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", year, row.rowMeasuredId);
                         row.rowOwner = AppCode.Util.getMetricMeetingOwner(row.rowName);
-                        if (months.HasValues)
+                        if (apiMonths.HasValues)
                         {
-                            foreach (var m in months)
+                            foreach (var m in apiMonths)
                             {
                                 MeasuredCellEntity temp = new MeasuredCellEntity();
                                 MeasuredCellEntity headerCol = new MeasuredCellEntity();
@@ -514,7 +566,7 @@ namespace REDZONE.AppCode
                                 temp.nextCellAction = "";
                                 temp.nextCellActionLink = "";
                                 row.entityMetricCells.Add(temp);
-                                if (rowHeader.entityMetricCells.Count < months.Count)
+                                if (rowHeader.entityMetricCells.Count < apiMonths.Count)
                                 {
                                     //Add a corresponding Cell to the "Headers", "Totals" and "Actions" Row                                    
                                     headerCol.metricName = (string)m["Month"];
@@ -528,13 +580,13 @@ namespace REDZONE.AppCode
                                     totalCol.isViewable = showAllMonths ? true : false;
                                     rowTotals.entityMetricCells.Add(totalCol);
                                     //Set the Cell Value and URL to use for the Actions Row.
-                                    rowActions.entityMetricCells.Add(getActionDataforMonth((string)m["Month"], bSummary.year));
+                                    //rowActions.entityMetricCells.Add(getActionDataforMonth((string)m["Month"], bSummary.year));
                                 }
                             }
                         }
-                        if (apiBuildingsMetrics.HasValues)
+                        if (apiBuildingsMetricValuess.HasValues)
                         {
-                            foreach (var apiCellValue in apiBuildingsMetrics)  // For each element of the full values Array retrieved by API
+                            foreach (var apiCellValue in apiBuildingsMetricValuess)  // For each element of the full values Array retrieved by API
                             {
                                 if (row.rowMeasuredId == (string)apiCellValue["mtrc_id"])
                                 {
@@ -564,12 +616,13 @@ namespace REDZONE.AppCode
                                             //tmp.metricColor = getMetricColor(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], (string)apiCellValue["rz_mps_status"]);
                                             tmp.displayClass = getMetricDisplayClass(tmp.metricValue, (string)apiCellValue["mpg_mtrc_passyn"], cellStatus);
 
-                                            if (!cellStatus.Equals("Open"))
-                                            {
-                                                //The "score" field on the Action Row holds the number of metrics that are closed for that specific month
-                                                try { rowActions.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]).score++; }
-                                                catch { }
-                                            }
+                                            //01/13/2017 ACTIONS ROW IS NO LONGER DISPLAYED OR NEEDED
+                                            //if (!cellStatus.Equals("Open"))
+                                            //{
+                                            //    //The "score" field on the Action Row holds the number of metrics that are closed for that specific month
+                                            //    try { rowActions.entityMetricCells.Find(p => p.metricMonth == (string)apiCellValue["MonthName"]).score++; }
+                                            //    catch { }
+                                            //}
 
                                             if (tmp.isGoalMet == "N" && !cellStatus.Equals("Open"))
                                             {// Open Periods do not count towards the totals as they are not complete yet
@@ -674,7 +727,7 @@ namespace REDZONE.AppCode
                     bSummary.buildingScoreRow = rowTotals;
                     bSummary.viewableColumns = bSummary.buildingHeadings.entityMetricCells.Where(x => (x.isViewable == true)).Count();
                     bSummary.metricRows = metricsRowList;//at this point we should have all rows with metric ids and months in the model
-                    bSummary.buildingActionsRow = rowActions;
+                    //bSummary.buildingActionsRow = rowActions;
                 }
                 bSummary.isModelValid = true;
             }
@@ -806,6 +859,10 @@ namespace REDZONE.AppCode
 
             return pValue;
         }
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //THIS METHOD WILL BE DEPRECATED AS SOON AS THE GOOGLE SHEETS PROCESS IS REMOVED FROM THE BUSINESS REQUIREMENTS
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         private MeasuredCellEntity getActionDataforMonth(string actionMonth, string actionYear)
         {
             const string urlBase = "http://goo.gl/forms/";

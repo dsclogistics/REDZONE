@@ -110,7 +110,7 @@ namespace REDZONE.Controllers
         [HttpPost]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public ActionResult login(LoginViewModel loginModel, string uPWD, string ReturnUrl)
+        public ActionResult login(LoginViewModel loginModel, string ReturnUrl)
         {
             //--------------------- Decryption and Input Validation Section ----------------------------------
             //Retrieve the one-time-use decryption Key from Memory and remove it so it can't be used again
@@ -123,7 +123,7 @@ namespace REDZONE.Controllers
                 decryptToken = Session["loginToken"].ToString();
                 Session.Remove("loginToken");  //Remove the session Id with the encoding key for security purposes
 
-                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(uPWD, decryptToken);
+                loginModel.Password = AppCode.AESEncrytDecry.DecryptStringAES(loginModel.uEncryPwd, decryptToken);
                 if (loginModel.Password.Equals("keyError"))
                 {
                     Session["errorMessage"] = "Failed to decrypt credentials. Try again or contact Support if the problem persist";
@@ -516,7 +516,7 @@ namespace REDZONE.Controllers
             
             //-------- Section to be Used during Development --------------------------------\
             //Retrieve the User information for Developers
-            switch (loginModel.Username.ToUpper() + loginModel.Password) { 
+            switch (loginModel.userSSO.ToUpper() + loginModel.Password) { 
                 case "DELGADO_FELICIANO~~":
                 case "ABDUGUEV_RASUL~~":
                 case "CHEN_ALEX~~":
@@ -528,7 +528,7 @@ namespace REDZONE.Controllers
             }
             //-------- END of Section to be Used during Development -------------------------/
             
-            if (!isDeveloper) { logggedUser = new dscUser(loginModel.Username.Trim(), loginModel.Password.Trim()); }
+            if (!isDeveloper) { logggedUser = new dscUser(loginModel.userSSO.Trim(), loginModel.Password.Trim(), loginModel.domain.Trim()); }
 
             if (logggedUser.isAuthenticated)
             {

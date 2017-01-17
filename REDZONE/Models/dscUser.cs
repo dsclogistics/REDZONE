@@ -11,6 +11,7 @@ namespace REDZONE.Models
     {
         private const string AUTHORIZATION_END_POINT = "getuserroles";
         private const string AUTHENTICATION_END_POINT = "loginrzuser";
+        private const string DFLTDOMAIN = "dsclogistics";
         public string dbUserId { get; set; }
         public bool isValidUser { get; set; }
         public bool isAuthenticated { get; set; }
@@ -43,18 +44,28 @@ namespace REDZONE.Models
             loadUserDetails(SSO);
         }
         //..... Full User Constructor, accepts SSO and password to perform Authentication and Retrieve the Associated user Info (Roles, buildings) ............
-        public dscUser(string userSSO, string userPwd){
-            SSO = userSSO;
-            loadUserDetails(userSSO, userPwd);
+        public dscUser(string userSSO, string userPwd, string domain = DFLTDOMAIN)
+        {
+            SSO = removeUserDomainCharacter(userSSO);
+            loadUserDetails(userSSO, userPwd, domain);
         }
         //---------- Constructors Section Ends-------------------------------
         #endregion
         #region classMethods 
-        public void loadUserDetails(string SSO, string uPassword=""){
+        public void loadUserDetails(string SSO, string uPassword = "", string uDomain = DFLTDOMAIN)
+        {
           // This function will retrieve the user information and load all roles,building, user info, etc if found.
           // If a password is specified, then it will also perform authentication
             SSO = SSO.ToUpper();
-            string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword);
+            string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword, uDomain);
+            if (jsonData.Length < 200) {
+                isValidUser = false;
+                isAuthenticated = false;
+                dbUserId = "0";
+                userStatusMsg = jsonData;
+                return;
+            }
+
             try      // -------- Try Parsing the User Data properties --------
             {
                 JObject parsed_UserDetails = JObject.Parse(jsonData);
@@ -254,7 +265,8 @@ namespace REDZONE.Models
             roles.Add(uRole); 
         }
 
-        public string getJsonUserData(string userSSO="", string userPwd="") {
+        public string getJsonUserData(string userSSO = "", string userPwd = "", string uDomain = DFLTDOMAIN)
+        {
             // This function wil retrieve the API Json data. If no password is specified, it will retrieve User Role API data.
             // If a password is specified it will return the Authentication Jason API data
             string endPoint = String.Empty;
@@ -266,7 +278,7 @@ namespace REDZONE.Models
             }
             else{ //Perform user Authentication and Data retrieval
                 endPoint = AUTHENTICATION_END_POINT;
-                payload = "{\"sso_id\":\"" + userSSO + "\", \"password\":\"" + userPwd + "\"}";
+                payload = "{\"sso_id\":\"" + userSSO + "\", \"password\":\"" + userPwd + "\", \"domain\":\"" + uDomain + "\"}";
             }
             //DataRetrieval api = new DataRetrieval();
 

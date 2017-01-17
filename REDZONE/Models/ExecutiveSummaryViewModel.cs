@@ -97,7 +97,6 @@ namespace REDZONE.Models
     }
 
    
-
     public class MeasuredRowEntity
     {// This represents a single Row in the Building Summary Spreadsheet
         public string rowName { get; set; }        //Row represents a "Metric"
