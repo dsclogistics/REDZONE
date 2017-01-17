@@ -47,6 +47,76 @@
     });
 }
 
+function submitLoginForm() {
+    //Verify all fields have been filled out
+    if ($('#UserName').val() == "" || $('#pwd').val() == "") {
+        $('#erroMsgDIV').html("User Name and Password connot be blank");
+        $('#UserName').select().focus();
+        return;
+    }
+
+    //Submit the Login Credentials
+    $('#btnRZLogin').prop("disabled", true);
+    //Set the domain and User SSO hidden fields for submission
+
+    var userSSO = $('#UserName').val();
+    var domainChar = userSSO.substring(0, 1);
+    var uDomain = "";
+    var hasDomainChar = true;
+    switch (domainChar) {
+        case '#':
+            uDomain = "ColonialHeights";
+            userSSO = $('#UserName').val().substring(1);
+            break;
+        case '@':
+            uDomain = "dsccorp";
+            userSSO = $('#UserName').val().substring(1);
+            break;
+        default:
+            uDomain = "dsclogistics";
+            hasDomainChar = false;
+            break;
+    }
+    if (!hasDomainChar) {//User Name does not have a domain character. Look for "\" domain delimiter
+        var delimiterIndex = userSSO.indexOf("\\");
+        if (!(delimiterIndex == -1)) {//Domain delimiter was found
+            uDomain = userSSO.substring(0, delimiterIndex);
+            if (delimiterIndex + 1 == userSSO.length) {
+                $('#erroMsgDIV').html("You must input a value after the slash");
+                $('#UserName').select().focus();
+                $('#btnRZLogin').prop("disabled", false);
+                return;
+            }
+            else {
+                userSSO = userSSO.substring(delimiterIndex + 1);
+            }
+        }
+        //if (userSSO.includes("\\")) {
+        //    alert("Domain delimiter found at index " + userSSO.indexOf("\\"));
+        //}
+    }
+    else {  //If a Domain Formatting character was used, the "slash" option is not allowed
+        if (!(userSSO.indexOf("\\") == -1)) {
+            $('#erroMsgDIV').html("User Name Format is not Valid. Check your input");
+            $('#UserName').select().focus();
+            $('#btnRZLogin').prop("disabled", false);
+            return;
+        }
+    }
+    uDomain = uDomain.toUpperCase();
+    if (!(uDomain == "DSCLOGISTICS" || uDomain == "DSCCORP" || uDomain == "COLONIALHEIGHTS")) {
+        $('#erroMsgDIV').html("The Selected Domain is not Valid.");
+        $('#UserName').select().focus();
+        $('#btnRZLogin').prop("disabled", false);
+        return;
+    }
+    $('#userSSO').val(userSSO);
+    $('#domain').val(uDomain);
+
+    //alert("User Name: " + $('#UserName').val() + "\nUser SSO: " + $('#userSSO').val() + "\nDomain: " + $('#domain').val() + "\nPassword: " + $('#uEncryPwd').val());
+
+    submitEncry();
+}
 
 $(document).ready(function () {
     //document.onkeypress(function () {
@@ -54,75 +124,16 @@ $(document).ready(function () {
     //});
     $("#frmLogin").keypress(function (e) {
         if (e.which == 13) {
-            $('#btnRZLogin').prop("disabled", true);
             //submit the Login Credentials
-            submitEncry();
-        }        
+            submitLoginForm();
+        }
+        else {
+            $('#erroMsgDIV').html("");
+        }
     });
 
     $('#btnRZLogin').click(function () {
-        //Submit the Login Credentials
-        $('#btnRZLogin').prop("disabled", true);
-
-        //Set the domain and User SSO hidden fields for submission
-        
-        var userSSO = $('#UserName').val();
-        var domainChar = userSSO.substring(0, 1);
-        var uDomain = "";
-        var hasDomainChar = true;
-        switch (domainChar) {
-            case '#':
-                uDomain = "ColonialHeights";
-                userSSO = $('#UserName').val().substring(1);
-                break;
-            case '@':
-                uDomain = "dsccorp";
-                userSSO = $('#UserName').val().substring(1);
-                break;
-            default:
-                uDomain = "dsclogistics";
-                hasDomainChar = false;
-                break;
-        }
-        if (!hasDomainChar) {//User Name does not have a domain character. Look for "\" domain delimiter
-            var delimiterIndex = userSSO.indexOf("\\");
-            if (!(delimiterIndex == -1)) {//Domain delimiter was found
-                uDomain = userSSO.substring(0, delimiterIndex);
-                if (delimiterIndex + 1 == userSSO.length) {
-                    alert("You must input a value after the slash");
-                    $('#UserName').select().focus();
-                    $('#btnRZLogin').prop("disabled", false);
-                    return;
-                }
-                else {
-                    userSSO = userSSO.substring(delimiterIndex + 1);
-                }
-            }
-            //if (userSSO.includes("\\")) {
-            //    alert("Domain delimiter found at index " + userSSO.indexOf("\\"));
-            //}
-        }
-        else {  //If a Domain Formatting character was used, the "slash" option is not allowed
-            if (!(userSSO.indexOf("\\") == -1)) {
-                alert("User Name Format is not Valid. Check your input");
-                $('#UserName').select().focus();
-                $('#btnRZLogin').prop("disabled", false);
-                return;
-            }
-        }
-        uDomain = uDomain.toUpperCase(); 
-        if (!(uDomain == "DSCLOGISTICS" || uDomain == "DSCCORP" || uDomain == "COLONIALHEIGHTS")) {
-            alert("The Selected Domain is not Valid.");
-            $('#UserName').select().focus();
-            $('#btnRZLogin').prop("disabled", false);
-            return;
-        }
-        $('#userSSO').val(userSSO);
-        $('#domain').val(uDomain);
-
-        //alert("User Name: " + $('#UserName').val() + "\nUser SSO: " + $('#userSSO').val() + "\nDomain: " + $('#domain').val() + "\nPassword: " + $('#uEncryPwd').val());
-
-        submitEncry();
+        submitLoginForm();
     });
 
 });

@@ -560,6 +560,8 @@ namespace REDZONE.AppCode
 
 
 
+
+
                 //---------------END OF PROCESS THAT CAPTURES THE METRIC VIEW (RZTABLE)
                 //========================================================================================================//
 

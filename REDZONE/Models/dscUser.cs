@@ -58,17 +58,20 @@ namespace REDZONE.Models
           // If a password is specified, then it will also perform authentication
             SSO = SSO.ToUpper();
             string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword, uDomain);
-            if (jsonData.Length < 200) {
-                isValidUser = false;
-                isAuthenticated = false;
-                dbUserId = "0";
-                userStatusMsg = jsonData;
-                return;
-            }
 
             try      // -------- Try Parsing the User Data properties --------
             {
                 JObject parsed_UserDetails = JObject.Parse(jsonData);
+
+                //Check if there is API data "result" Field shows API call failed
+                string APIcallResult = (string)parsed_UserDetails["result"];
+                if (String.IsNullOrEmpty(APIcallResult) || APIcallResult.Equals("FAILED")) {
+                    isValidUser = false;
+                    isAuthenticated = false;
+                    dbUserId = "0";
+                    userStatusMsg = APIcallResult.Equals("FAILED") ? (string)parsed_UserDetails["message"] : jsonData;
+                    return;
+                }
 
                 //After API has been called, correct the User SSO back to the the valid DB User Id
                 SSO = removeUserDomainCharacter(SSO);
@@ -207,7 +210,7 @@ namespace REDZONE.Models
                 isValidUser = false;
                 isAuthenticated = false;
                 dbUserId = "0";
-                userStatusMsg = ex.Message;
+                userStatusMsg = jsonData + "=>" + ex.Message;
             }
         }
 

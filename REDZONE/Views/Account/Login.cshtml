@@ -80,8 +80,8 @@
                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div style="color:#ff0000; text-align:center;">
-                                @ViewBag.errorMessage 
+                            <div id="erroMsgDIV" style="color:#ff0000; text-align:center;">
+                                @ViewBag.errorMessage
                                 @errorMessage
                             </div>
                             <br />
