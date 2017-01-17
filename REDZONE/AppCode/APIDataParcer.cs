@@ -489,23 +489,35 @@ namespace REDZONE.AppCode
                 JArray apiBuildingsMetricValuess = (JArray)parsed_result["buildingsmetrics"];
 
 
-                //Process all the Metric View properties
+                
+                //========================================================================================================//
+                //--------------- START OF PROCESS THAT CAPTURES THE METRIC VIEW (RZTABLE)
+
                 //public MeasuredRowEntity mvHeadings = new MeasuredRowEntity();
                 //public MeasuredRowEntity mvGoals = new MeasuredRowEntity();
                 //public List<MeasuredRowEntity> mvMonths = new List<MeasuredRowEntity>();
                 //public MeasuredRowEntity mvTotals = new MeasuredRowEntity();
-                
+
+                // string valueCellWidth = (apiMetrics.Count == 0)?"0.66%":(0.6668 / apiMetrics.Count).ToString("0.00%"); //66.68 % of the screen gets divided by the number of metric to display
+
                 if (apiMetrics.HasValues && apiMonths.HasValues)
                 {
-                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Header, rowIndex = 0 });   // Add the Headers/Titles Row
-                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Subheader, rowIndex = 1 });   // Add the Goals Row
+                    int indexPointer = 2;
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Header, rowIndex = 0 });   // Add the Headers/Titles Row and initialize its header cell
+                    bSummary.buildingTable.datarow[0].rowColumns.Add(new rzCell { cellIndex = 0, rzCellType = rzCell.cellType.Header, cellValue = "", cellDispValue = "", cellWidth = "16.66%" });
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Subheader, rowIndex = 1 });   // Add the Goals Row and Initializa its header cell
+                    bSummary.buildingTable.datarow[1].rowColumns.Add(new rzCell { cellIndex = 0, rzCellType = rzCell.cellType.Subheader, cellValue = "Goal", cellDispValue = "Goal"});
                     //Add one row for each Month retrieved
-                    for (int x = 0; x < apiMonths.Count; x++ )
-                    {
-                        bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Value, rowIndex = x + 2 });   // Add the Goals Missed Totals Row
+
+                    foreach (var m in apiMonths) {
+                        bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Value, rowIndex = indexPointer });   // Add a row for each Month Retrieved by the API
+                        //Initialize the associated header column for each Month row
+                        bSummary.buildingTable.datarow[indexPointer].rowColumns.Add(new rzCell { cellIndex = 0, rzCellType = rzCell.cellType.Value, cellValue = (string)m["Month"], cellDispValue = ""});
+                        indexPointer++;
                     }
 
-                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Total, rowIndex = apiMonths.Count + 2 });   // Add the Goals Missed Totals Row                   
+                    bSummary.buildingTable.datarow.Add(new rzRow { rzRowType = rzRow.rowType.Total, rowIndex = apiMonths.Count + 2 });   // Add the Goals Missed Totals Row and initializa its header column
+                    bSummary.buildingTable.datarow[indexPointer].rowColumns.Add(new rzCell { cellIndex = 0, rzCellType = rzCell.cellType.Total, cellValue = "Goals Missed", cellDispValue = "Goals Missed" });
                     //------------ Finished Adding all Rows-------- //
 
                     //Add cells to each Row
@@ -540,6 +552,16 @@ namespace REDZONE.AppCode
                     bSummary.modelValidationMsg = "Data Model Contains no Metric Data";
                     return bSummary;
                 }
+
+
+
+
+
+
+
+
+                //---------------END OF PROCESS THAT CAPTURES THE METRIC VIEW (RZTABLE)
+                //========================================================================================================//
 
 
                 if (apiMetrics.HasValues)

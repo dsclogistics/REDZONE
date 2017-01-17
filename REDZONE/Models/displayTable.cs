@@ -34,8 +34,9 @@ namespace REDZONE.Models
         public enum cellType {Header, Subheader, Value, Total};
         public cellType rzCellType {get;set;}
         public int cellIndex {get;set;}            //Column Index in the Table
-        public string cellWidth = "";   // (0.6668 / viewableColumns).ToString("0.00%");
-        public string cellValue { get; set; }      //Cell Display Value
+        public string cellWidth {get;set;}         // (0.6668 / viewableColumns).ToString("0.00%");
+        public string cellValue { get; set; }      //Cell Actual Value
+        public string cellDispValue { get; set; }      //Cell Display Value
         public string cellURL { get; set; }        //Cell URL http link when clicked
         public bool isViewable { get; set; }       //Whether it's value gets displayed or hidded
         public bool isValueMet {get; set; }        //i.e. "isGoalMet"
@@ -60,7 +61,8 @@ namespace REDZONE.Models
         //-------- Empty Constructor -----------\
         public rzCell() { 
             //Initialize Properties with default Values
-
+            isViewable = true;
+            cellStatus = "Inactive";
         }
         //-------- End of Constructor ----------
 
