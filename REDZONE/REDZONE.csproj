@@ -197,6 +197,7 @@
     <Compile Include="AppCode\AESEncrytDecry.cs" />
     <Compile Include="AppCode\APIDataParcer.cs" />
     <Compile Include="AppCode\DataRetrieval.cs" />
+    <Compile Include="AppCode\emailObject.cs" />
     <Compile Include="AppCode\ExcelBuilder.cs" />
     <Compile Include="AppCode\ExcelReader.cs" />
     <Compile Include="AppCode\SpreadSheetObjects.cs" />

@@ -249,9 +249,26 @@ namespace REDZONE.Controllers
         [HttpPost]
         public string submitActionPlan(string raw_json)
         {
-            string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));
+            //**FD 01/19/2017 Added Email notification Capability**
+            emailObject eNotification = new emailObject();
 
-            return returnResultMessage(status);
+            //string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing
+
+
+            string status = "Success";
+            if (returnResultMessage(status).Equals("Success"))
+            {// The Action Plan was submitted successfully. Send email notification to Alex
+                string senderName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString() + Session["last_name"].ToString();
+                string senderEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
+                string emailMessage = String.Format("Hi {0} [{1}] Your action Plan was submitted successfully", senderName, senderEmail);
+                if (!String.IsNullOrEmpty(senderEmail)) {
+                    eNotification = new emailObject("The_president@dsc-logistics.com", senderEmail, "Action Plan Submition Notification", emailMessage);
+                    eNotification.sendEmail();
+                }
+            }
+
+            return "Action Plan not Submitted: Alert sent to " + Session["email"].ToString() + " Response Message: " + String.Join("-", eNotification.emailLog);
+            //return returnResultMessage(status);       //Line Commented out for email Notification testing
         }
 
         //POST: /ActionPlan/submitActionPlanReview

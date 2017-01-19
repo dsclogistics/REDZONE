@@ -96,8 +96,14 @@ $(document).ready(function () {
     });
 
     $('#btnsActionPlan').on('click', '#btnSubmitActionPlan', function () {
-        var validated = validateActionPlanSubmit();
-        (validated) ? submitActionPlan() : showAlert("Action Plan text is required!", "", "N");;
+        if ($('#apText').val() == "") {
+            showAlert("Action Plan text is required!", "", "N");
+        }
+        else {
+            if (validateActionPlanSubmit()) {
+                submitActionPlan()
+            }
+        }
     });
 
     $('#btnsReviewAP').on('click', '#btnRejectActionPlan', function () {
@@ -143,11 +149,7 @@ $(document).ready(function () {
 //-------------------------------------------FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------------------------
 function validateActionPlanSubmit() {
-    var rz_apd_ap_text = $('#apText').val();
-
-    var confirmed = confirm("Are you sure you want to submit this action plan? You will not be able to make changes afterwards.");
-
-    return (rz_apd_ap_text == "" || !confirmed) ? false : true;
+    return confirm("Are you sure you want to submit this action plan? \nYou will not be able to make changes afterwards.") ? true : false;
 }
 
 function buildSubmitActionPlanJSON() {

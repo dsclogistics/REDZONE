@@ -2,6 +2,7 @@
 @{
     int loopCounter = 1;
 }
+
 <div class="row" id="viewByMetric" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; display:none" >
     <table class="bmSummary" style="width:100%;">
         <!-- ******* HEADERS/TITLES ROW (metricHeadingsRow) ********* -->
@@ -21,7 +22,7 @@
             }
             <td style="width:@Model.colWidths[loopCounter]">
                 <span> @Model.metricHeadingsRow.rowTotalsCell.cellDispValue</span>
-                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="padding:0px; padding-left:5px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score">
+                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="padding:0px; padding-left:5px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score" onclick="test()" >
                     <span class="glyphicon glyphicon-question-sign" style="font-size:large;"></span>
                 </button>
             </td>
@@ -103,3 +104,14 @@
         </tr>
     </table>
 </div> <!-- End of DIV Table Table -->
+
+<script>
+    function test() {
+        alert("This is a click event.");
+    };
+    //$(document).ready(function () {
+    //    $('#btnActionsRequired').click(function () {
+    //        alert("This is a click event.");
+    //    });
+    //});
+</script>

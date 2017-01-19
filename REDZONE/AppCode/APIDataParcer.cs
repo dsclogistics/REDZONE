@@ -493,17 +493,10 @@ namespace REDZONE.AppCode
 
 
 
+
+
                 //========================================================================================================//
                 //--------------- START OF PROCESS THAT CAPTURES THE METRIC VIEW (RZTABLE)
-
-                //public MeasuredRowEntity mvHeadings = new MeasuredRowEntity();
-                //public MeasuredRowEntity mvGoals = new MeasuredRowEntity();
-                //public List<MeasuredRowEntity> mvMonths = new List<MeasuredRowEntity>();
-                //public MeasuredRowEntity mvTotals = new MeasuredRowEntity();
-
-                // string valueCellWidth = (apiMetrics.Count == 0)?"0.66%":(0.6668 / apiMetrics.Count).ToString("0.00%"); //66.68 % of the screen gets divided by the number of metric to display
-                //Add the Headings and Goals Rows
-
 
                 if (apiMetrics.HasValues && apiMonths.HasValues)
                 {                    
