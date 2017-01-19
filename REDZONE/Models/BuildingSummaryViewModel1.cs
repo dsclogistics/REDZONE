@@ -34,7 +34,7 @@ namespace REDZONE.Models
         //public List<string> allMetrics = new List<string>();
         //public List<string> allMonths = new List<string>();
 
-        public rzTable buildingTable = new rzTable();
+        public rzTable summaryByMetric = new rzTable();
 
         public string metricColWidth
         {

@@ -51,6 +51,7 @@
         color:black;
         list-style-type: none;
 }
+
 .puViewBody {
     width:90%; 
     margin:0 auto; 
@@ -91,3 +92,51 @@
     border-color: #0264b2;*/  /*#9ecaed*/
     box-shadow: 0 0 10px #1597ff;
 }
+
+.headerColumn {
+    font-weight:bold;
+}
+
+.bmSummary tr td{
+    padding:5px;
+}
+
+/*.bmSummary tr:not(:first-child) {
+    color: red;
+}*/
+/*tr {css}
+tr:first-child {override css above}
+
+.rowHeader {
+    padding: 0px;
+    border-bottom: 1px solid gray;
+    background-color: #f0eaea;
+    font-weight: bold;
+}
+*/
+.monthRow {
+    border-top: 1px solid #c6c4c4;
+}
+.monthRow:hover{
+    background-color: #f1f1f1 !important;
+}
+.monthRow:hover td{
+    border-top: 1px solid #4a6b7f;
+    border-bottom: 1px solid #4a6b7f;
+}
+
+.monthRow td:first-child {
+  font-weight:bold;
+}
+
+.bmSummary td:not(:first-child) {
+    border-left: 1px solid #c6c4c4;
+    text-align: center;    
+}
+
+.goal-Schema {
+    background-color: #bbedff;
+    color:blue; 
+    font-weight:bold;
+}
+

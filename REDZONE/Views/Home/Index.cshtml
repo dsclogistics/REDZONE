@@ -121,7 +121,7 @@
                 <!-- INNER PANEL WITH METRIC BUILDING INFORMATION -->
                     <div class="panel-heading scroll-Head" style="overflow-y: @vScrollStatus">
                         <div class="row " style="margin:0; padding:0">
-                            <table style="margin:0; width:100%">
+                            <table class="metricTable" style="margin:0; width:100%">
                                 <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
                                     <td style="vertical-align:middle; width:17%">
                                         <input class="sortOrder" type="hidden" id="bSortOrder" value="@ViewData["bOrder"]" />
@@ -132,11 +132,11 @@
                                     </td>
                                     @foreach (var m in Model.allMetrics)
                                     {
-                                    <td class="buildingCol" title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
-                                         <a href="@m.url">@m.metricName</a>
-                                    </td>
+                                        <td title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
+                                            <a href="@m.url">@m.metricName</a>
+                                        </td>
                                     }
-                                    <td class="buildingCol " style="vertical-align:middle; width:11%; padding-right:13px">
+                                    <td style="vertical-align:middle; width:11%; padding-right:13px">
                                         <input class="sortOrder" type="hidden" id="sSortOrder" value="@ViewData["sOrder"]" />
                                         Building Score
                                         <button type="button" class="btn btn-sm sortButton @btnClassScore" aria-label="Sort by" style="padding:0px 2px; float:right">
@@ -151,11 +151,11 @@
                                     </td>
                                     @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
                                     {
-                                <td class="buildingCol" style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
-                                    @HttpUtility.HtmlDecode(bldngMV.metricValue)
-                                </td>
+                                        <td style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
+                                            @HttpUtility.HtmlDecode(bldngMV.metricValue)
+                                        </td>
                                     }
-                                    <td class="buildingCol " style="vertical-align:middle; width:11%;">
+                                    <td style="vertical-align:middle; width:11%;">
                                         <br />
                                     </td>
 
@@ -168,25 +168,27 @@
                     <!--  ******** START OF BUILDING DETAIL SECTION ****************************************************************-->
                     <div class="panel-body scroll-Body @panelHeight" style="overflow-y: @vScrollStatus">
                         <div class="row " style="margin:0; padding:0">
-                            <table style="margin:0; width:100%">
-                              @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
-                              {
-                                <tr class="rHover" style="border-bottom:1px solid #c6c4c4;">
-                                    <td style="vertical-align:middle; width:17%">
-                                        <a href="@dscBldng.url">@dscBldng.BuildingName</a>
-                                    </td>
-                                    @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
-                                    {
-                                        <td class="buildingCol @bldngMV.displayClass" style="vertical-align:middle; width: @strColWidth ">
-                                            @if (String.IsNullOrEmpty(@bldngMV.metricValue))   { <br /> }
-                                            else                                               { @bldngMV.metricValue }
+                            <table class="metricTable" style="margin:0; width:100%">
+                                @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
+                                {
+                                    <tr class="rHover" style="border-bottom:1px solid #c6c4c4;">
+                                        <td style="vertical-align:middle; width:17%">
+                                            <a href="@dscBldng.url">@dscBldng.BuildingName</a>
                                         </td>
-                                    }
-                                    <td class="buildingCol scoreCol  @dscBldng.scoreDisplayClass" style=" vertical-align:middle; width:11%;">
-                                        @dscBldng.rowScore
-                                    </td>
-                                </tr>
-                              }
+                                        @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
+                                        {
+                                            <td class="@bldngMV.displayClass" style="vertical-align:middle; width: @strColWidth ">
+                                                @if (String.IsNullOrEmpty(@bldngMV.metricValue))
+                                                { <br /> }
+                                                else
+                                                { @bldngMV.metricValue }
+                                            </td>
+                                        }
+                                        <td class="scoreCol  @dscBldng.scoreDisplayClass" style=" vertical-align:middle; width:11%;">
+                                            @dscBldng.rowScore
+                                        </td>
+                                    </tr>
+                                }
                             </table>
                         </div>  
                     </div> <!-- *********** END OF BUILDING ROWS DATA SECTION ************** -->
@@ -201,11 +203,11 @@
                                     </td>
                                     @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
                                     {
-                                        <td class="buildingCol" style="vertical-align:middle; width: @strColWidth ">
+                                        <td style="vertical-align:middle; width: @strColWidth ">
                                             @metricTotalCell.score.ToString("0")
                                         </td>
                                     }
-                                    <td class="buildingCol @Model.goalsMissedRow.scoreDisplayClass" style="vertical-align:middle; width:11%;">
+                                    <td class="@Model.goalsMissedRow.scoreDisplayClass" style="vertical-align:middle; width:11%;">
                                         @Model.total
                                     </td>
                                 </tr>

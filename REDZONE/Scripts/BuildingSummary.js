@@ -552,8 +552,22 @@ $('#chkMyBuildingsOnly').change(function () {
     });
 });
 //------------------------------------------------------------------------------------
+$('.btnFlip').click(function () {
+    //alert("Flipping View");
+    if ($('#viewMode').val() == "byMonth") {
+        $('#viewMode').val("byMetric");
+        $('#viewByMonth').hide();
+        $('#viewByMetric').show();       
+    }
+    else {
+        $('#viewMode').val("byMonth");
+        $('#viewByMetric').hide();
+        $('#viewByMonth').show();
+    }
+});
+//------------------------------------------------------------------------------------
 
-//$(".collapse").on('hidden.bs.collapse', function () {
+    //$(".collapse").on('hidden.bs.collapse', function () {
 //    alert('The collapsible content is now hidden.');
 //});
 

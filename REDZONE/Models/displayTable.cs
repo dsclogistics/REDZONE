@@ -7,18 +7,26 @@ namespace REDZONE.Models
 {
     public class rzTable
     {
-        public List<rzRow> datarow = new List<rzRow>();
+        public rzRow metricHeadingsRow = new rzRow();
+        public rzRow goalHeadingsRow = new rzRow();
+        public List<rzRow> dataRows = new List<rzRow>();
+        public rzRow goalsMissedRow = new rzRow();
+        public List<string> colWidths = new List<string>();
     }
 
     public class rzRow
     {  // This CLASS represents a single Row in the table
-        public enum rowType {Header, Subheader, Value, Total};
-        public rowType rzRowType {get;set;}
-        public int rowIndex { get; set; }
-        public List<rzCell> rowColumns = new List<rzCell>();
-
+        public int rowOrder { get; set; }
+        public rzCell rowHeaderCell = new rzCell();
+        public List<rzCell> rowDataColumns = new List<rzCell>();
+        public rzCell rowTotalsCell = new rzCell();
+        //public string valueCellWidth { 
+        //    get {
+        //        return (rowColumns.Count == 0) ? "75%" : (75 / rowColumns.Count).ToString("00.00%");
+        //    } 
+        //}
         //-------- Empty Constructor ------------\
-        public rzRow() { }
+        public rzRow() {  }
 
         //\-------- End of Constructor ----------/
 
@@ -31,10 +39,7 @@ namespace REDZONE.Models
 
     public class rzCell
     {  // This CLASS represents a single Cell in a Table Row
-        public enum cellType {Header, Subheader, Value, Total};
-        public cellType rzCellType {get;set;}
-        public int cellIndex {get;set;}            //Column Index in the Table
-        public string cellWidth {get;set;}         // (0.6668 / viewableColumns).ToString("0.00%");
+        public int cellOrder {get;set;}            //Column Index in the Table
         public string cellValue { get; set; }      //Cell Actual Value
         public string cellDispValue { get; set; }      //Cell Display Value
         public string cellURL { get; set; }        //Cell URL http link when clicked
@@ -45,26 +50,28 @@ namespace REDZONE.Models
         public string caption { get; set; }        //For Title Property (mouseover caption)
         public string cellOwner { get; set; }
         public string cellLastUpdt { get; set; }
-
         public metricInfo cellMetricInfo = new metricInfo();             //Metric Information Related to this cell         [For 'Value' Cells only]  
         public metricPeriodInfo mpInfo = new metricPeriodInfo();                 //Metric Period Information Related to this cell. [For 'Value' Cells only]        
         public actionPlanInfo apInfo = new actionPlanInfo();                 //Action Plan Information Related to this cell    [For 'Value' Cells only]
-
-
 
         //public string rowMeasuredId { get; set; }           //?????????????????
         //public string metricMonth { get; set; }
         //public string tm_period_id { get; set; }
         //public string dsc_mtrc_lc_bldg_id { get; set; }
 
-
         //-------- Empty Constructor -----------\
         public rzCell() { 
             //Initialize Properties with default Values
             isViewable = true;
             cellStatus = "Inactive";
+            cellValue = "";
+            cellDispValue = "";
+            displayClass = "";              // Add The Default neutral gray color schema   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  TO DO !!!!!!!!!!!!!
         }
         //-------- End of Constructor ----------
+        //public void setCell(){
+        
+        //}
 
     }
 

@@ -1,0 +1,105 @@
+﻿@model REDZONE.Models.rzTable
+@{
+    int loopCounter = 1;
+}
+<div class="row" id="viewByMetric" style="border:1px solid lightgray; border-radius: 5px; margin: 0; padding:0; display:none" >
+    <table class="bmSummary" style="width:100%;">
+        <!-- ******* HEADERS/TITLES ROW (metricHeadingsRow) ********* -->
+        <tr class="rowHeader">
+            <td style="width:@Model.colWidths[0]">
+                <span> @Model.metricHeadingsRow.rowHeaderCell.cellDispValue</span>
+                <span class="btnFlip" style="float:right"><img src="~/Images/ChangeView.png" /></span>               
+            </td>
+            @foreach (var metricCellHdr in Model.metricHeadingsRow.rowDataColumns)
+            {
+                <td style="width:@Model.colWidths[loopCounter]">
+                    <a href="@metricCellHdr.cellURL" id="mName" title="Metric Owner: @metricCellHdr.cellOwner">
+                        @metricCellHdr.cellDispValue
+                    </a>
+                </td>
+                loopCounter++;
+            }
+            <td style="width:@Model.colWidths[loopCounter]">
+                <span> @Model.metricHeadingsRow.rowTotalsCell.cellDispValue</span>
+                <button type="button" id="btnActionsRequired" class="btn  btn-sm" style="padding:0px; padding-left:5px; background-color:transparent; color: darkgreen " title="Show Actions Required by Building Score">
+                    <span class="glyphicon glyphicon-question-sign" style="font-size:large;"></span>
+                </button>
+            </td>
+        </tr>
+        <!-- ******* GOALS ROW (goalHeadingsRow) ********* -->
+        <tr class="goal-Schema" >            
+            <td >
+                <span> @Model.goalHeadingsRow.rowHeaderCell.cellDispValue</span>
+            </td>
+            @foreach (var metricGoalCellHdr in Model.goalHeadingsRow.rowDataColumns)
+            {
+                <td>
+                    <span id="mGoal">@HttpUtility.HtmlDecode(metricGoalCellHdr.cellDispValue)</span>
+                </td>
+            }
+            <td>
+                <span> @Model.goalHeadingsRow.rowTotalsCell.cellDispValue</span>
+            </td>
+        </tr>
+        <!-- =============== Begin loop section One Row for Each Month ========================================= -->
+        @foreach (REDZONE.Models.rzRow myRow in Model.dataRows)
+        {
+            <tr class="monthRow">
+                <td >
+                    <input type="hidden" id="month-@myRow.rowOrder.ToString("00")" value="@myRow.rowHeaderCell.cellValue" />
+                    <span> @myRow.rowHeaderCell.cellDispValue</span>
+                    @if (@myRow.rowHeaderCell.cellStatus.Equals("Mixed") || @myRow.rowHeaderCell.cellStatus.Equals("Open"))
+                    {
+                        <span style="color:red">*</span>
+                    }
+                </td>
+
+               @foreach (REDZONE.Models.rzCell valueCol in myRow.rowDataColumns)
+               {
+                   //string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
+                <td >
+                @*<td id="@buildingCell.cellValueId" class="valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="Right Click any cell to Add/Edit Reasons and Action Plans [STS: @buildingCell.cellStatus - @buildingCell.rz_bapm_status]">*@
+                    <div>
+                        @*<input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
+                        <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
+                        <input type="hidden" id="colIndex" value="month-@colCounter.ToString("00")" />
+                        <input type="hidden" id="bamp_status" value="@buildingCell.rz_bapm_status" />
+                        <input type="hidden" id="bapm_id" value="@buildingCell.rz_bapm_id" />
+                        <input type="hidden" id="hasReasons" value="@hasReasonsClass" />
+                        <input type="hidden" id="periodStatus" value="@buildingCell.cellStatus" />*@
+                        @if (String.IsNullOrEmpty(@valueCol.cellDispValue))
+                        { <br /> }
+                        else
+                        { 
+                          <span id="mValue">@valueCol.cellDispValue </span>
+                        }
+                    </div>
+                </td>
+               }
+                <td>
+                    @*style="color:black; font-weight:bold"*@
+                    <span>@myRow.rowTotalsCell.cellDispValue</span>
+                </td>
+            </tr>            
+        }
+        <!-- =============== End of loop section with One Row for Each Month ========================================= -->
+
+        <!-- ******* 'GOALS MISSED' ROW (goalsMissedRow) ********* -->
+        <tr class="totalsRow">
+            <td>
+                <span> @Model.goalsMissedRow.rowHeaderCell.cellDispValue</span>
+            </td>
+            @foreach (var gmCell in Model.goalsMissedRow.rowDataColumns)
+            {
+                <td>
+                    <span>
+                        @gmCell.cellDispValue
+                    </span>
+                </td>
+            }
+            <td>
+                <span> @Model.goalsMissedRow.rowTotalsCell.cellDispValue</span>
+            </td>
+        </tr>
+    </table>
+</div> <!-- End of DIV Table Table -->

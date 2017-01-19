@@ -40,24 +40,22 @@ td.center {
     background-color: white;
 }
 
-.headerRow {
+/*.headerRow {
     padding: 0px;
     width: 98%;
     margin-left: 1px;
     border-bottom: 1px solid black;
     min-width: 100%;
-    /*border-top-left-radius: 5px;
-    border-top-right-radius:5px;*/
     background-color: #f0eaea;
     font-weight: bold;
     display: flex;
     flex-wrap: wrap;
-}
+}*/
 
-.headerRow > div[class*='col-'] {
+/*.headerRow > div[class*='col-'] {
     display: flex;
     flex-direction: column;
-}
+}*/
 
 .rowHeader {
     padding: 0px;
@@ -65,13 +63,7 @@ td.center {
     background-color: #f0eaea;
     font-weight: bold;
 }
-.buildingRowX {
-    padding: 0;
-    width: 98%;
-    margin-left: 1px;
-    border-bottom: 1px solid #c6c4c4;   
-    min-width: 100%;
-}
+
 
 .rHover:hover {
     border-top: 1px solid #4a6b7f !important;
@@ -98,12 +90,19 @@ td.center {
     border-bottom: 1px solid #4a6b7f;
 }
 
-.buildingCol {
-    border-left: 1px solid #c6c4c4;     /*#f1f1f1*/
+/*.buildingCol {
+    border-left: 1px solid #c6c4c4;
     text-align: center;    
     padding: 5px;
-    /*vertical-align: middle !important;*/
+}*/
+.metricTable tr td {
+    padding:5px !important;
 }
+.metricTable td:not(:first-child) {
+    border-left: 1px solid #c6c4c4 !important; 
+    text-align: center;
+}
+
 
 .scoreCol {
     border-left: 1px solid gray !important;
@@ -116,9 +115,6 @@ td.center {
     padding:0; 
     background-color: #fbfbfb
 }
-/*.valueRow:hover td  {
-    background-color: #f1f1f1 !important;
-}*/
 
 
     /* ======= Animated Check Box Styling ==================*/

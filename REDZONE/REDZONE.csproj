@@ -213,7 +213,6 @@
     <Compile Include="Controllers\Api\DSC_LCController.cs" />
     <Compile Include="Controllers\AppErrorController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
-    <Compile Include="Controllers\ExecutiveSummaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuBarController.cs" />
     <Compile Include="Controllers\MetricController.cs" />
@@ -487,7 +486,6 @@
     <Content Include="Views\Metric\Index.cshtml" />
     <Content Include="Views\MenuBar\_RZDM_MenuOption.cshtml" />
     <Content Include="Views\Metric\_Upload.cshtml" />
-    <Content Include="Views\ExecutiveSummary\MonthlySummary.cshtml" />
     <Content Include="Views\Home\BuildingSummary.cshtml" />
     <Content Include="Views\Home\MetricSummary.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
@@ -512,10 +510,12 @@
     <Content Include="Views\MenuBar\_RZ_TeamsFlag.cshtml" />
     <Content Include="Views\Tasks\_accountableUsers.cshtml" />
     <Content Include="Views\Home\Chat.cshtml" />
+    <Content Include="Views\Home\_BuildingSummaryMetric.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ExecutiveSummary\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>
