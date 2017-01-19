@@ -267,7 +267,7 @@ namespace REDZONE.Controllers
                 }
             }
 
-            return "Action Plan not Submitted: Alert sent to " + Session["email"].ToString() + " Response Message: " + String.Join("-", eNotification.emailLog);
+            return "AP NOTIFICATIONS: (Action Plan not Submitted): Notification Alert sent to " + Session["email"].ToString() + " Response Message: " + String.Join("-", eNotification.emailLog);
             //return returnResultMessage(status);       //Line Commented out for email Notification testing
         }
 
