@@ -72,14 +72,14 @@
                     <div class="row" style="margin-bottom:10px; padding:0px;">
                         <div class="input-group col-sm-10 col-sm-offset-1" style="padding:0px;">
                             <span class="input-group-btn" style="padding:0px;">
-                                <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Building" @Model.statusPrevPeriod>
+                                <button id="btn-lastmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlPrevPeriod'" title="Navigate to Previous Year" @Model.statusPrevPeriod>
                                     <span class="glyphicon glyphicon-chevron-left"></span>
                                 </button>
                             </span>
                             @*<span style="min-width:100%; text-align:center; vertical-align:middle; font-size:large; padding:0px">Period: @Model.year</span>*@
                             <input type="text" class="form-control" value="@Model.year" readonly="readonly" style="min-width:100%; text-align:center; font-weight:bold; font-size:large; padding:0px">
                             <span class="input-group-btn">
-                                <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Building" @Model.statusNextPeriod>
+                                <button id="btn-nextmonth" type="button" class="btn btn-primary" style="float:right; width:60px;" onclick="location.href='@Model.urlNextPeriod'" title="Navigate to Next Year" @Model.statusNextPeriod>
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </button>
                             </span>

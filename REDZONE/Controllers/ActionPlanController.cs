@@ -254,7 +254,6 @@ namespace REDZONE.Controllers
 
             //string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing
 
-
             string status = "Success";
             if (returnResultMessage(status).Equals("Success"))
             {// The Action Plan was submitted successfully. Send email notification to Alex
