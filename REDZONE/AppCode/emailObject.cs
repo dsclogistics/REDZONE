@@ -68,7 +68,7 @@ namespace REDZONE.AppCode
             // Verify that the Email Message is Fully Formed
             if (msgIsReady)
             {
-                SmtpClient smtp = new SmtpClient("192.168.2.13");
+                SmtpClient smtp = new SmtpClient("192.168.2.13"); //gmail server
                 //// Add credentials if the SMTP server requires them.
                 //smtp.Credentials= System.Net.CredentialCache.DefaultNetworkCredentials;
                 smtp.Send(myEmailMessage);
