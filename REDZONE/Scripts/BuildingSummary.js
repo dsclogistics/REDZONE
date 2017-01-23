@@ -1,6 +1,6 @@
-﻿
-$(document).ready(function () {
-    //Set the current page as the "back URL" so we can return to this page once we bavigate out
+﻿$(document).ready(function () {
+
+    //Set the current page as the "back URL" so we can return to this page once we navigate out
 
     //alert("Setting Local storage back URL: " + window.location.href);
     localStorage.setItem("backUrl", window.location.href);
@@ -477,9 +477,10 @@ $('#APhistory').on('click', '.btnVieAP', function () {
     $(this).children('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
 });
 //------------------------------------------------------------------------------------
-$('#btnActionsRequired').click(function () {
+$('.btnActionsRequired').click(function () {
     showPopupForm("SCORE REQUIRED ACTIONS", scoreActionContent, "N");
 });
+
 //------------------------------------------------------------------------------------
 $(".collapse").on('shown.bs.collapse', function () {
     $('html, body').animate({ scrollTop: $(document).height() }, "slow");        //Scroll to the botttom of the page to avoid hidding the newly Expanded Section

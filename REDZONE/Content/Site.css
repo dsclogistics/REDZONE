@@ -82,6 +82,10 @@ textarea {
     color:black;
     background-color:#ffbb8b;   /*Light Red*/
 }
+.Score-Met, .Score-Red3, .Score-Red4, .Score-Red5 {
+    font-weight:bold;
+}
+
 .Score-Met {
     background-color: #C5E0B3;   /* #b3ff99 Light Green Color*/
 }

@@ -12,6 +12,16 @@ namespace REDZONE.Models
         public List<rzRow> dataRows = new List<rzRow>();
         public rzRow goalsMissedRow = new rzRow();
         public List<string> colWidths = new List<string>();
+        public int dataColsCount { get { return goalHeadingsRow.rowDataColumns.Count; } }
+        public int dataRowsCount { get { return dataRows.Count; } }
+        public int getMetricIndex(string term) {
+            return metricHeadingsRow.rowDataColumns.FindIndex(x => x.cellDispValue == term);
+            //for simple String Lists:    stringList.IndexOf("ItemToSearch");
+        }
+        public int getRowIndex(string term)
+        {
+            return dataRows.FindIndex(x => x.rowHeaderCell.cellDispValue == term);
+        }
     }
 
     public class rzRow
@@ -39,19 +49,22 @@ namespace REDZONE.Models
 
     public class rzCell
     {  // This CLASS represents a single Cell in a Table Row
+        public string cellMPVid { get; set; }      //Metric Period Value Id (mpvId)
         public int cellOrder {get;set;}            //Column Index in the Table
-        public string cellValue { get; set; }      //Cell Actual Value
-        public string cellDispValue { get; set; }      //Cell Display Value
+        public string cellValue { get; set; }      //Cell Actual Value      (mpv value)
+        public string cellDispValue { get; set; }  //Cell Display Value
         public string cellURL { get; set; }        //Cell URL http link when clicked
         public bool isViewable { get; set; }       //Whether it's value gets displayed or hidded
-        public bool isValueMet {get; set; }        //i.e. "isGoalMet"
+        public bool isGoalMet {get; set; }         //i.e. "isGoalMet"
         public string displayClass { get; set; }   //Determines color Scheme of Cell
-        public string cellStatus { get; set; }            //                      ???????????????????????????
+        public string cellStatus { get; set; }     // Closed, Open, Mixed, etc
         public string caption { get; set; }        //For Title Property (mouseover caption)
         public string cellOwner { get; set; }
+        public string cellMonth { get; set; }
         public string cellLastUpdt { get; set; }
+        public string cellNextAction { get; set; }
+        public string cellNextActionLink { get; set; }
         public metricInfo cellMetricInfo = new metricInfo();             //Metric Information Related to this cell         [For 'Value' Cells only]  
-        public metricPeriodInfo mpInfo = new metricPeriodInfo();                 //Metric Period Information Related to this cell. [For 'Value' Cells only]        
         public actionPlanInfo apInfo = new actionPlanInfo();                 //Action Plan Information Related to this cell    [For 'Value' Cells only]
 
         //public string rowMeasuredId { get; set; }           //?????????????????
@@ -66,7 +79,9 @@ namespace REDZONE.Models
             cellStatus = "Inactive";
             cellValue = "";
             cellDispValue = "";
-            displayClass = "";              // Add The Default neutral gray color schema   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  TO DO !!!!!!!!!!!!!
+            cellMonth = "";
+            displayClass = "cell-NoValue";        // Add The Default neutral gray color schema
+            cellMetricInfo.metricDoubleValue = 0;
         }
         //-------- End of Constructor ----------
         //public void setCell(){
@@ -78,16 +93,9 @@ namespace REDZONE.Models
     public class metricInfo
     {
         public string mtrc_id { get; set; }
+        public string metricPeriodId { get; set; }
         public string metricName { get; set; }
-        public string metricValue { get; set; }
-        public double metricDoubleValue { get; set; }
-    }
-
-    public class metricPeriodInfo
-    {
-        public string mpId { get; set; }
-        public string mpValue { get; set; }
-
+        public double metricDoubleValue { get; set; }        
     }
 
     public class actionPlanInfo
@@ -98,5 +106,6 @@ namespace REDZONE.Models
         public string rz_bapm_status { get; set; }   //Building Action Plan Metric Status
         public string nextCellAction { get; set; }   //Next action to take Based on the Cell Metric Value Status and the Current User Authority
         public string nextCellActionLink { get; set; }
+        public string apDisplayClass { get { return hasReasons?"note":""; } }
     }
 }

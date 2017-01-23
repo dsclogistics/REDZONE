@@ -14,12 +14,13 @@ namespace REDZONE.AppCode
     public bool msgIsReady
     {
         get {
+            emailLog.Clear();         //Reset all the Object Log Entries
             if (String.IsNullOrEmpty(myEmailMessage.From.Address) ) { emailLog.Add("The Sender Email Address is Missing"); }
             if (myEmailMessage.To.Count == 0) { emailLog.Add("Email Message must have at list one Recipient"); }
             if (String.IsNullOrEmpty(myEmailMessage.Subject)) { emailLog.Add("Email Subject Line is Required"); }
             if (String.IsNullOrEmpty(myEmailMessage.Body)) { emailLog.Add("Email Body Text cannot be blank"); }
-            if (emailLog.Count > 0 ){ return false; }
-            else{ return true;}
+            return !(emailLog.Count > 0);
+            //if (emailLog.Count > 0 ){ return false; } else{ return true;}
        }
     }
     // ============= END OF Public Class Properties DECLARATIONS =============
@@ -29,6 +30,7 @@ namespace REDZONE.AppCode
     public emailObject(string sender, string receiver, string subject, string emailMsgText)
     {
         myEmailMessage = new MailMessage(sender, receiver, subject, emailMsgText);
+
     }  
     // --------  END OF CLASS CONSTRUCTORS----------------------
 
@@ -54,7 +56,12 @@ namespace REDZONE.AppCode
         MailAddress receiver = new MailAddress(eAddress, displayName);
         myEmailMessage.Bcc.Add(receiver);
     }
-
+    public void addAttachment(string fileName) {
+        if (!String.IsNullOrEmpty(fileName.Trim())) {
+            Attachment at = new Attachment(fileName);
+            myEmailMessage.Attachments.Add(at);
+        }        
+    }
     public bool sendEmail()
     {
         try {

@@ -252,17 +252,17 @@ namespace REDZONE.Controllers
             //**FD 01/19/2017 Added Email notification Capability**
             emailObject eNotification = new emailObject();
 
-            //string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing
-
-
+            //string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing only
             string status = "Success";
+
             if (returnResultMessage(status).Equals("Success"))
             {// The Action Plan was submitted successfully. Send email notification to Alex
-                string senderName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString() + Session["last_name"].ToString();
-                string senderEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
-                string emailMessage = String.Format("Hi {0} [{1}] Your action Plan was submitted successfully", senderName, senderEmail);
-                if (!String.IsNullOrEmpty(senderEmail)) {
-                    eNotification = new emailObject("The_president@dsc-logistics.com", senderEmail, "Action Plan Submition Notification", emailMessage);
+                string submitterName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString() + " " + Session["last_name"].ToString();
+                string submitterEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
+                string emailMessage = String.Format("Hi {0} [{1}] Your action Plan was submitted successfully", submitterName, submitterEmail);
+                if (!String.IsNullOrEmpty(submitterEmail)) {
+                    eNotification = new emailObject("The_president@dsc-logistics.com", submitterEmail, "Action Plan Submition Notification", emailMessage);
+                    eNotification.setSender("The_president@dsc-logistics.com", "The President");  //Not needed but Just to Add a 'Display Name' :)
                     eNotification.sendEmail();
                 }
             }

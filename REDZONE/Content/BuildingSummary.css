@@ -73,14 +73,14 @@
 .note:after { /* Magic Happens Here to Add Comment Indicator Excell like style to a cell! */
     content: "";
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -5px;    
+    right: -4px;  
     width: 0; 
     height: 0; 
     display: block;
-    border-left: 11px solid transparent;
-    border-bottom: 11px solid transparent;
-    border-top: 11px solid black;  /*Black Corner Triangle*/
+    border-left: 8px solid transparent;  /*original value was 11px*/
+    border-bottom: 8px solid transparent;
+    border-top: 8px solid black;  /*Black Corner Triangle*/
     /*border-top: 11px solid #f00;*/  /*Red Corner Triangle*/
 } /* </magic> */
 
