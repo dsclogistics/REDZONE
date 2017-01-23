@@ -95,7 +95,8 @@ namespace REDZONE.Models
         public string mtrc_id { get; set; }
         public string metricPeriodId { get; set; }
         public string metricName { get; set; }
-        public double metricDoubleValue { get; set; }        
+        public double metricDoubleValue { get; set; }
+        public string metricMeetingDate { get; set; }
     }
 
     public class actionPlanInfo

@@ -558,7 +558,7 @@ namespace REDZONE.AppCode
                         bSummary.summaryByMetric.goalsMissedRow.rowDataColumns.Add(new rzCell());
                         colIndex++;
                     }
-                    // ------- Finished Adding all Metric Data Columns/cells for each Row, table array is not complete ----------
+                    // ------- Finished Adding all Metric Data Columns/cells for each Row, table array is now complete ----------
 
                     //----------------------------------------------------------------------------------------------------------
                     //----- Start populating all the Table Cell Values and properties from the "buildingmetrics" array ---------
@@ -604,7 +604,36 @@ namespace REDZONE.AppCode
                             mvCell.caption = "[STS: " + (string)apiCellValue["rz_mps_status"] + " - " + (string)apiCellValue["rz_bapm_status"] + "]";
                         }
 
+                        ////Get The current Cells, Metric Meeting Date
+                        //string currentMetric = (string)apiCellValue["mtrc_prod_display_text"];
+                        //switch(currentMetric) {
+                        //    case "Safety":  //Tuesday
+                        //        mvCell.cellMetricInfo.metricMeetingDate = getNthDayofMonth(4, "Tuesday", (string)apiCellValue["MonthName"], p_year);
+                        //        break;
+
+                        //    case "OT":       //Wednesday
+                        //    case "Net FTE":
+                        //        mvCell.cellMetricInfo.metricMeetingDate = getNthDayofMonth(4, "Wednesday", (string)apiCellValue["MonthName"], p_year);
+                        //        break;
+
+                        //    case "Turnover":  //Thursday
+                        //    case "Trainees":
+                        //        mvCell.cellMetricInfo.metricMeetingDate = getNthDayofMonth(4, "Thursday", (string)apiCellValue["MonthName"], p_year);
+                        //        break;
+
+                        //    case "IT Tickets":  //Friday
+                        //        mvCell.cellMetricInfo.metricMeetingDate = getNthDayofMonth(4, "Friday", (string)apiCellValue["MonthName"], p_year);
+                        //        break;
+
+                        //    case "Volume":
+                        //    case "Financial":    //No meeting
+                        //        mvCell.cellMetricInfo.metricMeetingDate = "Not Required";
+                        //        break;
+                        //    default:
+                        //        break;                        
+                        //}
                         // ------------------- Finished Mapping all indvidual Cell Values ----------------------------------- /
+
 
                         //  Populate all the Row Totals (Building Score for each Month Row which is the number of "reds" for closed metrics only)
 
@@ -771,6 +800,37 @@ namespace REDZONE.AppCode
                                             //tmp.nextCellActionLink = "";          // ***** Add Logic Here to calculate the next action Link ******
                                             // *********************************************************
 
+                                            //Set the Scheduled Owners Meeting Date for this metric cell
+                                            string currentMetric = (string)apiCellValue["mtrc_prod_display_text"];
+                                            switch (currentMetric)
+                                            {
+                                                case "Safety":  //Tuesday
+                                                    tmp.metricMeetingDate = getNthDayofMonth(4, "Tuesday", (string)apiCellValue["MonthName"], p_year);
+                                                    break;
+
+                                                case "OT":       //Wednesday
+                                                case "Net FTE":
+                                                    tmp.metricMeetingDate = getNthDayofMonth(4, "Wednesday", (string)apiCellValue["MonthName"], p_year);
+                                                    break;
+
+                                                case "Turnover":  //Thursday
+                                                case "Trainees":
+                                                    tmp.metricMeetingDate = getNthDayofMonth(4, "Thursday", (string)apiCellValue["MonthName"], p_year);
+                                                    break;
+
+                                                case "IT Tickets":  //Friday
+                                                    tmp.metricMeetingDate = getNthDayofMonth(4, "Friday", (string)apiCellValue["MonthName"], p_year);
+                                                    break;
+
+                                                case "Volume":
+                                                case "Financial":    //No meeting
+                                                    tmp.metricMeetingDate = "Not Required";
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+
+
                                         }
                                         if (String.IsNullOrEmpty(tmp.displayClass))
                                         {
@@ -870,7 +930,7 @@ namespace REDZONE.AppCode
         {
             return goalValue.Replace("<=", "&le;").Replace(">=", "&ge;");
         }
-
+        //--------------------------------------------------------------------------------------------------
         public string getMPV_NextAction(string ap_status, string mtrc_period_id, string building_ID, string currentUserSSO)
         {
             dscUser currentUser = new dscUser(currentUserSSO);  //Retrieve the currently Logged-on User Info
@@ -2510,7 +2570,59 @@ namespace REDZONE.AppCode
 
             return monthShort;
         }
+        private string getNextDayName(string dayName) {
+            switch (dayName.ToUpper()) {
+                case "SUNDAY":
+                    return "Monday";
+                case "MONDAY":
+                    return "Tuesday";
+                case "TUESDAY":
+                    return "Wednesday";
+                case "WEDNESDAY":
+                    return "Thursday";
+                case "THURSDAY":
+                    return "Friday";
+                case "FRIDAY":
+                    return "Saturday";
+                case "SATURDAY":
+                    return "Sunday";
+                default:
+                    return "";
+            }
+        }
 
+        private string getNthDayofMonth(int nthDay, string DayName, string Month, string Year)
+        {
+            if (nthDay < 1 || nthDay > 5) { return "[Invalid Date]";}   //No month can have more than 5 instances of a given Day
+
+            DateTime calMonth;
+
+            if (DateTime.TryParse(String.Format("{0} 01, {1}", Month, Year), out calMonth) && !getNextDayName(DayName).Equals(""))
+            {   // The input Date and the Day Name must be valid  at this point
+                //For Metrics purposes, the meeting date is the following month
+                calMonth = calMonth.AddMonths(1);
+                string compareDay = calMonth.DayOfWeek.ToString().ToUpper();
+
+                for (int x = 0; x < 7; x++) {
+                    if (compareDay.ToUpper().Equals(DayName.ToUpper()))
+                    {//We found the day we are looking for
+                        calMonth = calMonth.AddDays(x);
+                        break;
+                    }
+                    else {
+                        compareDay = getNextDayName(compareDay);
+                    }
+                }
+                //At this point we know the date of the first Day Name that we are looking for.
+                //Add (nthDay-1) weeks to the date we found
+                int daystoAdd = (nthDay - 1) * 7;
+                //calMonth.AddDays((nthDay - 1)* 7);
+                calMonth = calMonth.AddDays(daystoAdd);
+                return calMonth.ToString("MMM dd, yyyy");
+            }            
+
+            return "[Invalid Date]";
+        }
         //========= This Function "getMetricDisplayClass" returns the html class to use for Color Display for metric value cell based on the value, isGoalMet flag and metric status =========
         private string getMetricDisplayClass(string mValue, string isGoalMet, string status)
         {
