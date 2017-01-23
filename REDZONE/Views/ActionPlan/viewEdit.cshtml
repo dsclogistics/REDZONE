@@ -177,6 +177,11 @@
                                 @if (!String.IsNullOrEmpty(@Model.actionPlanList.First().submittedBy))
                                 {
                                     <span>Submitted By: @Model.actionPlanList.First().submittedBy</span>
+                                    <input type="hidden" id="hdnSubmitter" value="@Model.actionPlanList.First().submittedBy" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" id="hdnSubmitter" value="" />
                                 }
                             </div>
                         </div>

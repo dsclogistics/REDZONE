@@ -249,6 +249,9 @@ function buildSubmitAPReviewJSON(status) {
 
 function submitAPReview(status) {
     var payload = buildSubmitAPReviewJSON(status);
+    var submitter = $('#hdnSubmitter').val();
+    //alert(submitter);
+    //alert(status);
     //alert(payload);
 
     $.ajax({
@@ -258,7 +261,7 @@ function submitAPReview(status) {
         cache: false,
         //type: "POST",
         //data: payload,
-        data: { raw_json: payload },
+        data: { raw_json: payload, submitter: submitter, reviewResult: status },
         //contentType: "application/json; charset=utf-8",
         //dataType: "json",
         error: function (jqXHR, textStatus, errorThrown) {

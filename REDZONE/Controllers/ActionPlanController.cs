@@ -250,31 +250,52 @@ namespace REDZONE.Controllers
         public string submitActionPlan(string raw_json)
         {
             //**FD 01/19/2017 Added Email notification Capability**
-            emailObject eNotification = new emailObject();
+            //emailObject eNotification = new emailObject();
 
-            //string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing
+            string status = api.submitActionPlan(raw_json.Replace("\n", "\\n"));       //Line Commented out for email Notification testing
 
-            string status = "Success";
-            if (returnResultMessage(status).Equals("Success"))
-            {// The Action Plan was submitted successfully. Send email notification to Alex
-                string senderName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString() + Session["last_name"].ToString();
-                string senderEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
-                string emailMessage = String.Format("Hi {0} [{1}] Your action Plan was submitted successfully", senderName, senderEmail);
-                if (!String.IsNullOrEmpty(senderEmail)) {
-                    eNotification = new emailObject("The_president@dsc-logistics.com", senderEmail, "Action Plan Submition Notification", emailMessage);
-                    eNotification.sendEmail();
-                }
-            }
+            //string status = "Success";
+            //if (returnResultMessage(status).Equals("Success"))
+            //{// The Action Plan was submitted successfully. Send email notification to Alex
+            //    string senderName = (Session["first_name"] == null) ? "" : Session["first_name"].ToString() + Session["last_name"].ToString();
+            //    string senderEmail = (Session["email"] == null) ? "" : Session["email"].ToString();
+            //    string emailMessage = String.Format("Hi {0} [{1}] Your action Plan was submitted successfully", senderName, senderEmail);
+            //    if (!String.IsNullOrEmpty(senderEmail)) {
+            //        eNotification = new emailObject("The_president@dsc-logistics.com", senderEmail, "Action Plan Submission Notification", emailMessage);
+            //        eNotification.sendEmail();
+            //    }
+            //}
 
-            return "AP NOTIFICATIONS: (Action Plan not Submitted): Notification Alert sent to " + Session["email"].ToString() + " Response Message: " + String.Join("-", eNotification.emailLog);
-            //return returnResultMessage(status);       //Line Commented out for email Notification testing
+            //return "AP NOTIFICATIONS: (Action Plan not Submitted): Notification Alert sent to " + Session["email"].ToString() + " Response Message: " + String.Join("-", eNotification.emailLog);
+            return returnResultMessage(status);       //Line Commented out for email Notification testing
         }
 
         //POST: /ActionPlan/submitActionPlanReview
         [HttpPost]
-        public string submitActionPlanReview(string raw_json)
+        public string submitActionPlanReview(string raw_json, string submitter, string reviewResult)
         {
+            //**AC 01/20/2017 Added Email notification Capability**
+            emailObject eNotification = new emailObject();
+
             string status = api.submitAPReview (raw_json.Replace("\n", "\\n"));
+
+            //string status = "Success";
+            if(submitter != ""){
+                dscUser submitUser = new Models.dscUser(submitter);
+
+                if (returnResultMessage(status).Equals("Success"))
+                {
+                    // The Action Plan was submitted successfully. Send email notification to Alex
+                    string recipientName = (submitUser.FirstName == null) ? "" : submitUser.FirstName + " " + submitUser.LastName.ToString();
+                    string recipientEmail = (submitUser.emailAddress == null) ? "" : submitUser.emailAddress.ToString();
+                    string emailMessage = String.Format("Hi {0} [{1}] Your action plan was {2}.", recipientName, recipientEmail, reviewResult.ToLower());
+                    if (!String.IsNullOrEmpty(recipientEmail))
+                    {
+                        eNotification = new emailObject("redzone@dsc-logistics.com", recipientEmail, "Action Plan Review Notification", emailMessage);
+                        eNotification.sendEmail();
+                    }
+                }
+            }
 
             return returnResultMessage(status);
         }
