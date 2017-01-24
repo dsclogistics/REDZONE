@@ -8,8 +8,10 @@
     <!-- ******* HEADERS/TITLES ROW (metricHeadingsRow) ********* -->
     <tr class="rowHeader">
         <td style="width:@Model.colWidths[0]">
-            <span> @Model.metricHeadingsRow.rowHeaderCell.cellDispValue</span>
-            <span class="btnFlip" style="float:right"><img src="~/Images/ChangeView.png" title="Pivot Table Data" /></span>
+            <span class="btnFlip" style="float:right">
+                <span style="color: darkgray; font-size:12px">Switch Rows to Columns</span>
+                <img style="margin-left:3px" src="~/Images/ChangeView.png" title="Pivot Table Data" />
+            </span>
         </td>
         @foreach (var metricCellHdr in Model.metricHeadingsRow.rowDataColumns)
         {

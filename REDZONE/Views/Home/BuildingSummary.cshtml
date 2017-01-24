@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div class="row ">
-                        <span style="font-size:x-large; font-weight:bold; color:darkblue">Building Summary</span>
+                        <span style="font-size:x-large; font-weight:bold; color:darkblue">Monthly Building Summary</span>
                     </div>
                     @* <----------- Navigation Field by Building*@
                     <div class="row" style="margin-bottom:3px">
@@ -110,8 +110,10 @@
                     <tr class="rowHeader">
                         <!-- ******* HEADERS/TITLES ROW ********* -->
                         <td style="width:14.99%; min-width:180px;">
-                            <span style="font-weight:bold"> @Model.buildingHeadings.rowName</span>
-                            <span class="btnFlip" style="float:right"><img src="~/Images/ChangeView.png" title="Pivot Table Data" /></span>
+                            <span class="btnFlip" style="float:right; padding:1.5px">
+                                <span style="color: darkgray; font-size:12px">Switch Rows to Columns</span>
+                                <img style="margin-left:3px" src="~/Images/ChangeView.png" title="Pivot Table Data" />
+                            </span>
                         </td>
                         <td style="width:8.33%; background-color: #bbedff">
                             Goal
