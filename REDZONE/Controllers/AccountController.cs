@@ -244,39 +244,14 @@ namespace REDZONE.Controllers
         [HttpGet]
         public ActionResult userInquire(string userSSO="")
         {
-            dscUser appUser;
             userSSO = userSSO.Trim();
-            if (String.IsNullOrEmpty(userSSO)) { 
-            //No User was defined. Create Empty User and redirect to the View
-                appUser = new dscUser();
-                return View(appUser);
-            }
-
-            //---------------- TEST SECTION FOR LDAP Signon Validation using encryption ---------------
-            if (userSSO.Contains("^")) { 
-            //This is AD Testing Data. Create a AD validation test used and return user to view
-                appUser = new dscUser();
-                string[] temp = userSSO.Split('^');
-                appUser.FirstName = temp[0];
-                appUser.LastName = temp[1];
-                appUser.userStatusMsg = "LDAP Authentication Test Message";
-                appUser.dbUserId = "999";
-                return View(appUser);
-            }
-            //----------- END of LDAP TEST Validation  ---------------
-
-            appUser = new dscUser(userSSO);
-            //string uRoles = appUser.getUserRoles();
-            //List<string> roleList = appUser.getUserRolesList();
-            //ViewBag.rzUserData = String.IsNullOrEmpty(userSSO)? "" : xUser.getUserJsonData();
-            return View(appUser);
+            return String.IsNullOrEmpty(userSSO.Trim()) ? View(new dscUser()) : View(new dscUser(userSSO));
         }
         
         [HttpGet]
         public PartialViewResult _UserInfo()
         { //This controller will display the current Logged On User Credential Information
-            dscUser appUser = new dscUser(User.Identity.Name);
-            return PartialView(appUser);
+            return PartialView(new dscUser(User.Identity.Name));
         }
 
         [HttpPost]
@@ -287,7 +262,6 @@ namespace REDZONE.Controllers
 
             return "Success";
         }
-
 
         //--------------------------------------------------------------------------------------------------------------\\
         #region OriginalTemplateMethods
