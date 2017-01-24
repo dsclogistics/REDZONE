@@ -134,6 +134,9 @@ function buildSubmitAPReviewJSON(status) {
 function submitAPReview(status) {
     var payload = buildSubmitAPReviewJSON(status);
     var bapmId = $('#hdnWipBapmId').val();
+    var submitter = $('#hdnSubmitter').val();
+    var metric = $('#metricName').text();
+    var building = $('#buildingName').text();
     //alert(payload);
 
     $.ajax({
@@ -143,7 +146,7 @@ function submitAPReview(status) {
         cache: false,
         //type: "POST",
         //data: payload,
-        data: { raw_json: payload },
+        data: { raw_json: payload, submitter: submitter, reviewResult: status, metric: metric, building: building },
         //contentType: "application/json; charset=utf-8",
         //dataType: "json",
         error: function (jqXHR, textStatus, errorThrown) {
