@@ -33,14 +33,6 @@
         background-color: #fbfbfb;
         overflow-x: hidden;
     }
-
-    .full-height {
-        height: 500px;
-    }
-    .med-height {
-        height: 250px;
-    }
-
 </style>
 
 @{
@@ -51,8 +43,8 @@
     string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
     double colWidth = .72 / Model.metricRows.Count;
     string strColWidth = colWidth.ToString("00.00%");
-    string panelHeight = (applyFilter == "checked") ? "med-height" : "full-height";
-    string vScrollStatus = (applyFilter.Equals("checked")) ? "hidden" : "scroll";
+    //string panelHeight = (applyFilter == "checked") ? "med-height" : "full-height";
+    string vScrollStatus = (applyFilter.Equals("checked") && Model.metricRows.Count() < 15) ? "hidden" : "scroll";
     strColWidth = "6%";
 }
 
@@ -217,7 +209,7 @@ else
 
 
                     <!-- (((((((((((  SCROLLABLE BUILDING ROWS DETAIL PANEL ))))))))))))))) -->
-                    <div class="panel-body scroll-Body @panelHeight" style="overflow-y: @vScrollStatus">
+                    <div class="panel-body scroll-Body" style="overflow-y: @vScrollStatus ; height: @Model.tableDisplaySize">
                         <!-- BUILDING DATA ARRAY ROWS -->
                         <div class="row " style="margin:0; padding:0">
                             <table class="metricTable" style="margin:0; width:100%; ">

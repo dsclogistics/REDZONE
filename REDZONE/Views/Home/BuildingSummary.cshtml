@@ -14,6 +14,9 @@
         display: table-cell;
         vertical-align: middle;
     }
+    .btnFlip:hover {
+        cursor: pointer;
+    }
 </style>
 
 <div class="row" style="font-family:Arial; margin-top: 5px">
@@ -28,8 +31,8 @@
         <div class="panel-heading" style="text-align:center; padding: 0px 15px; ">
             <div class="row">
                 <div class="col-sm-2" style="text-align:left; padding:0; padding-left:10px">
-                    @if (Model.canFilterBuildings)
-                    {
+                  @if (Model.canFilterBuildings)
+                  {
                     <div style="margin:0; padding:0; margin-top:38px">
                         <label class="switch" style="display:inline-block; margin:0;">
                             <input class="switch-input" id="chkMyBuildingsOnly" type="checkbox" @Model.applyFilter />
@@ -38,15 +41,7 @@
                         </label>
                         <span class="" style="font-size:12px; margin:0; padding:0; padding-top:5px; display:inline-block">View my Buildings Only</span>
                     </div>
-
-                    @*<div class="checkbox" style="padding-left:45px; padding-top:76px">
-                            <label class="" style="text-align:left; padding:0; font-size: .8em">
-                                <input id="chkMyBuildingsOnly" type="checkbox" value="" @applyFilter>
-                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok" style="color: hsl(240, 45%, 40%); font-weight:bold"></i></span>
-                                <span id="chkText" style="font-size:12px">View my Buildings Only</span>
-                            </label>
-                        </div>*@
-                    }
+                  }
                 </div>
                 <div class="col-sm-8">
                     <div class="row ">
@@ -110,7 +105,7 @@
                     <tr class="rowHeader">
                         <!-- ******* HEADERS/TITLES ROW ********* -->
                         <td style="width:14.99%; min-width:180px;">
-                            <span class="btnFlip" style="float:right; padding:1.5px">
+                            <span class="btnFlip" style="float:right; padding:1.5px; ">
                                 <span style="color: darkgray; font-size:12px">Switch Rows to Columns</span>
                                 <img style="margin-left:3px" src="~/Images/ChangeView.png" title="Pivot Table Data" />
                             </span>

@@ -10,9 +10,8 @@
     string btnClassBldng = (ViewData["bntClassB"] == null) ? "" : ViewData["bntClassB"].ToString();
     string btnClassScore = (ViewData["bntClassS"] == null) ? "" : ViewData["bntClassS"].ToString();
     string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
-    string panelHeight = (applyFilter == "checked") ? "med-height" : "full-height";
     //string vScrollStatus = "scroll";  //or "hidden"
-    string vScrollStatus = (applyFilter.Equals("checked")) ? "hidden" : "scroll";
+    string vScrollStatus = (applyFilter.Equals("checked") && Model.buildings.Count() < 15) ? "hidden" : "scroll";
 }
 
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -34,7 +33,7 @@
 
     .scroll-Body {
         padding: 0px;
-        height: 560px;
+        /*height: 560px;*/
         overflow-x: hidden;
     }
     .scroll-Footer {
@@ -42,13 +41,6 @@
         background-color: #fbfbfb;
         overflow-x: hidden;
     }
-    .full-height {
-        height: 500px;
-    }
-    .med-height {
-        height: 200px;
-    }
-
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px; ">
     <!-- MAIN SCREEN PANEL -->
@@ -97,7 +89,6 @@
                     </div>
                 </div>
                 <div class="col-sm-2">
-
                 </div>
             </div>
         </div>
@@ -166,7 +157,7 @@
 
 
                     <!--  ******** START OF BUILDING DETAIL SECTION ****************************************************************-->
-                    <div class="panel-body scroll-Body @panelHeight" style="overflow-y: @vScrollStatus">
+                    <div class="panel-body scroll-Body" style="overflow-y: @vScrollStatus ; height: @Model.tableDisplaySize">
                         <div class="row " style="margin:0; padding:0">
                             <table class="metricTable" style="margin:0; width:100%">
                                 @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
@@ -190,7 +181,7 @@
                                     </tr>
                                 }
                             </table>
-                        </div>  
+                        </div>
                     </div> <!-- *********** END OF BUILDING ROWS DATA SECTION ************** -->
 
 

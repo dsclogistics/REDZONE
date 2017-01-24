@@ -155,11 +155,13 @@ namespace REDZONE.Models
                     }
 
                     //*********** DEVELOPMENT ONLY CODE ***************
+                    addRole("RZ_USER", "Red Zone");
+
                     //Add any additional Roles (soft coded values) that might be needed  
-                    foreach (string roleNew in REDZONE.AppCode.Util.getUserRolesList(SSO))
-                    {
-                        addRole(roleNew, "Red Zone");
-                    }
+                    //foreach (string roleNew in REDZONE.AppCode.Util.getUserRolesList(SSO))
+                    //{
+                    //    addRole(roleNew, "Red Zone");
+                    //}
                     //********* END OF DEVELOPMENT ONLY CODE **********
 
                     //Once Roles List is compiled, sort it by Product/Role in ascending order

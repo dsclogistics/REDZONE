@@ -39,6 +39,19 @@ namespace REDZONE.Models
                 return (1.00 / viewableColumns).ToString("0.0%");
             }
         }
+        public string tableDisplaySize
+        {
+            get
+            {
+                //Each Building Row uses about 28px. The max size we want to allow is 504px or 18 rows. Minimum size is 100px
+                if (metricRows.Count < 2) { return "60px"; }
+                if (metricRows.Count > 18) { return "504px"; }
+                return (metricRows.Count * 28).ToString("0px");
+                //string returnValue = (metricRows.Count * 28).ToString("0px");
+                //return returnValue;
+            }
+        }
+
         //-------- Empty Constructor -----------
         public MetricSummaryViewModel() { }
         //\-------- End of Constructor ----------/

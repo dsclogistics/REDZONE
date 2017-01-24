@@ -17,13 +17,23 @@ namespace REDZONE.Models
         public string statusNextMonth { get; set; }
         public string statusPrevMonth { get; set; }
         public bool canFilterBuildings { get; set; }
+        public string tableDisplaySize
+        {
+            get
+            {
+                //Each Building Row uses about 28px. The max size we want to allow is 504px or 18 rows. Minimum size is 100px
+                if (buildings.Count < 2) { return "60px"; }
+                if (buildings.Count > 18) { return "504px"; }
+                return   (buildings.Count * 28).ToString("0px");
+            }
+        }
         public BuildingMetricEntity goalsRow = new BuildingMetricEntity();
         public BuildingMetricEntity goalsMissedRow = new BuildingMetricEntity();
         public List<BuildingMetricEntity> buildings = new List<BuildingMetricEntity>();
         public List<string> allBuildings = new List<string>();
         public List<MetricHeader> allMetrics = new List<MetricHeader>();
         public List<string> allMonths = new List<string>();
-        
+
         //-------- Empty Constructor -----------
         public ExecutiveSummaryViewModel() { }
         //\-------- End of Constructor ----------/
@@ -68,9 +78,9 @@ namespace REDZONE.Models
         public string tm_period_id { get; set; }
         public string dsc_mtrc_lc_bldg_id { get; set; }
         public string cellValueURL { get; set; }
-        public bool isViewable { get; set; }  
+        public bool isViewable { get; set; }
         public string isGoalMet { get; set; }
-        public int score { get; set; }    
+        public int score { get; set; }
         public string displayClass { get; set; }
         public string cellStatus { get; set; }
         public string caption { get; set; }          //For Title Property (mouseover caption)
@@ -90,14 +100,15 @@ namespace REDZONE.Models
         public MeasuredCellEntity(string name)
         { metricName = name; }
         //-------- Instantiated Constructor -----------\
-        public MeasuredCellEntity(string mName, string mValue) {
+        public MeasuredCellEntity(string mName, string mValue)
+        {
             metricName = mName;
             metricValue = mValue;
         }
         //-------- End of Constructor ----------
     }
 
-   
+
     public class MeasuredRowEntity
     {// This represents a single Row in the Building Summary Spreadsheet
         public string rowName { get; set; }        //Row represents a "Metric"
@@ -117,5 +128,5 @@ namespace REDZONE.Models
         //\-------- End of Constructor ----------/
     }
 
-  
+
 }
