@@ -272,7 +272,7 @@ namespace REDZONE.Controllers
 
         //POST: /ActionPlan/submitActionPlanReview
         [HttpPost]
-        public string submitActionPlanReview(string raw_json, string submitter, string reviewResult)
+        public string submitActionPlanReview(string raw_json, string submitter, string reviewResult, string metric, string building)
         {
             //**AC 01/20/2017 Added Email notification Capability**
             emailObject eNotification = new emailObject();
@@ -288,7 +288,7 @@ namespace REDZONE.Controllers
                     // The Action Plan was submitted successfully. Send email notification to Alex
                     string recipientName = (submitUser.FirstName == null) ? "" : submitUser.FirstName + " " + submitUser.LastName.ToString();
                     string recipientEmail = (submitUser.emailAddress == null) ? "" : submitUser.emailAddress.ToString();
-                    string emailMessage = String.Format("Hi {0} [{1}] Your action plan was {2}.", recipientName, recipientEmail, reviewResult.ToLower());
+                    string emailMessage = String.Format("Hi {0} [{1}] Your action plan for {2} in {3} was {4}.", recipientName, recipientEmail, metric, building, reviewResult.ToLower());
                     if (!String.IsNullOrEmpty(recipientEmail))
                     {
                         eNotification = new emailObject("redzone@dsc-logistics.com", recipientEmail, "Action Plan Review Notification", emailMessage);
