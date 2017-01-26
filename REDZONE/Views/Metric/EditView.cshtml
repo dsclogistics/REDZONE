@@ -189,7 +189,17 @@
                 </div>
             }
             else
-            {
+                if (Model.isEntryPeriodExceeded && !User.IsInRole("RZ_ADMIN") && !User.IsInRole("MTRC_DATA_ADMIN") && !User.IsInRole("ADMIN"))
+                {
+                    <div class="row" style="margin:0; text-align:center">
+                        <span style="font-size:large; color:red">
+                            The Allowed Time to enter data has been exceeded. <br />
+                            Please contact your Administrator to close the current month.
+                        </span>                        
+                    </div>
+                }
+                else
+                {
                 <div class="row" id="sectionButtons" style="margin:0">
                     @*--------- Form Buttons Sections --------------*@
                     <div class="col-sm-2 col-sm-offset-1">
@@ -203,8 +213,8 @@
                         }
                     </div>
                     <div class="col-sm-4 col-sm-offset-2">
-                        <input type="button" id="btnSave" class="btn btn-primary" title="Click to Save Data without closing the Metric Period" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>               } style="width:80px" />
-                        <input type="button" id="btnPublish" class="btn btn-primary" value="PUBLISH" style="width:80px; margin-left:50px" title="Publishing Data will Save and Close the Current Metric Period" />
+                        <input type="button" id="btnSave" class="btn btn-primary" title="Click to Save Data without closing the Metric Period" value="SAVE" @if (ViewBag.fileuploaded != "Y") { <text> disabled="disabled" </text>  } style="width:80px" />
+                        <input type="button" id="btnPublish" class="btn btn-primary" value="PUBLISH" style="width:85px; margin-left:50px" title="Publishing Data will Save and Close the Current Metric Period" />
                         <input type="button" id="btnCancel" class="btn btn-primary" value="CANCEL" style="width:80px; margin-left:50px" />
                     </div>
                     @if (Model.isImportable)
@@ -222,6 +232,7 @@
                         </div>
                     }
                 </div>  <!-- ------ Form Buttons ROW End Section--------- -->
+
                 <div class="row alert-success" id="divMsg" style="padding: 7px; font-weight:bold; font-size:large; text-align:center; display:none">
                     @errorMessage
                 </div>

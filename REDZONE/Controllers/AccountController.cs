@@ -263,6 +263,15 @@ namespace REDZONE.Controllers
             return "Success";
         }
 
+        [HttpPost]
+        public string setUserBuildingView(string vFilter)
+        {
+            if (vFilter == "byMetric") { Session["buildingView"] = "byMetric"; }
+            else { Session["buildingView"] = "byMonth"; }
+
+            return "Success";
+        }
+
         //--------------------------------------------------------------------------------------------------------------\\
         #region OriginalTemplateMethods
         //// POST: /Account/LogOff                (Original Template Method)

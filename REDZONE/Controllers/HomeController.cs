@@ -108,6 +108,17 @@ namespace REDZONE.Controllers
             }
             BuildingSummaryViewModel1 bldngSummary = parcer.getBuildingSummaryView(year, buildingID, User.Identity.Name, filterByBuilding);
             
+            //Set the correct View that will be displayed based on the last User's Choice stored in Session Variable
+            if (Session["buildingView"] != null && Session["buildingView"].ToString().Equals("byMonth") )
+            {//The view is set to be By Month
+                bldngSummary.monthViewMode = "";
+                bldngSummary.summaryByMetric.viewMode = "display:none";
+            }
+            else
+            {//The view is set to be By Metric
+                bldngSummary.monthViewMode = "display:none";
+                bldngSummary.summaryByMetric.viewMode = "";
+            }
 
             //Retrieve the Current Logged on User Reviewer's metrics (If any)
             ViewBag.ReviewerMetrics = currentUser.getReviewerMetricIds();

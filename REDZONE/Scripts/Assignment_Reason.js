@@ -194,7 +194,7 @@ function saveReasons(startAP) {
             }
             else { //No need to redirect to the AP page. Just display a confirmation message
                 //alert("Reasons Saved Successfully\n\n=========== OPERATION RESULTS ===============\n" + d);
-                $("#msgFormBodyData").html('<span style="font-weight:bold; color:green">Reasons Saved Successfully</span><br /><br />=========== OPERATION RESULTS ===============<br />' + d.replaceAll("\n", "<br />"));
+                $("#msgFormBodyData").html('<span style="font-weight:bold; color:green">Reasons Saved Successfully</span><br /><br /><br />' + d.replaceAll("\n", "<br />"));
                 $('#reloadAfterPopup').val("Y");  //To trigger a relaod when popup is Closed
                 $('#msgForm').modal('show');
             }

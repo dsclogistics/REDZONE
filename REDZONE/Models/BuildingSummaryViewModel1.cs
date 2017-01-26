@@ -20,6 +20,7 @@ namespace REDZONE.Models
         public string statusPrevPeriod { get; set; }
         public string statusNextBuilding { get; set; }
         public string statusPrevBuilding { get; set; }
+        public string monthViewMode { get; set; }           //blank or "display:none" to show or hide The Month View based on user choice
         public bool canFilterBuildings { get; set; }
         public int viewableColumns { get; set; }
         public MeasuredRowEntity buildingHeadings = new MeasuredRowEntity();

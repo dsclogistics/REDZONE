@@ -14,6 +14,7 @@ namespace REDZONE.Models
         public List<string> colWidths = new List<string>();
         public int dataColsCount { get { return goalHeadingsRow.rowDataColumns.Count; } }
         public int dataRowsCount { get { return dataRows.Count; } }
+        public string viewMode { get; set; }   //blank or "display:none" to show or hide based on user choice
         public int getMetricIndex(string term) {
             return metricHeadingsRow.rowDataColumns.FindIndex(x => x.cellDispValue == term);
             //for simple String Lists:    stringList.IndexOf("ItemToSearch");

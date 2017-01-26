@@ -565,8 +565,34 @@ $('.btnFlip').click(function () {
         $('#viewByMetric').hide();
         $('#viewByMonth').show();
     }
+
+    //Store the new View Mode and send it to the Server to be set in Session Variable Scope to persist the view in later page loads
+    var viewMode = $('#viewMode').val();
+    $.ajax({
+        url: '/Account/setUserBuildingView',
+        method: "POST",
+        cache: false,
+        data: { vFilter: viewMode },
+        //contentType: "application/json; charset=utf-8",
+        //dataType: "json",
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Failed to register the Display View Mode with the Server.\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+        }
+    }).done(function (d) {
+        if (d == "Success") {
+            //alert("New View Mode was successfully set to '" + viewMode + "' on the Server Side");
+        } else {
+            alert("Failed to set the Server View Mode:" + d);
+        }
+    });
 });
 //------------------------------------------------------------------------------------
+$('.btn-wait').click(function () {
+    $('#viewByMonth').hide();
+    $('#viewByMetric').hide();
+    $('#viewWait').show();
+});
+    //------------------------------------------------------------------------------------
 
     //$(".collapse").on('hidden.bs.collapse', function () {
 //    alert('The collapsible content is now hidden.');

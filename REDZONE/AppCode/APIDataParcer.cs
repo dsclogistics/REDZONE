@@ -99,6 +99,16 @@ namespace REDZONE.AppCode
                 //    }
                 //    catch { }
                 //}
+                //Verify if the Entry Period for the metric has been exceeded is the metric is not closed yet
+                if (!rz_metric.metricPeriodStatus.ToUpper().Equals("CLOSED"))
+                {
+                    DateTime now = DateTime.Now;
+                    DateTime startOfMonth = new DateTime(now.Year,now.Month,1);
+                    rz_metric.isEntryPeriodExceeded = !(rz_metric.metric_period_start_date.AddMonths(2) > startOfMonth);
+                }
+                else {
+                    rz_metric.isEntryPeriodExceeded = false;
+                }
             }
             catch
             {
@@ -1150,8 +1160,8 @@ namespace REDZONE.AppCode
                 mSummary.urlNextPeriod = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", (intYear + 1).ToString(), metricID);
                 mSummary.urlPrevPeriod = String.Format("/Home/MetricSummary/?year={0}&metricID={1}", (intYear - 1).ToString(), metricID);
                 mSummary.statusPrevPeriod = (intYear <= 2016) ? "disabled" : "";
-                //For the first 15 days of January, the current year is unavailable as there is no data available until after the 15th
-                mSummary.statusNextPeriod = ((DateTime.Today.Year == intYear) || (DateTime.Today.Year - 1 == intYear && DateTime.Today.Month == 01 && DateTime.Today.Day < 15)) ? "disabled" : "";
+                //For the month of January, the current year is unavailable as there is no data available until February
+                mSummary.statusNextPeriod = ((DateTime.Today.Year == intYear) || (DateTime.Today.Year - 1 == intYear && DateTime.Today.Month == 01 )) ? "disabled" : "";
                 //------- END of hardcoding data ------------------------------------------
 
 

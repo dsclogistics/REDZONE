@@ -41,6 +41,7 @@ namespace REDZONE.Models
         public bool isNumeric { set; get; }
         public bool isAuto { set; get; }
         public bool isModelValid { set; get; }
+        public bool isEntryPeriodExceeded { set; get; }
         public string mtrcMinVal { set; get; }
         public string mtrcMaxVal { set; get; }
         public string maxDecPlaces { set; get; }
