@@ -26,7 +26,7 @@ namespace REDZONE.Controllers
             dscUser loggedonUser = new dscUser(userName);      //Create a user instance of the Loggedon user
             RZMetricMenu RZMenu = new RZMetricMenu();          //Create an instance of a Metric Data Collection Menu object
             RZMenu.canCollect = false;
-            string message = "";  ///////////////Do we need it????????????????????????????????????????????????????
+            Session["globalAppError"] = "";
             try
             {
                 //Load the Data Collection Menu from the Logged User "MTRC_COLLECTOR" Role's Metric List (If it exist)                
@@ -43,12 +43,11 @@ namespace REDZONE.Controllers
 
                         RZMenu.DM_MetricItems.Add(metricMenuItem);
                     }
-                }
-                Session["globalAppError"] = "";
+                }                
              }
             catch (Exception e)
             {
-                Session["globalAppError"] = "ERROR: " + message + Environment.NewLine + " ==>" + e.Message;
+                Session["globalAppError"] = "ERROR: " + e.Message;
             }
 
             return PartialView(RZMenu);

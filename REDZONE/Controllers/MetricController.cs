@@ -30,10 +30,9 @@ namespace REDZONE.Controllers
             // If the Authenticated User does not exist or has no Role Authorization the the requetsed metric, kick the user out to the "Not authorized Screen"
 
             try {
-                APIDataParcer dp = new APIDataParcer();
-                string uName = User.Identity.Name;
-                //uName = "dempsey_christina";
-                List<int> rol = dp.getUserMetrics(uName);
+                //APIDataParcer dp = new APIDataParcer();
+                //List<int> rol = dp.getUserMetrics(User.Identity.Name);
+                List<int> rol = dscUser.collectorMetrics(User.Identity.Name);
                 if (rol.Contains(metricId) ) {
                     //The User Requested Metric Id is in it's list of Authorized Metrics
                     RZ_Metric rz_metric = parcer.getRZ_Metric(metricId, month, year);

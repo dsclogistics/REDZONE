@@ -341,6 +341,79 @@ namespace REDZONE.Models
         public bool hasBuilding(string building_Id) {
             return (buildings.FirstOrDefault(x => x.id == building_Id) == null) ? false : true;
         }
+        public static List<int> collectorMetrics(string userSSO)
+        {
+            string jsonData = DataRetrieval.executeAPI(AUTHORIZATION_END_POINT, "{\"sso_id\":\"" + userSSO + "\"}");
+            List<int> collectorMetricIds = new List<int>();
+            try      // -------- Try Parsing the User Data properties --------
+            {
+                JObject parsed_UserDetails = JObject.Parse(jsonData);
+                //Check if API call "result" was successful
+                string APIcallResult = (string)parsed_UserDetails["result"];
+                if (String.IsNullOrEmpty(APIcallResult) || !APIcallResult.Equals("Success")) {
+                    string errorMsg = APIcallResult.Equals("FAILED") ? (string)parsed_UserDetails["message"] : jsonData;
+                    throw new Exception("Failed to Retrieve API Collector Metrics: " + errorMsg);
+                }
+
+                // ------- Retrieve all the User ROLES --------
+                JArray jRoles = (JArray)parsed_UserDetails["roles"];
+                if (jRoles.HasValues)
+                {
+                    //int roleIndex = 0;
+                    //bool isDataAdminUser = false;
+                    foreach (var jRole in jRoles)
+                    {
+                        string roleName = (string)jRole["role_name"];
+
+                        //If the role found is a data admin role, the user has access to all metric.  Return full set of Metric Ids. No need to keep checking
+                        if (roleName.Equals("RZ_ADMIN") || roleName.Equals("MDMT_ADMIN") || roleName.Equals("MTRC_DATA_ADMIN") ){
+                            try {
+                                DataRetrieval api = new DataRetrieval();
+                                JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
+                                foreach (var metricName in parsed_result["metriclist"])
+                                {
+                                    collectorMetricIds.Add((int)metricName["mtrc_id"]);
+                                    //roleMetric roleMetricInfo = new roleMetric();
+                                    //roleMetricInfo.metricId = (string)metricName["mtrc_id"];
+                                    //roleMetricInfo.mpId = (string)metricName["mtrc_period_id"];
+                                    //roleMetricInfo.mpName = (string)metricName["mtrc_name"];
+                                    //roleMetricInfo.mpDisplayName = (string)metricName["mtrc_prod_display_text"];
+                                    //roleMetricInfo.order = (int)metricName["mtrc_prod_display_order"];
+                                    //uRole.roleMetrics.Add(roleMetricInfo);  //Add a metric entry to this Role's Metrics
+                                }
+                                //Once all metrics added. Return list of Metrics
+                                return collectorMetricIds;
+                            }
+                            catch { 
+                                collectorMetricIds.Clear();  //Clear List
+                            }
+                        }
+
+
+                        //If the Role is "MTRC_COLLECTOR", populate all the metrics found for that role
+                        if (roleName == "MTRC_COLLECTOR")
+                        {
+                            foreach (var rMetric in jRole["metrics"])
+                            {
+                                collectorMetricIds.Add((int)rMetric["mtrc_id"]);
+                                //roleMetric roleMetricInfo = new roleMetric();
+                                //roleMetricInfo.metricId = (string)rMetric["mtrc_id"];
+                                //roleMetricInfo.mpId = (string)rMetric["metric_period_id"];
+                                //roleMetricInfo.mpName = (string)rMetric["metric_period_name"];
+                                //roleMetricInfo.mpDisplayName = (string)rMetric["mtrc_name"];
+                                //roleMetricInfo.order = 0;
+                                //uRole.roleMetrics.Add(roleMetricInfo);  //Add a metric entry to this Role's Metrics
+                            }
+                        }
+                    } //--------Finished processing all the User Roles
+                }// -- Finished Processing Roles
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to Retrieve API Collector Metrics: " + ex.Message);
+            }
+            return collectorMetricIds;
+        }
         #endregion
     }
 
