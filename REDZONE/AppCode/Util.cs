@@ -157,7 +157,15 @@ namespace REDZONE.AppCode
                     applicationAPIurl = ReadSetting("apiBaseURLDEV");
                     break;
             }
-            try { HttpContext.Current.Session["APIserver"] = applicationAPIurl.Substring(7, applicationAPIurl.IndexOf('.') - 7); }
+            try {
+                int serverDelimiterIndex = applicationAPIurl.IndexOf('.') - 7;
+                if (serverDelimiterIndex < 0)
+                {
+                    serverDelimiterIndex = applicationAPIurl.IndexOf('/') - 7;
+                    if (serverDelimiterIndex < 0) { serverDelimiterIndex = 0; }
+                }
+                HttpContext.Current.Session["APIserver"] = applicationAPIurl.Substring(7, serverDelimiterIndex); 
+            }
             catch { HttpContext.Current.Session["APIserver"] = "UNDEFINED"; }
             
             return applicationAPIurl;

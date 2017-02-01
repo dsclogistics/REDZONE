@@ -50,8 +50,13 @@ function getURLid() {
 }
 function getURL_mpid() {
     var sPageURL = window.location.href;
-    sPageURL = sPageURL.substring(sPageURL.indexOf("mpId="), sPageURL.indexOf("&"));         //Remove all the params from the URL
-    return sPageURL.replace("mpId=", "");
+    if (sPageURL.indexOf("&") == -1) {
+        sPageURL = sPageURL.substring(sPageURL.indexOf("mpId="));         //Remove all the params from the URL
+    }
+    else {
+        sPageURL = sPageURL.substring(sPageURL.indexOf("mpId="), sPageURL.indexOf("&"));         //Remove all the params from the URL
+    }    
+    return sPageURL.replace("mpId=", "").replace("#", "");
     //return sPageURL.match(/\d+\.?\d*/g);
 }
 function cleanString(inputString) {
@@ -537,22 +542,24 @@ $(document).ready(function () {
         if ((reasonText.indexOf("<") != -1) || (reasonText.indexOf("'") != -1) || (reasonText.indexOf("\"") != -1)) {
             $('#inputReasonText').addClass("hasError");
             $('#puErrorMsg').html("Reason Text has invalid characters.\nPlease correct and try again.").show();  //Display the error message
+            $('#inputReasonText').select().focus();
             return false;
         }
         if (reasonText == "") {
             $('#inputReasonText').addClass("hasError");
             $('#puErrorMsg').html("Reason Text Cannot be blank").show();
-            //showAlert("Reason Text Cannot be blank");
+            $('#inputReasonText').select().focus();
             return false;
         }
         // --------- End of Form Validation -----------------------
-
-        var mpID = getURL_mpid();
+        var mpID = getMPid();
+        if (mpID == null || mpID == "") { mpID = getURL_mpid(); }        
         var reasonText = $('#inputReasonText').val();
         var userId = $('#ssoName').val();
         var jsonPayload = '{"reasons": [{"mtrc_period_id": "' + mpID + '", "mpr_display_text": "' + reasonText + '", "mpr_desc": "", "mpr_std_yn": "N", "mpr_display_order": "", "user_id": "' + userId + '" }]}';
         //alert(jsonPayload);
         //Make ajax call to save (Add) Data (New MP Reason)
+
         $.ajax({
             url: '/ReasonMgmt/addMPReason',
             //url: 'http://dscapidev/dscmtrc/api/v1/metric/savereason',
