@@ -42,6 +42,7 @@
 <div id="globalVariables">
     @*<input type="hidden" id="userRole" value="@userRole" />*@
     <input type="hidden" id="userId" value="@uId" />
+    <input type="hidden" id="pageModified" value="N" />
 </div>
 
 <div class="panel panel-default" style="margin-top:5px; font-family:Arial; ">
@@ -408,7 +409,7 @@
                                 <input type="hidden" id="priorMpValue" value="@priorAP.priorAPMetricValue" />
                                 <input type="hidden" id="priorApMonth" value="@priorAP.priorAPMonth" />
                                 <input type="hidden" id="priorApYear" value="@priorAP.priorAPYear" />
-                                <input type="button" class="btn btn-primary" id="btnPriorActionPlanDetail" style="" value="View Detail" />
+                                <input type="button" class="btn btn-primary btnViewDetails" id="btnPriorActionPlanDetail" style="" value="View Detail" />
                             </div>
                         </div>
                     </div>
@@ -538,3 +539,32 @@
 </div>
 
 <br />
+
+<div id="dialog-confirm-exit" class="modal fade" role="dialog">
+    <div class="modal-dialog puf" style="width:35%; min-width: 450px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-Warning-Gradient" style="color:black;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center">Confirm Action</h4>
+            </div>
+            <div class="modal-body" id="confBody">
+                <div class="row " id="confBodyData" style="margin-top:40px; margin-bottom:30px; ">
+                    <input type="hidden" id="p_mp_id" value="" />
+                    <input type="hidden" id="p_bldg_id" value="" />
+                    <input type="hidden" id="p_bapm_id" value="" />
+                    <div style="font-weight:bold">WARNING!</div>
+                    <div style="text-align:center">The current action plan has been modified.</div>
+                    <div style="text-align:center">Do you want to discard the changes and navigate out?</div>
+                    <br />
+                </div>
+            </div>
+            <div class="modal-footer row" id="confFooter" style="text-align:center">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <button type="button" class="btn btn-primary" id="btnDiscard" style="width:180px; float:left">LEAVE PAGE</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="width:180px; float:right">CONTINUE WORKING</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

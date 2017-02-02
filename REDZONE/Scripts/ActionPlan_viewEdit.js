@@ -30,6 +30,14 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------------------
     //------------------------------------------BEHAVIOR---------------------------------------------
     //-----------------------------------------------------------------------------------------------
+    //Inhibit browser Navigate and Prevent page to be closed if there is unsaved data
+    $(window).bind('beforeunload', function () {
+        if ($("#pageModified").val() == "Y") {
+            //if the form has been changed
+            return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+        }
+        else { return undefined; }
+    });
 
     $('.panel-heading').on('click', '.glyph-link', function (e) {
         $(this).find('.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
@@ -40,6 +48,10 @@ $(document).ready(function () {
         //var linebreaks = ($(this).val().match(/\n/g) || []).length;
         $('#apTextChars').text(characters + ' / 2000');
     })
+
+    $('#apText').change(function () {
+        $('#pageModified').val("Y");        
+    });
 
     $('#apReviewComment').on('keyup', function () {
         var characters = $(this).text().length;
@@ -70,7 +82,7 @@ $(document).ready(function () {
         //alert("Setting Local storage back URL: " + window.location.href);
         localStorage.setItem("backUrl", window.location.href);
         localStorage.setItem("mpvStatus", "Not Started");
-
+        $('#pageModified').val("Y");
         mpvId = $('#mpvId').val();
         mpId = $('#mpId').val();
 
@@ -135,14 +147,55 @@ $(document).ready(function () {
     });
 
     $('#divPriorActionPlans').on('click', '#btnPriorActionPlanDetail', function () {
-        var bapm_id = $(this).parent().find('#priorBapmId').val();
-        var mpv_id = $(this).parent().find('#priorMpvId').val();
-        var mp_id = $(this).parent().find('#priorMpId').val();
-        var bldg_id = $(this).parent().find('#priorBldgId').val();
-        var metricDate = $(this).parent().find('#priorApMonth').val() + " " + $(this).parent().find('#priorApYear').val();
+        //var bapm_id = $(this).parent().find('#priorBapmId').val();
+        //var mpv_id = $(this).parent().find('#priorMpvId').val();
+        //var mp_id = $(this).parent().find('#priorMpId').val();
+        //var bldg_id = $(this).parent().find('#priorBldgId').val();
+        //var metricDate = $(this).parent().find('#priorApMonth').val() + " " + $(this).parent().find('#priorApYear').val();
 
-        //alert(getBapmId());
-        window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id +"&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
+        //Before Navigating out of the page, prompt the user to save/discard changes if any
+        if ($("#pageModified").val() == "Y") {
+            //if ($("#bootstrapBtnReset").val() == "N") {
+            //    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window. Must be done only once (at most) to prevent js errors
+            //    $("#bootstrapBtnReset").val("Y");   // Set it to "Y" so we don't try to reset it again which would cause an error
+            //}
+            $("#dialog-confirm-exit #p_mp_id").val($(this).parent().find('#priorMpId').val());
+            $("#dialog-confirm-exit #p_bldg_id").val($(this).parent().find('#priorBldgId').val());
+            $("#dialog-confirm-exit #p_bapm_id").val($(this).parent().find('#priorBapmId').val());
+            $('#dialog-confirm-exit').modal('show');
+
+            //$("#dialog-confirm-exit").dialog({
+            //    resizable: false,
+            //    height: 250,
+            //    width: 400,
+            //    modal: true,
+            //    buttons: {
+            //        "Discard Changes": function () {
+            //            $('#pageModified').val("N");  //So we don't get prompted again when leaving the page
+            //            window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id + "&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
+            //        },
+            //        "Continue Working": function () {
+            //            $(this).dialog("close");
+            //        }
+            //    }
+            //});
+        }
+        else {
+            var mp_id = $(this).parent().find('#priorMpId').val();
+            var bldg_id = $(this).parent().find('#priorBldgId').val();
+            var bapm_id = $(this).parent().find('#priorBapmId').val();
+            //alert("Navigating out using...\nmp_id: " + mp_id + "\nbldg_id: " + bldg_id + "\nbapm_id: " + bapm_id);
+            window.location.href = "/ActionPlan/viewEdit/?mp_id=" + mp_id + "&bldg_id=" + bldg_id + "&bapm_id=" + bapm_id;
+        }
+    });
+
+    $('#btnDiscard').click(function () {
+        var p1 = $("#dialog-confirm-exit #p_mp_id").val();
+        var p2 = $("#dialog-confirm-exit #p_bldg_id").val();
+        var p3 = $("#dialog-confirm-exit #p_bapm_id").val();
+        //alert("Changes have been Discarded! Navigating out using...\nmp_id: " + p1 + "\nbldg_id: " + p2 + "\nbapm_id: " + p3);
+        $('#pageModified').val("N");  //So we don't get prompted again when leaving the page
+        window.location.href = "/ActionPlan/viewEdit/?mp_id=" + p1 + "&bldg_id=" + p2 + "&bapm_id=" + p3;
     });
 
     $('#lnkBack').click(function () {
@@ -150,6 +203,8 @@ $(document).ready(function () {
         //window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
         window.location.href = decodeURIComponent(localStorage.getItem("backUrl"));
     });
+    //$('.btnViewDetails').click(function () {
+    //});
 });
 
 //------------------------------------------------------------------------------------------------

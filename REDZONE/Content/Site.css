@@ -115,6 +115,16 @@ textarea {
     font-family:Arial !important;
 }
   
+.bg-Warning-Gradient {
+    background: #e8460b; /* Old browsers */
+    background: -moz-linear-gradient(top,  #e8460b 2%, #e8460b 13%, #e8460b 29%, #ea6e09 61%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #e8460b 2%,#e8460b 13%,#e8460b 29%,#ea6e09 61%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #e8460b 2%,#e8460b 13%,#e8460b 29%,#ea6e09 61%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8460b', endColorstr='#ea6e09',GradientType=0 ); /* IE6-9 */
+    background-repeat: repeat-x;
+    border-color: #245580;
+    font-family:Arial !important;
+}
       /*
         const string COLOR_YELLOW = "yellow";
         const string COLOR_GREEN = "#33cc00";
