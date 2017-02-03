@@ -244,7 +244,7 @@ namespace REDZONE.AppCode
             switch (metricName) { 
                 case "Net FTE":
                 case "OT":
-                    meetingOwner = "Christina Dempsey";
+                    meetingOwner = "Christina Dempsey";  //JASCHUK
                     break;
                 case "Turnover":
                 case "Trainees":

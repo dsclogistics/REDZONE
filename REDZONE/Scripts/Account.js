@@ -73,7 +73,7 @@ function submitLoginForm() {
             userSSO = $('#UserName').val().substring(1);
             break;
         default:
-            uDomain = "dsclogistics";
+            uDomain = DFLTDOMAIN;
             hasDomainChar = false;
             break;
     }
@@ -110,9 +110,10 @@ function submitLoginForm() {
         $('#btnRZLogin').prop("disabled", false);
         return;
     }
+
     $('#userSSO').val(userSSO);
     $('#domain').val(uDomain);
-
+    
     //alert("User Name: " + $('#UserName').val() + "\nUser SSO: " + $('#userSSO').val() + "\nDomain: " + $('#domain').val() + "\nPassword: " + $('#uEncryPwd').val());
 
     submitEncry();

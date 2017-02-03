@@ -15,13 +15,21 @@
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <link href="~/Content/EditView.css" rel="stylesheet" />
-
+<style>
+    .erroMsgDiv {
+        display:none;  width:100%; 
+        font-weight:bold; color:white;  text-align:center; 
+        background-color: #ffaa6d; padding: 5px 4px; 
+        /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+        /*text-shadow: -1px 0 blue, 0 1px blue, 1px 0 blue, 0 -1px blue;*/
+        text-shadow: -1px 0 red, 0 1px red, 1px 0 red, 0 -1px red;
+    }
+</style>
 <div class="row">
     <input type="hidden" id="frmModified" value="N" />
     <input type="hidden" id="frmErrors" value="0" />
 </div>
-
-<div class="row" style="font-family:Arial; margin-top: 5px; width:100%;">
+<div class="row" style="font-family:Arial; margin-top: 0px; width:100%;">
     <div class="panel panel-default" style="margin: 0px 0px 0px 0px;" title="@tblCaption">
         <div class="panel-heading" style="text-align:center; padding: 0px 15px;">
             <div class="row">
@@ -233,7 +241,7 @@
                     }
                 </div>  <!-- ------ Form Buttons ROW End Section--------- -->
 
-                <div class="row alert-success" id="divMsg" style="padding: 7px; font-weight:bold; font-size:large; text-align:center; display:none">
+                <div class="row alert-success" id="divMsg" style="padding: 6px; font-weight:bold; font-size:large; text-align:center; display:none; margin:0 auto">
                     @errorMessage
                 </div>
             }
@@ -251,7 +259,7 @@
     </div>
 </div>
 
-<div id="messageLine" class="row" style="display:none; width:100%; font-weight:bold; color:red; text-align:center;">
+<div id="messageLine" class="row erroMsgDiv">
 </div>
 <br />
 @*<iframe id="fileFrame"></iframe>
@@ -279,7 +287,9 @@
 <script>
     $(document).ready(function () {
         if ("@errorMessage" != ""){
-            $("#divMsg").show().fadeOut(3000);
+            $("#divMsg").show();
+            $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+            $("#divMsg").fadeOut(2500);
         }
 
         $("#btnCancel").click(function () {
@@ -303,6 +313,7 @@
                 $txtControl.parents(".bldngRow").find("#saveFlag").first().val("Y");
                 $("#frmModified").val("Y");
                 $("#btnSave").prop('disabled', false);
+                $("#messageLine").hide();
             }
             else{
                 //Validation Failed. Value entered is not valid
@@ -321,11 +332,13 @@
             //Validate all input fields
             var errorsFound = 0;
             var valMessage = "";
+            $("#btnSave").prop('disabled', true);
+
             $("#frmErrors").val("0"); // Reset the errors counter before form validation
             //Loop through all text boxes to validate each one of them and cound how many failed.
             $(".updateField").each(function(){
                 valMessage = validateTxtField($(this));
-                if (!(valMessage == "PASS")){
+                if (valMessage != "PASS"){
                     var valControl = $(this).parents(".bldngRow").first().find(".valValidationMsg").first();
                     //Validation Failed. Increase the error count and report the error
                     errorsFound = errorsFound + 1;
@@ -333,7 +346,6 @@
                     $txtControl.addClass("error");
                     valControl.html(valMessage);
                     valControl.show();
-                    $("#btnSave").prop('disabled', true);
                     $txtControl.focus();
                 }
             });
@@ -341,7 +353,7 @@
 
             if(errorsFound > 0){
                 // Errors were found
-                alert(errorsFound + " Errors were found. Please correct errors before saving.");
+                showAlert( errorsFound + " Errors were found. Please correct errors before saving.");
             }
             else{
                 //Proceed saving the data
@@ -403,9 +415,10 @@
             .done(function (d) {
                 if (d == "Success") {
                     //alert("Data Reloaded Successfully!");
+                    showAlert("Data has been recalculated successfully");
                     location.reload();
                 } else {
-                    alert("Error performing Data Reload: \n" + JSON.stringify(d));
+                    showAlert("Error performing Data Reload: \n" + JSON.stringify(d));
                 }
                 hideAnimation();
                 //$("#output").html(JSON.stringify(d));
@@ -456,18 +469,21 @@
 
     function saveMetricData(doClose){
         //alert("Saving Data...");
-        //var payload1 = '{"metricdetail":{"mtrc_period_id":"1","mtrc_name":"Net FTE","mtrc_id":"3","mtrc_period_name":"Monthly Net FTE","tpt_name":"Month","tm_per_start_dtm":"2016-06-01 00:00:00.0","tm_per_end_dtm":"2016-06-30 23:59:59.0","prod_name":"Red Zone","data_type_token":"dec","data_type_num_yn":"Y"},"locationdetails":[{ "dsc_mtrc_lc_bldg_name": "Allentown 2","dsc_mtrc_lc_bldg_id": "2","bmp_is_editable_yn": "Y","bmp_is_manual_yn": "Y","mtrc_period_val_id": "122","mtrc_period_val_value": "TEST123"}]} ';
-        var payload = buildJSON();
-        //alert("Posting Data: \n" + payload);
-        var saveClose = !doClose;
+        var okToSaveClose = !doClose;
         if (doClose){
-            if(confirm("Are you sure you want to close the current Metric Period?")){
-                saveClose = canBeClosed();
+            //Verify that there aren't any input errors
+            okToSaveClose = canBeClosed();   // "Can Be closed" validation only applies to clossing and not to simple save.
+            if (okToSaveClose){
+                //No errors Found. Have User confirm that they really want to Close the Period.
+                if(!confirm("Are you sure you want to close the current Metric Period?")){
+                    return;   //Do Nothing. User did not confirm that it's ok to proceed
+                }
             }
-            else return;
         }
 
-        if (saveClose){
+        if (okToSaveClose){
+            var payload = buildJSON();
+            //alert("Posting Data: \n" + payload);
             $.ajax({
                 url: '/Metric/saveRZMetric',
                 //url: 'http://dscapidev/dscmtrc/api/v1/metric/metricperiodsave',
@@ -479,7 +495,7 @@
                 //contentType: "application/json; charset=utf-8",
                 //dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    showAlert("Failed to Save Data. Ajax Failed!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 if (d == "Success") {
@@ -487,8 +503,7 @@
                     //alert("Navigating to: /Metric/EditView/" + urlSufixx);
                     if (doClose){
                         closePeriod();
-                        alert("Metric Period Saved and Closed Successfully!");
-                        location.reload();
+                        //location.reload();
                     }
                     else{
                         //$("#frmModified").val("N");
@@ -500,7 +515,7 @@
                         location.reload();  //If we are not doing a close, just reload the page
                     }                    
                 } else {
-                    alert("Error Saving the data!\n" + JSON.stringify(d));
+                    showAlert("Error Saving the data!\n" + JSON.stringify(d));
                 }
                 //$("#output").html(JSON.stringify(d));
             });
@@ -508,29 +523,39 @@
     }
 
     function closePeriod(){
+        //setTimeout(function(){ alert("Hello"); }, 4000);
         $.ajax({
             //url: '@Url.Action("closeRZMetricPeriod", "Metric")',
             url: '/Metric/closeRZMetricPeriod',
             method: "POST",
             cache: false,
             data: { metricId: "@Model.id", metricMonth:"@curMonth", metricYear:"@curYear", metricPeriodId:"@Model.metricPeriodID" },
-            error: function () {
-                alert("Failed to Close Period.");  //<-- Trap and alert of any errors if they occurred
+            error: function (xhr, status, thrownError) {
+                showAlert("Failed to Close Period [ Code " +  xhr.status + ": " + xhr.responseText + "]");    //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (d) {
             if (d == "Success") {
-                alert("Period Successfully Closed!");
+                $("#divMsg").html('<span style="margin-right:10px">Period Closed Successfully</span>' );
+                $("#divMsg").show();
+                $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+                $("#divMsg").fadeOut( 3000, "swing");
+
                 var urlSufixx = "@Model.id?month=@curMonth&year=@curYear";
                 //alert("Navigating to: /Metric/EditView/" + urlSufixx);
-                location.href = "/Metric/EditView/" + urlSufixx;
+                //Redirect after 3.1 seconds
+                setTimeout(function(){ location.href = "/Metric/EditView/" + urlSufixx; }, 3100);    // 3.1 seconds
             }
-            else {alert("ERROR Closing Period: " + d); }
+            else {
+                showAlert("FAILED TO CLOSE PERIOD: " + d);
+            }
         });
     }
 
     function canBeClosed(){
         //alert("Checking if Metric Can be closed...");
         var errorsFound = 0;
+        $("#btnSave").prop('disabled', true);  //Always disable save button
+
         //Check the Read Only fields (For the automated metric values)
         $(".ROField").each(function(){
             var $txtControl = $(this);
@@ -550,15 +575,13 @@
                 valMessage = validateTxtField($(this));
             }
 
-            if(!(valMessage == "PASS")){ //Validation Failed
+            if(valMessage != "PASS"){ //Validation Failed
                 errorsFound = errorsFound + 1;
                 $txtControl.removeClass("no-error");
                 $txtControl.addClass("error");
                 valControl.html(valMessage);
                 valControl.show();
             }
-            $("#btnSave").prop('disabled', true);  //Always disable save button
-
             //Reenable the read only property of the control
             $txtControl.attr("readonly", true);
         });
@@ -579,19 +602,19 @@
                 valMessage = validateTxtField($(this));
             }
 
-            if(!(valMessage == "PASS")){ //Validation Failed
+            if(valMessage != "PASS"){ //Validation Failed
                 errorsFound = errorsFound + 1;
                 $txtControl.removeClass("no-error");
                 $txtControl.addClass("error");
                 valControl.html(valMessage);
                 valControl.show();
-                $("#btnSave").prop('disabled', true);
                 $txtControl.focus();
             }
         });
         if(errorsFound > 0){
-            $("#messageLine").html('<span style="margin-right:10px">FAILED TO CLOSE:</span>' + errorsFound + ' error(s) need to be corrected before closing.');
+            $("#messageLine").html('<span style="margin-right:10px">PERIOD CANNOT BE CLOSED:</span>' + errorsFound + ' error(s) need to be corrected before closing.');
             $("#messageLine").show();
+            $('html, body').animate({scrollTop:$(document).height()}, 'slow');
             //alert("Warning! " + errorsFound + " error(s) need to be corrected before closing.");
             return false;
         }

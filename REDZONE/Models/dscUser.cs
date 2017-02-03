@@ -20,14 +20,15 @@ namespace REDZONE.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string emailAddress { get; set; }
-        public string fullName { get{ return (FirstName + " " + LastName).Trim(); } }    //Read Only Property
-        public string other2 { get; set; }
+        public string fullName { get { return (FirstName + " " + LastName).Trim(); } }      //Read Only Property
+        public string networkDomain { get; set; }
         public List<userRole> roles = new List<userRole>();
         public List<building> buildings = new List<building>();
         #region Constructors
         //--------------- Constructors -------------------------------
         //..... Empty Constructor, does not do any validation nor retrieves user info........
-        public dscUser() {
+        public dscUser()
+        {
             dbUserId = null;
             FirstName = "";
             LastName = "";
@@ -37,27 +38,61 @@ namespace REDZONE.Models
             userStatusMsg = "User has not Been Defined";
         }
         //..... User SSO constructor. Creates user and retrieves its associated info. It Does not perform User authentication
-        public dscUser(string userSSO) {
-            SSO = removeUserDomainCharacter(userSSO);
-            isAuthenticated = false;
-            FirstName = userSSO;  //Default the name to the SSO Id (For invalid users that do not have a real DB Name)
-            loadUserDetails(SSO);
+        public dscUser(string userSSO) : this(userSSO, "")
+        {
         }
         //..... Full User Constructor, accepts SSO and password to perform Authentication and Retrieve the Associated user Info (Roles, buildings) ............
-        public dscUser(string userSSO, string userPwd, string domain = DFLTDOMAIN)
+        public dscUser(string userSSO, string userPwd)
         {
-            SSO = removeUserDomainCharacter(userSSO);
-            loadUserDetails(userSSO, userPwd, domain);
+            loadUserDetails(userSSO, userPwd);
         }
         //---------- Constructors Section Ends-------------------------------
         #endregion
-        #region classMethods 
-        public void loadUserDetails(string SSO, string uPassword = "", string uDomain = DFLTDOMAIN)
+        #region classMethods
+        public void loadUserDetails(string userSSO, string uPassword)
         {
-          // This function will retrieve the user information and load all roles,building, user info, etc if found.
-          // If a password is specified, then it will also perform authentication
-            SSO = SSO.ToUpper();
-            string jsonData = String.IsNullOrEmpty(uPassword) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword, uDomain);
+            // This Function will initialize a new application User Object with default values (if not found or invalid) 
+            // And it will try to retrieve and set the user information and load all roles,building, user info, etc if found.
+            // If a password is specified, then it will also perform authentication against the LDAP API service
+
+            //Initialize all required Values and flags
+            isValidUser = false;
+            isAuthenticated = false;
+
+            //The user SSO could contain Domain Information
+            //Perform Basic User Domain/SSO Id valildation (Verify Correct Format and that it is valid)
+            if (!setUserDomain_SSO(userSSO))
+            {   //Failed to parse the User Domain/User SSO
+                FirstName = "";
+                LastName = "";
+                userStatusMsg = "Cannot Resolve User Domain and User Id information";
+                return;   //Exit constructor with invalid User set
+            }
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////  ALLOW NON-AUTHENTICATED DEVELOPERS ACCESS  ///////////////////////////
+            bool isDeveloper = false;
+            //-------- Section to be Used during Development --------------------------------\
+            //Retrieve the User information for Developers
+            switch (SSO + uPassword)
+            {
+                case "DELGADO_FELICIANO~~":
+                case "ABDUGUEV_RASUL~~":
+                case "CHEN_ALEX~~":
+                    isDeveloper = true;
+                    isAuthenticated = true;
+                    break;
+                default: break;
+            }
+            //-------- END of Section to be Used during Development -------------------------/
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////
+
+            FirstName = SSO;  //Default the name to the SSO Id (For invalid users that do not have a real DB Name)
+
+            //If there is no password or if it's a developer, just retrieve user details, else perform authentication
+            string jsonData = (isDeveloper || String.IsNullOrEmpty(uPassword)) ? getJsonUserData(SSO) : getJsonUserData(SSO, uPassword, networkDomain);
 
             try      // -------- Try Parsing the User Data properties --------
             {
@@ -65,16 +100,14 @@ namespace REDZONE.Models
 
                 //Check if there is API data "result" Field shows API call failed
                 string APIcallResult = (string)parsed_UserDetails["result"];
-                if (String.IsNullOrEmpty(APIcallResult) || APIcallResult.Equals("FAILED")) {
+                if (String.IsNullOrEmpty(APIcallResult) || APIcallResult.Equals("FAILED"))
+                {
                     isValidUser = false;
                     isAuthenticated = false;
                     dbUserId = "0";
                     userStatusMsg = APIcallResult.Equals("FAILED") ? (string)parsed_UserDetails["message"] : jsonData;
                     return;
                 }
-
-                //After API has been called, correct the User SSO back to the the valid DB User Id
-                SSO = removeUserDomainCharacter(SSO);
 
                 //Verify that the Data Retrieval was successful before attempting to parse any data
                 if (parsed_UserDetails["result"].ToString().Equals("Success") && !parsed_UserDetails["user_id"].ToString().Equals("0"))
@@ -87,7 +120,7 @@ namespace REDZONE.Models
                     //Routine to parse the First & Last Name
                     if (String.IsNullOrEmpty(uName))
                     { //Default the Name to the SSO Id if there is no name in the database
-                        FirstName = SSO; 
+                        FirstName = userSSO;
                     }
                     else
                     {
@@ -135,7 +168,8 @@ namespace REDZONE.Models
 
                             //If the Role is "MTRC_COLLECTOR" and the 'isDataAdminUser' flag is true (User has already been set as Metric Collector of all Metrics)
                             // then do not add the role as it already exist
-                            if (!(uRole.roleName == "MTRC_COLLECTOR" && isDataAdminUser)) {
+                            if (!(uRole.roleName == "MTRC_COLLECTOR" && isDataAdminUser))
+                            {
                                 //Add all the metrics for this role
                                 foreach (var rMetric in jRole["metrics"])
                                 {
@@ -149,7 +183,7 @@ namespace REDZONE.Models
                                 }
                                 roles.Add(uRole); //Add a "Role" Entry to this user Roles                            
                             }
-                            
+
                             roleIndex++;      //Get Index of the Next Role in the Json Data
                         }
                     }
@@ -174,8 +208,8 @@ namespace REDZONE.Models
                         foreach (var building in jbldgList)
                         {
                             building userBuilding = new building();
-                            userBuilding.id = (string)building["dsc_mtrc_lc_bldg_id"];      //Not Implemented yet. Name might change !!!!!!!!!!!!!!!
-                            userBuilding.buildingName = (string)building["dsc_mtrc_lc_bldg_name"];      //Not Implemented yet. Name might change !!!!!!!!!!!!!!!
+                            userBuilding.id = (string)building["dsc_mtrc_lc_bldg_id"];      
+                            userBuilding.buildingName = (string)building["dsc_mtrc_lc_bldg_name"];   
                             buildings.Add(userBuilding);
                         }
                     }
@@ -216,24 +250,50 @@ namespace REDZONE.Models
             }
         }
 
-        private string removeUserDomainCharacter(string SSO)
+        private bool setUserDomain_SSO(string uSSO)
         {
-            return (SSO.StartsWith("@") || SSO.StartsWith("!") || SSO.StartsWith("#"))?SSO.Substring(1):SSO;
+            networkDomain = DFLTDOMAIN;
+            SSO = uSSO.ToUpper();     //Initialize the User SSO Id. it must have at least two characters otherwise it is invalid
+            if ( SSO.Length < 3) { return false; }
 
-            //string domainChar = SSO.Substring(0, 1);
-            //string userSSO = "";
-            //switch (domainChar) { 
-            //    case "@":
-            //    case "#":
-            //    case "!":
-            //    case "$":
-            //        userSSO = SSO.Substring(1);  //Remove first character of the User Id
-            //        break;
-            //    default:
-            //        userSSO = SSO;
-            //        break;
-            //}
-            //return userSSO;
+            //Check if a Domain Control Character was used
+            if (uSSO.StartsWith("@") || uSSO.StartsWith("!") || uSSO.StartsWith("#") || uSSO.StartsWith("#"))
+            {
+                string domainChar = uSSO.Substring(0, 1);
+                SSO = uSSO.Substring(1);     //Remove the Domain Control Character from the SSO Id
+                switch (domainChar)         //Set the corresponding User Domain
+                {
+                    case "#":
+                        networkDomain = "ColonialHeights";
+                        break;
+                    case "@":
+                        networkDomain = "dsccorp";
+                        break;
+                    //case "!":
+                    //    networkDomain = "domain1";
+                    //    break;
+                    //case "$":
+                    //    networkDomain = "net";
+                    //    break;
+                    default:
+                        networkDomain = DFLTDOMAIN;
+                        break;
+                }
+            }
+            else {
+                //If no Domain Control Character was used. Check if a explicit Domain Name was indicated
+                int domainIndex = uSSO.IndexOf("\\");
+                if (domainIndex == -1)
+                {  // No Domain was specified. Set up Default Domain
+                    networkDomain = DFLTDOMAIN;
+                }
+                else {  //A Domain was indicated during signon
+                    networkDomain = uSSO.Substring(0, domainIndex);
+                    //Make sure that a user name was indicated after the domain name
+                    SSO = (uSSO.Length > domainIndex + 1) ? uSSO.Substring(domainIndex + 1) : "";
+                }            
+            }
+            return (String.IsNullOrEmpty(SSO)) ? false : true;
         }
 
         private void makeUserDataCollectorAdmin()
@@ -250,7 +310,8 @@ namespace REDZONE.Models
             uRole.appProduct = "ALL";
             //Add all available metrics to the "MTRC_COLLECTOR" Role
 
-            try {
+            try
+            {
                 DataRetrieval api = new DataRetrieval();
                 JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
                 foreach (var metricName in parsed_result["metriclist"])
@@ -267,7 +328,7 @@ namespace REDZONE.Models
             }
             catch { }
 
-            roles.Add(uRole); 
+            roles.Add(uRole);
         }
 
         public string getJsonUserData(string userSSO = "", string userPwd = "", string uDomain = DFLTDOMAIN)
@@ -277,11 +338,13 @@ namespace REDZONE.Models
             string endPoint = String.Empty;
             string payload = String.Empty;
             if (String.IsNullOrEmpty(userSSO)) { userSSO = SSO; }
-            if(String.IsNullOrEmpty(userPwd)){    //Perform User Data Role Retrieval Only
+            if (String.IsNullOrEmpty(userPwd))
+            {    //Perform User Data Role Retrieval Only
                 endPoint = AUTHORIZATION_END_POINT;
                 payload = "{\"sso_id\":\"" + userSSO + "\"}";
             }
-            else{ //Perform user Authentication and Data retrieval
+            else
+            { //Perform user Authentication and Data retrieval
                 endPoint = AUTHENTICATION_END_POINT;
                 payload = "{\"sso_id\":\"" + userSSO + "\", \"password\":\"" + userPwd + "\", \"domain\":\"" + uDomain + "\"}";
             }
@@ -298,8 +361,9 @@ namespace REDZONE.Models
         {
             return roles.Select(x => x.roleName).ToArray();
         } // Reuturns a list Of the User Roles Name
-        public void addRole(string roleName, string roleProduct) {
-            if ( !roles.Any(p => p.roleName.ToUpper() == roleName.ToUpper()))
+        public void addRole(string roleName, string roleProduct)
+        {
+            if (!roles.Any(p => p.roleName.ToUpper() == roleName.ToUpper()))
             {//Role Name does not exist on the current list
                 userRole roleNew = new userRole();
                 roleNew.id = "9999";
@@ -309,16 +373,19 @@ namespace REDZONE.Models
                 roles.Add(roleNew);
             }
         }
-        public string getUserBuildings() {
+        public string getUserBuildings()
+        {
             return "|" + String.Join("|", buildings.Select(x => x.id).ToList()) + "|";
         }
-        public string getReviewerMetricIds(){
+        public string getReviewerMetricIds()
+        {
             //Retrieve the User Reviewer Roll (If any)
             userRole reviewerRole = roles.FirstOrDefault(x => x.roleName == "RZ_AP_REVIEWER");
             if (reviewerRole == null) { return "||"; }   //No Metrics assigned as a Reviewer
             return "|" + reviewerRole.metricIds + "|";
         }
-        public bool hasRole(string roleName) { 
+        public bool hasRole(string roleName)
+        {
             return roles.FirstOrDefault(x => x.roleName == roleName) == null ? false : true;
         }
         public bool hasReviewerMetric(string metricPeriodId)
@@ -338,7 +405,8 @@ namespace REDZONE.Models
             //roleMetric selectedMetric = reviewerRole.roleMetrics.FirstOrDefault(x => x.mpId == metricPeriodId);
             return reviewerRole.roleMetrics.FirstOrDefault(x => x.mpId == metricPeriodId) == null ? false : true;
         }
-        public bool hasBuilding(string building_Id) {
+        public bool hasBuilding(string building_Id)
+        {
             return (buildings.FirstOrDefault(x => x.id == building_Id) == null) ? false : true;
         }
         public static List<int> collectorMetrics(string userSSO)
@@ -350,7 +418,8 @@ namespace REDZONE.Models
                 JObject parsed_UserDetails = JObject.Parse(jsonData);
                 //Check if API call "result" was successful
                 string APIcallResult = (string)parsed_UserDetails["result"];
-                if (String.IsNullOrEmpty(APIcallResult) || !APIcallResult.Equals("Success")) {
+                if (String.IsNullOrEmpty(APIcallResult) || !APIcallResult.Equals("Success"))
+                {
                     string errorMsg = APIcallResult.Equals("FAILED") ? (string)parsed_UserDetails["message"] : jsonData;
                     throw new Exception("Failed to Retrieve API Collector Metrics: " + errorMsg);
                 }
@@ -366,8 +435,10 @@ namespace REDZONE.Models
                         string roleName = (string)jRole["role_name"];
 
                         //If the role found is a data admin role, the user has access to all metric.  Return full set of Metric Ids. No need to keep checking
-                        if (roleName.Equals("RZ_ADMIN") || roleName.Equals("MDMT_ADMIN") || roleName.Equals("MTRC_DATA_ADMIN") ){
-                            try {
+                        if (roleName.Equals("RZ_ADMIN") || roleName.Equals("MDMT_ADMIN") || roleName.Equals("MTRC_DATA_ADMIN"))
+                        {
+                            try
+                            {
                                 DataRetrieval api = new DataRetrieval();
                                 JObject parsed_result = JObject.Parse(api.getMetricname("Red Zone", "Month"));
                                 foreach (var metricName in parsed_result["metriclist"])
@@ -384,7 +455,8 @@ namespace REDZONE.Models
                                 //Once all metrics added. Return list of Metrics
                                 return collectorMetricIds;
                             }
-                            catch { 
+                            catch
+                            {
                                 collectorMetricIds.Clear();  //Clear List
                             }
                         }
@@ -417,7 +489,8 @@ namespace REDZONE.Models
         #endregion
     }
 
-    public class userRole {
+    public class userRole
+    {
         public string id { get; set; }
         public string appProduct { get; set; }
         public string roleName { get; set; }
@@ -427,7 +500,8 @@ namespace REDZONE.Models
         public string metricNames { get { return String.Join("|", roleMetrics.OrderBy(x => x.mpName).Select(x => x.mpName).ToList()); } }
     }
 
-    public class roleMetric {
+    public class roleMetric
+    {
         public string metricId { get; set; }         //Metric ID
         public string mpId { get; set; }             //Metric Period ID
         public string mpName { get; set; }
@@ -435,7 +509,8 @@ namespace REDZONE.Models
         public int order { get; set; }
     }
 
-    public class building {
+    public class building
+    {
         public string id { get; set; }
         public string buildingName { get; set; }
         public string buildingCode { get; set; }

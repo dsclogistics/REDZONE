@@ -175,6 +175,7 @@ namespace REDZONE.Controllers
             }
             catch(Exception ex) {
                 Session["errorMessage"] = ex.Message + "\nContact the Service Desk for assistance.";
+                ViewBag.errorMessage = ex.Message;
                 return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
                 //ViewBag.errorMessage = ex.Message + "\nContact the Service Desk for assistance.";
                 //return View(loginModel);
@@ -494,50 +495,35 @@ namespace REDZONE.Controllers
         //============= PRIVATE LOGIN HELPER METHODS ==================
         private bool logonUser(LoginViewModel loginModel)
         {
-            dscUser logggedUser = new dscUser();
-            bool isDeveloper = false;
-            
-            //-------- Section to be Used during Development --------------------------------\
-            //Retrieve the User information for Developers
-            switch (loginModel.userSSO.ToUpper() + loginModel.Password) { 
-                case "DELGADO_FELICIANO~~":
-                case "ABDUGUEV_RASUL~~":
-                case "CHEN_ALEX~~":
-                     isDeveloper= true;
-                     logggedUser = new dscUser(loginModel.Username.Trim());  //Retrieve all User Info
-                     logggedUser.isAuthenticated = true;
-                     break;
-                default: break;
-            }
-            //-------- END of Section to be Used during Development -------------------------/
-            
-            if (!isDeveloper) { logggedUser = new dscUser(loginModel.userSSO.Trim(), loginModel.Password.Trim(), loginModel.domain.Trim()); }
-
+            //"loginModel.Username" has the Full domain/id as entered by the User
+            //"loginModel.userSSO"  has the cleaned up SSO id with no Domain indicators
+            dscUser logggedUser = new dscUser(loginModel.Username, loginModel.Password);
             if (logggedUser.isAuthenticated)
             {
-                Session.Add("first_name", logggedUser.FirstName);
-                Session.Add("last_name", logggedUser.LastName);
-                Session.Add("username", logggedUser.fullName);
-                Session["userSSO"] = logggedUser.SSO;
-                Session["email"] = logggedUser.emailAddress;
-                Session["emp_id"] = logggedUser.dbUserId; 
-                Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
-                Session["userRole"] = logggedUser.getUserRoles();
-                Session["userBuildings"] = logggedUser.getUserBuildings();
-                Session["buildingFilter"] = (logggedUser.buildings.Count() > 0) ? "Y" : "N";
+                try {
+                    Session.Add("first_name", logggedUser.FirstName);
+                    Session.Add("last_name", logggedUser.LastName);
+                    Session.Add("username", logggedUser.fullName);
+                    Session["userSSO"] = logggedUser.SSO;
+                    Session["email"] = logggedUser.emailAddress;
+                    Session["emp_id"] = logggedUser.dbUserId;
+                    Session["firstLoad"] = "True";      //To trigger localStorage logic when first logged in
+                    Session["userRole"] = logggedUser.getUserRoles();
+                    Session["userBuildings"] = logggedUser.getUserBuildings();
+                    Session["buildingFilter"] = (logggedUser.buildings.Count() > 0) ? "Y" : "N";
 
-                //Register the User with the Server as an authenticated user
-                //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
-                registerUser(loginModel.Username, logggedUser.getUserRolesList());
-
-                return true;
+                    //Register the User with the Server as an authenticated user
+                    //"registerUser()"; Roles parameter irrelevant (for now) if those roles are already defined on the Session["userRole"]
+                    registerUser(logggedUser.SSO, logggedUser.getUserRolesList());
+                    return true;                
+                }
+                catch{ throw; }
             }
             else {
                 Session["errorMessage"] = "LOGIN FAILED: " + logggedUser.userStatusMsg;
                 ViewBag.errorMessage = logggedUser.userStatusMsg;
                 return false;
             }
-
         }
 
         //=========================================================================================================
