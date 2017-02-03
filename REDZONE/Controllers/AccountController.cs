@@ -127,22 +127,26 @@ namespace REDZONE.Controllers
                 if (loginModel.Password.Equals("keyError"))
                 {
                     Session["errorMessage"] = "Failed to decrypt credentials. Try again or contact Support if the problem persist";
-                    return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                    //return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                    
                     //ModelState.AddModelError("", "Failed to decrypt credentials. Try again or contact Support if the problem persist");
+                    return View(loginModel);
                 }
             }
             catch (Exception ex) {
                 Session["errorMessage"] = "LOGIN FAILED: " + ex.Message;
-                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
-                //ModelState.AddModelError("", "ERROR: " + ex.Message);             
+                //return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                //ModelState.AddModelError("", "ERROR: " + ex.Message);
+                return View(loginModel);
             }
             //-------- END of the Decryption and Input Validation Section ----------------------------------
 
             if (!ModelState.IsValid) {
                 Session["errorMessage"] = "LOGIN FAILED: " + ModelState.ToString();
-                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
-                //return View(loginModel); 
+                //return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                return View(loginModel); 
             }
+
 
             // ----- Reset/Remove the Authorization Cookie and other related session variables if any -----
             FormsAuthentication.SignOut();   
@@ -163,22 +167,24 @@ namespace REDZONE.Controllers
                     if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
                         && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
                     { return Redirect(ReturnUrl); }
-                    else { return RedirectToAction("Index", "Home"); }
+                    else {
+                        return RedirectToAction("Index", "Home"); //Once authenticate start in Home/Index if there is no "back URL"
+                    }
                 }
                 else
                 { //Failed to authenticate user. Back to Login page with Validation errors
-                    return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
-                    //ViewBag.ReturnUrl = ReturnUrl;
+                    //return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                    ViewBag.ReturnUrl = ReturnUrl;
                     //ModelState.AddModelError("", "Failed to Logon User: " + ViewBag.errorMessage);
-                    //return View(loginModel);
+                    return View(loginModel);
                 }
             }
             catch(Exception ex) {
                 Session["errorMessage"] = ex.Message + "\nContact the Service Desk for assistance.";
-                ViewBag.errorMessage = ex.Message;
-                return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
+                //ViewBag.errorMessage = ex.Message;
+                //return RedirectToAction("login", "Account", new { returnUrl = ReturnUrl });
                 //ViewBag.errorMessage = ex.Message + "\nContact the Service Desk for assistance.";
-                //return View(loginModel);
+                return View(loginModel);
             }
         }
         //--------------------------------------------------------------------------------------------------------------\\
@@ -521,7 +527,6 @@ namespace REDZONE.Controllers
             }
             else {
                 Session["errorMessage"] = "LOGIN FAILED: " + logggedUser.userStatusMsg;
-                ViewBag.errorMessage = logggedUser.userStatusMsg;
                 return false;
             }
         }

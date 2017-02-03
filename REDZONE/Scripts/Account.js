@@ -49,14 +49,22 @@
 
 function submitLoginForm() {
     //Verify all fields have been filled out
-    if ($('#UserName').val() == "" || $('#pwd').val() == "") {
-        $('#erroMsgDIV').html("User Name and Password connot be blank");
+    if ($('#UserName').val() == "") {
+        $('#erroMsgDIV').html("* User Name is Required");
         $('#UserName').select().focus();
         return;
     }
 
+    if ($('#pwd').val() == "") {
+        $('#erroMsgDIV').html("* Password cannot be blank");
+        $('#pwd').select().focus();
+        return;
+    }
+
     //Submit the Login Credentials
-    $('#btnRZLogin').prop("disabled", true);
+    
+    //$('#btnRZLogin').prop("disabled", true);
+    $('#btnRZLogin').button("loading");
     //Set the domain and User SSO hidden fields for submission
 
     var userSSO = $('#UserName').val();
@@ -73,7 +81,7 @@ function submitLoginForm() {
             userSSO = $('#UserName').val().substring(1);
             break;
         default:
-            uDomain = DFLTDOMAIN;
+            uDomain = "dsclogistics";
             hasDomainChar = false;
             break;
     }
@@ -130,6 +138,7 @@ $(document).ready(function () {
         }
         else {
             $('#erroMsgDIV').html("");
+            $('#btnRZLogin').button("reset");
         }
     });
 

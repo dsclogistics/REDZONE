@@ -100,7 +100,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script>
         $(document).ready(function () {
-            $("#myModal").modal({ backdrop: "static" });
+            $("#myModal").modal({ backdrop: "static", keyboard: false });
             $('#UserName').select().focus();
             //$('#myModal').on('shown.bs.modal', function () {
             //    $('#UserName').select().focus();
