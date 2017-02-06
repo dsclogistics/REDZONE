@@ -48,6 +48,7 @@
 }
 
 function submitLoginForm() {
+    $('#UserName').val($('#UserName').val().trim());
     //Verify all fields have been filled out
     if ($('#UserName').val() == "") {
         $('#erroMsgDIV').html("* User Name is Required");
