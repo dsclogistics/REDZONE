@@ -50,7 +50,7 @@ $(document).ready(function () {
     })
 
     $('#apText').change(function () {
-        $('#pageModified').val("Y");        
+        $('#pageModified').val("Y");
     });
 
     $('#apReviewComment').on('keyup', function () {
@@ -246,6 +246,7 @@ function submitActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
+            $('#pageModified').val("N");
             showAlert("Action Plan Submitted Successfully!", "", "Y");
             //location.reload();
         } else {
@@ -286,6 +287,7 @@ function saveActionPlan() {
         }
     }).done(function (d) {
         if (d == "Success") {
+            $('#pageModified').val("N");
             showAlert("Action Plan Saved!", "", "Y");
             //location.reload();
         } else {
