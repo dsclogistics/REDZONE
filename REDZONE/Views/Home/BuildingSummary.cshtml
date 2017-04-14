@@ -231,9 +231,9 @@
             </div> <!-- End of DIV Table Table -->
 
 
+            <!-- **Per New Requirements 04/07/2017, Action Plans are no longer needed. Below Section can be uncommented if they need to be displayed again ****  -->
             <!-- **************************** RECENT ACTION PLAN HISTORY SECTION *********************************************  -->
-              <div id="APhistory" style="max-width:1000px; margin:0 auto">
-                    @*Draw a Section for each Month in Reverse Order*@
+              @*<div id="APhistory" style="max-width:1000px; margin:0 auto">
                     @{
                         colCounter = 0;
                             bool isFirstMonth = true;
@@ -333,15 +333,22 @@
                         colCounter++;
                     }
                 </div>
-              <br />
-           }
-           else
-           {
+              <br />*@
+            <!-- ********************* END OF THE RECENT ACTION PLAN HISTORY SECTION *****************************************  -->
+
+
+            <br />
+            <a href="https://drive.google.com/drive/folders/0B2Rk0VULt5zKczY5dDk1dXBseDg" target="_blank" style="font-weight:bold">Click here For GAAP Analysis and Actions</a>
+            <br />
+
+          }
+          else
+          {
               <div class="row" style="color:red; font-weight:bold; font-size:18px">
                   <span>There is no Building data to display.</span><br />
                   <span>Please go back to review your input and select a valid building.</span>
               </div>
-           }
+          }
         </div> <!-- END OF PANEL BODY -->
     </div><!-- END OF PANEL -->
 </div> <!-- ROW END -->
