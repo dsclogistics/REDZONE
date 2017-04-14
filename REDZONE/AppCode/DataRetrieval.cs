@@ -78,6 +78,7 @@ namespace REDZONE.AppCode
                 return e.Message;
             }
         }
+
         public string getAllBuildings(string productName, string tptName, string year)
         {
             string endPoint = "buildinglc";
