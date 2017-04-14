@@ -516,7 +516,6 @@
   <ItemGroup>
     <Folder Include="APIhelper\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ExecutiveSummary\" />
     <Folder Include="Views\MetricDisplay\" />
   </ItemGroup>
   <ItemGroup>

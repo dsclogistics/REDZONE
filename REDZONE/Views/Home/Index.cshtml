@@ -12,6 +12,8 @@
     string applyFilter = (Session["buildingFilter"] != null && (string)Session["buildingFilter"] == "Y") ? "checked" : "";
     //string vScrollStatus = "scroll";  //or "hidden"
     string vScrollStatus = (applyFilter.Equals("checked") && Model.buildings.Count() < 15) ? "hidden" : "scroll";
+    int dataColCounter = 0;
+    string dataColClass = "";
 }
 
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -41,6 +43,17 @@
         background-color: #fbfbfb;
         overflow-x: hidden;
     }
+
+    .dataValCol04, .dataHdrCol04, .dataGoalCol04, .dataFootCol04 {
+        border-right: 3px solid black !important;
+    }
+    .dataHdrCol01, .dataHdrCol02, .dataHdrCol03, .dataHdrCol04 {
+        border-top: 3px solid black !important;
+    }
+    .dataFootCol01, .dataFootCol02, .dataFootCol03, .dataFootCol04 {
+        border-bottom: 3px solid black !important;
+    }
+
 </style>
 <div class="row" style="font-family:Arial; margin-top: 5px; ">
     <!-- MAIN SCREEN PANEL -->
@@ -114,16 +127,18 @@
                         <div class="row " style="margin:0; padding:0">
                             <table class="metricTable" style="margin:0; width:100%">
                                 <tr style="background-color: #f0eaea; border-bottom:1px solid lightgray">
-                                    <td style="vertical-align:middle; width:17%">
+                                    <td style="vertical-align:middle; width:17%; border-right:3px solid black;">
                                         <input class="sortOrder" type="hidden" id="bSortOrder" value="@ViewData["bOrder"]" />
                                         <span style="font-weight:bold; margin-left:30px;">Building</span>
                                         <button type="button" class="btn btn-sm sortButton @btnClassBldng" aria-label="Sort by" style="padding:0px 2px; float:right; margin-right:8px">
                                             <span class="glyphicon @ViewData["bIcon"]" aria-hidden="true"></span>
                                         </button>
                                     </td>
+                                    @{dataColCounter = 0;}
                                     @foreach (var m in Model.allMetrics)
                                     {
-                                        <td title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
+                                        dataColClass = "dataHdrCol" + (++dataColCounter).ToString("00");
+                                        <td class="@dataColClass" title="@m.metricDescription" style="vertical-align:middle; width: @strColWidth ">
                                             <a href="@m.url">@m.metricName</a>
                                         </td>
                                     }
@@ -137,12 +152,16 @@
                                 </tr>  <!-- ****** END OF HEADER TITLES ROW *************** -->
 
                                 <tr style="background-color: #bbedff; border-bottom:1px solid black">
-                                    <td style="vertical-align:middle; width:17%">
+                                    <td style="vertical-align:middle; width:17%; border-right:3px solid black;">
                                         <span style="font-weight:bold"> @Model.goalsRow.BuildingName</span>
                                     </td>
+                                    @{dataColCounter = 0;}
                                     @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in Model.goalsRow.entityMetrics)
                                     {
-                                        <td style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
+                                        dataColCounter++;
+                                        if (dataColCounter == 4) { dataColClass = "dataGoalCol04"; }
+                                        else { dataColClass = ""; }
+                                        <td class="@dataColClass" style="color:blue; font-weight:bold; vertical-align:middle; width: @strColWidth ">
                                             @HttpUtility.HtmlDecode(bldngMV.metricValue)
                                         </td>
                                     }
@@ -158,17 +177,19 @@
 
                     <!--  ******** START OF BUILDING DETAIL SECTION ****************************************************************-->
                     <div class="panel-body scroll-Body" style="overflow-y: @vScrollStatus ; height: @Model.tableDisplaySize">
-                        <div class="row " style="margin:0; padding:0">
+                        <div class="row " style="margin:0; padding:0;">
                             <table class="metricTable" style="margin:0; width:100%">
                                 @foreach (REDZONE.Models.BuildingMetricEntity dscBldng in Model.buildings)
                                 {
                                     <tr class="rHover" style="border-bottom:1px solid #c6c4c4;">
-                                        <td style="vertical-align:middle; width:17%">
+                                        <td style="vertical-align:middle; width:17%; border-right:3px solid black;">
                                             <a href="@dscBldng.url">@dscBldng.BuildingName</a>
                                         </td>
+                                        @{dataColCounter = 0;}
                                         @foreach (REDZONE.Models.MeasuredCellEntity bldngMV in dscBldng.entityMetrics)
                                         {
-                                            <td class="@bldngMV.displayClass" style="vertical-align:middle; width: @strColWidth ">
+                                            dataColClass = "dataValCol" + (++dataColCounter).ToString("00");
+                                            <td class="@bldngMV.displayClass @dataColClass" style="vertical-align:middle; width: @strColWidth ">
                                                 @if (String.IsNullOrEmpty(@bldngMV.metricValue))
                                                 { <br /> }
                                                 else
@@ -189,12 +210,14 @@
                         <div class="row " style="margin:0; padding:0">
                             <table class="metricTable" style="margin:0; width:100%">
                                 <tr totalsrow>
-                                    <td style="vertical-align:middle; width:17%; ">
+                                    <td style="vertical-align:middle; width:17%; border-right:3px solid black;">
                                         <span>@Model.goalsMissedRow.BuildingName</span>
                                     </td>
+                                    @{dataColCounter = 0;}
                                     @foreach (REDZONE.Models.MeasuredCellEntity metricTotalCell in Model.goalsMissedRow.entityMetrics)
                                     {
-                                        <td style="vertical-align:middle; width: @strColWidth ">
+                                        dataColClass = "dataFootCol" + (++dataColCounter).ToString("00");
+                                        <td class="@dataColClass" style="vertical-align:middle; width: @strColWidth ">
                                             @metricTotalCell.score.ToString("0")
                                         </td>
                                     }
