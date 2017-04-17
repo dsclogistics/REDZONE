@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Building Summary";
     int colCounter = 0;
+    int PRIORITY_ROWS = 4;
+    int priorityRowCounter = 0;
 }
 <link href="~/Content/RedZoneApp.css" rel="stylesheet" />
 <link href="~/Content/BuildingSummary.css" rel="stylesheet" />
@@ -16,6 +18,15 @@
     }
     .btnFlip:hover {
         cursor: pointer;
+    }
+    .dataHdrCol01, .dataHdrCol02, .dataHdrCol03, .dataHdrCol04 {
+        border-top: 3px solid black !important;
+    }
+    .dataFootCol01, .dataFootCol02, .dataFootCol03, .dataFootCol04 {
+        border-bottom: 3px solid black !important;
+    }
+    .dataHdrCol04, .dataGoalCol04, .dataValCol04, .dataFootCol04 {
+        border-right: 3px solid black !important;
     }
 </style>
 
@@ -108,13 +119,13 @@
                 <table class="metricTable" style="width:100%;">
                     <tr class="rowHeader">
                         <!-- ******* HEADERS/TITLES ROW ********* -->
-                        <td style="width:14.99%; min-width:180px;">
+                        <td style="width:14.99%; min-width:180px; border-bottom:3px solid black;">
                             <span class="btnFlip" style="float:right; padding:1.5px; ">
                                 <span style="color: darkgray; font-size:12px">Switch Rows to Columns</span>
                                 <img style="margin-left:3px" src="~/Images/ChangeView.png" title="Pivot Table Data" />
                             </span>
                         </td>
-                        <td style="width:8.33%; background-color: #bbedff">
+                        <td style="width:8.33%; background-color: #bbedff; border-bottom:3px solid black">
                             Goal
                         </td>
                         @{colCounter = 0;}
@@ -122,7 +133,7 @@
                         {
                             if (dscBldngHdr.isViewable)
                             {
-                                <td style="width:@Model.metricColWidth">
+                                <td style="border-bottom:3px solid black; width:@Model.metricColWidth">
                                     <input type="hidden" id="month-@colCounter.ToString("00")" value="@dscBldngHdr.metricMonth" />
                                     @dscBldngHdr.metricName
                                     @if (@dscBldngHdr.cellStatus.Equals("Mixed") || @dscBldngHdr.cellStatus.Equals("Open"))
@@ -133,20 +144,35 @@
                             }
                             colCounter++;
                         }
-                        <td style="width:10%;">
+                        <td style="width:10%; border-bottom:3px solid black; ">
                             Goals Missed
                         </td>
                     </tr>  <!-- END OF HEADERS/TITLES ROW -->
+
                     <!-- =========================================================================================================== -->
                     <!-- ================== Begin loop sections of Building Metric Rows ============================================ -->
                     @foreach (var buildingRow in Model.metricRows)
                     {
                         colCounter = 0;
+                        priorityRowCounter++;  // priorityRowL
+                        string priorityRowCellStyleFirst = "";
+                        string priorityRowCellStyleLast = "";
+                        string priorityRowCellStyle = "";
+                        if (priorityRowCounter <= PRIORITY_ROWS) {
+                            priorityRowCellStyleFirst = "border-left: 3px solid black; ";
+                            priorityRowCellStyleLast = "border-right: 3px solid black; ";
+                            if (priorityRowCounter == PRIORITY_ROWS) {
+                                priorityRowCellStyleFirst = "border-left: 3px solid black; border-bottom: 3px solid black;";
+                                priorityRowCellStyleLast = "border-right: 3px solid black; border-bottom: 3px solid black;";
+                                priorityRowCellStyle = "border-bottom: 3px solid black;"; 
+                            }  //This is the last Priority Row
+                        }  //This is a Priority Row
+                        
                         <tr class="buildingRow">
-                            <td style="width:14.99%; min-width:180px; font-weight:bold">
+                            <td style="width:14.99%; min-width:180px; font-weight:bold; @priorityRowCellStyleFirst" >
                                 <a href="@buildingRow.rowURL" id="mName" title="Metric Owner: @buildingRow.rowOwner">@buildingRow.rowName</a>
                             </td> <!-- Metric Name Column -->
-                            <td style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold;">
+                            <td style="width:8.33%; background-color: #bbedff; color:blue; font-weight:bold; @priorityRowCellStyle" >
                                 <span id="mGoal">@HttpUtility.HtmlDecode(buildingRow.scoreGoal)</span>
                             </td> <!-- Goal Column -->
                             @foreach (REDZONE.Models.MeasuredCellEntity buildingCell in buildingRow.entityMetricCells)
@@ -155,7 +181,7 @@
                                 if (cellIsViewable)
                                 {
                                     string hasReasonsClass = (buildingCell.hasReasons) ? "note" : "";
-                                    <td id="@buildingCell.cellValueId" class="valueCell @buildingCell.displayClass" style="padding:0; width:@Model.metricColWidth" title="Right Click any cell to Add/Edit Reasons and Action Plans [STS: @buildingCell.cellStatus - @buildingCell.rz_bapm_status]">
+                                    <td id="@buildingCell.cellValueId" class="valueCell @buildingCell.displayClass " style="padding:0; width:@Model.metricColWidth; @priorityRowCellStyle" title="Right Click any cell to Add/Edit Reasons and Action Plans [STS: @buildingCell.cellStatus - @buildingCell.rz_bapm_status]">
                                         <div class="@hasReasonsClass mvCell" style="margin:0; padding:4px; ">
                                             <input type="hidden" id="mpId" value="@buildingCell.mtrc_period_id" />
                                             <input type="hidden" id="mDisplayClass" value="@buildingCell.displayClass" />
@@ -174,7 +200,7 @@
                                 }
                                 colCounter++;
                             }
-                            <td class="scoreCol @buildingRow.displayClass" style="width:10%; color:black; font-weight:bold">
+                            <td class="scoreCol @buildingRow.displayClass " style="width:10%; color:black; font-weight:bold; @priorityRowCellStyleLast">
                                 @buildingRow.redTotals
                             </td>
                         </tr>

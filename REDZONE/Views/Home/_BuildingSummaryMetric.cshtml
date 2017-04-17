@@ -7,7 +7,7 @@
 <table class="bmSummary" style="width:100%;">
     <!-- ******* HEADERS/TITLES ROW (metricHeadingsRow) ********* -->
     <tr class="rowHeader">
-        <td style="width:@Model.colWidths[0]">
+        <td style="border-right:3px solid black; width:@Model.colWidths[0]">
             <span class="btnFlip" style="float:right">
                 <span style="color: darkgray; font-size:12px">Switch Rows to Columns</span>
                 <img style="margin-left:3px" src="~/Images/ChangeView.png" title="Pivot Table Data" />
@@ -15,7 +15,7 @@
         </td>
         @foreach (var metricCellHdr in Model.metricHeadingsRow.rowDataColumns)
         {
-            <td style="width:@Model.colWidths[loopCounter]">
+            <td class="@metricCellHdr.displayClass" style="width:@Model.colWidths[loopCounter]">
                 <a href="@metricCellHdr.cellURL" id="mName" title="Metric Owner: @metricCellHdr.cellOwner">
                     @metricCellHdr.cellDispValue
                 </a>
@@ -31,12 +31,12 @@
     </tr>
     <!-- ******* GOALS ROW (goalHeadingsRow) ********* -->
     <tr class="goal-Schema">
-        <td>
+        <td style="border-right:3px solid black;">
             <span> @Model.goalHeadingsRow.rowHeaderCell.cellDispValue</span>
         </td>
         @foreach (var metricGoalCellHdr in Model.goalHeadingsRow.rowDataColumns)
         {
-            <td>
+            <td class="@metricGoalCellHdr.displayClass">
                 <span id="mGoal">@HttpUtility.HtmlDecode(metricGoalCellHdr.cellDispValue)</span>
             </td>
         }
@@ -48,7 +48,7 @@
     @foreach (REDZONE.Models.rzRow myRow in Model.dataRows)
     {
         <tr class="monthRow">
-            <td title="@myRow.rowHeaderCell.caption">
+            <td style="border-right: 3px solid black;" title="@myRow.rowHeaderCell.caption">
                 <input type="hidden" id="month-@myRow.rowOrder.ToString("00")" value="@myRow.rowHeaderCell.cellValue" />
                 <span> @myRow.rowHeaderCell.cellDispValue</span>
                 @if (@myRow.rowHeaderCell.cellStatus.Equals("Mixed") || @myRow.rowHeaderCell.cellStatus.Equals("Open"))
@@ -86,12 +86,12 @@
     <!-- =============== End of loop section with One Row for Each Month ========================================= -->
     <!-- ******* 'GOALS MISSED' ROW (goalsMissedRow) ********* -->
     <tr class="totalsRow">
-        <td>
+        <td style="border-right:3px solid black;">
             <span> @Model.goalsMissedRow.rowHeaderCell.cellDispValue</span>
         </td>
         @foreach (var gmCell in Model.goalsMissedRow.rowDataColumns)
         {
-            <td>
+            <td class="@gmCell.displayClass">
                 <span>
                     @gmCell.cellDispValue
                 </span>

@@ -445,7 +445,8 @@ namespace REDZONE.AppCode
 
         public BuildingSummaryViewModel1 getBuildingSummaryView(string p_year, string p_buildingID, string p_currentUserSSO, bool filterByBldng)
         {
-            const bool showAllMonths = true;        //Flag to control whether al months are shown Vs only those that have data
+            const bool showAllMonths = true;      // Flag to control whether al months are shown Vs only those that have data
+            const int PRIORITY_METRICS = 4;        // First Four columns are priority Metrics and will have special display Classes (For showing "Black Box" border)
 
             //Define and Initializa Model Object Components
             BuildingSummaryViewModel1 bSummary = new BuildingSummaryViewModel1();   // Main Metric Model Object. Returned back to calling method
@@ -696,6 +697,19 @@ namespace REDZONE.AppCode
 
                     foreach (var _metric in bSummary.summaryByMetric.goalsMissedRow.rowDataColumns) {
                         _metric.cellDispValue = _metric.cellMetricInfo.metricDoubleValue.ToString("0");
+                    }
+
+                    //Finally Add the "Display Classes" for all the priority Metric Columns
+                    for (int x = 0; x < PRIORITY_METRICS; x++) {
+                        //Make sure The Data Columns are more than the priority Columns to avoid array out of Index errors
+                        if (bSummary.summaryByMetric.metricHeadingsRow.rowDataColumns.Count() > x) {
+                            bSummary.summaryByMetric.metricHeadingsRow.rowDataColumns[x].displayClass = bSummary.summaryByMetric.metricHeadingsRow.rowDataColumns[x].displayClass + " " + "dataHdrCol" + (x+1).ToString("00");
+                            bSummary.summaryByMetric.goalHeadingsRow.rowDataColumns[x].displayClass = bSummary.summaryByMetric.goalHeadingsRow.rowDataColumns[x].displayClass + " " + "dataGoalCol" + (x+1).ToString("00");
+                            foreach(rzRow valRow in bSummary.summaryByMetric.dataRows){
+                              valRow.rowDataColumns[x].displayClass = valRow.rowDataColumns[x].displayClass + " " + "dataValCol" + (x+1).ToString("00");
+                            }
+                            bSummary.summaryByMetric.goalsMissedRow.rowDataColumns[x].displayClass = bSummary.summaryByMetric.goalsMissedRow.rowDataColumns[x].displayClass + " " + "dataFootCol" + (x+1).ToString("00");
+                        }
                     }
 
                 }
