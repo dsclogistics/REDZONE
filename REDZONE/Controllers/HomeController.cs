@@ -10,7 +10,6 @@ using REDZONE.Models;
 
 namespace REDZONE.Controllers
 {
-      
     public class HomeController : Controller
     {
       //================== GLOBAL CONTROLLER PROPERTIES =================
