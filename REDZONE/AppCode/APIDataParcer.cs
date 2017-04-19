@@ -556,6 +556,7 @@ namespace REDZONE.AppCode
                         bSummary.summaryByMetric.goalHeadingsRow.rowDataColumns.Add(new rzCell {
                             cellValue = (string)mtrc["mpg_display_text"],
                             cellDispValue = encodeGoalValues( ((string)mtrc["mpg_display_text"])),
+                            displayClass = ""     //To erase the "gray" backgroud default class color
                         });
 
                         //Add the Current Metric Column to Each and Every Data Row
