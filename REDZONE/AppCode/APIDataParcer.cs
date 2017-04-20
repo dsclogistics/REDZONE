@@ -543,7 +543,6 @@ namespace REDZONE.AppCode
                         string m_Name = (string)mtrc["mtrc_name"];                       //Metric Name                //Used on row1
                         string m_DispName = (string)mtrc["mtrc_prod_display_text"];      //Metric Display Name        //Used on Row1
 
-
                         //Add the Metric Col to the Header Row
                         bSummary.summaryByMetric.metricHeadingsRow.rowDataColumns.Add(new rzCell {
                             cellValue = m_Name,
